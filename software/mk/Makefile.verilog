@@ -7,13 +7,16 @@ PROG_NAME ?= main
 
 ########################################
 # select the tools
-include $(CAD_DIR)/cadenv.mk
+# Shunning: disable this
+# include $(CAD_DIR)/cadenv.mk
+VCS_BIN = ${VCS_HOME}/bin
+VCS = ${VCS_BIN}/vcs
 
 BSG-SIM-TOOL = vcs
 INC_OP = +incdir+
 
 VCS_OP = -full64 -sverilog
-VCS_OP += +lint=PCWM 
+VCS_OP += +lint=PCWM
 VCS_OP += -timescale=1ps/1ps
 VCS_OP += -suppress=CWUC
 VCS_OP += -p1800_macro_expansion

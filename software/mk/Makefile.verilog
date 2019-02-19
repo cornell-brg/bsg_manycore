@@ -5,6 +5,10 @@ DVE=1
 COVERAGE=
 PROG_NAME ?= main
 
+# Shunning:
+VCS = ${VCS_HOME}/bin/vcs
+DVE = ${VCS_HOME}/bin/dve
+
 ########################################
 # select the tools
 ifneq ($(HOSTNAME),xor.cs.washington.edu)
@@ -19,15 +23,14 @@ endif
 #Using the cadenv.mk to setup the VCS
 else
 include $(CAD_DIR)/cadenv.mk
-endif 
+endif
 ########################################
-
 
 BSG-SIM-TOOL = vcs
 INC_OP = +incdir+
 
 VCS_OP = -full64 -sverilog
-VCS_OP += +lint=PCWM 
+VCS_OP += +lint=PCWM
 VCS_OP += -timescale=1ps/1ps
 
 VCS_OPTIONS = +define+SPMD=$*+

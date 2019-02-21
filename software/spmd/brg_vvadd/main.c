@@ -28,7 +28,7 @@
 ////------------------------------------------------------------------------
 
 int size = 16;
-
+const int g_size = 256;
 int g_src0[256];
 int g_src1[256];
 int g_dest[256];
@@ -46,7 +46,7 @@ void vvadd(int* dest, int* src0, int* src1, int size)
       {
         *( dest + i ) = *( src0 + i ) + *( src1 + i );
       }	
-   bsg_printf(".");
+   bsg_printf("E");
 
     // Set the done flag.
     g_done_flags[( ( bsg_x * TILE_DIM ) + bsg_y )] = 1;
@@ -82,7 +82,7 @@ int main()
     else {
 	   int * flag = bsg_remote_ptr( 0, 0, &( g_go_flags[ tile_id ] ) );
 	   while ( !( *( flag ) ) ) {
-	           bsg_printf("."); 
+	           bsg_printf("W"); 
 	   }
     }
  

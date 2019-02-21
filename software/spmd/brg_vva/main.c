@@ -5,67 +5,104 @@
 #define TILE_DIM        4
 #define NUM_X_TILES     TILE_DIM
 #define NUM_Y_TILES     TILE_DIM
-#define N         	16*TILE_DIM
 
 
-int Source1 [N]={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
-int Source2 [N]={10,20,30,40,50,60,70,80,90,100,110,120,130,140,150};
-int Result [N];
 
-void vector_vector_add( int * source_1, int * source_2, int * dest)
+//------------------------------------------------------------------------
+//// Global data
+////------------------------------------------------------------------------
+int size = 16;
+const int g_size = 256;
+int g_src0[256];
+int g_src1[256];
+int g_dest[256];
+int g_go_flags[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+int g_done_flags[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
+//------------------------------------------------------------------------
+//// Vector Vector Add Function
+////------------------------------------------------------------------------
+//
+void vvadd(int* dest, int* src0, int* src1, int size)
   {
-//    bsg_printf("\n Core (%d, %d).\n", bsg_x, bsg_y);
-    for (int i = 0; i<TILE_DIM; i++)
+    for ( int i = 0; i < size; i++)
       {
-        *(dest+i) = *(source_1+i) + *(source_2+i);
-
+        *( dest + i ) = *( src0 + i ) + *( src1 + i );
+	if(bsg_x==0 && bsg_y==1){    bsg_printf("\n %d+ %d= %d", *( dest + i ), *( src0 + i ), *( src1 + i) );}
       }	
+    bsg_printf(".");
+    g_done_flags[( ( bsg_x * TILE_DIM ) + bsg_y )] = 1;
   }
 
 int main()
   {
-    
+    // Sets the bsg_x and bsg_y global variables.
     bsg_set_tile_x_y();
-   //  if((bsg_x==0)&&(bsg_y==0)) 
-    vector_vector_add( &Source1[0], &Source2[0],&Result[0]); 
-   //  if((bsg_x==0)&&(bsg_y==1))
-    vector_vector_add( &Source1[4], &Source2[4],&Result[4]);
-  //  if((bsg_x==0)&&(bsg_y==2))
-    vector_vector_add( &Source1[8], &Source2[8],&Result[8]);
-   // if((bsg_x==0)&&(bsg_y==3))
-    vector_vector_add( &Source1[12], &Source2[12],&Result[12]);
-   // if((bsg_x==1)&&(bsg_y==0))
-    vector_vector_add( &Source1[16], &Source2[16],&Result[16]);
-   // if((bsg_x==1)&&(bsg_y==1))
-    vector_vector_add( &Source1[20], &Source2[20],&Result[20]);
-  //  if((bsg_x==1)&&(bsg_y==2))
-    vector_vector_add( &Source1[24], &Source2[24],&Result[24]);
-  //  if((bsg_x==1)&&(bsg_y==3))
-    vector_vector_add( &Source1[28], &Source2[28],&Result[28]);
-  //  if((bsg_x==2)&&(bsg_y==0))
-    vector_vector_add( &Source1[32], &Source2[32],&Result[32]);
-  //  if((bsg_x==2)&&(bsg_y==1))
-    vector_vector_add( &Source1[36], &Source2[36],&Result[36]);
-  //  if((bsg_x==2)&&(bsg_y==2))
-    vector_vector_add( &Source1[40], &Source2[40],&Result[40]);
-  //  if((bsg_x==2)&&(bsg_y==3))
-    vector_vector_add( &Source1[44], &Source2[44],&Result[44]);
-  //  if((bsg_x==3)&&(bsg_y==0))
-    vector_vector_add( &Source1[48], &Source2[48],&Result[48]);
-  //  if((bsg_x==3)&&(bsg_y==1))
-    vector_vector_add( &Source1[52], &Source2[52],&Result[52]);
-  //  if((bsg_x==3)&&(bsg_y==2))
-    vector_vector_add( &Source1[56], &Source2[56],&Result[56]);
-  //  if((bsg_x==3)&&(bsg_y==3))
-    vector_vector_add( &Source1[60], &Source2[60],&Result[60]);
 
-    if((bsg_x==0)&&(bsg_y==0))
-      {
-       for (int i =0; i<16; i++ )
-        bsg_printf("\n %d \n ",Result[i] );
-        bsg_finish(); 
+    int num_tiles = bsg_num_tiles;
+    int tile_id   = bsg_x_y_to_id( bsg_x, bsg_y );
+    
+    // Determine where this tile should start in the data array.
+    int start_id = tile_id*num_tiles;
+
+    // Last tile will handle the remainder  
+    // if ( tile_id == num_tiles-1 )
+    // size = g_size % num_tiles; // may be size+=
+
+    // Tile 0 will fill in the input data
+    if ( tile_id == 0 ) {
+        for ( int i = 0; i < g_size; i++ ) {
+              g_src0[i] = i;
+              g_src1[i] = i*10;
+           
+        }
+        for ( int i = 1; i < num_tiles; i++ ) {
+              g_go_flags[i] = 1;
+        }
+	// bsg_printf("\n Finish Initializing Vectors !!! \n ");
+    }
+    else {
+	   int * flag = bsg_remote_ptr( 0, 0, &( g_go_flags[ tile_id ] ) );
+	   while ( !( *( flag ) ) ) {
+	           bsg_printf("."); 
+	   }
+    }
+ 
+    // Execute vvadd for just this tile's partition.
+    vvadd(&(g_dest[start_id]), &(g_src0[start_id]), &(g_src1[start_id]),size); 
+    
+    // Set the done flag. May be move to vvadd!
+    // g_done_flags[tile_id] = 1; 
+
+    // Tile 0 will wait until all tiles are done.
+    if( tile_id == 0 ) {
+       for ( int i = 0; i < NUM_X_TILES; i++ )
+       for ( int j = 0; j < NUM_Y_TILES; j++ ) {
+         int * done  = bsg_remote_ptr( i, j, &( g_done_flags[(i*4)+j] ) ); 
+         while ( !( *( done ) ) ) {
+	         bsg_printf(" %d \n", ((i*4+j)));
+	 }
+       }
+
+    // Tile 0 will verify the results
+
+      int passed = 1;
+      for ( int i = 0; i < g_size; i++ ) {
+        if ( g_dest[i] != ( i + i*10 ) ) {
+             bsg_printf("*** FAILED *** g_dest[%d] incorrect, ( %d != %d ) \n ", i, g_dest[i], i+i*10 );
+             passed = 0;
+             break;
+        }
       }
 
-  bsg_wait_while(1);
-  }
+      if ( passed ) {
+          bsg_printf("\n *** PASSED *** \n");
+      }
 
+
+        bsg_finish(); 
+    }
+
+  bsg_wait_while(1);
+  
+}

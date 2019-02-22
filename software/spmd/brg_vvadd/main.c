@@ -53,8 +53,10 @@ int main()
   bsg_set_tile_x_y();
   int num_tiles = bsg_num_tiles;
   int tile_id   = bsg_x_y_to_id( bsg_x, bsg_y );  
+
   // Determine where this tile should start in the data array.
   int start_id = tile_id*num_tiles;
+
   // Tile 0 will fill in the input data
   if ( tile_id == 0 ) {
     for ( int i = 0; i < g_size; i++ ) {
@@ -104,6 +106,5 @@ int main()
     bsg_finish(); 
   }
 
-  bsg_wait_while(1);
-  
+  bsg_wait_while(1); 
 }

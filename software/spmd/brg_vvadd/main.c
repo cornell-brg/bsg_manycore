@@ -2,12 +2,13 @@
 // main.c
 //========================================================================
 // Author: Shady Agwa, shady.agwa@cornell.edu
-// Date: 22 February 2019 
-// Based on Prof. Batten Code
-// The code add two vectors using 16 cores and DRAM, Tile 0 intializes the two vectors,
-// then the 16 tiles will exectute the addition in parallel (Vector_Size/16), the last
-// tile will execute the remainder of the Vector.
-// Tile 0 verifies the results and ends the execution!!
+// Date: 22 February 2019. 
+// Based on Prof. Batten Code.
+// The code add two vectors using 16 cores and DRAM, Tile 0 intializes the 
+// two vectors,then the 16 tiles will exectute the addition in parallel, 
+// the last tile will execute the remainder of the Vector and then Tile 0 
+// verifies the results and ends the execution.
+//========================================================================
 
 #include "bsg_manycore.h"
 #include "bsg_set_tile_x_y.h"
@@ -24,12 +25,12 @@
 int g_src0[256]  __attribute__ ((section (".dram")));
 int g_src1[256]  __attribute__ ((section (".dram")));
 int g_dest[256]  __attribute__ ((section (".dram")));
-// Sizes of Vectors and loads of tiles.
+// General Variables.
 const int g_size = 256;
 int size = ( g_size / ( NUM_X_TILES * NUM_Y_TILES ) );
 // Control Signals.
-int* g_go_flag = 0;
-int* g_done_flag = 0;
+int g_go_flag = 0;
+int g_done_flag = 0;
 
 //------------------------------------------------------------------------
 // Vector Vecctor Add function
@@ -43,8 +44,7 @@ void vvadd( int* dest, int* src0, int* src1, int size)
   // Trace Execution Phase.
   bsg_printf("E");
   // Set the done flag.
-  int* done_xy = bsg_remote_ptr( bsg_x, bsg_y, &( g_done_flag ) );
-  *( done_xy ) = 1;
+  g_done_flag = 1;
 }
 
 //------------------------------------------------------------------------
@@ -71,8 +71,7 @@ int main()
       g_src1[i] = i * 10;    
     }
     // write Tile 0 go flag for all tiles.
-    int* go = bsg_remote_ptr( 0, 0, &( g_go_flag ) );
-    *( go ) = 1;
+    g_go_flag = 1;
   }
   else {
         int* go_t0 = bsg_remote_ptr( 0, 0, &( g_go_flag ) ) ;  
@@ -91,7 +90,7 @@ int main()
     for ( int j = 0; j < NUM_Y_TILES; j++ ) {
       int * done  = bsg_remote_ptr( i, j, &( g_done_flag ) ); 
       while ( !( *( done ) ) ) {
-        bsg_printf("w");
+        bsg_printf("o");
       }
     }
 

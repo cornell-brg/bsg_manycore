@@ -79,7 +79,7 @@ int main()
   int * src0_pt = bsg_remote_ptr( 0, 0, &( g_src0[start_id] ) ) ;
   int * src1_pt = bsg_remote_ptr( 0, 0, &( g_src1[start_id] ) ) ;
   int * dest_pt = bsg_remote_ptr( 0, 0, &( g_dest[start_id] ) ) ;
-  vvadd((dest_pt), (src0_pt), (src1_pt),size); 
+  vvadd( dest_pt, src0_pt, src1_pt, size); 
      
   // Tile 0 will wait until all tiles are done.
   if ( tile_id == 0 ) {

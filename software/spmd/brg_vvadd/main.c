@@ -22,11 +22,11 @@
 //------------------------------------------------------------------------
 
 // Define Vectors in DRAM.
-int g_src0[256]  __attribute__ ((section (".dram")));
-int g_src1[256]  __attribute__ ((section (".dram")));
-int g_dest[256]  __attribute__ ((section (".dram")));
-// General Variables.
-const int g_size = 256;
+int g_src0[500]  __attribute__ ((section (".dram")));
+int g_src1[500]  __attribute__ ((section (".dram")));
+int g_dest[500]  __attribute__ ((section (".dram")));
+// Size Variables & Constants.
+const int g_size = 500;
 int size = ( g_size / ( NUM_X_TILES * NUM_Y_TILES ) );
 // Control Signals.
 int g_go_flag = 0;
@@ -42,7 +42,7 @@ void vvadd( int* dest, int* src0, int* src1, int size)
     dest[i] = src0[i] + src1[i];
   }	
   // Trace Execution Phase.
-  bsg_printf("E");
+  bsg_printf("e");
   // Set the done flag.
   g_done_flag = 1;
 }
@@ -58,7 +58,7 @@ int main()
   int num_tiles = bsg_num_tiles;
   int tile_id   = bsg_x_y_to_id( bsg_x, bsg_y );  
   // Determine where this tile should start in the data array.
-  int start_id = tile_id * num_tiles;
+  int start_id = tile_id * size;
   // Last tile will handle the remainder.
   if ( tile_id == ( num_tiles - 1 ) ) {
     size = size + ( g_size % num_tiles );
@@ -77,7 +77,7 @@ int main()
         int* go_t0 = bsg_remote_ptr( 0, 0, &( g_go_flag ) ) ;  
         while ( !( *( go_t0 ) ) ) {
           // Trace the Waiting Phase.
-          bsg_printf("W"); 
+          bsg_printf("w"); 
     }
   }
  
@@ -90,7 +90,7 @@ int main()
     for ( int j = 0; j < NUM_Y_TILES; j++ ) {
       int * done  = bsg_remote_ptr( i, j, &( g_done_flag ) ); 
       while ( !( *( done ) ) ) {
-        bsg_printf("o");
+        bsg_printf(".");
       }
     }
 

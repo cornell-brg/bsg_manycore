@@ -1,21 +1,16 @@
 //========================================================================
-// main.c
+// Vector Vector Add
 //========================================================================
-// Author: Shady Agwa, shady.agwa@cornell.edu
-// Date: 22 February 2019. 
-// Based on Prof. Batten Code.
 // The code add two vectors using 16 cores and DRAM, Tile 0 intializes the 
 // two vectors,then the 16 tiles will exectute the addition in parallel, 
 // the last tile will execute the remainder of the Vector and then Tile 0 
 // verifies the results and ends the execution.
-//========================================================================
+//
+// Author: Shady Agwa, shady.agwa@cornell.edu
+// Date: 22 February 2019.
 
 #include "bsg_manycore.h"
 #include "bsg_set_tile_x_y.h"
-
-#define TILE_DIM        4
-#define NUM_X_TILES     TILE_DIM
-#define NUM_Y_TILES     TILE_DIM
 
 //------------------------------------------------------------------------
 // Global data
@@ -27,7 +22,7 @@ int g_src1[500]  __attribute__ ((section (".dram")));
 int g_dest[500]  __attribute__ ((section (".dram")));
 // Size Variables & Constants.
 const int g_size = 500;
-int size = ( g_size / ( NUM_X_TILES * NUM_Y_TILES ) );
+int size = ( g_size / ( bsg_tiles_X * bsg_tiles_Y ) );
 // Control Signals.
 int g_go_flag = 0;
 int g_done_flag = 0;
@@ -74,11 +69,11 @@ int main()
     g_go_flag = 1;
   }
   else {
-        int* go_t0 = bsg_remote_ptr( 0, 0, &( g_go_flag ) ) ;  
+        int* go_t0 = bsg_remote_ptr( 0, 0, &( g_go_flag ) );  
         while ( !( *( go_t0 ) ) ) {
           // Trace the Waiting Phase.
           bsg_printf("w"); 
-    }
+        }
   }
  
   // Execute vvadd for just this tile's partition. 
@@ -86,14 +81,14 @@ int main()
 
   // Tile 0 will wait until all tiles are done.
   if ( tile_id == 0 ) {
-    for ( int i = 0; i < NUM_X_TILES; i++ )
-    for ( int j = 0; j < NUM_Y_TILES; j++ ) {
-      int * done  = bsg_remote_ptr( i, j, &( g_done_flag ) ); 
-      while ( !( *( done ) ) ) {
-        bsg_printf(".");
+    for ( int i = 0; i < bsg_tiles_X; i++ ) {
+      for ( int j = 0; j < bsg_tiles_Y; j++ ) {
+        int * done  = bsg_remote_ptr( i, j, &( g_done_flag ) ); 
+        while ( !( *( done ) ) ) {
+          bsg_printf(".");
+        }
       }
     }
-
     // Tile 0 will verify the results.
     int passed = 1;
     for ( int i = 0; i < g_size; i++ ) {

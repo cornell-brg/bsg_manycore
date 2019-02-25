@@ -17,9 +17,9 @@
 //------------------------------------------------------------------------
 
 // Define Vectors in DRAM.
-int g_src0[500]  __attribute__ ((section (".dram")));
-int g_src1[500]  __attribute__ ((section (".dram")));
-int g_dest[500]  __attribute__ ((section (".dram")));
+int g_src0[500] __attribute__ ((section (".dram")));
+int g_src1[500] __attribute__ ((section (".dram")));
+int g_dest[500] __attribute__ ((section (".dram")));
 // Size Variables & Constants.
 const int g_size = 500;
 int size = ( g_size / ( bsg_tiles_X * bsg_tiles_Y ) );

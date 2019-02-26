@@ -31,7 +31,7 @@ int g_done_flag = 0;
 // Vector Vecctor Add function
 //------------------------------------------------------------------------
 
-void vvadd( int* dest, int* src0, int* src1, int size)
+void vvadd( int* dest, int* src0, int* src1, int size )
 {
   for ( int i = 0; i < size; i++) {
     dest[i] = src0[i] + src1[i];
@@ -83,7 +83,7 @@ int main()
   if ( tile_id == 0 ) {
     for ( int i = 0; i < bsg_tiles_X; i++ ) {
       for ( int j = 0; j < bsg_tiles_Y; j++ ) {
-        int * done  = bsg_remote_ptr( i, j, &( g_done_flag ) ); 
+        int* done  = bsg_remote_ptr( i, j, &( g_done_flag ) ); 
         while ( !( *( done ) ) ) {
           bsg_printf(".");
         }

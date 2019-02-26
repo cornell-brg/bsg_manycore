@@ -92,7 +92,7 @@ void parallel_exe( int* go, int size )
 // Verify & End Execution function
 //------------------------------------------------------------------------
 
-void verify_end( int e_tile_id , int* g_done_flag )
+void verify_end( int e_tile_id, int* g_done_flag )
 {
   int tile_id   = bsg_x_y_to_id( bsg_x, bsg_y );
   if ( tile_id == e_tile_id ) {

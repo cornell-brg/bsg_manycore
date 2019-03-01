@@ -32,15 +32,15 @@ int g_block_size = ( g_size / ( bsg_tiles_X * bsg_tiles_Y ) );
 //------------------------------------------------------------------------
 
 typedef struct {
-  int* dest;  // pointer to dest array
-  int* src0;  // pointer to src0 array
-  int* src1;  // pointer to src1 array
+  int* dest; // pointer to dest array
+  int* src0; // pointer to src0 array
+  int* src1; // pointer to src1 array
   int begin; // first element this core should process
   int end;   // last element + 1 this core should process
 } arg_t;
 
 // Function arguments to be sent to different Tiles.
-arg_t* g_thread_spawn_func_args; // Defined in Tile's SP
+arg_t* g_thread_spawn_func_args; 
 
 //------------------------------------------------------------------------
 // Start Execution & Intialize Inputs function

@@ -194,9 +194,7 @@ int main()
     thread_join(i);
   }
   // Tile 0 verifies Results & End execution.
-  if ( bsg_x_y_to_id( bsg_x, bsg_y ) == 0 ) {
-    verify_end();
-  }
+  verify_end();
   bsg_wait_while(1); 
   return 0;
 }

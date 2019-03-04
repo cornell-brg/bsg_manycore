@@ -20,8 +20,8 @@
 int g_src0[500] __attribute__ ( ( section(".dram") ) );
 int g_src1[500] __attribute__ ( ( section(".dram") ) );
 int g_dest[500] __attribute__ ( ( section(".dram") ) );
-// Tiles Flags in DRAM.
-int g_thread_flags[bsg_num_tiles] __attribute__ ( ( section(".dram") ) );
+// Tiles Flags in SP.
+int g_thread_flags;
 // Vector Size Constant.
 const int g_size = 500;
 // Run Size Per each Tile.
@@ -42,6 +42,10 @@ typedef struct {
 // Function arguments to be sent to different Tiles.
 arg_t* g_thread_spawn_func_args; 
 
+// Function pointer to be filled by Tile 0 for each Tile.
+typedef void (*spawn_func_ptr)(void*);
+spawn_func_ptr g_thread_spawn_func_ptrs;
+
 //------------------------------------------------------------------------
 // Start Execution & Intialize Inputs function
 //------------------------------------------------------------------------
@@ -54,28 +58,34 @@ void thread_init()
   // Tile 0 intialize input vectors & Tile flags
   if ( tile_id == 0 ) {
     for ( int i = 0; i < bsg_num_tiles; i++ ) {
-      g_thread_flags[i] = 0;
-    }
+      int t_x = bsg_id_to_x( tile_id );
+      int t_y = bsg_id_to_y( tile_id );
+      int* flag = bsg_remote_ptr( t_x, t_y, &( g_thread_flags ) );
+      *( flag ) = 0;
+    } 
+    // Initialize Input Vectors -> to be moved!
     for ( int i = 0; i < g_size; i++ ) {
-      g_src0[i] = i;
+     g_src0[i] = i;
       g_src1[i] = i * 10;
     }
     // Tile 0 is working.
-    g_thread_flags[0] = 1;
+    g_thread_flags = 1;
   }
   else {
     // Tiles will be in the worker loop.
     while (1) {
       // Wait until Tile 0 spawn function.
-      while( g_thread_flags[tile_id] == 0 ) {
+      while( g_thread_flags == 0 ) {
         __asm__ __volatile__ ( "nop;"
+                               "nop;"
+                               "nop;"
                                "nop;"
                                "nop;": : : "memory" );
       }
       // Execute the vector addition function, use Tile's arguments.
-      vvadd_mt( &( g_thread_spawn_func_args ) );
+      (*g_thread_spawn_func_ptrs)( &( g_thread_spawn_func_args ) );
       // Set the flag so Tile 0 knows that this Tile is done.
-      g_thread_flags[tile_id] = 0;
+      g_thread_flags = 0;
     }
   }
 }
@@ -105,13 +115,14 @@ void vvadd_mt( arg_t* arg_vptr )
 void thread_spawn( int tile_y, int tile_x, arg_t* arg )
 {
   int thread_id = bsg_x_y_to_id( tile_x, tile_y );
+  int* flag = bsg_remote_ptr( tile_x, tile_y, &( g_thread_flags) );
   if ( ( thread_id < bsg_num_tiles ) && ( thread_id > 0 ) ) {
-    if ( g_thread_flags[thread_id] == 0 ) {
+    if ( *( flag ) == 0 ) {
       // Set arguments pointer to a certain Tile X-Y.
       arg_t*  arg_ptr = bsg_remote_ptr( tile_x, tile_y, &( g_thread_spawn_func_args ) );
       *( arg_ptr ) = *( arg );
       // Wake up Tile 
-      g_thread_flags[thread_id] = 1;
+      *( flag ) = 1;
     }
   }
 }
@@ -123,8 +134,11 @@ void thread_spawn( int tile_y, int tile_x, arg_t* arg )
 void thread_join( int thread_id )
 {
   if ( ( thread_id < bsg_num_tiles ) && ( thread_id > 0 ) ) {  
+    int t_x = bsg_id_to_x( thread_id );
+    int t_y = bsg_id_to_y( thread_id );
+    int* flag = bsg_remote_ptr( t_x, t_y, &( g_thread_flags ) );
     // Wait until the Tile is no longer in use.
-    while ( g_thread_flags[thread_id] ) {
+    while ( *( flag ) ) {
       __asm__ __volatile__ ( "nop;"
                              "nop;"
                              "nop;": : : "memory" );
@@ -162,6 +176,7 @@ int main()
 {
   // Intialize Threads.
   thread_init();
+  g_thread_spawn_func_ptrs = &( vvadd_mt );
   // Define start and end for each Tile.
   int start;
   int end;
@@ -182,13 +197,15 @@ int main()
         arg_t arg_i = { g_dest, g_src0, g_src1, start, end };
         // Spawn workload for Tile x = j, y = k. 
         thread_spawn( k , j, &( arg_i ) );
+        spawn_func_ptr* tile_fptr = bsg_remote_ptr( j, k, &( g_thread_spawn_func_ptrs ) );
+        *( tile_fptr ) = &( vvadd_mt ); 
       }
     }
   } 
   // Create arguments for function working on Tile 0.
   arg_t arg_0 = { g_dest, g_src0, g_src1, 0, g_block_size };
   // Map work to Tile 0.
-  vvadd_mt( &( arg_0 ) );
+  (*g_thread_spawn_func_ptrs)( &( arg_0 ) ); 
   // Wait for other Tiles to finish.
   for ( int i = 1; i < bsg_num_tiles; i++ ) {
     thread_join(i);

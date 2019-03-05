@@ -164,16 +164,12 @@ int main()
   g_thread_spawn_func_ptrs = &( vvadd_mt );
 
   // Tile 0 intializes input vectors.
-  int t_id = bsg_x_y_to_id( bsg_x, bsg_y );
-  if ( t_id == 0 ) {
-    // Initialize Input Vectors -> to be moved!
     for ( int i = 0; i < g_size; i++ ) {
       g_src0[i] = i;
       g_src1[i] = i * 10;
     }
     // Tile 0 is working.
-    g_thread_flags = 1;
-  }                                                                  
+    g_thread_flags = 1;                                                                  
 
   // Define start and end for each Tile's block size.
   int start;

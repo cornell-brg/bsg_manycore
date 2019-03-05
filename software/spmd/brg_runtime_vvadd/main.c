@@ -1,5 +1,5 @@
 //========================================================================
-// Vector Vector Add [Runtime bthread-like]
+// Vector Vector Add [Runtime bthread]
 //========================================================================
 // The code add two vectors using ( X * Y ) cores and DRAM, Start Tile 0
 // intializes two vectors,then the Tiles will exectute the addition, 
@@ -7,7 +7,7 @@
 // The Tile 0 verifies the results and ends the execution.
 //
 // Author: Shady Agwa, shady.agwa@cornell.edu
-// Date: 28 February 2019.
+// Date: 5 March 2019.
 
 #include "bsg_manycore.h"
 #include "bsg_set_tile_x_y.h"
@@ -20,8 +20,8 @@
 int g_src0[500] __attribute__ ( ( section(".dram") ) );
 int g_src1[500] __attribute__ ( ( section(".dram") ) );
 int g_dest[500] __attribute__ ( ( section(".dram") ) );
-// Tiles Flags in SP.
-int g_thread_flags;
+// Tiles Flags in SP, default value 0.
+int g_thread_flags = 0;
 // Vector Size Constant.
 const int g_size = 500;
 // Run Size Per each Tile.
@@ -55,23 +55,8 @@ void thread_init()
   // Sets the bsg_x and bsg_y global variables.
   bsg_set_tile_x_y();
   int tile_id = bsg_x_y_to_id( bsg_x, bsg_y );
-  // Tile 0 intialize input vectors & Tile flags
-  if ( tile_id == 0 ) {
-    for ( int i = 0; i < bsg_num_tiles; i++ ) {
-      int t_x = bsg_id_to_x( tile_id );
-      int t_y = bsg_id_to_y( tile_id );
-      int* flag = bsg_remote_ptr( t_x, t_y, &( g_thread_flags ) );
-      *( flag ) = 0;
-    } 
-    // Initialize Input Vectors -> to be moved!
-    for ( int i = 0; i < g_size; i++ ) {
-     g_src0[i] = i;
-      g_src1[i] = i * 10;
-    }
-    // Tile 0 is working.
-    g_thread_flags = 1;
-  }
-  else {
+  // all Tiles except Tile 0 will be stuck here.
+  if ( ( tile_id > 0 ) && ( tile_id < bsg_num_tiles ) ) {
     // Tiles will be in the worker loop.
     while (1) {
       // Wait until Tile 0 spawn function.
@@ -82,8 +67,8 @@ void thread_init()
                                "nop;"
                                "nop;": : : "memory" );
       }
-      // Execute the vector addition function, use Tile's arguments.
-      (*g_thread_spawn_func_ptrs)( &( g_thread_spawn_func_args ) );
+      // Execute the Tile's function pointer, using Tile's arguments.
+      ( *g_thread_spawn_func_ptrs )( &( g_thread_spawn_func_args ) );
       // Set the flag so Tile 0 knows that this Tile is done.
       g_thread_flags = 0;
     }
@@ -115,8 +100,8 @@ void vvadd_mt( arg_t* arg_vptr )
 void thread_spawn( int tile_y, int tile_x, arg_t* arg )
 {
   int thread_id = bsg_x_y_to_id( tile_x, tile_y );
-  int* flag = bsg_remote_ptr( tile_x, tile_y, &( g_thread_flags) );
   if ( ( thread_id < bsg_num_tiles ) && ( thread_id > 0 ) ) {
+    int* flag = bsg_remote_ptr( tile_x, tile_y, &( g_thread_flags ) );
     if ( *( flag ) == 0 ) {
       // Set arguments pointer to a certain Tile X-Y.
       arg_t*  arg_ptr = bsg_remote_ptr( tile_x, tile_y, &( g_thread_spawn_func_args ) );
@@ -147,10 +132,10 @@ void thread_join( int thread_id )
 }
 
 //------------------------------------------------------------------------
-// Verify & End Execution function
+// Verify Results function
 //------------------------------------------------------------------------
 
-void verify_end()
+void verify_results()
 {
   // Verify Results.
   int passed = 1;
@@ -164,8 +149,6 @@ void verify_end()
   if ( passed ) {
     bsg_printf("\n\n #### _________# PASSED #_________ #### \n\n");
   }
-  // End Execution.
-  bsg_finish();
 }
 
 //------------------------------------------------------------------------
@@ -176,8 +159,23 @@ int main()
 {
   // Intialize Threads.
   thread_init();
+
+  // Set the Functionality for all Tiles.
   g_thread_spawn_func_ptrs = &( vvadd_mt );
-  // Define start and end for each Tile.
+
+  // Tile 0 intializes input vectors.
+  int t_id = bsg_x_y_to_id( bsg_x, bsg_y );
+  if ( t_id == 0 ) {
+    // Initialize Input Vectors -> to be moved!
+    for ( int i = 0; i < g_size; i++ ) {
+      g_src0[i] = i;
+      g_src1[i] = i * 10;
+    }
+    // Tile 0 is working.
+    g_thread_flags = 1;
+  }                                                                  
+
+  // Define start and end for each Tile's block size.
   int start;
   int end;
   // Have to use X & Y instead of Tile_id due to remote_store.
@@ -185,20 +183,19 @@ int main()
     for ( int j = 0; j < bsg_tiles_X; j++ ) {    
       int tile_id = ( 4 * k ) + j;
       start = ( tile_id * g_block_size );
+      end = start + g_block_size;
       // Last Tile will consume the remainder, So end = g_size.
       if (tile_id == ( bsg_num_tiles - 1 ) ) {
         end = g_size; 
-      }
-      else {
-        end = start + g_block_size;
       }
       // Create arguments for functions working on other Tiles.
       if ( ( tile_id > 0 ) && ( tile_id < bsg_num_tiles ) ) {
         arg_t arg_i = { g_dest, g_src0, g_src1, start, end };
         // Spawn workload for Tile x = j, y = k. 
         thread_spawn( k , j, &( arg_i ) );
+        // Set the function pointer of Tile x = j, y = k to the selected function.
         spawn_func_ptr* tile_fptr = bsg_remote_ptr( j, k, &( g_thread_spawn_func_ptrs ) );
-        *( tile_fptr ) = &( vvadd_mt ); 
+        *( tile_fptr ) = g_thread_spawn_func_ptrs;
       }
     }
   } 
@@ -206,12 +203,17 @@ int main()
   arg_t arg_0 = { g_dest, g_src0, g_src1, 0, g_block_size };
   // Map work to Tile 0.
   (*g_thread_spawn_func_ptrs)( &( arg_0 ) ); 
+
   // Wait for other Tiles to finish.
   for ( int i = 1; i < bsg_num_tiles; i++ ) {
     thread_join(i);
   }
-  // Tile 0 verifies Results & End execution.
-  verify_end();
+
+  // Tile 0 verifies Results.
+  verify_results();
+
+  // Tile 0 Ends Execution.
+  bsg_finish();
   bsg_wait_while(1); 
   return 0;
 }

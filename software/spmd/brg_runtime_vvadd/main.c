@@ -47,7 +47,7 @@ typedef void (*spawn_func_ptr)(void*);
 spawn_func_ptr g_thread_spawn_func_ptrs;
 
 //------------------------------------------------------------------------
-// Start Execution & Intialize Inputs function
+// Start Execution & Intialize Tiles
 //------------------------------------------------------------------------
 
 void thread_init()

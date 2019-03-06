@@ -69,11 +69,11 @@ int main()
     g_go_flag = 1;
   }
   else {
-        int* go_t0 = bsg_remote_ptr( 0, 0, &( g_go_flag ) );  
-        while ( !( *( go_t0 ) ) ) {
-          // Trace the Waiting Phase.
-          bsg_printf("w"); 
-        }
+    int* go_t0 = bsg_remote_ptr( 0, 0, &( g_go_flag ) );  
+    while ( !( *( go_t0 ) ) ) {
+    // Trace the Waiting Phase.
+    bsg_printf("w"); 
+    }
   }
  
   // Execute vvadd for just this tile's partition. 

@@ -84,9 +84,12 @@
 #define Y_CORD_SHIFTS                   (X_CORD_SHIFTS + MAX_X_CORD_BITS)
 
 #define REMOTE_EPA_PREFIX               0x1
+#define GLOBAL_EPA_PREFIX               0x1
 #define REMOTE_EPA_MASK_BITS            (32 - EPA_ADDR_BITS - MAX_X_CORD_BITS - MAX_Y_CORD_BITS) 
 #define REMOTE_EPA_MASK                 ((1<<REMOTE_EPA_MASK_BITS)-1)
-#define REMOTE_EPA_MASK_SHIFTS          (Y_CORD_SHIFTS + MAX_Y_CORD_BITS)
+//TODO -- MAX_Y_CORD_BITS is reduced 1 bits. 
+#define REMOTE_EPA_MASK_SHIFTS          (Y_CORD_SHIFTS + MAX_Y_CORD_BITS -1)
+#define GLOBAL_EPA_MASK_SHIFTS          (Y_CORD_SHIFTS + MAX_Y_CORD_BITS   )
 
 
 #if (bsg_noc_xbits + bsg_noc_ybits + EPA_ADDR_BITS) > 30
@@ -100,13 +103,20 @@
 //------------------------------------------------------
 
 #define bsg_remote_addr_bits            EPA_ADDR_BITS 
+// Used for in tile group access
 #define bsg_remote_ptr(x,y,local_addr) ((bsg_remote_int_ptr) (   (REMOTE_EPA_PREFIX << REMOTE_EPA_MASK_SHIFTS) \
                                                                | ((y) << Y_CORD_SHIFTS )                     \
                                                                | ((x) << X_CORD_SHIFTS )                     \
                                                                | ((int) (local_addr)   )                     \
                                                              )                                               \
                                         )
-
+//Used for global network access
+#define bsg_global_ptr(x,y,local_addr) ((bsg_remote_int_ptr) (   (GLOBAL_EPA_PREFIX << GLOBAL_EPA_MASK_SHIFTS) \
+                                                               | ((y) << Y_CORD_SHIFTS )                     \
+                                                               | ((x) << X_CORD_SHIFTS )                     \
+                                                               | ((int) (local_addr)   )                     \
+                                                             )                                               \
+                                        )
 #define bsg_dram_ptr(local_addr) (  (bsg_remote_int_ptr)  ((1<< 31) | ((int) (local_addr))  ) )
 
 #define bsg_local_ptr( remote_addr)  (    (int) (remote_addr)                           \

@@ -101,7 +101,8 @@ import bsg_noc_pkg   ::*; // {P=0, W, E, N, S}
         if( init_vcache_p)
                 init_vcache();
 
-        init_dram       ();
+        init_dram();
+        config_tile_group();
         unfreeze_tiles  ();
 
         @(posedge clk_i);  
@@ -256,6 +257,37 @@ import bsg_noc_pkg   ::*; // {P=0, W, E, N, S}
 
                         @(negedge clk_i);
                         wait( ready_i === 1'b1);   //check if the ready is pulled up.
+                end
+        end
+  endtask 
+  ///////////////////////////////////////////////////////////////////////////////
+  // Task to initilized the Tile Group Origin
+  task config_tile_group();
+        int x_cord, y_cord, CSR_ADDR, TG_X=0, TG_Y=0;
+        int i;
+
+        $display("Configuring the Tile Group Association.");
+        for (y_cord =0; y_cord < num_rows_p; y_cord ++) begin
+                for(x_cord =0; x_cord < num_cols_p; x_cord++)begin
+                      for(CSR_ADDR=4; CSR_ADDR<=8; CSR_ADDR=CSR_ADDR+4) begin
+                                @(posedge clk_i);          //pull up the valid
+                                var_v_o = 1'b1; 
+                                 
+                                var_data_o.payload    =  (CSR_ADDR==4)? TG_X : TG_Y;
+                                //MSB==1 : The vcache tag
+                                var_data_o.addr       =  (config_addr_bits | CSR_ADDR )>>2 ;
+                                var_data_o.op         = `ePacketOp_remote_store;
+                                var_data_o.op_ex      =  4'b1111; //TODO not handle the byte write.
+                                var_data_o.x_cord     = x_cord;
+                                var_data_o.y_cord     = y_cord;
+                                //var_data_o.y_cord     = (y_cord_width_lp)'(num_rows_p);
+                                var_data_o.src_x_cord = my_x_i;
+                                var_data_o.src_y_cord = my_y_i;
+
+                                @(negedge clk_i);
+                                wait( ready_i === 1'b1);   //check if the ready is pulled up.
+                       end
+                       $display("Tile (y,x)=(%d,%d) Set to Group (y,x)=(%d,%d).", y_cord, x_cord, TG_X, TG_Y);
                 end
         end
   endtask 

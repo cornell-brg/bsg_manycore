@@ -33,7 +33,7 @@ typedef volatile void *bsg_remote_void_ptr;
 // remote loads
 //#define bsg_remote_load(x,y,local_addr, val) ( val = *(bsg_remote_ptr((x),(y),(local_addr))) )
 
-#define bsg_remote_ptr_io(x,local_addr) bsg_global_ptr((x),bsg_global_Y,(local_addr))
+#define bsg_remote_ptr_io(x,local_addr) bsg_global_ptr((x), IO_Y_INDEX,(local_addr))
 #define bsg_remote_ptr_io_store(x,local_addr,val) do { *(bsg_remote_ptr_io((x),(local_addr))) = (int) (val); } while (0)
 #define bsg_remote_ptr_io_load(x,local_addr,val) do { (val) = *(bsg_remote_ptr_io((x),(local_addr))) ; } while (0)
 

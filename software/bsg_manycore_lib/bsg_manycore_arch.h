@@ -5,6 +5,7 @@
 // 0. basic SoC definitaion
 //------------------------------------------------------
 #define IO_X_INDEX     ((bsg_global_X)-1) 
+#define IO_Y_INDEX     (bsg_global_Y) 
 //in words.
 #define EPA_ADDR_BITS                   18
 //------------------------------------------------------

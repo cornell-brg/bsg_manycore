@@ -269,7 +269,7 @@ import bsg_noc_pkg   ::*; // {P=0, W, E, N, S}
         $display("############################################################");
         $display("Configuring the Tile Group Association.");
         $display("############################################################");
-        $display("Total Tiles in networs X=%d, Y=%d", `bsg_global_X, `bsg_global_Y);
+        $display("Total Tiles in network X=%02d, Y=%02d", `bsg_global_X, `bsg_global_Y);
 
         for (y_cord =tg_org_y; y_cord < tg_org_y + tg_dim_y; y_cord ++) begin
                 for(x_cord =tg_org_x; x_cord < tg_org_x + tg_dim_x ; x_cord++)begin
@@ -291,7 +291,7 @@ import bsg_noc_pkg   ::*; // {P=0, W, E, N, S}
                                 @(negedge clk_i);
                                 wait( ready_i === 1'b1);   //check if the ready is pulled up.
                        end
-                       $display("Tile (y,x)=(%d,%d) Set to Group (y,x)=(%d,%d).", y_cord, x_cord, tg_org_y, tg_org_x);
+                       $display("Tile (y,x)=(%0d,%0d) Set to Group Origin(y,x)=(%0d,%0d), dim(y,x)=(%0d,%0d).", y_cord, x_cord, tg_org_y, tg_org_x, tg_dim_y, tg_dim_x);
                 end
         end
   endtask 

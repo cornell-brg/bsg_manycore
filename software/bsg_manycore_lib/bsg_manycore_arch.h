@@ -11,6 +11,14 @@
 //------------------------------------------------------
 // 1. X/Y dimention setting/Checking.
 //------------------------------------------------------
+#ifndef bsg_global_X
+#error bsg_global_X must be defined
+#endif
+
+#ifndef bsg_global_Y
+#error bsg_global_Y must be defined
+#endif
+
 #ifndef bsg_tiles_X
 #error bsg_tiles_X must be defined
 #endif
@@ -19,60 +27,62 @@
 #error bsg_tiles_Y must be defined
 #endif
 
-#define bsg_routers_Y ( (bsg_tiles_Y) +1) 
-
-#if bsg_tiles_X == 1
+#if bsg_global_X == 1
 #define bsg_noc_xbits 1
-#elif bsg_tiles_X == 2
+#elif bsg_global_X == 2
 #define bsg_noc_xbits 1
-#elif bsg_tiles_X == 3
+#elif bsg_global_X == 3
 #define bsg_noc_xbits 2
-#elif bsg_tiles_X == 4
+#elif bsg_global_X == 4
 #define bsg_noc_xbits 2
-#elif bsg_tiles_X == 5
+#elif bsg_global_X == 5
 #define bsg_noc_xbits 3
-#elif bsg_tiles_X == 6
+#elif bsg_global_X == 6
 #define bsg_noc_xbits 3
-#elif bsg_tiles_X == 7
+#elif bsg_global_X == 7
 #define bsg_noc_xbits 3
-#elif bsg_tiles_X == 8
+#elif bsg_global_X == 8
 #define bsg_noc_xbits 3
-#elif bsg_tiles_X == 9
+#elif bsg_global_X == 9
 #define bsg_noc_xbits 4
-#elif bsg_tiles_X == 16
+#elif bsg_global_X == 16
 #define bsg_noc_xbits 4
 #else
-#error Unsupported bsg_tiles_X
+#error Unsupported bsg_global_X
 #endif
 
-#if bsg_routers_Y == 1
+#if bsg_global_Y == 1
 #define bsg_noc_ybits 1
-#elif bsg_routers_Y == 2
+#elif bsg_global_Y == 2
 #define bsg_noc_ybits 2
-#elif bsg_routers_Y == 3
+#elif bsg_global_Y == 3
 #define bsg_noc_ybits 2
-#elif bsg_routers_Y == 4
+#elif bsg_global_Y == 4
 #define bsg_noc_ybits 3
-#elif bsg_routers_Y == 5
+#elif bsg_global_Y == 5
 #define bsg_noc_ybits 3
-#elif bsg_routers_Y == 6
+#elif bsg_global_Y == 6
 #define bsg_noc_ybits 3
-#elif bsg_routers_Y == 7
+#elif bsg_global_Y == 7
 #define bsg_noc_ybits 3
-#elif bsg_routers_Y == 8
+#elif bsg_global_Y == 8
 #define bsg_noc_ybits 4
-#elif bsg_routers_Y == 9
+#elif bsg_global_Y == 9
 #define bsg_noc_ybits 4
-#elif bsg_routers_Y == 16
+#elif bsg_global_Y == 16
 #define bsg_noc_ybits 5
-#elif bsg_routers_Y == 20
+#elif bsg_global_Y == 20
 #define bsg_noc_ybits 5
-#elif bsg_routers_Y == 25
+#elif bsg_global_Y == 25
 #define bsg_noc_ybits 5
-#elif bsg_routers_Y == 31
+#elif bsg_global_Y == 31
 #define bsg_noc_ybits 5
 #else
-#error Unsupported bsg_routers_Y
+#error Unsupported bsg_global_Y
+#endif
+
+#if ( bsg_tiles_Y + 1 ) > (bsg_global_Y )
+#error bsg_tiles_Y must 1 less than bsg_global_Y
 #endif
 
 //------------------------------------------------------

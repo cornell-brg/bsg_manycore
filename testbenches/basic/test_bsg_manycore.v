@@ -4,12 +4,12 @@
 `define ICACHE_ENTRIES  1024
 `define DRAM_CH_SIZE    1024  //in words
 
-`ifndef bsg_tiles_X
-`error bsg_tiles_X must be defined; pass it in through the makefile
+`ifndef bsg_global_X
+`error bsg_global_X must be defined; pass it in through the makefile
 `endif
 
-`ifndef bsg_tiles_Y
-`error bsg_tiles_Y must be defined; pass it in through the makefile
+`ifndef bsg_global_Y
+`error bsg_global_Y must be defined; pass it in through the makefile
 `endif
 
 `define MAX_CYCLES 1000000
@@ -33,8 +33,8 @@ module test_bsg_manycore;
    localparam data_width_lp   = 32;
    localparam load_id_width_lp = 11;
    localparam epa_addr_width_lp       = 16;
-   localparam num_tiles_x_lp  = `bsg_tiles_X;
-   localparam num_tiles_y_lp  = `bsg_tiles_Y;
+   localparam num_tiles_x_lp  = `bsg_global_X;
+   localparam num_tiles_y_lp  = `bsg_global_Y;
    localparam extra_io_rows_lp= 2;
    localparam num_routers_y_lp  = num_tiles_y_lp + extra_io_rows_lp -1;
    localparam lg_node_x_lp    = `BSG_SAFE_CLOG2(num_tiles_x_lp);

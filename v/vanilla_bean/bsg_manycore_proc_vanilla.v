@@ -10,7 +10,7 @@ module bsg_manycore_proc_vanilla #(x_cord_width_p   = "inv"
                            , data_width_p   = 32
                            , addr_width_p   = -1
                            , load_id_width_p = 5
-                           , epa_addr_width_p = -1 
+                           , epa_byte_addr_width_p = -1 
                            , dram_ch_addr_width_p = -1
                            , dram_ch_start_col_p = 0
                            , debug_p        = 1
@@ -205,9 +205,9 @@ module bsg_manycore_proc_vanilla #(x_cord_width_p   = "inv"
    //////////////////////////////////////////////////////////
 
    // configuration  in_addr_lo = { 1 ------ } 2'b00
-   localparam  epa_config_bit_idx = (epa_addr_width_p-2) -1;
+   localparam  epa_word_addr_width_lp = epa_byte_addr_width_p-2;
 
-   wire is_config_op      = in_v_lo & in_addr_lo[epa_config_bit_idx] & in_we_lo;
+   wire is_config_op      = in_v_lo & in_addr_lo[epa_word_addr_width_lp-1] & in_we_lo;
    wire is_dmem_addr      = `MC_IS_DMEM_ADDR(in_addr_lo, addr_width_p);
    wire is_icache_addr    = `MC_IS_ICACHE_ADDR(in_addr_lo, addr_width_p);
 
@@ -386,7 +386,7 @@ module bsg_manycore_proc_vanilla #(x_cord_width_p   = "inv"
                              ,.y_cord_width_p(y_cord_width_p)
                              ,.data_width_p (data_width_p )
                              ,.addr_width_p (addr_width_p )
-                             ,.epa_addr_width_p( epa_addr_width_p)
+                             ,.epa_word_addr_width_p( epa_byte_addr_width_p -2 )
                              ,.dram_ch_addr_width_p ( dram_ch_addr_width_p)
                              ,.dram_ch_start_col_p  ( dram_ch_start_col_p )
                              ) pkt_encode
@@ -559,9 +559,9 @@ module bsg_manycore_proc_vanilla #(x_cord_width_p   = "inv"
    // Handle the control registers
    // ----------------------------------------------------------------------------------------
                                          
-   wire  is_freeze_addr = {1'b0, in_addr_lo[epa_config_bit_idx-1:0]} == (epa_addr_width_p-2)'(`CSR_FREEZE);
-   wire  is_tgo_x_addr  = {1'b0, in_addr_lo[epa_config_bit_idx-1:0]} == (epa_addr_width_p-2)'(`CSR_TGO_X);
-   wire  is_tgo_y_addr  = {1'b0, in_addr_lo[epa_config_bit_idx-1:0]} == (epa_addr_width_p-2)'(`CSR_TGO_Y);
+   wire  is_freeze_addr = {1'b0, in_addr_lo[epa_word_addr_width_lp-2:0]} == epa_word_addr_width_lp'(`CSR_FREEZE);
+   wire  is_tgo_x_addr  = {1'b0, in_addr_lo[epa_word_addr_width_lp-2:0]} == epa_word_addr_width_lp'(`CSR_TGO_X);
+   wire  is_tgo_y_addr  = {1'b0, in_addr_lo[epa_word_addr_width_lp-2:0]} == epa_word_addr_width_lp'(`CSR_TGO_Y);
    wire  is_config_decoded = is_freeze_addr | is_tgo_x_addr | is_tgo_y_addr;
 
    // freeze register

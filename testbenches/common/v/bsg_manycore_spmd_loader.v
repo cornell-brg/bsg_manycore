@@ -24,7 +24,7 @@ import bsg_noc_pkg   ::*; // {P=0, W, E, N, S}
    ,parameter data_width_p    = 32
    ,parameter addr_width_p    = 30
    ,parameter load_id_width_p = 5
-   ,parameter epa_addr_width_p= 16
+   ,parameter epa_byte_addr_width_p= 16
    ,parameter dram_ch_addr_width_p=-1
    ,parameter dram_ch_num_p   = 0
    ,parameter tile_id_ptr_p   = -1
@@ -76,8 +76,8 @@ import bsg_noc_pkg   ::*; // {P=0, W, E, N, S}
   `declare_bsg_manycore_packet_s(addr_width_p,data_width_p,x_cord_width_p,y_cord_width_p,load_id_width_p);
   `declare_bsg_manycore_dram_addr_s(dram_ch_addr_width_p);
 
-  localparam    config_addr_bits = 1 << ( epa_addr_width_p-1);
-  localparam    unfreeze_addr = addr_width_p'(0) | config_addr_bits;
+  localparam    config_byte_addr = 1 << ( epa_byte_addr_width_p-1);
+  localparam    unfreeze_addr = addr_width_p'(0) | config_byte_addr;
 
   logic                         var_v_o;
   bsg_manycore_packet_s         var_data_o;
@@ -279,7 +279,7 @@ import bsg_noc_pkg   ::*; // {P=0, W, E, N, S}
                                  
                                 var_data_o.payload    =  (CSR_ADDR==4)? tg_org_x : tg_org_y;
                                 //MSB==1 : The vcache tag
-                                var_data_o.addr       =  (config_addr_bits | CSR_ADDR )>>2 ;
+                                var_data_o.addr       =  (config_byte_addr | CSR_ADDR )>>2 ;
                                 var_data_o.op         = `ePacketOp_remote_store;
                                 var_data_o.op_ex      =  4'b1111; //TODO not handle the byte write.
                                 var_data_o.x_cord     = x_cord;

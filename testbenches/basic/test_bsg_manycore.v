@@ -32,7 +32,7 @@ module test_bsg_manycore;
    localparam icache_tag_width_lp= 12;      // 16MB PC address 
    localparam data_width_lp   = 32;
    localparam load_id_width_lp = 11;
-   localparam epa_addr_width_lp       = 16;
+   localparam epa_byte_addr_width_lp       = 18;
    localparam num_tiles_x_lp  = `bsg_global_X;
    localparam num_tiles_y_lp  = `bsg_global_Y;
    localparam extra_io_rows_lp= 1;
@@ -164,7 +164,7 @@ module test_bsg_manycore;
      ,.data_width_p (data_width_lp)
      ,.addr_width_p (addr_width_lp)
      ,.load_id_width_p (load_id_width_lp)
-     ,.epa_addr_width_p (epa_addr_width_lp)
+     ,.epa_byte_addr_width_p (epa_byte_addr_width_lp)
      ,.dram_ch_addr_width_p( dram_ch_addr_width_lp )
      ,.dram_ch_start_col_p ( 1'b0                  )
      ,.num_tiles_x_p(num_tiles_x_lp)
@@ -255,7 +255,7 @@ module test_bsg_manycore;
      #( .icache_entries_num_p(icache_entries_num_lp)
         ,.addr_width_p(addr_width_lp)
         ,.load_id_width_p(load_id_width_lp)
-        ,.epa_addr_width_p(epa_addr_width_lp)
+        ,.epa_byte_addr_width_p(epa_byte_addr_width_lp)
         ,.dram_ch_addr_width_p( dram_ch_addr_width_lp)
         ,.data_width_p(data_width_lp)
         ,.extra_io_rows_p ( extra_io_rows_lp )

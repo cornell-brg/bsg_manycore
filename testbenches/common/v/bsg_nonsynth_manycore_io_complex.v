@@ -9,7 +9,7 @@ module bsg_nonsynth_manycore_io_complex
     ,max_cycles_p   = -1
     ,addr_width_p   = -1
     ,load_id_width_p = 5
-    ,epa_addr_width_p = -1
+    ,epa_byte_addr_width_p = -1
     ,dram_ch_num_p       = 0
     ,dram_ch_addr_width_p=-1
     ,data_width_p  = 32
@@ -84,7 +84,7 @@ module bsg_nonsynth_manycore_io_complex
         ,.data_width_p  (data_width_p)
         ,.addr_width_p  (addr_width_p)
         ,.load_id_width_p (load_id_width_p)
-        ,.epa_addr_width_p (epa_addr_width_p)
+        ,.epa_byte_addr_width_p (epa_byte_addr_width_p)
         ,.dram_ch_num_p       ( dram_ch_num_p       )
         ,.dram_ch_addr_width_p( dram_ch_addr_width_p )
         ,.tile_id_ptr_p (tile_id_ptr_p)

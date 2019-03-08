@@ -8,7 +8,7 @@ module bsg_manycore_pkt_encode
     , data_width_p   = -1
     , addr_width_p   = -1
     , load_id_width_p = 5
-    , epa_addr_width_p = -1
+    , epa_word_addr_width_p = -1
     , dram_ch_addr_width_p = -1
     , dram_ch_start_col_p  = 0
     , remote_addr_prefix_lp = 3'b001
@@ -39,8 +39,8 @@ module bsg_manycore_pkt_encode
     ,output [packet_width_lp-1:0]           data_o
     );
 
-   `declare_bsg_manycore_addr_s(epa_addr_width_p, max_x_cord_width_lp, max_y_cord_width_lp);
-   `declare_bsg_manycore_global_addr_s(epa_addr_width_p, max_x_cord_width_lp, max_y_cord_width_lp);
+   `declare_bsg_manycore_addr_s(epa_word_addr_width_p, max_x_cord_width_lp, max_y_cord_width_lp);
+   `declare_bsg_manycore_global_addr_s(epa_word_addr_width_p, max_x_cord_width_lp, max_y_cord_width_lp);
    `declare_bsg_manycore_dram_addr_s(dram_ch_addr_width_p);
    `declare_bsg_manycore_packet_s(addr_width_p, data_width_p, x_cord_width_p, y_cord_width_p, load_id_width_p);
 

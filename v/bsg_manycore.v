@@ -50,7 +50,7 @@ module bsg_manycore
 
    //the epa_addr_width_lp is the address bit used in C for remote access.
    //the value should be set to EPA_ADDR_WIDTH-2, refer to bsg_manycore.h for EPA_ADDR_WDITH setting
-   ,parameter epa_addr_width_p =  "inv" 
+   ,parameter epa_byte_addr_width_p =  "inv" 
 
     //------------------------------------------------------
     //  DRAM Address Definition
@@ -177,7 +177,7 @@ module bsg_manycore
                 .data_width_p(data_width_p),
                 .addr_width_p(addr_width_p),
                 .load_id_width_p(load_id_width_p),
-                .epa_addr_width_p(epa_addr_width_p),
+                .epa_byte_addr_width_p(epa_byte_addr_width_p),
                 .dram_ch_addr_width_p( dram_ch_addr_width_p),
                 .dram_ch_start_col_p ( dram_ch_start_col_p ),
                 .stub_p({(r == num_tiles_y_p-1) ? (((stub_s_p>>c) & 1'b1) == 1) : 1'b0 /* s */

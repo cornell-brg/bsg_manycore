@@ -30,8 +30,6 @@ import bsg_noc_pkg   ::*; // {P=0, W, E, N, S}
    ,parameter tile_id_ptr_p   = -1
    ,parameter num_rows_p      = -1
    ,parameter num_cols_p      = -1
-   ,parameter load_rows_p     = num_rows_p
-   ,parameter load_cols_p     = num_cols_p
 
    ,parameter y_cord_width_p  = -1
    ,parameter x_cord_width_p  = -1 

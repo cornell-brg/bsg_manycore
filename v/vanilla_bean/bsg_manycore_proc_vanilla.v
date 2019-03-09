@@ -79,8 +79,8 @@ module bsg_manycore_proc_vanilla #(x_cord_width_p   = "inv"
    logic                       returned_fifo_full_lo;
    logic                       returned_yumi_li;
 
-   logic [data_width_p-1:0] load_returning_data, store_returning_data_r, returning_data;
-   logic                    load_returning_v, store_returning_v_r, returning_v;
+   logic [data_width_p-1:0] load_returning_data, delayed_returning_data_r, returning_data;
+   logic                    load_returning_v, delayed_returning_v_r, returning_v;
 
    logic                                   in_we_lo  ;
    logic [data_width_p-1:0]                in_data_lo;
@@ -207,7 +207,7 @@ module bsg_manycore_proc_vanilla #(x_cord_width_p   = "inv"
    // configuration  in_addr_lo = { 1 ------ } 2'b00
    localparam  epa_word_addr_width_lp = epa_byte_addr_width_p-2;
 
-   wire is_config_op      = in_v_lo & in_addr_lo[epa_word_addr_width_lp-1] & in_we_lo;
+   wire is_config_op      = in_v_lo & in_addr_lo[epa_word_addr_width_lp-1] ;
    wire is_dmem_addr      = `MC_IS_DMEM_ADDR(in_addr_lo, addr_width_p);
    wire is_icache_addr    = `MC_IS_ICACHE_ADDR(in_addr_lo, addr_width_p);
 
@@ -594,17 +594,19 @@ module bsg_manycore_proc_vanilla #(x_cord_width_p   = "inv"
    // ----------------------------------------------------------------------------------------
    // Handle the returning data/credit back to the network
    // ----------------------------------------------------------------------------------------
-   wire         store_yumi      = in_yumi_li & in_we_lo;
+   wire                   store_yumi      = in_yumi_li & in_we_lo;
+   wire                   CSR_load_yumi   = is_config_decoded & (~in_we_lo);
+   wire[data_width_p-1:0] CSR_load_data   = is_tgo_x_addr ? CSR_TGO_X_r : CSR_TGO_Y_r;
    //delay the response for store for 1 cycle
-   always_ff@(posedge clk_i)    store_returning_v_r   <= store_yumi;
-   always_ff@(posedge clk_i)    store_returning_data_r<= in_data_lo;
+   always_ff@(posedge clk_i)    delayed_returning_v_r   <= store_yumi | CSR_load_yumi;
+   always_ff@(posedge clk_i)    delayed_returning_data_r<= CSR_load_yumi ? CSR_load_data :  in_data_lo;
 
-   assign       returning_v     = load_returning_v | store_returning_v_r;
-   assign       returning_data  = store_returning_v_r? store_returning_data_r : load_returning_data;
+   assign       returning_v     = load_returning_v | delayed_returning_v_r;
+   assign       returning_data  = delayed_returning_v_r? delayed_returning_data_r : load_returning_data;
 
   // synopsys translate_off
   always_ff@(negedge clk_i)
-        if ( (store_returning_v_r & load_returning_v) == 1'b1 ) begin
+        if ( (delayed_returning_v_r & load_returning_v) == 1'b1 ) begin
                 $error(" Store returning and Load returning happens at the same time!" );
                 $finish();
         end

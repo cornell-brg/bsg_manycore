@@ -8,6 +8,13 @@
 #define IO_Y_INDEX     (0) 
 //in words.
 #define EPA_ADDR_BITS                   18
+
+// The CSR Addr configurations
+// bsg_manycore/v/parameters.vh  for definition in RTL
+#define CSR_BASE_ADDR   (1<< (EPA_ADDR_BITS-1))
+#define CSR_FREEZE      0x0
+#define CSR_TGO_X       0x4
+#define CSR_TGO_Y       0x8
 //------------------------------------------------------
 // 1. X/Y dimention setting/Checking.
 //------------------------------------------------------

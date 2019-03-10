@@ -192,12 +192,7 @@ module bsg_manycore
                 .epa_byte_addr_width_p(epa_byte_addr_width_p),
                 .dram_ch_addr_width_p( dram_ch_addr_width_p),
                 .dram_ch_start_col_p ( dram_ch_start_col_p ),
-                .stub_p({(r == num_tiles_y_p-1) ? (((stub_s_p>>c) & 1'b1) == 1) : 1'b0 /* s */
-                        ,(r == 0)               ? (((stub_n_p>>c) & 1'b1) == 1) : 1'b0 /* n */
-                        ,(c == num_tiles_x_p-1) ? (((stub_e_p>>r) & 1'b1) == 1) : 1'b0 /* e */
-                        ,(c == 0)               ? (((stub_w_p>>r) & 1'b1) == 1) : 1'b0 /* w */}),
-                .repeater_output_p( hetero_type_vec_p[r][c]),
-                .hetero_type_p(0),
+                .hetero_type_p( hetero_type_vec_p[r][c] ),
                 .debug_p(debug_p)
               )
             tile

@@ -63,6 +63,7 @@ LIST_COMMON_SRCS+= $(BSG_IP_CORES_DIR)/bsg_misc/bsg_circular_ptr.v
 LIST_COMMON_SRCS+= $(BSG_IP_CORES_DIR)/bsg_misc/bsg_decode_with_v.v
 LIST_COMMON_SRCS+= $(BSG_IP_CORES_DIR)/bsg_misc/bsg_decode.v
 LIST_COMMON_SRCS+= $(BSG_IP_CORES_DIR)/bsg_misc/bsg_dff_reset_en.v
+LIST_COMMON_SRCS+= $(BSG_IP_CORES_DIR)/bsg_misc/bsg_inv.v
 LIST_COMMON_SRCS+= $(BSG_IP_CORES_DIR)/bsg_mem/bsg_mem_1r1w.v
 LIST_COMMON_SRCS+= $(BSG_IP_CORES_DIR)/bsg_mem/bsg_mem_1r1w_synth.v
 LIST_COMMON_SRCS+= $(BSG_IP_CORES_DIR)/bsg_mem/bsg_mem_1rw_sync.v

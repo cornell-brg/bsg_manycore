@@ -7,9 +7,14 @@
 *************************************************************************/
 int data[4] __attribute__ ((section (".dram"))) = { -1, 1, 0xF, 0x80000000};
 
+#define  GS_X_CORD  0 
+#define  GS_Y_CORD  (bsg_global_Y-1)
+
 int main()
 {
-   int i;
+   int i, tmp;
+   
+   bsg_remote_int_ptr GS_CSR_base_p; 
   /************************************************************************
    This will setup the  X/Y coordination. Current pre-defined corrdinations 
    includes:
@@ -19,29 +24,14 @@ int main()
         __bsg_org_y     : The origin Y cord of the group
   *************************************************************************/
   bsg_set_tile_x_y();
+  
+  GS_CSR_base_p = bsg_global_ptr( GS_X_CORD, GS_Y_CORD, 0);
 
-  /************************************************************************
-   Basic IO outputs bsg_remote_ptr_io_store(IO_X_INDEX, Address, Value)
-   Every core will outputs once.
-  *************************************************************************/
-  bsg_remote_ptr_io_store(IO_X_INDEX,0x1260,__bsg_x);
-
-  /************************************************************************
-   Example of Using Prinf. 
-   Please call printf once a time, other wise the output string will be 
-   messed up.  
-   A mutex in printf should release this constraint.
-  *************************************************************************/
   if ((__bsg_x == bsg_tiles_X-1) && (__bsg_y == bsg_tiles_Y-1)) {
 
-     bsg_printf("\nManycore>> Hello from core %d, %d in group origin=(%d,%d).\n", \
-                        __bsg_x, __bsg_y, __bsg_grp_org_x, __bsg_grp_org_y);
-
-     bsg_printf("Manycore>> Values in DRAM:");
-     for(i=0; i<4; i++)
-        bsg_printf("%08x,",data[i]);
-     bsg_printf("\n\n");
-
+     * GS_CSR_base_p = 0x1;
+     tmp             = * GS_CSR_base_p;
+     bsg_printf("\nManycore>> CSR[0] = %x\n",  tmp);
   /************************************************************************
     Terminates the Simulation
   *************************************************************************/

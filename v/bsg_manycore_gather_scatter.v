@@ -135,7 +135,7 @@ module bsg_manycore_gather_scatter#(
                 $error("## Invalid CSR addr in Gather/Scatter Module, addr=%h,%t, %m", in_addr_lo, $time);
                 $finish();
         end
-        if( debug_p ) begin
+        if( 1 ) begin
                 
                 if( in_v_lo ) begin
                         if( in_we_lo )

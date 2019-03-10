@@ -25,7 +25,7 @@ module bsg_manycore
    // each byte contains the type of core being instantiated
    // type 0 is the standard core
 
-   ,parameter hetero_type_vec_p      = 0
+   ,parameter [num_tiles_y_p][num_tiles_x_p][31:0] hetero_type_vec_p      ={0} 
 
    // enable debugging
    ,parameter debug_p           = 0
@@ -114,11 +114,20 @@ module bsg_manycore
    // synopsys translate_off
    initial
    begin
+        int i,j;
        assert ((num_tiles_x_p > 0) && (num_tiles_y_p > 0))
            else $error("num_tiles_x_p and num_tiles_y_p must be positive constants");
-
-       $display("$bits(addr)=%-d, $bits(op)=%-d, $bits(op_ex)=%-d, $bits(data)=%-d, $bits(return_pkt)=%-d, $bits(y_cord)=%-d, $bits(x_cord)=%-d",
-           addr_width_p,2,(data_width_p>>3),data_width_p,y_cord_width_lp+x_cord_width_lp,y_cord_width_lp,x_cord_width_lp);
+        $display("## ----------------------------------------------------------------");
+        $display("## MANYCORE HETERO TYPE CONFIGUREATIONS");
+        $display("## ----------------------------------------------------------------");
+        for(i=0; i < num_tiles_y_p; i ++) begin
+                $write("## ");
+                for(j=0; j< num_tiles_x_p; j++) begin
+                        $write("%0d,", hetero_type_vec_p[i][j]);
+                end
+                $write("\n");
+        end
+        $display("## ----------------------------------------------------------------");
    end
    // synopsys translate_on
 
@@ -185,7 +194,7 @@ module bsg_manycore
                         ,(c == num_tiles_x_p-1) ? (((stub_e_p>>r) & 1'b1) == 1) : 1'b0 /* e */
                         ,(c == 0)               ? (((stub_w_p>>r) & 1'b1) == 1) : 1'b0 /* w */}),
                 .repeater_output_p((repeater_output_p >> (4*(r*num_tiles_x_p+c))) & 4'b1111),
-                .hetero_type_p((hetero_type_vec_p >> (8*(r*num_tiles_x_p + c))) & 8'b1111_1111),
+                .hetero_type_p(0),
                 .debug_p(debug_p)
               )
             tile

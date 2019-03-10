@@ -80,6 +80,7 @@ LIST_COMMON_SRCS+= $(BSG_IP_CORES_DIR)/bsg_noc/bsg_mesh_stitch.v
 LIST_COMMON_SRCS+= $(BSG_IP_CORES_DIR)/bsg_noc/bsg_mesh_to_ring_stitch.v
 LIST_COMMON_SRCS+= $(BSG_IP_CORES_DIR)/bsg_noc/bsg_mesh_router_buffered.v
 LIST_COMMON_SRCS+= $(BSG_MANYCORE_DIR)/v/bsg_manycore_hetero_socket.v
+LIST_COMMON_SRCS+= $(BSG_MANYCORE_DIR)/v/bsg_manycore_gather_scatter.v
 LIST_COMMON_SRCS+= $(BSG_MANYCORE_DIR)/v/bsg_manycore_mesh.v
 LIST_COMMON_SRCS+= $(BSG_MANYCORE_DIR)/v/bsg_manycore_mesh_node.v
 LIST_COMMON_SRCS+= $(BSG_MANYCORE_DIR)/v/bsg_manycore_endpoint.v

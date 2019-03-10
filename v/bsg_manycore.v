@@ -125,6 +125,9 @@ module bsg_manycore
                 for(j=0; j< num_tiles_x_p; j++) begin
                         $write("%0d,", hetero_type_vec_p[i][j]);
                 end
+                if( i==0 ) begin
+                $write(" //Ignored, Set to IO Router");
+                end
                 $write("\n");
         end
         $display("## ----------------------------------------------------------------");
@@ -193,7 +196,7 @@ module bsg_manycore
                         ,(r == 0)               ? (((stub_n_p>>c) & 1'b1) == 1) : 1'b0 /* n */
                         ,(c == num_tiles_x_p-1) ? (((stub_e_p>>r) & 1'b1) == 1) : 1'b0 /* e */
                         ,(c == 0)               ? (((stub_w_p>>r) & 1'b1) == 1) : 1'b0 /* w */}),
-                .repeater_output_p((repeater_output_p >> (4*(r*num_tiles_x_p+c))) & 4'b1111),
+                .repeater_output_p( hetero_type_vec_p[r][c]),
                 .hetero_type_p(0),
                 .debug_p(debug_p)
               )

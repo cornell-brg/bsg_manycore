@@ -34,60 +34,6 @@
 #error bsg_tiles_Y must be defined
 #endif
 
-#if bsg_global_X == 1
-#define bsg_noc_xbits 1
-#elif bsg_global_X == 2
-#define bsg_noc_xbits 1
-#elif bsg_global_X == 3
-#define bsg_noc_xbits 2
-#elif bsg_global_X == 4
-#define bsg_noc_xbits 2
-#elif bsg_global_X == 5
-#define bsg_noc_xbits 3
-#elif bsg_global_X == 6
-#define bsg_noc_xbits 3
-#elif bsg_global_X == 7
-#define bsg_noc_xbits 3
-#elif bsg_global_X == 8
-#define bsg_noc_xbits 3
-#elif bsg_global_X == 9
-#define bsg_noc_xbits 4
-#elif bsg_global_X == 16
-#define bsg_noc_xbits 4
-#else
-#error Unsupported bsg_global_X
-#endif
-
-#if bsg_global_Y == 1
-#define bsg_noc_ybits 1
-#elif bsg_global_Y == 2
-#define bsg_noc_ybits 2
-#elif bsg_global_Y == 3
-#define bsg_noc_ybits 2
-#elif bsg_global_Y == 4
-#define bsg_noc_ybits 3
-#elif bsg_global_Y == 5
-#define bsg_noc_ybits 3
-#elif bsg_global_Y == 6
-#define bsg_noc_ybits 3
-#elif bsg_global_Y == 7
-#define bsg_noc_ybits 3
-#elif bsg_global_Y == 8
-#define bsg_noc_ybits 4
-#elif bsg_global_Y == 9
-#define bsg_noc_ybits 4
-#elif bsg_global_Y == 16
-#define bsg_noc_ybits 5
-#elif bsg_global_Y == 20
-#define bsg_noc_ybits 5
-#elif bsg_global_Y == 25
-#define bsg_noc_ybits 5
-#elif bsg_global_Y == 31
-#define bsg_noc_ybits 5
-#else
-#error Unsupported bsg_global_Y
-#endif
-
 #if ( bsg_tiles_Y + 1 ) > (bsg_global_Y )
 #error bsg_tiles_Y must 1 less than bsg_global_Y
 #endif
@@ -109,14 +55,11 @@
 #define REMOTE_EPA_MASK_SHIFTS          (Y_CORD_SHIFTS + MAX_Y_CORD_BITS -1)
 #define GLOBAL_EPA_MASK_SHIFTS          (Y_CORD_SHIFTS + MAX_Y_CORD_BITS   )
 
-
-#if (bsg_noc_xbits + bsg_noc_ybits + EPA_ADDR_BITS) > 30
-#error Unsupported address configuration
-#endif
 //------------------------------------------------------
 // 3. Basic Remote Pointers Definition
 //------------------------------------------------------
-// Remote EPA = {01, y_cord, x_cord, addr }
+// Global EPA = {01, y_cord, x_cord, addr }
+// Remote EPA = {001,y_cord, x_cord, addr }
 // DRAM Addr  = {1 addr                   }
 //------------------------------------------------------
 

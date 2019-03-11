@@ -29,8 +29,8 @@ int main()
 
   if ((__bsg_x == bsg_tiles_X-1) && (__bsg_y == bsg_tiles_Y-1)) {
 
-     * GS_CSR_base_p = 0x1;
-     tmp             = * GS_CSR_base_p;
+     * (GS_CSR_base_p + 0x1 ) = 0x1;
+     tmp             = * (GS_CSR_base_p + 0x1);
      bsg_printf("\nManycore>> CSR[0] = %x\n",  tmp);
   /************************************************************************
     Terminates the Simulation

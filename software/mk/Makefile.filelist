@@ -59,6 +59,7 @@ LIST_COMMON_SRCS+= $(BSG_IP_CORES_DIR)/bsg_misc/bsg_mux_one_hot.v
 LIST_COMMON_SRCS+= $(BSG_IP_CORES_DIR)/bsg_misc/bsg_encode_one_hot.v
 LIST_COMMON_SRCS+= $(BSG_IP_CORES_DIR)/bsg_misc/bsg_scan.v
 LIST_COMMON_SRCS+= $(BSG_IP_CORES_DIR)/bsg_misc/bsg_counter_up_down.v
+LIST_COMMON_SRCS+= $(BSG_IP_CORES_DIR)/bsg_misc/bsg_counter_clear_up.v
 LIST_COMMON_SRCS+= $(BSG_IP_CORES_DIR)/bsg_misc/bsg_circular_ptr.v
 LIST_COMMON_SRCS+= $(BSG_IP_CORES_DIR)/bsg_misc/bsg_decode_with_v.v
 LIST_COMMON_SRCS+= $(BSG_IP_CORES_DIR)/bsg_misc/bsg_decode.v

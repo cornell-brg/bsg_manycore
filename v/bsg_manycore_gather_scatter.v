@@ -47,8 +47,10 @@ module bsg_manycore_gather_scatter#(
         ,CSR_STATUS_IDX         //the status, 0: idle, 1: running
         ,CSR_SRC_ADDR_IDX       //source addr
         ,CSR_SRC_CORD_IDX       //the source x/y cord, X==15:0, Y=31:16
+        ,CSR_1D_DIM_IDX         //legnth in byte for the 1st dimension
+        ,CSR_2D_SKIP_IDX        //2D skip in bytes.
+        ,CSR_2D_DIM_IDX         //2D dimension
         ,CSR_DST_ADDR_IDX       //dest addr
-        ,CSR_BYTE_LEN_IDX       //legnth in byte
         ,CSR_SIG_ADDR_IDX       //the signal addr, write non-zero to indicates finish
         ,CSR_NUM_lp
     } CSR_INDX;
@@ -86,7 +88,7 @@ module bsg_manycore_gather_scatter#(
 
     logic                             returned_v_lo     ;
     logic[data_width_p-1:0]           returned_data_lo  ;
-
+    logic[$clog2(max_out_credits_p+1)-1:0] out_credits_lo;
     bsg_manycore_endpoint_standard  #(
                               .x_cord_width_p        ( x_cord_width_p    )
                              ,.y_cord_width_p        ( y_cord_width_p    )
@@ -134,7 +136,7 @@ module bsg_manycore_gather_scatter#(
     ,.returned_fifo_full_o      (             )
     ,.returned_yumi_i           (returned_v_lo)
 
-    ,.out_credits_o     (               )
+    ,.out_credits_o     (out_credits_lo               )
     );
 
     //--------------------------------------------------------------
@@ -147,15 +149,16 @@ module bsg_manycore_gather_scatter#(
 
     //--------------------------------------------------------------
     //  The DMA state machine
-    typedef enum logic[0:0] {
-        eGS_dma_idle    = 1'b0
-       ,eGS_dma_busy    = 1'b1
+    typedef enum logic[1:0] {
+        eGS_dma_idle    = 2'd0
+       ,eGS_dma_busy    = 2'd1
+       ,eGS_dma_wait    = 2'd2
     }GS_dma_stat;
 
     GS_dma_stat  curr_stat_e_r,  next_stat_e ;
     
     wire dma_run_en =  in_v_lo & ( in_addr_lo == CSR_CMD_IDX );
-    wire dma_finish;
+    wire dma_send_finish, dma_all_credit_returned;
 
     always_comb begin
         case ( curr_stat_e_r )
@@ -163,8 +166,11 @@ module bsg_manycore_gather_scatter#(
                 if( dma_run_en)         next_stat_e = eGS_dma_busy;
                 else                    next_stat_e = eGS_dma_idle;
             eGS_dma_busy :
-                if( dma_finish)         next_stat_e = eGS_dma_idle;
+                if( dma_send_finish)    next_stat_e = eGS_dma_wait;
                 else                    next_stat_e = eGS_dma_busy;
+            eGS_dma_wait :
+                if( dma_all_credit_returned)    next_stat_e = eGS_dma_idle;
+                else                            next_stat_e = eGS_dma_wait;
         endcase
     end
 
@@ -176,31 +182,41 @@ module bsg_manycore_gather_scatter#(
     //--------------------------------------------------------------
     //  The Length Counter
      wire launch_one_word       = out_v_li & out_ready_lo ;
-     logic counter_clear_r;
-     
-     wire [data_width_p-2-1:0]  count_lo;
-     bsg_counter_clear_up#( 
-                .init_val_p     (0               )
-               ,.max_val_p      ( (1<<(data_width_p-2) ) -2  )
-     ) run_word_counter (
-        .clk_i      ( clk_i                                     )
-       ,.reset_i    ( reset_i                                   )
-       ,.clear_i    ( counter_clear_r                           )
-       ,.up_i       ( launch_one_word                           )
-       ,.count_o    ( count_lo                                  )
-    );
-      
-    wire counter_overflow = count_lo ==  CSR_mem_r [ CSR_BYTE_LEN_IDX ][data_width_p-1 : 2 ] ;
-    always_ff@(posedge clk_i) if (reset_i) counter_clear_r <= 1'b0;
-                              else         counter_clear_r <= counter_overflow ;
 
-    assign dma_finish = counter_overflow ;
+     wire [1:0]                      counter_en_li, counter_overflowed_lo;
+     wire [1:0][data_width_p-2-1:0]  counter_lo, counter_limit_li;
+     genvar i;
+
+     for(i = 0; i<2; i++) begin
+        bsg_counter_dynamic_limit_en#( .width_p ( data_width_p-2  )
+        ) run_counter (
+           .clk_i      ( clk_i                                     )
+          ,.reset_i    ( reset_i | dma_run_en                      )
+          ,.limit_i    ( counter_limit_li[i]                       )
+          ,.en_i       ( counter_en_li   [i]                       )
+          ,.counter_o  ( counter_lo      [i]                       )
+          ,.overflowed_o(counter_overflowed_lo [i]                 )
+        );
+    end
+    assign counter_en_li   [0] = ( launch_one_word      ); 
+    assign counter_limit_li[0] = CSR_mem_r [ CSR_1D_DIM_IDX ][data_width_p-1 : 2 ] ;
+
+    assign counter_en_li   [1] = counter_overflowed_lo[0];
+    assign counter_limit_li[1] = CSR_mem_r [ CSR_2D_DIM_IDX ][data_width_p-1 : 0 ] ;
+
+    assign dma_send_finish = & counter_overflowed_lo; 
+    assign dma_all_credit_returned = (curr_stat_e_r == eGS_dma_wait) && ( out_credits_lo == max_out_credits_p );
     //--------------------------------------------------------------
     //  Master interface to load 
     wire   eOp_n            =  `ePacketOp_remote_load   ;
-    assign out_v_li         =  curr_stat_e_r == eGS_dma_busy ;
+    assign out_v_li         =  (curr_stat_e_r == eGS_dma_busy) ;
+    wire   [addr_width_p-1:0] out_addr =   
+                                  (CSR_mem_r[ CSR_SRC_ADDR_IDX ] >> 2) 
+                                + (CSR_mem_r[ CSR_2D_SKIP_IDX  ] >> 2) * counter_lo[1] 
+                                + counter_lo[0] ;
+
     assign out_packet_li    = '{
-                                 addr           :       (CSR_mem_r[ CSR_SRC_ADDR_IDX ] >> 2) + count_lo 
+                                 addr           :       out_addr
                                 ,op             :       eOp_n
                                 ,op_ex          :       {(data_width_p>>3){1'b1}}
                                 ,payload        :       'b0 
@@ -226,9 +242,9 @@ module bsg_manycore_gather_scatter#(
                 if( returned_v_lo ) begin
                         returned_num = returned_num +1;
                         $display("## Recieved data = %h, returned num= %0d", returned_data_lo, returned_num);
-                        if( returned_num == (CSR_mem_r[ CSR_BYTE_LEN_IDX ] >> 2) ) 
-                                $finish();
                 end
+
+                if( dma_all_credit_returned ) $finish();
 
                 if( in_v_lo ) begin
                         if( in_we_lo )

@@ -132,7 +132,7 @@ module bsg_manycore_gather_scatter#(
     ,.returned_v_r_o            (returned_v_lo  )
     ,.returned_load_id_r_o      (             )
     ,.returned_fifo_full_o      (             )
-    ,.returned_yumi_i           (   1'b0      )
+    ,.returned_yumi_i           (returned_v_lo)
 
     ,.out_credits_o     (               )
     );
@@ -175,8 +175,9 @@ module bsg_manycore_gather_scatter#(
      
     //--------------------------------------------------------------
     //  The Length Counter
-     wire finish_one_word       = returned_v_lo;
-     wire                       counter_overflow;
+     wire launch_one_word       = out_v_li & out_ready_lo ;
+     logic counter_clear_r;
+     
      wire [data_width_p-2-1:0]  count_lo;
      bsg_counter_clear_up#( 
                 .init_val_p     (0               )
@@ -184,12 +185,14 @@ module bsg_manycore_gather_scatter#(
      ) run_word_counter (
         .clk_i      ( clk_i                                     )
        ,.reset_i    ( reset_i                                   )
-       ,.clear_i    ( counter_overflow                          )
-       ,.up_i       ( finish_one_word                           )
+       ,.clear_i    ( counter_clear_r                           )
+       ,.up_i       ( launch_one_word                           )
        ,.count_o    ( count_lo                                  )
     );
       
-    assign counter_overflow = count_lo ==  CSR_mem_r [ CSR_BYTE_LEN_IDX ][data_width_p-1 : 2 ] ;
+    wire counter_overflow = count_lo ==  CSR_mem_r [ CSR_BYTE_LEN_IDX ][data_width_p-1 : 2 ] ;
+    always_ff@(posedge clk_i) if (reset_i) counter_clear_r <= 1'b0;
+                              else         counter_clear_r <= counter_overflow ;
 
     assign dma_finish = counter_overflow ;
     //--------------------------------------------------------------
@@ -197,7 +200,7 @@ module bsg_manycore_gather_scatter#(
     wire   eOp_n            =  `ePacketOp_remote_load   ;
     assign out_v_li         =  curr_stat_e_r == eGS_dma_busy ;
     assign out_packet_li    = '{
-                                 addr           :       CSR_mem_r[ CSR_SRC_ADDR_IDX ] >> 2
+                                 addr           :       (CSR_mem_r[ CSR_SRC_ADDR_IDX ] >> 2) + count_lo 
                                 ,op             :       eOp_n
                                 ,op_ex          :       {(data_width_p>>3){1'b1}}
                                 ,payload        :       'b0 
@@ -210,6 +213,8 @@ module bsg_manycore_gather_scatter#(
     //--------------------------------------------------------------
     // Checking 
     // synopsys translate_off
+    logic [31:0] returned_num =0; 
+
     always_ff@(negedge clk_i ) begin
         if( in_v_lo &&  (in_addr_lo >= CSR_NUM_lp ) ) begin
                 $error("## Invalid CSR addr in Gather/Scatter Module, addr=%h,%t, %m", in_addr_lo, $time);
@@ -217,10 +222,14 @@ module bsg_manycore_gather_scatter#(
         end
 
         if( 1 ) begin
-                if( returned_v_lo ) begin
-                        $display("## Recieved data = %h, counter = %d", returned_data_lo, count_lo );
-                end
                 
+                if( returned_v_lo ) begin
+                        returned_num = returned_num +1;
+                        $display("## Recieved data = %h, returned num= %0d", returned_data_lo, returned_num);
+                        if( returned_num == (CSR_mem_r[ CSR_BYTE_LEN_IDX ] >> 2) ) 
+                                $finish();
+                end
+
                 if( in_v_lo ) begin
                         if( in_we_lo )
                                 $display("## G/S Write: addr=%h, value=%h", in_addr_lo<<2, in_data_lo);  

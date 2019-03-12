@@ -1,20 +1,36 @@
 
 #include "bsg_manycore.h"
 #include "bsg_set_tile_x_y.h"
+#include "bsg_mutex.h"
 
 /************************************************************************
  Declear an array in DRAM. 
 *************************************************************************/
-int data[4] __attribute__ ((section (".dram"))) = { -1, 1, 0xF, 0x80000000};
+#define X_DIM 4
+int src_data[ X_DIM ] __attribute__ ((section (".dram"))) = { -1, 1, 0xF, 0x80000000};
+
+int dst_data[ X_DIM ];
+
+int done =0;
 
 #define  GS_X_CORD  0 
 #define  GS_Y_CORD  (bsg_global_Y-1)
+enum CSR_INDX{
+         CSR_CMD_IDX =0         //command, write to start the transcation
+        ,CSR_STATUS_IDX         //the status, 0: idle, 1: running
+        ,CSR_SRC_ADDR_IDX       //source addr
+        ,CSR_SRC_CORD_IDX       //the source x/y cord, X==15:0, Y=31:16
+        ,CSR_DST_ADDR_IDX       //dest addr
+        ,CSR_BYTE_LEN_IDX       //legnth in byte
+        ,CSR_SIG_ADDR_IDX       //the signal addr, write non-zero to indicates finish
+        ,CSR_NUM_lp
+};
 
 int main()
 {
    int i, tmp;
    
-   bsg_remote_int_ptr GS_CSR_base_p; 
+   bsg_remote_int_ptr GS_CSR_base_p ; 
   /************************************************************************
    This will setup the  X/Y coordination. Current pre-defined corrdinations 
    includes:
@@ -28,14 +44,16 @@ int main()
   GS_CSR_base_p = bsg_global_ptr( GS_X_CORD, GS_Y_CORD, 0);
 
   if ((__bsg_x == bsg_tiles_X-1) && (__bsg_y == bsg_tiles_Y-1)) {
-
-     * (GS_CSR_base_p + 0x1 ) = 0x1;
-     tmp             = * (GS_CSR_base_p + 0x1);
-     bsg_printf("\nManycore>> CSR[0] = %x\n",  tmp);
-  /************************************************************************
-    Terminates the Simulation
-  *************************************************************************/
-    bsg_finish();
+     //Configure the CSR
+     * (GS_CSR_base_p + CSR_SRC_ADDR_IDX )      =  (int) src_data;
+     // Y=31:16, X=15:0
+     * (GS_CSR_base_p + CSR_SRC_CORD_IDX )      =  ( ((bsg_global_Y)<<16) | 0x0 );
+     * (GS_CSR_base_p + CSR_BYTE_LEN_IDX )      =  X_DIM * 4;
+     * (GS_CSR_base_p + CSR_CMD_IDX )           =  1;
+     /************************************************************************
+       Terminates the Simulation
+     *************************************************************************/
+  //  bsg_finish();
   }
 
   bsg_wait_while(1);

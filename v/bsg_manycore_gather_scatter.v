@@ -242,7 +242,7 @@ module bsg_manycore_gather_scatter#(
    logic      [mem_addr_width_lp : 0]       returned_pointer_r;
    always_ff@(posedge clk_i ) begin
         if( reset_i )           returned_pointer_r <= 'b0;
-        else if( dma_run_en)    returned_pointer_r <= CSR_mem_r[ CSR_DST_ADDR_IDX ] [ mem_addr_width_lp-1 : 0 ];
+        else if( dma_run_en)    returned_pointer_r <= CSR_mem_r[ CSR_DST_ADDR_IDX ] [ 2 +: mem_addr_width_lp ];
         else if( returned_v_lo) returned_pointer_r <= returned_pointer_r + 'b1;
    end
 
@@ -273,13 +273,15 @@ module bsg_manycore_gather_scatter#(
     assign mem_v_li     [mem_local_port_lp] = returned_v_lo ; 
     assign mem_we_li    [mem_local_port_lp] = 1'b1;
     assign mem_addr_li  [mem_local_port_lp] = returned_pointer_r        ;
+    assign mem_data_li  [mem_local_port_lp] = returned_data_lo          ;
     assign mem_mask_li  [mem_local_port_lp] = { (data_width_p>>3){1'b1} } ;
 
     //the request coming from network
     wire is_mem_addr    =  (in_addr_lo >= dmem_size_p ) && ( in_addr_lo < 2*dmem_size_p );
 
     assign mem_v_li     [mem_remote_port_lp ] =  is_mem_addr & in_v_lo;
-    assign mem_we_li    [mem_remote_port_lp ] =  in_we_lo  ;
+    assign mem_we_li    [mem_remote_port_lp ] =  in_we_lo   ;
+    assign mem_data_li  [mem_remote_port_lp ] =  in_data_lo ;
     assign mem_addr_li  [mem_remote_port_lp ] =  in_addr_lo ;
     assign mem_mask_li  [mem_remote_port_lp ] =  in_mask_lo ;
    

@@ -9,6 +9,7 @@
 module bsg_manycore_gather_scatter#( 
                              x_cord_width_p         = "inv"
                             ,y_cord_width_p         = "inv"
+                            ,dmem_size_p            = "inv" 
                             ,data_width_p           = 32
                             ,addr_width_p           = 32
                             ,load_id_width_p        = 11
@@ -19,12 +20,13 @@ module bsg_manycore_gather_scatter#(
                             ,debug_p                = 1
                             /* Dummy parameter for compatability with socket*/    
                             ,hetero_type_p          = 1
-                            ,dmem_size_p            = "inv" 
                             ,epa_byte_addr_width_p  = "inv" 
                             ,dram_ch_addr_width_p   = "inv"
                             ,dram_ch_start_col_p    = "inv"
                             ,icache_entries_p       = "inv"
                             ,icache_tag_width_p     = "inv"
+                            //Gather/Scatter parameters
+                            ,mem_begin_word_addr_lp = dmem_size_p
                            )
    (  input clk_i
     , input reset_i
@@ -57,24 +59,31 @@ module bsg_manycore_gather_scatter#(
     
     //--------------------------------------------------------------
     // The CSR Memory
-    //valid request
     logic [data_width_p-1:0] CSR_mem_r [ CSR_NUM_lp ]           ; 
 
     logic                               in_v_lo                 ;
     logic[data_width_p-1:0]             in_data_lo              ;
     logic[addr_width_p-1:0]             in_addr_lo              ;
     logic                               in_we_lo                ;
+    logic[(data_width_p>>3)-1:0]        in_mask_lo              ;
+
+    wire  is_CSR_addr = in_addr_lo < CSR_NUM_lp                 ;
+
     // write
     always@( posedge clk_i)
-        if( in_we_lo & in_v_lo )
+        if( in_we_lo & in_v_lo  & is_CSR_addr )
                 CSR_mem_r[ in_addr_lo ] <=  in_data_lo;
 
     // read
-    logic[data_width_p-1:0]             read_data_r             ;
+    logic                               CSR_returning_v_r           ;
+    logic[data_width_p-1:0]             CSR_returning_data_r             ;
     always@( posedge clk_i)
-        if( ~in_we_lo & in_v_lo)
-                read_data_r <= CSR_mem_r[ in_addr_lo ] ;
+        if( ~in_we_lo & in_v_lo & is_CSR_addr )
+                CSR_returning_data_r <= CSR_mem_r[ in_addr_lo ] ;
 
+    always_ff@(posedge clk_i)
+        if( reset_i ) CSR_returning_v_r <= 1'b0;
+        else          CSR_returning_v_r <= in_v_lo & is_CSR_addr ;
     //--------------------------------------------------------------
     // instantiate the endpoint standard
 
@@ -84,7 +93,8 @@ module bsg_manycore_gather_scatter#(
     logic                             out_ready_lo      ;
 
     logic                             in_yumi_li        ;
-    logic                             returning_v_r     ;
+    logic                             returning_v_li    ;
+    logic[data_width_p-1:0]           returning_data_li ;
 
     logic                             returned_v_lo     ;
     logic[data_width_p-1:0]           returned_data_lo  ;
@@ -112,15 +122,15 @@ module bsg_manycore_gather_scatter#(
     ,.in_v_o     ( in_v_lo              )
     ,.in_yumi_i  ( in_yumi_li           )
     ,.in_data_o  ( in_data_lo           )
-    ,.in_mask_o  (                      )
+    ,.in_mask_o  ( in_mask_lo           )
     ,.in_addr_o  ( in_addr_lo           )
     ,.in_we_o    ( in_we_lo             )
     ,.in_src_x_cord_o(  )
     ,.in_src_y_cord_o(  )
 
     // The memory read value
-    ,.returning_data_i  ( read_data_r   )
-    ,.returning_v_i     ( returning_v_r )
+    ,.returning_data_i  ( returning_data_li )
+    ,.returning_v_i     ( returning_v_li )
 
     // local outgoing data interface (does not include credits)
     // Tied up all the outgoing signals
@@ -139,13 +149,6 @@ module bsg_manycore_gather_scatter#(
     ,.out_credits_o     (out_credits_lo               )
     );
 
-    //--------------------------------------------------------------
-    // assign the signals to endpoint
-    assign  in_yumi_li  =       in_v_lo   ;     //we can always handle the reqeust
-
-    always_ff@(posedge clk_i)
-        if( reset_i ) returning_v_r <= 1'b0;
-        else          returning_v_r <= in_yumi_li;
 
     //--------------------------------------------------------------
     //  The DMA state machine
@@ -225,7 +228,68 @@ module bsg_manycore_gather_scatter#(
                                 ,y_cord         :       y_cord_width_p'( CSR_mem_r[ CSR_SRC_CORD_IDX][31: 16] )
                                 ,x_cord         :       x_cord_width_p'( CSR_mem_r[ CSR_SRC_CORD_IDX][15: 0 ] )
                                 };
-    
+   //------------------------------------------------------------------
+   // Instantiate the memory
+   localparam mem_addr_width_lp    = $clog2(dmem_size_p);
+   localparam mem_local_port_lp    = 1;
+   localparam mem_remote_port_lp   = 0;
+
+   wire [1:0]                                 mem_v_li, mem_we_li, mem_yumi_lo, mem_v_lo;
+   wire [1:0] [mem_addr_width_lp-1 : 0]       mem_addr_li;
+   wire [1:0] [data_width_p-1      : 0]       mem_data_li, mem_data_lo;
+   wire [1:0] [(data_width_p>>3)-1 : 0]       mem_mask_li;
+
+   logic      [mem_addr_width_lp : 0]       returned_pointer_r;
+   always_ff@(posedge clk_i ) begin
+        if( reset_i )           returned_pointer_r <= 'b0;
+        else if( dma_run_en)    returned_pointer_r <= CSR_mem_r[ CSR_DST_ADDR_IDX ] [ mem_addr_width_lp-1 : 0 ];
+        else if( returned_v_lo) returned_pointer_r <= returned_pointer_r + 'b1;
+   end
+
+   bsg_mem_banked_crossbar #
+    ( .num_ports_p  (2)
+     ,.num_banks_p  (1)
+     ,.bank_size_p  (dmem_size_p )
+     ,.data_width_p (data_width_p)
+     // Priority,  0 = fixed hi, 
+     ,.rr_lo_hi_p   ( 0 ) 
+    ) mem
+    (  .clk_i    
+      ,.reset_i  
+      //deprecated, tied to zero
+      ,.reverse_pr_i( 1'b0)
+      ,.v_i     (mem_v_li)
+      ,.w_i     (mem_we_li)
+      ,.addr_i  (mem_addr_li)
+      ,.data_i  (mem_data_li)
+      ,.mask_i  (mem_mask_li)
+
+      // whether the crossbar accepts the input
+     ,.yumi_o  ( mem_yumi_lo)
+     ,.v_o     ( mem_v_lo   )
+     ,.data_o  ( mem_data_lo)
+    );
+    //the returned load data 
+    assign mem_v_li     [mem_local_port_lp] = returned_v_lo ; 
+    assign mem_we_li    [mem_local_port_lp] = 1'b1;
+    assign mem_addr_li  [mem_local_port_lp] = returned_pointer_r        ;
+    assign mem_mask_li  [mem_local_port_lp] = { (data_width_p>>3){1'b1} } ;
+
+    //the request coming from network
+    wire is_mem_addr    =  (in_addr_lo >= dmem_size_p ) && ( in_addr_lo < 2*dmem_size_p );
+
+    assign mem_v_li     [mem_remote_port_lp ] =  is_mem_addr & in_v_lo;
+    assign mem_we_li    [mem_remote_port_lp ] =  in_we_lo  ;
+    assign mem_addr_li  [mem_remote_port_lp ] =  in_addr_lo ;
+    assign mem_mask_li  [mem_remote_port_lp ] =  in_mask_lo ;
+   
+    //--------------------------------------------------------------
+    // assign the signals to endpoint
+    assign    in_yumi_li        = in_v_lo & ( is_CSR_addr |  mem_yumi_lo[ mem_remote_port_lp ] ); 
+    assign    returning_v_li    = CSR_returning_v_r | mem_v_lo[ mem_remote_port_lp ];
+
+    assign    returning_data_li = CSR_returning_v_r ? CSR_returning_data_r 
+                                                    : mem_data_lo[ mem_remote_port_lp ];
     //--------------------------------------------------------------
     // Checking 
     // synopsys translate_off

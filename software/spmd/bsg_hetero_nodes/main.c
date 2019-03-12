@@ -63,6 +63,7 @@ int main()
      * (GS_CSR_base_p + CSR_1D_DIM_IDX   )      =  SUB_X_DIM * 4;
      * (GS_CSR_base_p + CSR_2D_SKIP_IDX  )      =  Y_DIM * 4;
      * (GS_CSR_base_p + CSR_2D_DIM_IDX   )      =  SUB_Y_DIM    ;
+     * (GS_CSR_base_p + CSR_DST_ADDR_IDX   )    =  (int) dst_data ;
      * (GS_CSR_base_p + CSR_CMD_IDX )           =  1;
      /************************************************************************
        Terminates the Simulation

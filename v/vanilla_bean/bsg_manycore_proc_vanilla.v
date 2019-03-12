@@ -595,10 +595,12 @@ module bsg_manycore_proc_vanilla #(x_cord_width_p   = "inv"
    // Handle the returning data/credit back to the network
    // ----------------------------------------------------------------------------------------
    wire                   store_yumi      = in_yumi_li & in_we_lo;
-   wire                   CSR_load_yumi   = is_config_decoded & (~in_we_lo);
+   wire                   CSR_load_yumi   = in_v_lo & is_config_decoded & (~in_we_lo);
    wire[data_width_p-1:0] CSR_load_data   = is_tgo_x_addr ? CSR_TGO_X_r : CSR_TGO_Y_r;
    //delay the response for store for 1 cycle
-   always_ff@(posedge clk_i)    delayed_returning_v_r   <= store_yumi | CSR_load_yumi;
+   always_ff@(posedge clk_i) 
+        if( reset_i )   delayed_returning_v_r   <= 1'b0;
+        else            delayed_returning_v_r   <= store_yumi | CSR_load_yumi;
    always_ff@(posedge clk_i)    delayed_returning_data_r<= CSR_load_yumi ? CSR_load_data :  in_data_lo;
 
    assign       returning_v     = load_returning_v | delayed_returning_v_r;

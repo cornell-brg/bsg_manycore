@@ -114,7 +114,7 @@ module bsg_manycore_pkt_encode
 //     end
    always_ff @(negedge clk_i)
      begin
-        if ( ~addr_decode.remote & (swap_aq_i | swap_rl_i ) & v_i)
+        if ( ~is_network_addr & (swap_aq_i | swap_rl_i ) & v_i)
           begin
              $error("%m swap with local memory address %x", addr_i);
              $finish();

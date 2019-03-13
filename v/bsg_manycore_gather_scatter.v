@@ -125,6 +125,7 @@ module bsg_manycore_gather_scatter#(
 
     logic                             returned_v_lo     ;
     logic[data_width_p-1:0]           returned_data_lo  ;
+    logic[load_id_width_p-1:0]        returned_load_id_r_lo, load_id_r;
     logic[$clog2(max_out_credits_p+1)-1:0] out_credits_lo;
     bsg_manycore_endpoint_standard  #(
                               .x_cord_width_p        ( x_cord_width_p    )
@@ -168,8 +169,8 @@ module bsg_manycore_gather_scatter#(
    // Like the memory interface, processor should always ready be to
    // handle the returned data
     ,.returned_data_r_o         (returned_data_lo     )
-    ,.returned_v_r_o            (returned_v_lo  )
-    ,.returned_load_id_r_o      (             )
+    ,.returned_v_r_o            (returned_v_lo        )
+    ,.returned_load_id_r_o      (returned_load_id_r_lo)
     ,.returned_fifo_full_o      (             )
     ,.returned_yumi_i           (returned_v_lo)
 
@@ -265,17 +266,26 @@ module bsg_manycore_gather_scatter#(
     assign dma_all_credit_returned = (curr_stat_e_r == eGS_dma_wait) && ( out_credits_lo == max_out_credits_p );
     //--------------------------------------------------------------
     //  Master interface to load and signal 
+    wire   bsg_manycore_packet_payload_u  payload_s;
+    
+    always_ff@(posedge clk_i) 
+        if( reset_i | dma_run_en ) load_id_r <= 'b0            ;
+        else                       load_id_r <= load_id_r + 'b1; 
+
+    assign payload_s.load_info_s.load_id=  load_id_r                     ; 
+
     wire   dma_fetching     =  (curr_stat_e_r == eGS_dma_busy) ;
     wire   dma_signaling    =  (curr_stat_e_r == eGS_dma_signal);
 
     assign out_v_li         =  dma_fetching  | dma_signaling ;
+
 
     assign out_packet_li    = '{
                                  addr        :   dma_fetching ? dim_addr_r[0] :  sig_addr_s.D0.epa_addr >> 2
                                 ,op          :   dma_fetching ? `ePacketOp_remote_load
                                                               : `ePacketOp_remote_store 
                                 ,op_ex       :   {(data_width_p>>3){1'b1}}
-                                ,payload     :   data_width_p'(1) 
+                                ,payload     :   dma_fetching ? payload_s     :   data_width_p'(1) 
                                 ,src_y_cord  :   my_y_i
                                 ,src_x_cord  :   my_x_i
                                 ,x_cord      :   dma_fetching ? x_cord_width_p'( dim_addr_r[ 1 ]   )
@@ -350,8 +360,6 @@ module bsg_manycore_gather_scatter#(
     //--------------------------------------------------------------
     // Checking 
     // synopsys translate_off
-    logic [31:0] returned_num =0; 
-
     always_ff@(negedge clk_i ) begin
         if( in_v_lo &(~ (is_CSR_addr | is_mem_addr ) ) ) begin
                 $error("## Invalid CSR addr in Gather/Scatter Module, addr=%h,%t, %m", in_addr_lo<<2 , $time);
@@ -361,11 +369,10 @@ module bsg_manycore_gather_scatter#(
         if( 1 ) begin
                 
                 if( returned_v_lo ) begin
-                        returned_num = returned_num +1;
-                        $display("## G/S recieved data = %h, returned num= %0d", returned_data_lo, returned_num);
+                        $display("## G/S recieved data = %h, load_id = %0d", returned_data_lo, returned_load_id_r_lo);
                 end
 
-                if( dma_all_credit_returned ) $finish();
+                //if( dma_all_credit_returned ) $finish();
 
                 if( in_v_lo && is_CSR_addr ) begin
                         if( in_we_lo )

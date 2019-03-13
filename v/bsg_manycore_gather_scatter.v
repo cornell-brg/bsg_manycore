@@ -46,25 +46,47 @@ module bsg_manycore_gather_scatter#(
     //  CSR definitions
      enum {
          CSR_CMD_IDX =0         //command, write to start the transcation
-        ,CSR_STATUS_IDX         //the status, 0: idle, 1: running
-        ,CSR_SRC_ADDR_IDX       //source addr
-        ,CSR_SRC_CORD_IDX       //the source x/y cord, X==15:0, Y=31:16
-        ,CSR_1D_DIM_IDX         //legnth in byte for the 1st dimension
-        ,CSR_2D_SKIP_IDX        //2D skip in bytes.
-        ,CSR_2D_DIM_IDX         //2D dimension
-        ,CSR_DST_ADDR_IDX       //dest addr
-        ,CSR_SIG_ADDR_IDX       //the signal addr, write non-zero to indicates finish
+        ,CSR_SRC_ADDR_HI_IDX    //Source Address Configuration High, using Norm_NPA_s format
+        ,CSR_SRC_ADDR_LO_IDX    //Source Address Configuration Low,  using Norm_NPA_s format
+        ,CSR_SRC_DIM_HI_IDX     //Source Dimension Configuration High, using Norm_NPA_s format
+        ,CSR_SRC_DIM_LO_IDX     //Source Dimension Configuration Low,  using Norm_NPA_s format
+        ,CSR_SRC_INCR_HI_IDX    //Source Increasement Configuration High, using Norm_NPA_s format
+        ,CSR_SRC_INCR_LO_IDX    //Source Increasement Configuration Low,  using Norm_NPA_s format
+
+        ,CSR_DST_ADDR_IDX       //Local Desitination  addr
+        ,CSR_SIG_ADDR_HI_IDX    //Signal Addr High, using Norm_NPA_s format
+        ,CSR_SIG_ADDR_LO_IDX    //Signal Addr Low, using Norm_NPA_s format
         ,CSR_NUM_lp
     } CSR_INDX;
     
-    struct packed {
-        logic [15: 0 ] addr   ;
-        logic [7 : 0 ] y_cord ;
-        logic [7 : 0 ] x_cord ;
-    }signal_addr_s;
+    typedef struct packed {
+        logic [7 : 0 ] reserved ;               //MSB
+        logic [7 : 0 ] chip_id  ;
+        union packed  {
+                logic [7 : 0] y_incr    ;
+                logic [7 : 0] y_dim     ;
+                logic [7 : 0] y_cord    ;
+        }D2;
+        union packed {
+                logic [7 : 0] x_incr    ;
+                logic [7 : 0] x_dim     ;
+                logic [7 : 0] x_cord    ;
+        }D1;
+        union packed {                           //LSB
+                logic [31 : 0] epa_incr ;
+                logic [31 : 0] epa_dim  ;
+                logic [31 : 0] epa_addr ;
+        }D0;
+    } Norm_NPA_s;
+
     //--------------------------------------------------------------
     // The CSR Memory
     logic [data_width_p-1:0] CSR_mem_r [ CSR_NUM_lp ]           ; 
+
+    wire Norm_NPA_s src_addr_s = { CSR_mem_r[ CSR_SRC_ADDR_HI_IDX ],  CSR_mem_r[ CSR_SRC_ADDR_LO_IDX ]};
+    wire Norm_NPA_s src_dim_s  = { CSR_mem_r[ CSR_SRC_DIM_HI_IDX  ],  CSR_mem_r[ CSR_SRC_DIM_LO_IDX  ]};
+    wire Norm_NPA_s src_incr_s = { CSR_mem_r[ CSR_SRC_INCR_HI_IDX ],  CSR_mem_r[ CSR_SRC_INCR_LO_IDX ]};
+    wire Norm_NPA_s sig_addr_s = { CSR_mem_r[ CSR_SIG_ADDR_HI_IDX ],  CSR_mem_r[ CSR_SIG_ADDR_LO_IDX ]};
 
     logic                               in_v_lo                 ;
     logic[data_width_p-1:0]             in_data_lo              ;
@@ -194,14 +216,17 @@ module bsg_manycore_gather_scatter#(
     end
      
     //--------------------------------------------------------------
-    //  The Length Counter
+    //  The 3  Length Counters
 
-     wire [1:0]                      counter_en_li, counter_overflowed_lo;
-     wire [1:0][data_width_p-2-1:0]  counter_lo, counter_limit_li;
+     wire [2:0]                      counter_en_li, counter_overflowed_lo;
+     wire [2:0][addr_width_p-1:0]  counter_lo, counter_limit_li;
+
+     logic[addr_width_p-1 : 0]       dim_addr_r, dim_incr, dim_base ; //the accumulated address for each dim
+
      genvar i;
 
-     for(i = 0; i<2; i++) begin
-        bsg_counter_dynamic_limit_en#( .width_p ( data_width_p-2  )
+     for(i = 0; i<3; i++) begin
+        bsg_counter_dynamic_limit_en#( .width_p ( addr_width_p    )
         ) run_counter (
            .clk_i      ( clk_i                                     )
           ,.reset_i    ( reset_i | dma_run_en                      )
@@ -210,12 +235,26 @@ module bsg_manycore_gather_scatter#(
           ,.counter_o  ( counter_lo      [i]                       )
           ,.overflowed_o(counter_overflowed_lo [i]                 )
         );
+        
+        always_ff@(posedge clk_i ) begin
+                if( reset_i | dma_run_en )      dim_addr_r[i] <= dim_base[i];
+                else if( counter_en_li [i] )    dim_addr_r[i] <= dim_addr_r[i] + dim_incr[i];
+        end
     end
     assign counter_en_li   [0] = ( launch_one_word      ); 
-    assign counter_limit_li[0] = CSR_mem_r [ CSR_1D_DIM_IDX ][data_width_p-1 : 2 ] ;
+    assign counter_limit_li[0] = addr_width_p'(src_dim_s.D0.epa_dim  [31 : 2]); 
+    assign dim_base        [0] = addr_width_p'(src_addr_s.D0.epa_addr[31 : 2]);
+    assign dim_incr        [0] = addr_width_p'(src_incr_s.D0.epa_incr[31 : 2]);
 
     assign counter_en_li   [1] = counter_overflowed_lo[0];
-    assign counter_limit_li[1] = CSR_mem_r [ CSR_2D_DIM_IDX ][data_width_p-1 : 0 ] ;
+    assign counter_limit_li[1] = addr_width_p'(src_dim_s.D1.x_dim  );
+    assign dim_base        [1] = addr_width_p'(src_addr_s.D1.x_cord);
+    assign dim_incr        [1] = addr_width_p'(src_incr_s.D1.x_incr);
+
+    assign counter_en_li   [2] = counter_overflowed_lo[1];
+    assign counter_limit_li[2] = addr_width_p'( src_dim_s.D2.y_dim  );
+    assign dim_base        [2] = addr_width_p'(src_addr_s.D2.y_cord);
+    assign dim_incr        [2] = addr_width_p'(src_incr_s.D2.y_incr);
 
     assign dma_send_finish = & counter_overflowed_lo; 
     assign dma_all_credit_returned = (curr_stat_e_r == eGS_dma_wait) && ( out_credits_lo == max_out_credits_p );
@@ -225,25 +264,19 @@ module bsg_manycore_gather_scatter#(
     wire   dma_signaling    =  (curr_stat_e_r == eGS_dma_signal);
 
     assign out_v_li         =  dma_fetching  | dma_signaling ;
-    wire   [addr_width_p-1:0] fetch_addr =   
-                                  (CSR_mem_r[ CSR_SRC_ADDR_IDX ] >> 2) 
-                                + (CSR_mem_r[ CSR_2D_SKIP_IDX  ] >> 2) * counter_lo[1] 
-                                + counter_lo[0] ;
-
-    assign signal_addr_s    = CSR_mem_r[ CSR_SIG_ADDR_IDX];
 
     assign out_packet_li    = '{
-                                 addr        :   dma_fetching ? fetch_addr :  signal_addr_s.addr >> 2
+                                 addr        :   dma_fetching ? dim_addr_r[0] :  sig_addr_s.D0.epa_addr >> 2
                                 ,op          :   dma_fetching ? `ePacketOp_remote_load
                                                               : `ePacketOp_remote_store 
                                 ,op_ex       :   {(data_width_p>>3){1'b1}}
                                 ,payload     :   data_width_p'(1) 
                                 ,src_y_cord  :   my_y_i
                                 ,src_x_cord  :   my_x_i
-                                ,y_cord      :   dma_fetching ? y_cord_width_p'( CSR_mem_r[ CSR_SRC_CORD_IDX][31: 16] )
-                                                              : y_cord_width_p'( signal_addr_s.y_cord )
-                                ,x_cord      :   dma_fetching ? x_cord_width_p'( CSR_mem_r[ CSR_SRC_CORD_IDX][15: 0 ] )
-                                                              : x_cord_width_p'( signal_addr_s.x_cord )
+                                ,x_cord      :   dma_fetching ? x_cord_width_p'( dim_addr_r[ 1 ]   )
+                                                              : x_cord_width_p'( sig_addr_s.D1.x_cord )
+                                ,y_cord      :   dma_fetching ? y_cord_width_p'( dim_addr_r[ 2 ]   )
+                                                              : y_cord_width_p'( sig_addr_s.D2.y_cord )
                                 };
    //------------------------------------------------------------------
    // Instantiate the memory
@@ -327,7 +360,7 @@ module bsg_manycore_gather_scatter#(
                         $display("## G/S recieved data = %h, returned num= %0d", returned_data_lo, returned_num);
                 end
 
-                //if( dma_all_credit_returned ) $finish();
+                if( dma_all_credit_returned ) $finish();
 
                 if( in_v_lo && is_CSR_addr ) begin
                         if( in_we_lo )

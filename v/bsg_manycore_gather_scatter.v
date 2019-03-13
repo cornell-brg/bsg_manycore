@@ -221,7 +221,8 @@ module bsg_manycore_gather_scatter#(
      wire [2:0]                      counter_en_li, counter_overflowed_lo;
      wire [2:0][addr_width_p-1 : 0]  counter_lo, counter_limit_li;
 
-     logic[2:0][addr_width_p-1 : 0]  dim_addr_r, dim_incr, dim_base ; //the accumulated address for each dim
+     //the accumulated address for each dim
+     logic[2:0][addr_width_p-1 : 0]  dim_addr_r, dim_incr, dim_base, dim_finish ; 
 
      genvar i;
 
@@ -239,9 +240,13 @@ module bsg_manycore_gather_scatter#(
         if( i== 0) assign counter_en_li[i] =   launch_one_word ;
         else       assign counter_en_li[i] = & counter_overflowed_lo[ i-1 : 0];
         
+        assign dim_finish[i]  = counter_en_li[i] & counter_overflowed_lo[i]; 
+
         always_ff@(posedge clk_i ) begin
-                if( reset_i | dma_run_en )      dim_addr_r[i] <= dim_base[i];
-                else if( counter_en_li [i] )    dim_addr_r[i] <= dim_addr_r[i] + dim_incr[i];
+                if( reset_i | dma_run_en | dim_finish[i]  )      
+                        dim_addr_r[i] <= dim_base[i];
+                else if( counter_en_li [i] )    
+                        dim_addr_r[i] <= dim_addr_r[i] + dim_incr[i];
         end
     end
     assign counter_limit_li[0] = addr_width_p'(src_dim_s.D0.epa_dim  [31 : 2]); 
@@ -256,7 +261,7 @@ module bsg_manycore_gather_scatter#(
     assign dim_base        [2] = addr_width_p'(src_addr_s.D2.y_cord);
     assign dim_incr        [2] = addr_width_p'(src_incr_s.D2.y_incr);
 
-    assign dma_send_finish = & counter_overflowed_lo; 
+    assign dma_send_finish = dim_finish[2]; 
     assign dma_all_credit_returned = (curr_stat_e_r == eGS_dma_wait) && ( out_credits_lo == max_out_credits_p );
     //--------------------------------------------------------------
     //  Master interface to load and signal 

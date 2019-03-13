@@ -57,6 +57,11 @@ module bsg_manycore_gather_scatter#(
         ,CSR_NUM_lp
     } CSR_INDX;
     
+    struct packed {
+        logic [15: 0 ] addr   ;
+        logic [7 : 0 ] y_cord ;
+        logic [7 : 0 ] x_cord ;
+    }signal_addr_s;
     //--------------------------------------------------------------
     // The CSR Memory
     logic [data_width_p-1:0] CSR_mem_r [ CSR_NUM_lp ]           ; 
@@ -156,24 +161,30 @@ module bsg_manycore_gather_scatter#(
         eGS_dma_idle    = 2'd0
        ,eGS_dma_busy    = 2'd1
        ,eGS_dma_wait    = 2'd2
+       ,eGS_dma_signal  = 2'd3
     }GS_dma_stat;
 
     GS_dma_stat  curr_stat_e_r,  next_stat_e ;
     
     wire dma_run_en =  in_v_lo & ( in_addr_lo == CSR_CMD_IDX );
+    wire launch_one_word       = out_v_li & out_ready_lo ;
+
     wire dma_send_finish, dma_all_credit_returned;
 
     always_comb begin
         case ( curr_stat_e_r )
             eGS_dma_idle :
-                if( dma_run_en)         next_stat_e = eGS_dma_busy;
-                else                    next_stat_e = eGS_dma_idle;
+                if( dma_run_en)                 next_stat_e = eGS_dma_busy;
+                else                            next_stat_e = eGS_dma_idle;
             eGS_dma_busy :
-                if( dma_send_finish)    next_stat_e = eGS_dma_wait;
-                else                    next_stat_e = eGS_dma_busy;
+                if( dma_send_finish)            next_stat_e = eGS_dma_wait;
+                else                            next_stat_e = eGS_dma_busy;
             eGS_dma_wait :
-                if( dma_all_credit_returned)    next_stat_e = eGS_dma_idle;
+                if( dma_all_credit_returned)    next_stat_e = eGS_dma_signal;
                 else                            next_stat_e = eGS_dma_wait;
+            eGS_dma_signal:
+                if( launch_one_word     )       next_stat_e = eGS_dma_idle ;
+                else                            next_stat_e = eGS_dma_signal;
         endcase
     end
 
@@ -184,7 +195,6 @@ module bsg_manycore_gather_scatter#(
      
     //--------------------------------------------------------------
     //  The Length Counter
-     wire launch_one_word       = out_v_li & out_ready_lo ;
 
      wire [1:0]                      counter_en_li, counter_overflowed_lo;
      wire [1:0][data_width_p-2-1:0]  counter_lo, counter_limit_li;
@@ -210,23 +220,30 @@ module bsg_manycore_gather_scatter#(
     assign dma_send_finish = & counter_overflowed_lo; 
     assign dma_all_credit_returned = (curr_stat_e_r == eGS_dma_wait) && ( out_credits_lo == max_out_credits_p );
     //--------------------------------------------------------------
-    //  Master interface to load 
-    wire   eOp_n            =  `ePacketOp_remote_load   ;
-    assign out_v_li         =  (curr_stat_e_r == eGS_dma_busy) ;
-    wire   [addr_width_p-1:0] out_addr =   
+    //  Master interface to load and signal 
+    wire   dma_fetching     =  (curr_stat_e_r == eGS_dma_busy) ;
+    wire   dma_signaling    =  (curr_stat_e_r == eGS_dma_signal);
+
+    assign out_v_li         =  dma_fetching  | dma_signaling ;
+    wire   [addr_width_p-1:0] fetch_addr =   
                                   (CSR_mem_r[ CSR_SRC_ADDR_IDX ] >> 2) 
                                 + (CSR_mem_r[ CSR_2D_SKIP_IDX  ] >> 2) * counter_lo[1] 
                                 + counter_lo[0] ;
 
+    assign signal_addr_s    = CSR_mem_r[ CSR_SIG_ADDR_IDX];
+
     assign out_packet_li    = '{
-                                 addr           :       out_addr
-                                ,op             :       eOp_n
-                                ,op_ex          :       {(data_width_p>>3){1'b1}}
-                                ,payload        :       'b0 
-                                ,src_y_cord     :       my_y_i
-                                ,src_x_cord     :       my_x_i
-                                ,y_cord         :       y_cord_width_p'( CSR_mem_r[ CSR_SRC_CORD_IDX][31: 16] )
-                                ,x_cord         :       x_cord_width_p'( CSR_mem_r[ CSR_SRC_CORD_IDX][15: 0 ] )
+                                 addr        :   dma_fetching ? fetch_addr :  signal_addr_s.addr >> 2
+                                ,op          :   dma_fetching ? `ePacketOp_remote_load
+                                                              : `ePacketOp_remote_store 
+                                ,op_ex       :   {(data_width_p>>3){1'b1}}
+                                ,payload     :   data_width_p'(1) 
+                                ,src_y_cord  :   my_y_i
+                                ,src_x_cord  :   my_x_i
+                                ,y_cord      :   dma_fetching ? y_cord_width_p'( CSR_mem_r[ CSR_SRC_CORD_IDX][31: 16] )
+                                                              : y_cord_width_p'( signal_addr_s.y_cord )
+                                ,x_cord      :   dma_fetching ? x_cord_width_p'( CSR_mem_r[ CSR_SRC_CORD_IDX][15: 0 ] )
+                                                              : x_cord_width_p'( signal_addr_s.x_cord )
                                 };
    //------------------------------------------------------------------
    // Instantiate the memory
@@ -298,8 +315,8 @@ module bsg_manycore_gather_scatter#(
     logic [31:0] returned_num =0; 
 
     always_ff@(negedge clk_i ) begin
-        if( in_v_lo &&  (in_addr_lo >= CSR_NUM_lp ) ) begin
-                $error("## Invalid CSR addr in Gather/Scatter Module, addr=%h,%t, %m", in_addr_lo, $time);
+        if( in_v_lo &(~ (is_CSR_addr | is_mem_addr ) ) ) begin
+                $error("## Invalid CSR addr in Gather/Scatter Module, addr=%h,%t, %m", in_addr_lo<<2 , $time);
                 $finish();
         end
 
@@ -307,16 +324,16 @@ module bsg_manycore_gather_scatter#(
                 
                 if( returned_v_lo ) begin
                         returned_num = returned_num +1;
-                        $display("## Recieved data = %h, returned num= %0d", returned_data_lo, returned_num);
+                        $display("## G/S recieved data = %h, returned num= %0d", returned_data_lo, returned_num);
                 end
 
-                if( dma_all_credit_returned ) $finish();
+                //if( dma_all_credit_returned ) $finish();
 
-                if( in_v_lo ) begin
+                if( in_v_lo && is_CSR_addr ) begin
                         if( in_we_lo )
-                                $display("## G/S Write: addr=%h, value=%h", in_addr_lo<<2, in_data_lo);  
+                                $display("## G/S CSR Write: addr=%h, value=%h", in_addr_lo<<2, in_data_lo);  
                         else
-                                $display("## G/S Read : addr=%h, value=%h", in_addr_lo<<2, CSR_mem_r[in_addr_lo]);  
+                                $display("## G/S CSR Read : addr=%h, value=%h", in_addr_lo<<2, CSR_mem_r[in_addr_lo]);  
                 end
         end
     end

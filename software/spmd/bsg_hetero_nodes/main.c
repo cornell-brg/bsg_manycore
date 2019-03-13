@@ -38,11 +38,22 @@ int done =0;
     ,CSR_NUM_lp
 } CSR_INDX;
 
+union {
+        struct{
+               char  x_cord ;
+               char  y_cord ;
+               short addr   ;
+        };
+        int    val        ;
+}signal_addr_s;
+
 int main()
 {
-   int i, tmp;
-   
-   bsg_remote_int_ptr GS_CSR_base_p ; 
+   int i, j;
+  
+    
+   bsg_remote_int_ptr GS_CSR_base_p; 
+   volatile int *GS_dst_ptr; 
   /************************************************************************
    This will setup the  X/Y coordination. Current pre-defined corrdinations 
    includes:
@@ -55,6 +66,12 @@ int main()
   
   GS_CSR_base_p = bsg_global_ptr( GS_X_CORD, GS_Y_CORD, 0);
 
+  GS_dst_ptr    = (volatile int *) bsg_global_ptr( GS_X_CORD, GS_Y_CORD, dst_data);
+
+  signal_addr_s.x_cord  = __bsg_x + __bsg_grp_org_x ;
+  signal_addr_s.y_cord  = __bsg_y + __bsg_grp_org_y ;
+  signal_addr_s.addr    = (short)( &done );
+
   if ((__bsg_x == bsg_tiles_X-1) && (__bsg_y == bsg_tiles_Y-1)) {
      //Configure the CSR, src[1][1]
      * (GS_CSR_base_p + CSR_SRC_ADDR_IDX )      =  (int) (&src_data[1][1]);
@@ -64,11 +81,28 @@ int main()
      * (GS_CSR_base_p + CSR_2D_SKIP_IDX  )      =  Y_DIM * 4;
      * (GS_CSR_base_p + CSR_2D_DIM_IDX   )      =  SUB_Y_DIM    ;
      * (GS_CSR_base_p + CSR_DST_ADDR_IDX   )    =  (int) dst_data ;
+     * (GS_CSR_base_p + CSR_SIG_ADDR_IDX   )    =  signal_addr_s.val ;
      * (GS_CSR_base_p + CSR_CMD_IDX )           =  1;
+
+     //wait the done signal.
+     bsg_wait_local_int( &done, 1);
+     bsg_printf("\nSource Matrix: \n");
+     for( i=0; i< X_DIM; i++){
+        for(j=0; j< Y_DIM; j++)
+                bsg_printf("\t%d,", src_data[i][j] );
+        bsg_printf("\n");
+     }
+
+     bsg_printf("\nFetched Sub Matrix: \n");
+     for( i=0; i< SUB_X_DIM; i++){
+        for(j=0; j< SUB_Y_DIM; j++)
+                bsg_printf("\t%d,", *(GS_dst_ptr + i*SUB_Y_DIM + j) );
+        bsg_printf("\n");
+     }
      /************************************************************************
        Terminates the Simulation
      *************************************************************************/
-  //  bsg_finish();
+     bsg_finish();
   }
 
   bsg_wait_while(1);

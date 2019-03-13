@@ -3,17 +3,21 @@
 #include "bsg_set_tile_x_y.h"
 #include "bsg_mutex.h"
 
+// #define   BSG_TILE_GROUP_X_DIM  bsg_tiles_X
+// #define   BSG_TILE_GROUP_Y_DIM  bsg_tiles_Y
+// #include "bsg_tile_group_barrier.h"
+// INIT_TILE_GROUP_BARRIER( row_barrier, col_barrier, 0, 0, bsg_tiles_X, bsg_tiles_Y);
 /************************************************************************
  Declear an array in DRAM. 
 *************************************************************************/
 #define SUB_EPA_DIM 2
-
+#define TOTAL_NUM   (SUB_EPA_DIM * bsg_tiles_X * bsg_tiles_Y)
 // each tile will allocate SUB_EPA_DIM words, which is initilized to 
 // (__bsg_x * bsg_tiles_Y + __bsg_y) * SUB_EPA_DIM  + i;
 int src_data[ SUB_EPA_DIM ] ;
 void init_src_data( void  ) ;
 
-int dst_data[ SUB_EPA_DIM * bsg_tiles_X * bsg_tiles_Y ];
+int dst_data[ TOTAL_NUM ];
 
 int done =0;
 
@@ -68,6 +72,8 @@ int main()
   
     
    bsg_remote_int_ptr GS_CSR_base_p; 
+   Norm_NPA_s  src_addr_s, src_dim_s, src_incr_s, sig_addr_s;
+
    volatile int *GS_dst_ptr; 
   /************************************************************************
    This will setup the  X/Y coordination. Current pre-defined corrdinations 
@@ -79,30 +85,57 @@ int main()
   *************************************************************************/
   bsg_set_tile_x_y();
   
-  // GS_CSR_base_p = bsg_global_ptr( GS_X_CORD, GS_Y_CORD, 0);
+   GS_CSR_base_p = bsg_global_ptr( GS_X_CORD, GS_Y_CORD, 0);
 
-  // GS_dst_ptr    = (volatile int *) bsg_global_ptr( GS_X_CORD, GS_Y_CORD, dst_data);
+   GS_dst_ptr    = (volatile int *) bsg_global_ptr( GS_X_CORD, GS_Y_CORD, dst_data);
 
   // signal_addr_s.x_cord  = __bsg_x + __bsg_grp_org_x ;
   // signal_addr_s.y_cord  = __bsg_y + __bsg_grp_org_y ;
   // signal_addr_s.addr    = (short)( &done );
 
   init_src_data(); 
- 
-  if ((__bsg_x == bsg_tiles_X-1) && (__bsg_y == bsg_tiles_Y-1)) {
-     // //Configure the CSR, src[1][1]
-     // * (GS_CSR_base_p + CSR_SRC_ADDR_IDX )      =  (int) (&src_data[1][1]);
-     // // Y=31:16, X=15:0
-     // * (GS_CSR_base_p + CSR_SRC_CORD_IDX )      =  ( ((bsg_global_Y)<<16) | 0x0 );
-     // * (GS_CSR_base_p + CSR_1D_DIM_IDX   )      =  SUB_X_DIM * 4;
-     // * (GS_CSR_base_p + CSR_2D_SKIP_IDX  )      =  Y_DIM * 4;
-     // * (GS_CSR_base_p + CSR_2D_DIM_IDX   )      =  SUB_Y_DIM    ;
-     // * (GS_CSR_base_p + CSR_DST_ADDR_IDX   )    =  (int) dst_data ;
-     // * (GS_CSR_base_p + CSR_SIG_ADDR_IDX   )    =  signal_addr_s.val ;
-     // * (GS_CSR_base_p + CSR_CMD_IDX )           =  1;
+  //wait all the tiles has initilized the data
+  //bsg_tile_group_barrier( &row_barrier, &col_barrier);
 
-     // //wait the done signal.
-     // bsg_wait_local_int( &done, 1);
+  if ((__bsg_x == bsg_tiles_X-1) && (__bsg_y == bsg_tiles_Y-1)) {
+      //Configure the CSR 
+      src_addr_s =(Norm_NPA_s)  {  .epa_addr    = (unsigned int)&src_data 
+                                  ,.x_cord      = __bsg_grp_org_x 
+                                  ,.y_cord      = __bsg_grp_org_y 
+                                 };
+
+      src_dim_s  =(Norm_NPA_s)  {  .epa_dim     =  SUB_EPA_DIM * sizeof( int )
+                                  ,.x_dim       =  bsg_tiles_X                
+                                  ,.y_dim       =  bsg_tiles_Y
+                                 };
+
+      src_incr_s =(Norm_NPA_s)  {  .epa_incr    =  sizeof( int )
+                                  ,.x_incr      =  1
+                                  ,.y_incr      =  1
+                                };
+
+      sig_addr_s =(Norm_NPA_s)  {  .epa_addr    = (unsigned int)& done
+                                  ,.x_cord      = __bsg_x + __bsg_grp_org_x 
+                                  ,.y_cord      = __bsg_y + __bsg_grp_org_y 
+                                 };
+
+      * (GS_CSR_base_p + CSR_SRC_ADDR_HI_IDX )      =  src_addr_s.HI ;
+      * (GS_CSR_base_p + CSR_SRC_ADDR_LO_IDX )      =  src_addr_s.LO ;
+      
+      * (GS_CSR_base_p + CSR_SRC_DIM_HI_IDX )       =  src_dim_s.HI ;
+      * (GS_CSR_base_p + CSR_SRC_DIM_LO_IDX )       =  src_dim_s.LO ;
+      
+      * (GS_CSR_base_p + CSR_SRC_INCR_HI_IDX )      =  src_incr_s.HI ;
+      * (GS_CSR_base_p + CSR_SRC_INCR_LO_IDX )      =  src_incr_s.LO ;
+      
+      * (GS_CSR_base_p + CSR_DST_ADDR_IDX   )       =  (int) dst_data ;
+      
+      * (GS_CSR_base_p + CSR_SIG_ADDR_HI_IDX   )    =  sig_addr_s.HI;
+      * (GS_CSR_base_p + CSR_SIG_ADDR_LO_IDX   )    =  sig_addr_s.LO;
+      * (GS_CSR_base_p + CSR_CMD_IDX )              =  1;
+
+     //wait the done signal.
+      bsg_wait_local_int( &done, 1);
      // bsg_printf("\nSource Matrix: \n");
      // for( i=0; i< X_DIM; i++){
      //    for(j=0; j< Y_DIM; j++)

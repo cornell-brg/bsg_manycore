@@ -219,9 +219,9 @@ module bsg_manycore_gather_scatter#(
     //  The 3  Length Counters
 
      wire [2:0]                      counter_en_li, counter_overflowed_lo;
-     wire [2:0][addr_width_p-1:0]  counter_lo, counter_limit_li;
+     wire [2:0][addr_width_p-1 : 0]  counter_lo, counter_limit_li;
 
-     logic[addr_width_p-1 : 0]       dim_addr_r, dim_incr, dim_base ; //the accumulated address for each dim
+     logic[2:0][addr_width_p-1 : 0]  dim_addr_r, dim_incr, dim_base ; //the accumulated address for each dim
 
      genvar i;
 
@@ -236,22 +236,22 @@ module bsg_manycore_gather_scatter#(
           ,.overflowed_o(counter_overflowed_lo [i]                 )
         );
         
+        if( i== 0) assign counter_en_li[i] =   launch_one_word ;
+        else       assign counter_en_li[i] = & counter_overflowed_lo[ i-1 : 0];
+        
         always_ff@(posedge clk_i ) begin
                 if( reset_i | dma_run_en )      dim_addr_r[i] <= dim_base[i];
                 else if( counter_en_li [i] )    dim_addr_r[i] <= dim_addr_r[i] + dim_incr[i];
         end
     end
-    assign counter_en_li   [0] = ( launch_one_word      ); 
     assign counter_limit_li[0] = addr_width_p'(src_dim_s.D0.epa_dim  [31 : 2]); 
     assign dim_base        [0] = addr_width_p'(src_addr_s.D0.epa_addr[31 : 2]);
     assign dim_incr        [0] = addr_width_p'(src_incr_s.D0.epa_incr[31 : 2]);
 
-    assign counter_en_li   [1] = counter_overflowed_lo[0];
     assign counter_limit_li[1] = addr_width_p'(src_dim_s.D1.x_dim  );
     assign dim_base        [1] = addr_width_p'(src_addr_s.D1.x_cord);
     assign dim_incr        [1] = addr_width_p'(src_incr_s.D1.x_incr);
 
-    assign counter_en_li   [2] = counter_overflowed_lo[1];
     assign counter_limit_li[2] = addr_width_p'( src_dim_s.D2.y_dim  );
     assign dim_base        [2] = addr_width_p'(src_addr_s.D2.y_cord);
     assign dim_incr        [2] = addr_width_p'(src_incr_s.D2.y_incr);

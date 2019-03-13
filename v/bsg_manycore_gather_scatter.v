@@ -250,9 +250,9 @@ module bsg_manycore_gather_scatter#(
                         dim_addr_r[i] <= dim_addr_r[i] + dim_incr[i];
         end
     end
-    assign counter_limit_li[0] = addr_width_p'(src_dim_s.D0.epa_dim  [31 : 2]); 
-    assign dim_base        [0] = addr_width_p'(src_addr_s.D0.epa_addr[31 : 2]);
-    assign dim_incr        [0] = addr_width_p'(src_incr_s.D0.epa_incr[31 : 2]);
+    assign counter_limit_li[0] = addr_width_p'(src_dim_s.D0.epa_dim  ); 
+    assign dim_base        [0] = addr_width_p'(src_addr_s.D0.epa_addr);
+    assign dim_incr        [0] = addr_width_p'(src_incr_s.D0.epa_incr);
 
     assign counter_limit_li[1] = addr_width_p'(src_dim_s.D1.x_dim  );
     assign dim_base        [1] = addr_width_p'(src_addr_s.D1.x_cord);

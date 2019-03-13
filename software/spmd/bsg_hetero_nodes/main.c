@@ -19,7 +19,7 @@ void init_src_data( void  ) ;
 
 int dst_data[ TOTAL_NUM ];
 
-int done =0;
+int done; 
 
 #define  GS_X_CORD  0 
 #define  GS_Y_CORD  (bsg_global_Y-1)
@@ -108,12 +108,35 @@ int main()
   //bsg_tile_group_barrier( &row_barrier, &col_barrier);
 
   if ((__bsg_x == bsg_tiles_X-1) && (__bsg_y == bsg_tiles_Y-1)) {
+     /************************************************************************
+       Concatenated Fetch
+     *************************************************************************/
       //Configure the CSR 
-      src_addr_s =(Norm_NPA_s)  {  .epa_addr    = (unsigned int)&src_data 
+      src_addr_s =(Norm_NPA_s)  {  .epa_addr    = (unsigned int)&src_data  / sizeof(int)
                                   ,.x_cord      = __bsg_grp_org_x 
                                   ,.y_cord      = __bsg_grp_org_y 
                                  };
 
+      src_dim_s  =(Norm_NPA_s)  {  .epa_dim     =  SUB_EPA_DIM 
+                                  ,.x_dim       =  bsg_tiles_X                
+                                  ,.y_dim       =  bsg_tiles_Y
+                                 };
+
+      src_incr_s =(Norm_NPA_s)  {  .epa_incr    =  1
+                                  ,.x_incr      =  1
+                                  ,.y_incr      =  1
+                                };
+
+      sig_addr_s =(Norm_NPA_s)  {  .epa_addr    = (unsigned int)& done
+                                  ,.x_cord      = __bsg_x + __bsg_grp_org_x 
+                                  ,.y_cord      = __bsg_y + __bsg_grp_org_y 
+                                 };
+
+      bsg_printf("Concatenated array data (should be re-ordered with load_id):\n");
+      bsg_gather(&src_addr_s, &src_dim_s, &src_incr_s, &sig_addr_s, &done); 
+     /************************************************************************
+       Interleaved Fetch
+     *************************************************************************/
       src_dim_s  =(Norm_NPA_s)  {  .epa_dim     =  SUB_EPA_DIM * sizeof( int )
                                   ,.x_dim       =  bsg_tiles_X                
                                   ,.y_dim       =  bsg_tiles_Y
@@ -124,13 +147,6 @@ int main()
                                   ,.y_incr      =  1
                                 };
 
-      sig_addr_s =(Norm_NPA_s)  {  .epa_addr    = (unsigned int)& done
-                                  ,.x_cord      = __bsg_x + __bsg_grp_org_x 
-                                  ,.y_cord      = __bsg_y + __bsg_grp_org_y 
-                                 };
-
-      bsg_printf("Concatenated array data:\n");
-      bsg_gather(&src_addr_s, &src_dim_s, &src_incr_s, &sig_addr_s, &done); 
      /************************************************************************
        Terminates the Simulation
      *************************************************************************/
@@ -156,8 +172,13 @@ void bsg_gather( Norm_NPA_s *   p_src
                 ,unsigned int * p_local_dst
                ){
 
-       volatile int *GS_dst_ptr; 
-      int i;
+      volatile int *GS_dst_ptr; 
+      int i; 
+      
+      // Clear the signal
+      * (int *)( p_signal -> epa_addr )             =  0;
+      
+      // Set CSR 
       * (GS_CSR_base_p + CSR_SRC_ADDR_HI_IDX )      =  p_src -> HI ;
       * (GS_CSR_base_p + CSR_SRC_ADDR_LO_IDX )      =  p_src -> LO ;
       
@@ -173,9 +194,10 @@ void bsg_gather( Norm_NPA_s *   p_src
       * (GS_CSR_base_p + CSR_SIG_ADDR_LO_IDX   )    =  p_signal-> LO;
       * (GS_CSR_base_p + CSR_CMD_IDX )              =  1;
 
-     //wait the done signal.
+      //wait the done signal.
       bsg_wait_local_int( (int *)( p_signal -> epa_addr ), 1);
 
+      //print the result.
       GS_dst_ptr    = (volatile int *) bsg_global_ptr( GS_X_CORD, GS_Y_CORD, p_local_dst);
 
       for( i=0; i< TOTAL_NUM; i++){

@@ -42,23 +42,11 @@ int done;
 
 typedef union {
         struct{ 
-                union{                                  //LSB
-                        unsigned int epa_incr ;
-                        unsigned int epa_dim  ;
-                        unsigned int epa_addr ;
-                };
-                union {
-                        unsigned char x_incr    ;
-                        unsigned char x_dim     ;
-                        unsigned char x_cord    ;
-                };
-                union {
-                        unsigned char y_incr    ;
-                        unsigned char y_dim     ;
-                        unsigned char y_cord    ;
-                };
-                unsigned char  chip_id  ;
-                unsigned char  reserved ;               //MSB
+                unsigned int    epa32     ;               //LSB
+                unsigned char   x8        ;
+                unsigned char   y8        ;
+                unsigned char   chip8     ;
+                unsigned char   reserved8 ;               //MSB
         };
         struct{
                unsigned int LO;
@@ -93,9 +81,9 @@ void bsg_gather( dma_cmd_order_s * p_order
 //--------------------------------------------------------------
 // 3.  Main function
 
-bsg_remote_int_ptr GS_CSR_base_p; 
-Norm_NPA_s  src_addr_s, src_dim_s, src_incr_s, sig_addr_s;
-dma_cmd_order_s  dma_order_s;
+bsg_remote_int_ptr      GS_CSR_base_p; 
+Norm_NPA_s              src_addr_s, src_dim_s, src_incr_s, sig_addr_s;
+dma_cmd_order_s         dma_order_s;
 
 int main()
 {
@@ -113,38 +101,31 @@ int main()
   
   GS_CSR_base_p = bsg_global_ptr( GS_X_CORD, GS_Y_CORD, 0);
 
-
-  // signal_addr_s.x_cord  = __bsg_x + __bsg_grp_org_x ;
-  // signal_addr_s.y_cord  = __bsg_y + __bsg_grp_org_y ;
-  // signal_addr_s.addr    = (short)( &done );
-
   init_src_data(); 
-  //wait all the tiles has initilized the data
-  //bsg_tile_group_barrier( &row_barrier, &col_barrier);
 
   if ((__bsg_x == bsg_tiles_X-1) && (__bsg_y == bsg_tiles_Y-1)) {
      /************************************************************************
        Concatenated Fetch
      *************************************************************************/
       //Configure the CSR 
-      src_addr_s =(Norm_NPA_s)  {  .epa_addr    = (unsigned int)&src_data  / sizeof(int)
-                                  ,.x_cord      = __bsg_grp_org_x 
-                                  ,.y_cord      = __bsg_grp_org_y 
+      src_addr_s =(Norm_NPA_s)  {  .epa32    = (unsigned int)&src_data  / sizeof(int)
+                                  ,.x8       = __bsg_grp_org_x 
+                                  ,.y8       = __bsg_grp_org_y 
                                  };
 
-      src_dim_s  =(Norm_NPA_s)  {  .epa_dim     =  SUB_EPA_DIM 
-                                  ,.x_dim       =  bsg_tiles_X                
-                                  ,.y_dim       =  bsg_tiles_Y
+      src_dim_s  =(Norm_NPA_s)  {  .epa32    =  SUB_EPA_DIM 
+                                  ,.x8       =  bsg_tiles_X                
+                                  ,.y8       =  bsg_tiles_Y
                                  };
 
-      src_incr_s =(Norm_NPA_s)  {  .epa_incr    =  1
-                                  ,.x_incr      =  1
-                                  ,.y_incr      =  1
+      src_incr_s =(Norm_NPA_s)  {  .epa32    =  1
+                                  ,.x8       =  1
+                                  ,.y8       =  1
                                 };
 
-      sig_addr_s =(Norm_NPA_s)  {  .epa_addr    = (unsigned int)& done
-                                  ,.x_cord      = __bsg_x + __bsg_grp_org_x 
-                                  ,.y_cord      = __bsg_y + __bsg_grp_org_y 
+      sig_addr_s =(Norm_NPA_s)  {  .epa32    = (unsigned int)& done
+                                  ,.x8       = __bsg_x + __bsg_grp_org_x 
+                                  ,.y8       = __bsg_y + __bsg_grp_org_y 
                                  };
 
       dma_order_s = (dma_cmd_order_s) {         .epa_order = 0
@@ -219,11 +200,11 @@ void bsg_gather( dma_cmd_order_s * p_order
       int i; 
       
       // Clear the signal
-      * (int *)( p_signal -> epa_addr )             =  0;
+      * (int *)( p_signal -> epa32 )             =  0;
       // Fire the command
       * (GS_CSR_base_p + CSR_CMD_IDX )              =  p_order->val ;
       //wait the done signal.
-      bsg_wait_local_int( (int *)( p_signal -> epa_addr ), 1);
+      bsg_wait_local_int( (int *)( p_signal -> epa32 ), 1);
       //print the result.
       GS_dst_ptr    = (volatile int *) bsg_global_ptr( GS_X_CORD, GS_Y_CORD, p_local_dst);
 

@@ -3,22 +3,15 @@
 #include "bsg_set_tile_x_y.h"
 #include "bsg_mutex.h"
 
-// #define   BSG_TILE_GROUP_X_DIM  bsg_tiles_X
-// #define   BSG_TILE_GROUP_Y_DIM  bsg_tiles_Y
-// #include "bsg_tile_group_barrier.h"
-// INIT_TILE_GROUP_BARRIER( row_barrier, col_barrier, 0, 0, bsg_tiles_X, bsg_tiles_Y);
-/************************************************************************
- Declear an array in DRAM. 
-*************************************************************************/
 #define SUB_EPA_DIM 2
 #define TOTAL_NUM   (SUB_EPA_DIM * bsg_tiles_X * bsg_tiles_Y)
-// each tile will allocate SUB_EPA_DIM words, which is initilized to 
+// Each tile will allocate SUB_EPA_DIM words, which are initilized to 
 // (__bsg_y * bsg_tiles_X + __bsg_x) * SUB_EPA_DIM  + i;
 int src_data[ SUB_EPA_DIM ] ;
 void init_src_data( void  ) ;
 
 int dst_data[ TOTAL_NUM ];
-
+// The returned gather done signal.
 int done; 
 
 #define  GS_X_CORD  0 
@@ -26,7 +19,8 @@ int done;
 //--------------------------------------------------------------
 // 1.  CSR definitions
  enum {
-         CSR_CMD_IDX =0         //command, write to start the transcation
+         CSR_CMD_IDX =0         //command, write to start the transcation, using dma_cmd_order_s 
+                                //to specify the dimension order.
         ,CSR_SRC_ADDR_HI_IDX    //Source Address Configuration High, using Norm_NPA_s format
         ,CSR_SRC_ADDR_LO_IDX    //Source Address Configuration Low,  using Norm_NPA_s format
         ,CSR_SRC_DIM_HI_IDX     //Source Dimension Configuration High, using Norm_NPA_s format

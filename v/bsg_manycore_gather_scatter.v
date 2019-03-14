@@ -66,18 +66,24 @@ module bsg_manycore_gather_scatter#(
                 logic [7 : 0] y_incr    ;
                 logic [7 : 0] y_dim     ;
                 logic [7 : 0] y_cord    ;
-        }D2;
+        }Y;
         union packed {
                 logic [7 : 0] x_incr    ;
                 logic [7 : 0] x_dim     ;
                 logic [7 : 0] x_cord    ;
-        }D1;
+        }X;
         union packed {                           //LSB
                 logic [31 : 0] epa_incr ;
                 logic [31 : 0] epa_dim  ;
                 logic [31 : 0] epa_addr ;
-        }D0;
+        }EPA;
     } Norm_NPA_s;
+
+    typedef struct packed {
+                logic [1 : 0] y_order;
+                logic [1 : 0] x_order;
+                logic [1 : 0] epa_order;
+    }dma_cmd_order;
 
     //--------------------------------------------------------------
     // The CSR Memory
@@ -88,14 +94,17 @@ module bsg_manycore_gather_scatter#(
     wire Norm_NPA_s src_incr_s = { CSR_mem_r[ CSR_SRC_INCR_HI_IDX ],  CSR_mem_r[ CSR_SRC_INCR_LO_IDX ]};
     wire Norm_NPA_s sig_addr_s = { CSR_mem_r[ CSR_SIG_ADDR_HI_IDX ],  CSR_mem_r[ CSR_SIG_ADDR_LO_IDX ]};
 
+
     logic                               in_v_lo                 ;
     logic[data_width_p-1:0]             in_data_lo              ;
     logic[addr_width_p-1:0]             in_addr_lo              ;
     logic                               in_we_lo                ;
     logic[(data_width_p>>3)-1:0]        in_mask_lo              ;
 
-    wire  is_CSR_addr = in_addr_lo < CSR_NUM_lp                 ;
-
+    wire is_CSR_addr = in_addr_lo < CSR_NUM_lp                 ;
+    wire dma_run_en  =  in_v_lo & ( in_addr_lo == CSR_CMD_IDX ) & in_we_lo;
+    wire dma_cmd_order  cmd_order_s = dma_run_en ? in_data_lo[ $bits(dma_cmd_order)-1 : 0 ]
+                                                 : CSR_mem_r[ CSR_CMD_IDX] [ $bits(dma_cmd_order)-1 : 0];
     // write
     always@( posedge clk_i)
         if( in_we_lo & in_v_lo  & is_CSR_addr )
@@ -189,7 +198,6 @@ module bsg_manycore_gather_scatter#(
 
     GS_dma_stat  curr_stat_e_r,  next_stat_e ;
     
-    wire dma_run_en =  in_v_lo & ( in_addr_lo == CSR_CMD_IDX );
     wire launch_one_word       = out_v_li & out_ready_lo ;
 
     wire dma_send_finish, dma_all_credit_returned;
@@ -250,17 +258,20 @@ module bsg_manycore_gather_scatter#(
                         dim_addr_r[i] <= dim_addr_r[i] + dim_incr[i];
         end
     end
-    assign counter_limit_li[0] = addr_width_p'(src_dim_s.D0.epa_dim  ); 
-    assign dim_base        [0] = addr_width_p'(src_addr_s.D0.epa_addr);
-    assign dim_incr        [0] = addr_width_p'(src_incr_s.D0.epa_incr);
+    
+    for(i=0;i<3;i++)begin
+        assign counter_limit_li [ i ]  = (cmd_order_s.epa_order == i)? src_dim_s.EPA.epa_dim 
+                                        :(cmd_order_s.x_order   == i)? src_dim_s.X.x_dim
+                                                                     : src_dim_s.Y.y_dim;
 
-    assign counter_limit_li[1] = addr_width_p'(src_dim_s.D1.x_dim  );
-    assign dim_base        [1] = addr_width_p'(src_addr_s.D1.x_cord);
-    assign dim_incr        [1] = addr_width_p'(src_incr_s.D1.x_incr);
+        assign dim_base         [ i ]  = (cmd_order_s.epa_order == i)? src_addr_s.EPA.epa_addr 
+                                        :(cmd_order_s.x_order   == i)? src_addr_s.X.x_cord
+                                                                     : src_addr_s.Y.y_cord;
 
-    assign counter_limit_li[2] = addr_width_p'( src_dim_s.D2.y_dim  );
-    assign dim_base        [2] = addr_width_p'(src_addr_s.D2.y_cord);
-    assign dim_incr        [2] = addr_width_p'(src_incr_s.D2.y_incr);
+        assign dim_incr         [ i ]  = (cmd_order_s.epa_order == i)? src_incr_s.EPA.epa_incr 
+                                        :(cmd_order_s.x_order   == i)? src_incr_s.X.x_incr
+                                                                     : src_incr_s.Y.y_incr;
+    end
 
     assign dma_send_finish = dim_finish[2]; 
     assign dma_all_credit_returned = (curr_stat_e_r == eGS_dma_wait) && ( out_credits_lo == max_out_credits_p );
@@ -281,7 +292,7 @@ module bsg_manycore_gather_scatter#(
 
 
     assign out_packet_li    = '{
-                                 addr        :   dma_fetching ? dim_addr_r[0] :  sig_addr_s.D0.epa_addr >> 2
+                                 addr        :   dma_fetching ? dim_addr_r[0] :  sig_addr_s.EPA.epa_addr >> 2
                                 ,op          :   dma_fetching ? `ePacketOp_remote_load
                                                               : `ePacketOp_remote_store 
                                 ,op_ex       :   {(data_width_p>>3){1'b1}}
@@ -289,9 +300,9 @@ module bsg_manycore_gather_scatter#(
                                 ,src_y_cord  :   my_y_i
                                 ,src_x_cord  :   my_x_i
                                 ,x_cord      :   dma_fetching ? x_cord_width_p'( dim_addr_r[ 1 ]   )
-                                                              : x_cord_width_p'( sig_addr_s.D1.x_cord )
+                                                              : x_cord_width_p'( sig_addr_s.X.x_cord )
                                 ,y_cord      :   dma_fetching ? y_cord_width_p'( dim_addr_r[ 2 ]   )
-                                                              : y_cord_width_p'( sig_addr_s.D2.y_cord )
+                                                              : y_cord_width_p'( sig_addr_s.Y.y_cord )
                                 };
    //------------------------------------------------------------------
    // Instantiate the memory

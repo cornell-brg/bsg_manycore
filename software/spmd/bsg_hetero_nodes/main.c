@@ -66,14 +66,25 @@ typedef union {
         };
 } Norm_NPA_s;
 
+typedef union {
+        struct { 
+                unsigned char epa_order       : 2;  
+                unsigned char x_order         : 2;       
+                unsigned char y_order         : 2;       
+                unsigned int  padding         : (32 - 6);
+        };
+        unsigned  int val;
+}dma_cmd_order_s;
+
 //--------------------------------------------------------------
-// 2.  CSR definitions
-//     The function to issue DMA and fetch the data
-void bsg_gather( Norm_NPA_s *   p_src, 
-                 Norm_NPA_s *   p_dim, 
-                 Norm_NPA_s *   p_incr, 
-                 Norm_NPA_s *   p_signal, 
-                 unsigned int * p_local_dst
+// 2. Funcion to gather data 
+void bsg_gather( 
+                 dma_cmd_order_s *      p_cmd,
+                 Norm_NPA_s *           p_src, 
+                 Norm_NPA_s *           p_dim, 
+                 Norm_NPA_s *           p_incr, 
+                 Norm_NPA_s *           p_signal, 
+                 unsigned int *         p_local_dst
                );
 
 //--------------------------------------------------------------
@@ -81,6 +92,7 @@ void bsg_gather( Norm_NPA_s *   p_src,
 
 bsg_remote_int_ptr GS_CSR_base_p; 
 Norm_NPA_s  src_addr_s, src_dim_s, src_incr_s, sig_addr_s;
+dma_cmd_order_s  dma_order_s;
 
 int main()
 {
@@ -132,21 +144,28 @@ int main()
                                   ,.y_cord      = __bsg_y + __bsg_grp_org_y 
                                  };
 
+      dma_order_s = (dma_cmd_order_s) {         .epa_order = 0
+                                               ,.x_order   = 1
+                                               ,.y_order   =2 
+                                       };
       bsg_printf("Concatenated array data (should be re-ordered with load_id):\n");
-      bsg_gather(&src_addr_s, &src_dim_s, &src_incr_s, &sig_addr_s, &done); 
+      bsg_gather(&dma_order_s, &src_addr_s, &src_dim_s, &src_incr_s, &sig_addr_s, &done); 
      /************************************************************************
        Interleaved Fetch
      *************************************************************************/
-      src_dim_s  =(Norm_NPA_s)  {  .epa_dim     =  SUB_EPA_DIM * sizeof( int )
-                                  ,.x_dim       =  bsg_tiles_X                
-                                  ,.y_dim       =  bsg_tiles_Y
-                                 };
-
-      src_incr_s =(Norm_NPA_s)  {  .epa_incr    =  sizeof( int )
-                                  ,.x_incr      =  1
-                                  ,.y_incr      =  1
-                                };
-
+//      src_dim_s  =(Norm_NPA_s)  {  .epa_dim     =  bsg_tiles_X 
+//                                  ,.x_dim       =  bsg_tiles_Y                
+//                                  ,.y_dim       =  SUB_EPA_DIM 
+//                                 };
+//
+//      src_incr_s =(Norm_NPA_s)  {  .epa_incr    =  1
+//                                  ,.x_incr      =  1
+//                                  ,.y_incr      =  1
+//                                };
+//
+//      bsg_printf("Interleaved array data (should be re-ordered with load_id):\n");
+//      bsg_gather(&src_addr_s, &src_dim_s, &src_incr_s, &sig_addr_s, &done); 
+//
      /************************************************************************
        Terminates the Simulation
      *************************************************************************/
@@ -165,7 +184,8 @@ void init_src_data( void ) {
         bsg_printf("First 2 data in tile (y,x)=(%d, %d)= %d, %d\n", __bsg_y, __bsg_x, src_data[0], src_data[1]);
 }
 
-void bsg_gather( Norm_NPA_s *   p_src 
+void bsg_gather( dma_cmd_order_s * p_order
+                ,Norm_NPA_s *   p_src 
                 ,Norm_NPA_s *   p_dim 
                 ,Norm_NPA_s *   p_incr 
                 ,Norm_NPA_s *   p_signal
@@ -192,7 +212,7 @@ void bsg_gather( Norm_NPA_s *   p_src
       
       * (GS_CSR_base_p + CSR_SIG_ADDR_HI_IDX   )    =  p_signal-> HI;
       * (GS_CSR_base_p + CSR_SIG_ADDR_LO_IDX   )    =  p_signal-> LO;
-      * (GS_CSR_base_p + CSR_CMD_IDX )              =  1;
+      * (GS_CSR_base_p + CSR_CMD_IDX )              =  p_order->val ;
 
       //wait the done signal.
       bsg_wait_local_int( (int *)( p_signal -> epa_addr ), 1);

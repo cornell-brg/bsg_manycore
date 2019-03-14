@@ -138,6 +138,8 @@ The Vallina Core wait for this address to be writen by '1' after issue the comma
 
 ### Normalized Network Physical Address (Norm_NPA)
 
+The normalized Network Physical Address is the software equivalent of the hardware NPA, but where the widths of the fields are standardized to make the software portable across hardware configurations.
+
 The accelerator dimensions parameters and the signal address are configured with 64 bits **Norm_NPA**, which are defined as following:
 
 ```c++

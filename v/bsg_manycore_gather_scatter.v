@@ -255,17 +255,17 @@ module bsg_manycore_gather_scatter#(
     end
 
     for(i=0;i<3;i++)begin
-        assign counter_limit_li [ i ]  = (epa_order_to[i])? src_dim_s.epa32
-                                        :(x_order_to[i]  )? src_dim_s.x8
-                                                          : src_dim_s.y8;
+        assign counter_limit_li [ i ]  = (epa_order_to[i])? (src_dim_s.epa32>>2)
+                                        :(x_order_to[i]  )?  src_dim_s.x8
+                                                          :  src_dim_s.y8;
 
-        assign dim_base         [ i ]  = (epa_order_to[i])? src_addr_s.epa32
-                                        :(x_order_to[i]  )? src_addr_s.x8
-                                                          : src_addr_s.y8;
+        assign dim_base         [ i ]  = (epa_order_to[i])? (src_addr_s.epa32>>2)
+                                        :(x_order_to[i]  )?  src_addr_s.x8
+                                                          :  src_addr_s.y8;
 
-        assign dim_incr         [ i ]  = (epa_order_to[i])? src_incr_s.epa32 
-                                        :(x_order_to[i]  )? src_incr_s.x8
-                                                          : src_incr_s.y8;
+        assign dim_incr         [ i ]  = (epa_order_to[i])? (src_incr_s.epa32>>2)
+                                        :(x_order_to[i]  )?  src_incr_s.x8
+                                                          :  src_incr_s.y8;
     end
 
     wire[addr_width_p-1 : 0] epa_send_addr, x_send_addr, y_send_addr;

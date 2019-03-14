@@ -105,17 +105,17 @@ int main()
 
   if ((__bsg_x == bsg_tiles_X-1) && (__bsg_y == bsg_tiles_Y-1)) {
       //Configure the CSR 
-      src_addr_s =(Norm_NPA_s)  {  .epa32    = (unsigned int)&src_data  / sizeof(int)
+      src_addr_s =(Norm_NPA_s)  {  .epa32    = (unsigned int)&src_data  
                                   ,.x8       = __bsg_grp_org_x 
                                   ,.y8       = __bsg_grp_org_y 
                                  };
 
-      src_dim_s  =(Norm_NPA_s)  {  .epa32    =  SUB_EPA_DIM 
+      src_dim_s  =(Norm_NPA_s)  {  .epa32    =  SUB_EPA_DIM * sizeof(int) 
                                   ,.x8       =  bsg_tiles_X                
                                   ,.y8       =  bsg_tiles_Y
                                  };
 
-      src_incr_s =(Norm_NPA_s)  {  .epa32    =  1
+      src_incr_s =(Norm_NPA_s)  {  .epa32    =  sizeof(int) 
                                   ,.x8       =  1
                                   ,.y8       =  1
                                 };

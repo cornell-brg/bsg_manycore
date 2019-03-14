@@ -149,7 +149,7 @@ int main()
 
       dma_order_s = (dma_cmd_order_s) {         .epa_order = 0
                                                ,.x_order   = 1
-                                               ,.y_order   =2 
+                                               ,.y_order   = 2 
                                        };
       bsg_printf("Concatenated array data (should be re-ordered with load_id):\n");
       bsg_set_param(&src_addr_s, &src_dim_s, &src_incr_s, &sig_addr_s, &done); 
@@ -157,19 +157,14 @@ int main()
      /************************************************************************
        Interleaved Fetch
      *************************************************************************/
-//      src_dim_s  =(Norm_NPA_s)  {  .epa_dim     =  bsg_tiles_X 
-//                                  ,.x_dim       =  bsg_tiles_Y                
-//                                  ,.y_dim       =  SUB_EPA_DIM 
-//                                 };
-//
-//      src_incr_s =(Norm_NPA_s)  {  .epa_incr    =  1
-//                                  ,.x_incr      =  1
-//                                  ,.y_incr      =  1
-//                                };
-//
-//      bsg_printf("Interleaved array data (should be re-ordered with load_id):\n");
-//      bsg_gather(&src_addr_s, &src_dim_s, &src_incr_s, &sig_addr_s, &done); 
-//
+
+     dma_order_s = (dma_cmd_order_s) {          .epa_order = 2
+                                               ,.x_order   = 0
+                                               ,.y_order   = 1
+                                       };
+     bsg_printf("Interleaved array data (should be re-ordered with load_id):\n");
+     bsg_gather(&dma_order_s,  &sig_addr_s, &done); 
+
      /************************************************************************
        Terminates the Simulation
      *************************************************************************/

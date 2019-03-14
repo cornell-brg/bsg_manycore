@@ -259,19 +259,40 @@ module bsg_manycore_gather_scatter#(
         end
     end
     
-    for(i=0;i<3;i++)begin
-        assign counter_limit_li [ i ]  = (cmd_order_s.epa_order == i)? src_dim_s.EPA.epa_dim 
-                                        :(cmd_order_s.x_order   == i)? src_dim_s.X.x_dim
-                                                                     : src_dim_s.Y.y_dim;
-
-        assign dim_base         [ i ]  = (cmd_order_s.epa_order == i)? src_addr_s.EPA.epa_addr 
-                                        :(cmd_order_s.x_order   == i)? src_addr_s.X.x_cord
-                                                                     : src_addr_s.Y.y_cord;
-
-        assign dim_incr         [ i ]  = (cmd_order_s.epa_order == i)? src_incr_s.EPA.epa_incr 
-                                        :(cmd_order_s.x_order   == i)? src_incr_s.X.x_incr
-                                                                     : src_incr_s.Y.y_incr;
+    wire  epa_order_to[2:0], x_order_to[2:0], y_order_to[2:0];
+    for(i=0;i<3;i++) begin
+        assign epa_order_to    [i]     = (cmd_order_s.epa_order == i);
+        assign x_order_to      [i]     = (cmd_order_s.x_order   == i);
+        assign y_order_to      [i]     = (cmd_order_s.y_order   == i);
     end
+
+    for(i=0;i<3;i++)begin
+        assign counter_limit_li [ i ]  = (epa_order_to[i])? src_dim_s.EPA.epa_dim 
+                                        :(x_order_to[i]  )? src_dim_s.X.x_dim
+                                                          : src_dim_s.Y.y_dim;
+
+        assign dim_base         [ i ]  = (epa_order_to[i])? src_addr_s.EPA.epa_addr 
+                                        :(x_order_to[i]  )? src_addr_s.X.x_cord
+                                                          : src_addr_s.Y.y_cord;
+
+        assign dim_incr         [ i ]  = (epa_order_to[i])? src_incr_s.EPA.epa_incr 
+                                        :(x_order_to[i]  )? src_incr_s.X.x_incr
+                                                          : src_incr_s.Y.y_incr;
+    end
+
+    wire[addr_width_p-1 : 0] epa_send_addr, x_send_addr, y_send_addr;
+
+    assign epa_send_addr = epa_order_to[0] ? dim_addr_r[0]
+                          :epa_order_to[1] ? dim_addr_r[1]
+                                           : dim_addr_r[2]; 
+
+    assign   x_send_addr =   x_order_to[0] ? dim_addr_r[0]
+                          :  x_order_to[1] ? dim_addr_r[1]
+                                           : dim_addr_r[2]; 
+
+    assign   y_send_addr =   y_order_to[0] ? dim_addr_r[0]
+                          :  y_order_to[1] ? dim_addr_r[1]
+                                           : dim_addr_r[2]; 
 
     assign dma_send_finish = dim_finish[2]; 
     assign dma_all_credit_returned = (curr_stat_e_r == eGS_dma_wait) && ( out_credits_lo == max_out_credits_p );
@@ -292,16 +313,16 @@ module bsg_manycore_gather_scatter#(
 
 
     assign out_packet_li    = '{
-                                 addr        :   dma_fetching ? dim_addr_r[0] :  sig_addr_s.EPA.epa_addr >> 2
+                                 addr        :   dma_fetching ? epa_send_addr :  sig_addr_s.EPA.epa_addr >> 2
                                 ,op          :   dma_fetching ? `ePacketOp_remote_load
                                                               : `ePacketOp_remote_store 
                                 ,op_ex       :   {(data_width_p>>3){1'b1}}
                                 ,payload     :   dma_fetching ? payload_s     :   data_width_p'(1) 
                                 ,src_y_cord  :   my_y_i
                                 ,src_x_cord  :   my_x_i
-                                ,x_cord      :   dma_fetching ? x_cord_width_p'( dim_addr_r[ 1 ]   )
+                                ,x_cord      :   dma_fetching ? x_cord_width_p'( x_send_addr   )
                                                               : x_cord_width_p'( sig_addr_s.X.x_cord )
-                                ,y_cord      :   dma_fetching ? y_cord_width_p'( dim_addr_r[ 2 ]   )
+                                ,y_cord      :   dma_fetching ? y_cord_width_p'( y_send_addr   )
                                                               : y_cord_width_p'( sig_addr_s.Y.y_cord )
                                 };
    //------------------------------------------------------------------

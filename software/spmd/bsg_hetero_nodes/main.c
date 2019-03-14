@@ -78,15 +78,18 @@ typedef union {
 
 //--------------------------------------------------------------
 // 2. Funcion to gather data 
-void bsg_gather( 
-                 dma_cmd_order_s *      p_cmd,
-                 Norm_NPA_s *           p_src, 
-                 Norm_NPA_s *           p_dim, 
-                 Norm_NPA_s *           p_incr, 
-                 Norm_NPA_s *           p_signal, 
-                 unsigned int *         p_local_dst
+void bsg_set_param( 
+                 Norm_NPA_s *   p_src 
+                ,Norm_NPA_s *   p_dim 
+                ,Norm_NPA_s *   p_incr 
+                ,Norm_NPA_s *   p_signal
+                ,unsigned int * p_local_dst
                );
 
+void bsg_gather( dma_cmd_order_s * p_order
+                ,Norm_NPA_s      * p_signal
+                ,unsigned int    * p_local_dst
+               );
 //--------------------------------------------------------------
 // 3.  Main function
 
@@ -108,7 +111,7 @@ int main()
   *************************************************************************/
   bsg_set_tile_x_y();
   
-   GS_CSR_base_p = bsg_global_ptr( GS_X_CORD, GS_Y_CORD, 0);
+  GS_CSR_base_p = bsg_global_ptr( GS_X_CORD, GS_Y_CORD, 0);
 
 
   // signal_addr_s.x_cord  = __bsg_x + __bsg_grp_org_x ;
@@ -149,7 +152,8 @@ int main()
                                                ,.y_order   =2 
                                        };
       bsg_printf("Concatenated array data (should be re-ordered with load_id):\n");
-      bsg_gather(&dma_order_s, &src_addr_s, &src_dim_s, &src_incr_s, &sig_addr_s, &done); 
+      bsg_set_param(&src_addr_s, &src_dim_s, &src_incr_s, &sig_addr_s, &done); 
+      bsg_gather(&dma_order_s, &sig_addr_s, &done); 
      /************************************************************************
        Interleaved Fetch
      *************************************************************************/
@@ -184,8 +188,8 @@ void init_src_data( void ) {
         bsg_printf("First 2 data in tile (y,x)=(%d, %d)= %d, %d\n", __bsg_y, __bsg_x, src_data[0], src_data[1]);
 }
 
-void bsg_gather( dma_cmd_order_s * p_order
-                ,Norm_NPA_s *   p_src 
+void bsg_set_param( 
+                 Norm_NPA_s *   p_src 
                 ,Norm_NPA_s *   p_dim 
                 ,Norm_NPA_s *   p_incr 
                 ,Norm_NPA_s *   p_signal
@@ -194,9 +198,6 @@ void bsg_gather( dma_cmd_order_s * p_order
 
       volatile int *GS_dst_ptr; 
       int i; 
-      
-      // Clear the signal
-      * (int *)( p_signal -> epa_addr )             =  0;
       
       // Set CSR 
       * (GS_CSR_base_p + CSR_SRC_ADDR_HI_IDX )      =  p_src -> HI ;
@@ -212,11 +213,22 @@ void bsg_gather( dma_cmd_order_s * p_order
       
       * (GS_CSR_base_p + CSR_SIG_ADDR_HI_IDX   )    =  p_signal-> HI;
       * (GS_CSR_base_p + CSR_SIG_ADDR_LO_IDX   )    =  p_signal-> LO;
-      * (GS_CSR_base_p + CSR_CMD_IDX )              =  p_order->val ;
+}
 
+void bsg_gather( dma_cmd_order_s * p_order
+                ,Norm_NPA_s      * p_signal
+                ,unsigned int    * p_local_dst
+               ){
+
+      volatile int *GS_dst_ptr; 
+      int i; 
+      
+      // Clear the signal
+      * (int *)( p_signal -> epa_addr )             =  0;
+      // Fire the command
+      * (GS_CSR_base_p + CSR_CMD_IDX )              =  p_order->val ;
       //wait the done signal.
       bsg_wait_local_int( (int *)( p_signal -> epa_addr ), 1);
-
       //print the result.
       GS_dst_ptr    = (volatile int *) bsg_global_ptr( GS_X_CORD, GS_Y_CORD, p_local_dst);
 

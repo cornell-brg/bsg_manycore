@@ -324,13 +324,6 @@ module bsg_manycore_gather_scatter#(
    wire [1:0] [data_width_p-1      : 0]       mem_data_li, mem_data_lo;
    wire [1:0] [(data_width_p>>3)-1 : 0]       mem_mask_li;
 
-   logic      [mem_addr_width_lp : 0]       returned_pointer_r;
-   always_ff@(posedge clk_i ) begin
-        if( reset_i )           returned_pointer_r <= 'b0;
-        else if( dma_run_en)    returned_pointer_r <= CSR_mem_r[ CSR_DST_ADDR_IDX ] [ 2 +: mem_addr_width_lp ];
-        else if( returned_v_lo) returned_pointer_r <= returned_pointer_r + 'b1;
-   end
-
    bsg_mem_banked_crossbar #
     ( .num_ports_p  (2)
      ,.num_banks_p  (1)
@@ -355,10 +348,11 @@ module bsg_manycore_gather_scatter#(
      ,.data_o  ( mem_data_lo)
     );
     //the returned load data 
-    assign mem_v_li     [mem_local_port_lp] = returned_v_lo ; 
-    assign mem_we_li    [mem_local_port_lp] = 1'b1;
-    assign mem_addr_li  [mem_local_port_lp] = returned_pointer_r        ;
-    assign mem_data_li  [mem_local_port_lp] = returned_data_lo          ;
+    assign mem_v_li     [mem_local_port_lp] = returned_v_lo               ; 
+    assign mem_we_li    [mem_local_port_lp] = 1'b1                        ;
+    assign mem_addr_li  [mem_local_port_lp] = CSR_mem_r[ CSR_DST_ADDR_IDX ] [ 2 +: mem_addr_width_lp ] 
+                                            + returned_load_id_r_lo       ;
+    assign mem_data_li  [mem_local_port_lp] = returned_data_lo            ;
     assign mem_mask_li  [mem_local_port_lp] = { (data_width_p>>3){1'b1} } ;
 
     //the request coming from network

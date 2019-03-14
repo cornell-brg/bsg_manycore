@@ -104,9 +104,6 @@ int main()
   init_src_data(); 
 
   if ((__bsg_x == bsg_tiles_X-1) && (__bsg_y == bsg_tiles_Y-1)) {
-     /************************************************************************
-       Concatenated Fetch
-     *************************************************************************/
       //Configure the CSR 
       src_addr_s =(Norm_NPA_s)  {  .epa32    = (unsigned int)&src_data  / sizeof(int)
                                   ,.x8       = __bsg_grp_org_x 
@@ -127,23 +124,24 @@ int main()
                                   ,.x8       = __bsg_x + __bsg_grp_org_x 
                                   ,.y8       = __bsg_y + __bsg_grp_org_y 
                                  };
-
+     /************************************************************************
+       Concatenated Fetch
+     *************************************************************************/
       dma_order_s = (dma_cmd_order_s) {         .epa_order = 0
                                                ,.x_order   = 1
                                                ,.y_order   = 2 
                                        };
-      bsg_printf("Concatenated array data (should be re-ordered with load_id):\n");
+      bsg_printf("Concatenated array data:\n");
       bsg_set_param(&src_addr_s, &src_dim_s, &src_incr_s, &sig_addr_s, &done); 
       bsg_gather(&dma_order_s, &sig_addr_s, &done); 
      /************************************************************************
        Interleaved Fetch
      *************************************************************************/
-
      dma_order_s = (dma_cmd_order_s) {          .epa_order = 2
                                                ,.x_order   = 0
                                                ,.y_order   = 1
                                        };
-     bsg_printf("Interleaved array data (should be re-ordered with load_id):\n");
+     bsg_printf("Interleaved array data:\n");
      bsg_gather(&dma_order_s,  &sig_addr_s, &done); 
 
      /************************************************************************

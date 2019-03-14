@@ -60,23 +60,11 @@ module bsg_manycore_gather_scatter#(
     } CSR_INDX;
     
     typedef struct packed {
-        logic [7 : 0 ] reserved ;               //MSB
-        logic [7 : 0 ] chip_id  ;
-        union packed  {
-                logic [7 : 0] y_incr    ;
-                logic [7 : 0] y_dim     ;
-                logic [7 : 0] y_cord    ;
-        }Y;
-        union packed {
-                logic [7 : 0] x_incr    ;
-                logic [7 : 0] x_dim     ;
-                logic [7 : 0] x_cord    ;
-        }X;
-        union packed {                           //LSB
-                logic [31 : 0] epa_incr ;
-                logic [31 : 0] epa_dim  ;
-                logic [31 : 0] epa_addr ;
-        }EPA;
+        logic [7 : 0 ] reserved8 ;               //MSB
+        logic [7 : 0 ] chip8     ;
+        logic [7 : 0]  y8        ;
+        logic [7 : 0]  x8        ;
+        logic [31 : 0] epa32     ;               //LSB
     } Norm_NPA_s;
 
     typedef struct packed {
@@ -267,17 +255,17 @@ module bsg_manycore_gather_scatter#(
     end
 
     for(i=0;i<3;i++)begin
-        assign counter_limit_li [ i ]  = (epa_order_to[i])? src_dim_s.EPA.epa_dim 
-                                        :(x_order_to[i]  )? src_dim_s.X.x_dim
-                                                          : src_dim_s.Y.y_dim;
+        assign counter_limit_li [ i ]  = (epa_order_to[i])? src_dim_s.epa32
+                                        :(x_order_to[i]  )? src_dim_s.x8
+                                                          : src_dim_s.y8;
 
-        assign dim_base         [ i ]  = (epa_order_to[i])? src_addr_s.EPA.epa_addr 
-                                        :(x_order_to[i]  )? src_addr_s.X.x_cord
-                                                          : src_addr_s.Y.y_cord;
+        assign dim_base         [ i ]  = (epa_order_to[i])? src_addr_s.epa32
+                                        :(x_order_to[i]  )? src_addr_s.x8
+                                                          : src_addr_s.y8;
 
-        assign dim_incr         [ i ]  = (epa_order_to[i])? src_incr_s.EPA.epa_incr 
-                                        :(x_order_to[i]  )? src_incr_s.X.x_incr
-                                                          : src_incr_s.Y.y_incr;
+        assign dim_incr         [ i ]  = (epa_order_to[i])? src_incr_s.epa32 
+                                        :(x_order_to[i]  )? src_incr_s.x8
+                                                          : src_incr_s.y8;
     end
 
     wire[addr_width_p-1 : 0] epa_send_addr, x_send_addr, y_send_addr;
@@ -313,7 +301,7 @@ module bsg_manycore_gather_scatter#(
 
 
     assign out_packet_li    = '{
-                                 addr        :   dma_fetching ? epa_send_addr :  sig_addr_s.EPA.epa_addr >> 2
+                                 addr        :   dma_fetching ? epa_send_addr :  sig_addr_s.epa32 >> 2
                                 ,op          :   dma_fetching ? `ePacketOp_remote_load
                                                               : `ePacketOp_remote_store 
                                 ,op_ex       :   {(data_width_p>>3){1'b1}}
@@ -321,9 +309,9 @@ module bsg_manycore_gather_scatter#(
                                 ,src_y_cord  :   my_y_i
                                 ,src_x_cord  :   my_x_i
                                 ,x_cord      :   dma_fetching ? x_cord_width_p'( x_send_addr   )
-                                                              : x_cord_width_p'( sig_addr_s.X.x_cord )
+                                                              : x_cord_width_p'( sig_addr_s.x8 )
                                 ,y_cord      :   dma_fetching ? y_cord_width_p'( y_send_addr   )
-                                                              : y_cord_width_p'( sig_addr_s.Y.y_cord )
+                                                              : y_cord_width_p'( sig_addr_s.y8 )
                                 };
    //------------------------------------------------------------------
    // Instantiate the memory

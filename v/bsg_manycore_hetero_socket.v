@@ -13,6 +13,7 @@
 //
 
 `include "bsg_manycore_packet.vh"
+`include "brg_slave_xcel_template.v"
 
 `ifdef bsg_FPU
 `include "float_definitions.vh"
@@ -79,8 +80,8 @@ module bsg_manycore_hetero_socket #(  x_cord_width_p      = "inv"
     , output logic freeze_o
 
  `ifdef bsg_FPU
-    , input  f_fam_out_s                         fam_out_s_i 
-    , output f_fam_in_s                          fam_in_s_o 
+    , input  f_fam_out_s                         fam_out_s_i
+    , output f_fam_in_s                          fam_in_s_o
  `endif
 
     );
@@ -88,7 +89,7 @@ module bsg_manycore_hetero_socket #(  x_cord_width_p      = "inv"
    // add as many types as you like...
    `HETERO_TYPE_MACRO(0,bsg_manycore_proc_vanilla) else
    `HETERO_TYPE_MACRO(1,bsg_manycore_gather_scatter) else
-   `HETERO_TYPE_MACRO(2,bsg_manycore_accel_default) else
+   `HETERO_TYPE_MACRO(2,brg_slave_xcel_template) else  // brg slave xcel
    `HETERO_TYPE_MACRO(3,bsg_manycore_accel_default) else
    `HETERO_TYPE_MACRO(4,bsg_manycore_accel_default) else
    `HETERO_TYPE_MACRO(5,bsg_manycore_accel_default) else

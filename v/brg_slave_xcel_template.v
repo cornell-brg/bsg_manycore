@@ -113,21 +113,25 @@ module brg_slave_xcel_template
     ,.returning_data_i  ( returning_data_li )
     ,.returning_v_i     ( returning_v_li )
 
+    // Shunning: we need to connect specific values to some ports to
+    //           prevent X similar to the following link.
+    // https://bitbucket.org/taylor-bsg/bsg_manycore/src/ff0c06906e27f8080dcab0ca2c12fa6b95cddc86/testbenches/mesh_example/mesh_slave_example.v#lines-90:104
+
     // local outgoing data interface (does not include credits)
     // Tied up all the outgoing signals
-    ,.out_v_i           ( out_v_li                      )
-    ,.out_packet_i      ( out_packet_li                 )
-    ,.out_ready_o       ( out_ready_lo                  )
+    ,.out_v_i           ( 1'b0                      )
+    ,.out_packet_i      ( packet_width_lp'(0)                 )
+    ,.out_ready_o       (                   )
     // local returned data interface
     // Like the memory interface, processor should always ready be to
     // handle the returned data
-    ,.returned_data_r_o         (returned_data_lo     )
-    ,.returned_v_r_o            (returned_v_lo        )
-    ,.returned_load_id_r_o      (returned_load_id_r_lo)
+    ,.returned_data_r_o         (     )
+    ,.returned_v_r_o            (        )
+    ,.returned_load_id_r_o      ()
     ,.returned_fifo_full_o      (             )
-    ,.returned_yumi_i           (returned_v_lo)
+    ,.returned_yumi_i           (1'b0)
 
-    ,.out_credits_o     (out_credits_lo               )
+    ,.out_credits_o     (               )
     );
 
     // Instantiate brg xcel
@@ -152,11 +156,12 @@ module brg_slave_xcel_template
     // synopsys translate_off
     always_ff@(negedge clk_i ) begin
 
-      if( in_v_lo & in_we_lo )
-        $display("## (%d,%d) G/S CSR Write: addr=%h, value=%h", my_x_i, my_y_i, in_addr_lo<<2, in_data_lo);
-      else
-        $display("## (%d,%d) G/S CSR Read : addr=%h", my_x_i, my_y_i, in_addr_lo<<2);
-
+      if( in_yumi_li ) begin
+        if ( in_we_lo )
+          $display("## (%d,%d) G/S CSR Write: csr=%h, value=%h", my_x_i, my_y_i, in_addr_lo, in_data_lo);
+        else
+          $display("## (%d,%d) G/S CSR Read : csr=%h", my_x_i, my_y_i, in_addr_lo);
+      end
     end
     // synopsys translate_on
 

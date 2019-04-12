@@ -1,3 +1,5 @@
+** NOTE: THIS REPO has been moved to http://github.com/bespoke-silicon-group/bsg_manycore **
+
 # Overview 
 
 This repo contains the **bsg\_manycore** source code designed by [Bespoke Silicon Group](http://cseweb.ucsd.edu/~mbtaylor/research_team.html)@University of Washington. 

@@ -13,23 +13,26 @@ bsg_global_Y = 4
 # 	bsg_hetero_type_vec = 0
 #
 # The first row is assigned to IO router and will the configuration values are ignored.
-bsg_hetero_type_vec =  {0, 0, 0, 0},  \
-		       {0, 0, 0, 0},  \
-		       {0, 0, 0, 0},  \
-                       {2, 2, 2, 2}
+
+# Shunning: Each vector has the same y -- e.g. first row has y = 0.
+bsg_hetero_type_vec =  \
+{0, 0, 0, 0}, \
+{2, 2, 2, 2}, \
+{0, 0, 0, 0}, \
+{0, 0, 0, 0}
 #########################################################
 #Tile group configuration
 # If not configured, Will use default Values
-#	bsg_tiles_org_X ?= 0
-#	bsg_tiles_org_Y ?= 1
-bsg_tiles_org_X =1
-bsg_tiles_org_Y =1
+
+# Shunning: this means in each tile group y starts from 1 and x starts from 0?
+bsg_tiles_org_X = 0
+bsg_tiles_org_Y = 3
 
 # If not configured, Will use default Values
 #	bsg_tiles_X ?= 2
 #	bsg_tiles_Y ?= 2
-bsg_tiles_X = 2
-bsg_tiles_Y = 2
+bsg_tiles_X = 4
+bsg_tiles_Y = 1
 
 
 all: main.run

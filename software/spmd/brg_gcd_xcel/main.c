@@ -31,10 +31,10 @@ int main()
   *************************************************************************/
   bsg_set_tile_x_y();
 
-  if ((__bsg_x == bsg_tiles_X-1) && (__bsg_y == bsg_tiles_Y-1)) {
+  if ((__bsg_x == 0) && (__bsg_y == 0)) {
 
     for (int i=0; i<4; ++i) {
-      xcel_csr_base_ptr = bsg_global_ptr( i, 3, 0);
+      xcel_csr_base_ptr = bsg_global_ptr( i, 1, 0);
 
       xcel_csr_base_ptr[CSR_OPA] = data_gcd_A[i];
       xcel_csr_base_ptr[CSR_OPB] = data_gcd_B[i];

@@ -205,15 +205,21 @@ module brg_xcel_template
     //--------------------------------------------------------------
     // Checking
     // synopsys translate_off
-    always_ff@(negedge clk_i ) begin
+    if (debug_p)
+      always_ff@(negedge clk_i ) begin
+        if (out_v_li && out_ready_lo)
+          $display("send mem req  %d %h %h", xcel_master_type, xcel_master_addr, xcel_master_data);
+        if (returned_v_lo)
+          $display("recv mem resp %d %h, credit: %d", returned_load_id_r_lo, returned_data_lo, out_credits_lo);
 
-      if( in_yumi_li ) begin
-        if ( in_we_lo )
-          $display("## (%d,%d) G/S CSR Write: csr=%h, value=%h", my_x_i, my_y_i, in_addr_lo, in_data_lo);
-        else
-          $display("## (%d,%d) G/S CSR Read : csr=%h", my_x_i, my_y_i, in_addr_lo);
+        if( in_yumi_li ) begin
+          if ( in_we_lo )
+            $display("## (%d,%d) G/S CSR Write: csr=%h, value=%h", my_x_i, my_y_i, in_addr_lo, in_data_lo);
+          else
+            $display("## (%d,%d) G/S CSR Read : csr=%h", my_x_i, my_y_i, in_addr_lo);
+        end
       end
-    end
+
     // synopsys translate_on
 
 endmodule

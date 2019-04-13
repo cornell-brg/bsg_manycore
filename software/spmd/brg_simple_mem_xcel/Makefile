@@ -30,7 +30,7 @@ bsg_tiles_org_Y = 1
 
 # If not configured, Will use default Values
 # Shunning: I only use 1 core at the top
-bsg_tiles_X = 1
+bsg_tiles_X = 4
 bsg_tiles_Y = 1
 
 all: main.run

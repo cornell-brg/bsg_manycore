@@ -197,9 +197,9 @@ module brg_xcel_template
        .master_mask ( xcel_master_mask ),
        .master_rdy  ( out_ready_lo ),
 
-       .master_ret_data( return_data_lo  ),
-       .master_ret_opq ( return_load_id_r_lo ),
-       .master_ret_val ( returned_v_r_lo )
+       .master_ret_data( returned_data_lo  ),
+       .master_ret_opq ( returned_load_id_r_lo ),
+       .master_ret_val ( returned_v_lo )
     );
 
     //--------------------------------------------------------------

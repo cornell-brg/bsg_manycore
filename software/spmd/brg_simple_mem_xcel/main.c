@@ -25,8 +25,8 @@ int main()
     dram[3] = 666;
 
     bsg_printf("----- Phase 1 ----- read existing value\n");
-    for (int i=0; i<4; ++i) {
-      bsg_remote_int_ptr xcel_csr_base_ptr = bsg_global_ptr( i, 1, 0 );
+    for (int i=0; i<1; ++i) {
+      bsg_remote_int_ptr xcel_csr_base_ptr = bsg_global_ptr( i, 2, 0 );
       xcel_csr_base_ptr[CSR_FUNC] = 0; // read
       xcel_csr_base_ptr[CSR_ADDR] = &(dram[i]);
       xcel_csr_base_ptr[CSR_GO  ] = 1;
@@ -35,8 +35,8 @@ int main()
     }
 
     bsg_printf("----- Phase 2 ----- xcel write value to dram\n");
-    for (int i=0; i<4; ++i) {
-      bsg_remote_int_ptr xcel_csr_base_ptr = bsg_global_ptr( i, 1, 0 );
+    for (int i=0; i<1; ++i) {
+      bsg_remote_int_ptr xcel_csr_base_ptr = bsg_global_ptr( i, 2, 0 );
       xcel_csr_base_ptr[CSR_FUNC] = 1; // write
       xcel_csr_base_ptr[CSR_ADDR] = &(dram[i]);
       xcel_csr_base_ptr[CSR_GO  ] = 1;
@@ -44,8 +44,8 @@ int main()
                   i, xcel_csr_base_ptr[CSR_GO] );
     }
     bsg_printf("----- Phase 3 ----- xcel read new value\n");
-    for (int i=0; i<4; ++i) {
-      bsg_remote_int_ptr xcel_csr_base_ptr = bsg_global_ptr( i, 1, 0 );
+    for (int i=0; i<1; ++i) {
+      bsg_remote_int_ptr xcel_csr_base_ptr = bsg_global_ptr( i, 2, 0 );
       xcel_csr_base_ptr[CSR_FUNC] = 0; // read
       xcel_csr_base_ptr[CSR_ADDR] = &(dram[i]);
       xcel_csr_base_ptr[CSR_GO  ] = 1;

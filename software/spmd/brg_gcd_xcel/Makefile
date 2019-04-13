@@ -26,7 +26,7 @@ bsg_hetero_type_vec =  \
 
 # Shunning: this means in each tile group y starts from 1 and x starts from 0?
 bsg_tiles_org_X = 0
-bsg_tiles_org_Y = 3
+bsg_tiles_org_Y = 2
 
 # If not configured, Will use default Values
 #	bsg_tiles_X ?= 2

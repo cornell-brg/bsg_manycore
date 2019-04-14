@@ -4,7 +4,7 @@
 #	bsg_global_X ?= $(bsg_tiles_X)
 #	bsg_global_Y ?= $(bsg_tiles_Y)+1
 bsg_global_X = 4
-bsg_global_Y = 4
+bsg_global_Y = 10
 
 # Configure the types of each nodes in the network
 # Refer to bsg_manycore/v/bsg_manycore_hetero_socket.v for type definiation
@@ -15,11 +15,19 @@ bsg_global_Y = 4
 # The first row is assigned to IO router and will the configuration values are ignored.
 
 # Shunning: Each vector has the same y -- e.g. first row has y = 0.
+# If the third row is accelerator, it takes 33378 cycles. If the last
+# row is accelerator it takes 33434 cycles, so dram is above this layout
 bsg_hetero_type_vec =  \
-{0, 0, 0, 0}, \
-{0, 0, 0, 0}, \
-{3, 3, 3, 3}, \
-{0, 0, 0, 0}
+{0,   0,   0,   0  }, \
+{0,   0,   0,   0  }, \
+{200, 200, 200, 200}, \
+{0,   0,   0,   0  }, \
+{0,   0,   0,   0  }, \
+{0,   0,   0,   0  }, \
+{0,   0,   0,   0  }, \
+{0,   0,   0,   0  }, \
+{0,   0,   0,   0  }, \
+{0,   0,   0,   0  }
 #########################################################
 #Tile group configuration
 # If not configured, Will use default Values

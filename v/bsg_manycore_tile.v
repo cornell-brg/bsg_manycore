@@ -10,7 +10,7 @@ module bsg_manycore_tile
 #(
   parameter dmem_size_p        = -1,
   parameter icache_entries_p   = -1,
-  parameter icache_tag_width_p = -1, 
+  parameter icache_tag_width_p = -1,
 
   parameter x_cord_width_p = -1,
   parameter y_cord_width_p = -1,
@@ -42,6 +42,20 @@ module bsg_manycore_tile
     input  f_fam_out_s fam_out_s_i,
     output f_fam_in_s  fam_in_s_o,
 `endif
+
+    // Shunning: systolic network
+    input  [36:0] in_row_msg,
+    input         in_row_val,
+    output        in_row_rdy,
+    input  [36:0] in_col_msg,
+    input         in_col_val,
+    output        in_col_rdy,
+    output [36:0] out_row_msg,
+    output        out_row_val,
+    input         out_row_rdy,
+    output [36:0] out_col_msg,
+    output        out_col_val,
+    input         out_col_rdy,
 
     input [x_cord_width_p-1:0] my_x_i,
     input [y_cord_width_p-1:0] my_y_i
@@ -110,6 +124,20 @@ module bsg_manycore_tile
 
       .link_sif_i(proc_link_sif_lo),
       .link_sif_o(proc_link_sif_li),
+
+       // Shunning: systolic network
+      .in_row_msg (in_row_msg),
+      .in_row_val (in_row_val),
+      .in_row_rdy (in_row_rdy),
+      .in_col_msg (in_col_msg),
+      .in_col_val (in_col_val),
+      .in_col_rdy (in_col_rdy),
+      .out_row_msg (out_row_msg),
+      .out_row_val (out_row_val),
+      .out_row_rdy (out_row_rdy),
+      .out_col_msg (out_col_msg),
+      .out_col_val (out_col_val),
+      .out_col_rdy (out_col_rdy),
 
       .my_x_i(my_x_i),
       .my_y_i(my_y_i),

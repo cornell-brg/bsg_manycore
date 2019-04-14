@@ -20,8 +20,11 @@
 `include "float_definitions.vh"
 `endif
 
+// Shunning: we enhance this to pass through systolic network for
+// non-systolic accelerators
 `define HETERO_TYPE_MACRO(BMC_TYPE,BMC_TYPE_MODULE)             \
    if (hetero_type_p == (BMC_TYPE))                             \
+     if ( hetero_type_p < 300 )                                 \
      begin: h                                                   \
         BMC_TYPE_MODULE #(.x_cord_width_p(x_cord_width_p)       \
                           ,.y_cord_width_p(y_cord_width_p)      \
@@ -45,6 +48,53 @@
            ,.my_x_i                                             \
            ,.my_y_i                                             \
            ,.freeze_o                                           \
+ `ifdef bsg_FPU                                                 \
+           ,.fam_out_s_i                                        \
+           ,.fam_in_s_o                                         \
+ `endif                                                         \
+           );                                                   \
+        assign out_row_msg = in_row_msg;                        \
+        assign out_row_val = in_row_val;                        \
+        assign in_row_rdy = out_row_rdy;                        \
+        assign out_row_msg = in_row_msg;                        \
+        assign out_row_val = in_row_val;                        \
+        assign in_row_rdy = out_row_rdy;                        \
+     end                                                        \
+     else begin                                                 \
+        BMC_TYPE_MODULE #(.x_cord_width_p(x_cord_width_p)       \
+                          ,.y_cord_width_p(y_cord_width_p)      \
+                          ,.data_width_p(data_width_p)          \
+                          ,.addr_width_p(addr_width_p)          \
+                          ,.load_id_width_p(load_id_width_p)    \
+                          ,.dmem_size_p (dmem_size_p )          \
+                          ,.epa_byte_addr_width_p(epa_byte_addr_width_p)  \
+                          ,.dram_ch_addr_width_p ( dram_ch_addr_width_p )  \
+                          ,.dram_ch_start_col_p  ( dram_ch_start_col_p) \
+                          ,.debug_p(debug_p)                    \
+                          ,.icache_entries_p(icache_entries_p)  \
+                          ,.icache_tag_width_p (icache_tag_width_p) \
+                          ,.max_out_credits_p(max_out_credits_p)\
+                          ,.hetero_type_p(hetero_type_p)        \
+                          ) z                                   \
+          (.clk_i                                               \
+           ,.reset_i                                            \
+           ,.link_sif_i                                         \
+           ,.link_sif_o                                         \
+           ,.my_x_i                                             \
+           ,.my_y_i                                             \
+           ,.freeze_o                                           \
+           ,.in_row_msg (in_row_msg), \
+            .in_row_val (in_row_val), \
+            .in_row_rdy (in_row_rdy), \
+            .in_col_msg (in_col_msg), \
+            .in_col_val (in_col_val), \
+            .in_col_rdy (in_col_rdy), \
+            .out_row_msg (out_row_msg), \
+            .out_row_val (out_row_val), \
+            .out_row_rdy (out_row_rdy), \
+            .out_col_msg (out_col_msg), \
+            .out_col_val (out_col_val), \
+            .out_col_rdy (out_col_rdy) \
  `ifdef bsg_FPU                                                 \
            ,.fam_out_s_i                                        \
            ,.fam_in_s_o                                         \
@@ -75,6 +125,20 @@ module bsg_manycore_hetero_socket #(  x_cord_width_p      = "inv"
     , input  [bsg_manycore_link_sif_width_lp-1:0] link_sif_i
     , output [bsg_manycore_link_sif_width_lp-1:0] link_sif_o
 
+    // Shunning: systolic network
+   ,input  [36:0] in_row_msg,
+    input         in_row_val,
+    output        in_row_rdy,
+    input  [36:0] in_col_msg,
+    input         in_col_val,
+    output        in_col_rdy,
+    output [36:0] out_row_msg,
+    output        out_row_val,
+    input         out_row_rdy,
+    output [36:0] out_col_msg,
+    output        out_col_val,
+    input         out_col_rdy
+
     // tile coordinates
     , input   [x_cord_width_p-1:0]                my_x_i
     , input   [y_cord_width_p-1:0]                my_y_i
@@ -90,13 +154,13 @@ module bsg_manycore_hetero_socket #(  x_cord_width_p      = "inv"
    // add as many types as you like...
    `HETERO_TYPE_MACRO(0,bsg_manycore_proc_vanilla) else
    `HETERO_TYPE_MACRO(1,bsg_manycore_gather_scatter) else
-   `HETERO_TYPE_MACRO(2,brg_slave_xcel_template) else  // brg slave xcel
-   `HETERO_TYPE_MACRO(3,brg_xcel_template) else
-   `HETERO_TYPE_MACRO(4,bsg_manycore_accel_default) else
-   `HETERO_TYPE_MACRO(5,bsg_manycore_accel_default) else
-   `HETERO_TYPE_MACRO(6,bsg_manycore_accel_default) else
-   `HETERO_TYPE_MACRO(7,bsg_manycore_accel_default) else
-   `HETERO_TYPE_MACRO(8,bsg_manycore_accel_default) else
+
+   `HETERO_TYPE_MACRO(100, brg_slave_xcel_template) else  // brg gcd xcel
+   `HETERO_TYPE_MACRO(200, brg_xcel_template) else // brg simple xcel
+
+   `HETERO_TYPE_MACRO(300, brg_systolic_xcel_template) else // brg column engine
+   `HETERO_TYPE_MACRO(301, brg_systolic_xcel_template) else // brg row engine
+   `HETERO_TYPE_MACRO(302, brg_systolic_xcel_template) else // brg dense xcel
      begin : nh
 	// synopsys translate_off
         initial

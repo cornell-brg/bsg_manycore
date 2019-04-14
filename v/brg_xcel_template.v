@@ -161,11 +161,11 @@ module brg_xcel_template
       ,.data_i    ( master_data )
       ,.addr_i    ( xcel_master_addr )
       ,.we_i      ( xcel_master_type )
-      ,.swap_aq_i ( 0 ) // Shunning: we don't issue AMO in xcel
-      ,.swap_rl_i ( 0 )
+      ,.swap_aq_i ( 1'b0 ) // Shunning: we don't issue AMO in xcel
+      ,.swap_rl_i ( 1'b0 )
       ,.mask_i    ( xcel_master_mask )
-      ,.tile_group_x_i ( 0 ) // Shunning: we assume the Makefile always specify 0
-      ,.tile_group_y_i ( 1 ) //           and 1 for these two.
+      ,.tile_group_x_i ( x_cord_width_p'(0) ) // Shunning: we assume the Makefile always specify 0
+      ,.tile_group_y_i ( x_cord_width_p'(1) ) //           and 1 for these two.
       ,.my_x_i    (my_x_i)
       ,.my_y_i    (my_y_i)
 

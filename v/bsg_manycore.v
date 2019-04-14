@@ -50,14 +50,14 @@ module bsg_manycore
 
    //the epa_addr_width_lp is the address bit used in C for remote access.
    //the value should be set to EPA_ADDR_WIDTH-2, refer to bsg_manycore.h for EPA_ADDR_WDITH setting
-   ,parameter epa_byte_addr_width_p =  "inv" 
+   ,parameter epa_byte_addr_width_p =  "inv"
 
     //------------------------------------------------------
     //  DRAM Address Definition
     //------------------------------------------------------
     // DRAMs are located at the south of mesh, and are divided
-    // into different channels depending on which column the dram 
-    // is attached to. 
+    // into different channels depending on which column the dram
+    // is attached to.
     //
     // Should be less or equal to addr_width_p
     //
@@ -69,10 +69,10 @@ module bsg_manycore
     //
     //  LOW_ADDR     ----->         HIGH_ADDR
     //
-    // This parameter is used to decode which DRAM channel should be 
+    // This parameter is used to decode which DRAM channel should be
     // send to.
     // 32 bits = {1'b1, CH0, network address}
-    
+
     //  26 = 32M WORDS for each channel
    ,parameter dram_ch_addr_width_p = "inv"
     //  Suppose the first channel is connected to column 0
@@ -139,6 +139,14 @@ module bsg_manycore
 
    bsg_manycore_link_sif_s [num_tiles_y_p-1:0][num_tiles_x_p-1:0][S:W] link_in;
    bsg_manycore_link_sif_s [num_tiles_y_p-1:0][num_tiles_x_p-1:0][S:W] link_out;
+
+   // Shunning: We have (X+1)*(Y+1) temporary wires
+   logic [num_tiles_y_p:0][num_tiles_x_p:0][36:0] row_msg;
+   logic [num_tiles_y_p:0][num_tiles_x_p:0]       row_val;
+   logic [num_tiles_y_p:0][num_tiles_x_p:0]       row_rdy;
+   logic [num_tiles_y_p:0][num_tiles_x_p:0][36:0] col_msg;
+   logic [num_tiles_y_p:0][num_tiles_x_p:0]       col_val;
+   logic [num_tiles_y_p:0][num_tiles_x_p:0]       col_rdy;
 
    genvar r,c;
 
@@ -208,35 +216,63 @@ module bsg_manycore
                 .fam_out_s_i(fam_out_s_v[r][c]),
               `endif
 
+                .in_row_msg(row_msg[r][c]),
+                .in_row_val(row_val[r][c]),
+                .in_row_rdy(row_rdy[r][c]),
+                .out_row_msg(row_msg[r][c+1]),
+                .out_row_val(row_val[r][c+1]),
+                .out_row_rdy(row_rdy[r][c+1]),
+
+                .in_col_msg(col_msg[r][c]),
+                .in_col_val(col_val[r][c]),
+                .in_col_rdy(col_rdy[r][c]),
+                .out_col_msg(col_msg[r+1][c]),
+                .out_col_val(col_val[r+1][c]),
+                .out_col_rdy(col_rdy[r+1][c]),
+
                 .my_x_i(x_cord_width_lp'(c)),
                 .my_y_i(y_cord_width_lp'(r))
               );
           end
      end
 
+   for (r = IO_row_idx_p+1; r < num_tiles_y_p; r = r+1)
+   begin
+      assign row_msg[r][0] = 0;
+      assign row_val[r][0] = 0;
+      assign row_rdy[r][num_tiles_x_p] = 0;
+   end
+
+   for (c = 0; c < num_tiles_x_p; c=c+1)
+   begin
+      assign col_msg[0][c] = 0;
+      assign col_val[0][c] = 0;
+      assign col_rdy[num_tiles_y_p][c] = 0;
+   end
+
 for (c = 0; c < num_tiles_x_p; c=c+1) begin:io
         bsg_manycore_mesh_node #(
             .x_cord_width_p     (x_cord_width_lp )
            ,.y_cord_width_p     (y_cord_width_lp )
            ,.load_id_width_p    (load_id_width_p )
-        
+
            ,.data_width_p       (data_width_p    )
            ,.addr_width_p       (addr_width_p    )
           ) io_router
            (  .clk_i    (clk_i      )
              ,.reset_i  (reset_i_rr )
-        
+
              ,.links_sif_i      ( link_in [ IO_row_idx_p][ c ] )
              ,.links_sif_o      ( link_out[ IO_row_idx_p][ c ] )
-        
+
              ,.proc_link_sif_i  ( io_link_sif_i [ c ])
              ,.proc_link_sif_o  ( io_link_sif_o [ c ])
-        
+
              // tile coordinates
              ,.my_x_i   ( x_cord_width_lp'(c              ))
              ,.my_y_i   ( y_cord_width_lp'(IO_row_idx_p  ))
              );
-        
+
 end
     // stitch together all of the tiles into a mesh
 

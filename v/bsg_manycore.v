@@ -141,10 +141,10 @@ module bsg_manycore
    bsg_manycore_link_sif_s [num_tiles_y_p-1:0][num_tiles_x_p-1:0][S:W] link_out;
 
    // Shunning: We have (X+1)*(Y+1) temporary wires
-   logic [num_tiles_y_p:0][num_tiles_x_p:0][36:0] row_msg;
+   logic [num_tiles_y_p:0][num_tiles_x_p:0][37:0] row_msg;
    logic [num_tiles_y_p:0][num_tiles_x_p:0]       row_val;
    logic [num_tiles_y_p:0][num_tiles_x_p:0]       row_rdy;
-   logic [num_tiles_y_p:0][num_tiles_x_p:0][36:0] col_msg;
+   logic [num_tiles_y_p:0][num_tiles_x_p:0][37:0] col_msg;
    logic [num_tiles_y_p:0][num_tiles_x_p:0]       col_val;
    logic [num_tiles_y_p:0][num_tiles_x_p:0]       col_rdy;
 

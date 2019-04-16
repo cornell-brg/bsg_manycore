@@ -15,6 +15,7 @@
 `include "bsg_manycore_packet.vh"
 `include "brg_slave_xcel_template.v"
 `include "brg_xcel_template.v"
+`include "brg_systolic_xcel_template.v"
 
 `ifdef bsg_FPU
 `include "float_definitions.vh"
@@ -126,16 +127,16 @@ module bsg_manycore_hetero_socket #(  x_cord_width_p      = "inv"
     , output [bsg_manycore_link_sif_width_lp-1:0] link_sif_o
 
     // Shunning: systolic network
-   ,input  [36:0] in_row_msg,
+   ,input  [37:0] in_row_msg,
     input         in_row_val,
     output        in_row_rdy,
-    input  [36:0] in_col_msg,
+    input  [37:0] in_col_msg,
     input         in_col_val,
     output        in_col_rdy,
-    output [36:0] out_row_msg,
+    output [37:0] out_row_msg,
     output        out_row_val,
     input         out_row_rdy,
-    output [36:0] out_col_msg,
+    output [37:0] out_col_msg,
     output        out_col_val,
     input         out_col_rdy
 
@@ -160,7 +161,8 @@ module bsg_manycore_hetero_socket #(  x_cord_width_p      = "inv"
 
    `HETERO_TYPE_MACRO(300, brg_systolic_xcel_template) else // brg column engine
    `HETERO_TYPE_MACRO(301, brg_systolic_xcel_template) else // brg row engine
-   `HETERO_TYPE_MACRO(302, brg_systolic_xcel_template) else // brg dense xcel
+   `HETERO_TYPE_MACRO(302, brg_systolic_xcel_template) else // brg dense xcel base
+   `HETERO_TYPE_MACRO(303, brg_systolic_xcel_template) else // brg dense xcel alt
      begin : nh
 	// synopsys translate_off
         initial

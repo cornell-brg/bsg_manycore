@@ -6,7 +6,7 @@ module testbench();
 
   // parameters
   //
-  parameter addr_width_p = 26;
+  parameter addr_width_p = 28;
   parameter data_width_p = 32;
   parameter num_tiles_x_p = 4;
   parameter num_tiles_y_p = 4;
@@ -16,11 +16,11 @@ module testbench();
   parameter dmem_size_p = 1024;
   parameter icache_entries_p = 1024;
   parameter icache_tag_width_p = 12;
-  parameter dram_ch_addr_width_p = 26;
+  parameter dram_ch_addr_width_p = 27;
   parameter epa_addr_width_p = 16;
 
   parameter num_cache_p = 4;
-  parameter sets_p = 512;
+  parameter sets_p = 16;
   parameter ways_p = 2;
   parameter block_size_in_words_p = 8;
 
@@ -32,7 +32,7 @@ module testbench();
   parameter mem_els_p = 2**12;
 
   parameter spmd_max_out_credits_p = 128;
-  parameter max_cycles_p = 100000;
+  parameter max_cycles_p = 1000000;
   parameter loader_x_cord_p = (x_cord_width_p)'(num_tiles_x_p-1);
   parameter loader_y_cord_p = (y_cord_width_p)'(num_tiles_y_p);
 

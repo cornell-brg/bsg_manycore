@@ -240,14 +240,14 @@ module bsg_manycore
    begin
       assign row_msg[r][0] = 0;
       assign row_val[r][0] = 0;
-      assign row_rdy[r][num_tiles_x_p] = 0;
+      assign row_rdy[r][num_tiles_x_p] = 1;
    end
 
    for (c = 0; c < num_tiles_x_p; c=c+1)
    begin
       assign col_msg[0][c] = 0;
       assign col_val[0][c] = 0;
-      assign col_rdy[num_tiles_y_p][c] = 0;
+      assign col_rdy[num_tiles_y_p][c] = 1;
    end
 
 for (c = 0; c < num_tiles_x_p; c=c+1) begin:io

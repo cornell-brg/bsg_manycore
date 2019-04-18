@@ -7,7 +7,6 @@ PROG_NAME ?= main
 
 # Shunning:
 VCS = ${VCS_HOME}/bin/vcs
-DVE = ${VCS_HOME}/bin/dve
 
 ########################################
 # select the tools
@@ -39,8 +38,7 @@ VCS_RUN_OP =
 
 include $(BSG_MANYCORE_DIR)/software/mk/Makefile.verilog.loader
 
-$(info xxx ="$(DVE)")
-ifneq ($(DVE),)
+ifeq ($(DVE),1)
 VCS_OP     +=  +vcs+vcdpluson -debug_access+all
 endif
 

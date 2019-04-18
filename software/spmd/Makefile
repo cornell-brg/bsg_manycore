@@ -3,7 +3,7 @@ include ./Makefile.include
 
 # Define this variable on cmd line to run coverage analysis. Currently
 # supports VCS coverage: run "make COVERAGE=VCS"
-COVERAGE = 
+COVERAGE =
 
 ifdef COVERAGE
 	bsg_tiles_X = 4
@@ -49,7 +49,7 @@ endif
 	done;
 
 coverage-debug:
-	$(VCS_BIN)/dve -full64 -dir *.vdb &
+	$(VCS_HOME)/bin/dve -full64 -dir *.vdb &
 
 clean:
 	rm -rf run.log cov.log coverage* DVEfiles/

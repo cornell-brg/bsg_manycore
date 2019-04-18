@@ -39,7 +39,8 @@ VCS_RUN_OP =
 
 include $(BSG_MANYCORE_DIR)/software/mk/Makefile.verilog.loader
 
-ifeq ($(DVE),1)
+$(info xxx ="$(DVE)")
+ifneq ($(DVE),)
 VCS_OP     +=  +vcs+vcdpluson -debug_access+all
 endif
 

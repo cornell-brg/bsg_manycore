@@ -2,16 +2,16 @@
 	echo $($*)
 
 dve:
-	$(VCS_BIN)/dve -full64 -vpd vcdplus.vpd &
+	$(VCS_HOME)/bin/dve -full64 -vpd vcdplus.vpd &
 
 %.pelog: pe.log
 	cat pe.log | grep '^$@' | sed 's/$@ //' > $@
 
 cov_dve:
-	$(VCS_BIN)/dve -full64 -dir *.vdb &
+	$(VCS_HOME)/bin/dve -full64 -dir *.vdb &
 
 cov_report:
-	$(VCS_BIN)/urg -full64 -map $(VCS_COV_MODULE_MAP) -report coverage/ -format both -dir *.vdb/ -log coverage.log
+	$(VCS_HOME)/bin/urg -full64 -map $(VCS_COV_MODULE_MAP) -report coverage/ -format both -dir *.vdb/ -log coverage.log
 	cat coverage/modlist.txt
 
 clean:

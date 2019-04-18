@@ -17,7 +17,7 @@ bsg_global_Y = 4
 # Shunning: Each vector has the same y -- e.g. first row has y = 0.
 bsg_hetero_type_vec =  \
 {0, 0, 0, 0}, \
-{2, 2, 2, 2}, \
+{100, 100, 100, 100}, \
 {0, 0, 0, 0}, \
 {0, 0, 0, 0}
 #########################################################

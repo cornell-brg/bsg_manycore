@@ -6,10 +6,10 @@
 // Date   : Apr 13, 2019
 
 `include "bsg_manycore_packet.vh"
-`include "HBTile_HBIfcDotProductAltPRTL.v"
-`include "HBTile_HBIfcDotProductBasePRTL.v"
-`include "HBIfcColEnginePRTL_0x7d1da687558b8b5a.v"
-`include "HBIfcRowEnginePRTL_0x3cc2ffdadbf4c450.v"
+`include "../../alloy-sim/pymtl/build/HBTile_HBIfcDotProductAltPRTL.v"
+`include "../../alloy-sim/pymtl/build/HBTile_HBIfcDotProductBasePRTL.v"
+`include "../../alloy-sim/pymtl/build/HBIfcColEnginePRTL_0x7d1da687558b8b5a.v"
+`include "../../alloy-sim/pymtl/build/HBIfcRowEnginePRTL_0x3cc2ffdadbf4c450.v"
 
 module brg_systolic_xcel_template
 #(

@@ -2,29 +2,7 @@
 #include "bsg_manycore.h"
 #include "bsg_set_tile_x_y.h"
 
-//dram_ch_addr_width_p set to DRAM_CH_ADDR_BITS-2
-#define DRAM_CH_ADDR_BITS 18
-
-// #include "dataset_tiny.dat"
-// Define Vectors in DRAM.
-int N_tiny = 3, M_tiny = 5, P_tiny = 4;
-int matA_tiny[500] __attribute__ ( ( section(".dram") ) ) = {
-  1,2,3,4,5,
-  6,7,8,9,10,
-  11,12,13,14,15
-};
-int matB_tiny[500] __attribute__ ( ( section(".dram") ) ) = {
-  10,20,30,40,
-  50,60,70,80,
-  90,100,110,120,
-  130,140,150,160,
-  170,180,190,200
-};
-int refC_tiny[500] __attribute__ ( ( section(".dram") ) ) = {
-  1750, 1900, 2050, 2200,
-  4000, 4400, 4800, 5200,
-  6250, 6900, 7550, 8200
-};
+#include "gemm-tiny.dat"
 
 inline void configure_row_engine(int x, int y, int *A_base_addr, int num_rows, int M) {
   bsg_remote_int_ptr base_ptr = bsg_global_ptr(x, y, 0);
@@ -60,7 +38,7 @@ int wait_on_accelerator(int x, int y) {
   return bsg_global_ptr(x, y, 0)[0];
 }
 
-int matC_tiny[500] __attribute__ ( ( section(".dram") ) );
+int matC_tiny[12] __attribute__ ( ( section(".dram") ) );
 
 int main()
 {
@@ -77,7 +55,7 @@ int main()
 
       wait_on_accelerator(1, 2);
       for (int i=0; i<N_tiny*P_tiny; ++i)
-        bsg_printf("%d\n", matC_tiny[i]);
+        bsg_printf("%d, ref=%d\n", matC_tiny[i], refC_tiny[i]);
     }
 
     bsg_finish();

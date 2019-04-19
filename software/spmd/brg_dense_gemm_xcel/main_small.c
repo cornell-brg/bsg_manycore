@@ -49,11 +49,17 @@ int main()
 
     if (bsg_global_X == 2 && bsg_global_Y == 3) { // 1x1 systolic
       int C_stride = 4;
+
+      bsg_print_time();
+
       configure_row_engine(0, 2, matA_tiny, N_tiny, M_tiny);
       configure_col_engine(1, 1, matB_tiny, N_tiny, M_tiny, P_tiny, 4);
       configure_accelerator(1, 2, matC_tiny, N_tiny, P_tiny, C_stride, 0);
 
       wait_on_accelerator(1, 2);
+
+      bsg_print_time();
+
       for (int i=0; i<N_tiny*P_tiny; ++i)
         bsg_printf("%d, ref=%d\n", matC_tiny[i], refC_tiny[i]);
     }

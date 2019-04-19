@@ -254,7 +254,7 @@ module brg_systolic_xcel_template
     //--------------------------------------------------------------
     // Checking
     // synopsys translate_off
-    // if (debug_p)
+    if (debug_p)
       always_ff@(negedge clk_i ) begin
         if (out_v_li && out_ready_lo)
           $display("MASTER (%d,%d) send mem req  %d %h %h", my_x_i, my_y_i, xcel_master_type, xcel_master_addr, xcel_master_data);

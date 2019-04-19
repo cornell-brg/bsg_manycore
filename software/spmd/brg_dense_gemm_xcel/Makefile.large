@@ -3,8 +3,8 @@
 # If not configured, Will use default Values
 #	bsg_global_X ?= $(bsg_tiles_X)
 #	bsg_global_Y ?= $(bsg_tiles_Y)+1
-bsg_global_X = 2
-bsg_global_Y = 3
+bsg_global_X = 5
+bsg_global_Y = 7
 
 # Configure the types of each nodes in the network
 # Refer to bsg_manycore/v/bsg_manycore_hetero_socket.v for type definiation
@@ -18,9 +18,14 @@ bsg_global_Y = 3
 # If the third row is accelerator, it takes 33378 cycles. If the last
 # row is accelerator it takes 33434 cycles, so dram is above this layout
 bsg_hetero_type_vec =  \
-{0,   0   }, \
-{0,   300 }, \
-{301, 303 } \
+{0,   0,   0,   0,   0}, \
+{0,   0,   0,   0,   0}, \
+{300, 300, 300, 300, 300 }, \
+{301, 303, 303, 303, 303 }, \
+{301, 303, 303, 303, 303 }, \
+{301, 303, 303, 303, 303 }, \
+{301, 303, 303, 303, 303 }
+
 #########################################################
 #Tile group configuration
 # If not configured, Will use default Values
@@ -31,10 +36,8 @@ bsg_tiles_org_Y = 1
 
 # If not configured, Will use default Values
 # Shunning: I only use 1 core at the top
-bsg_tiles_X = 1
+bsg_tiles_X = 5
 bsg_tiles_Y = 1
-
-RISCV_GCC_EXTRA_OPTS=-DDATASET_SMALL
 
 all: main.run
 
@@ -46,7 +49,7 @@ all: main.run
 # for a quick debug of processor or program running on it.
 proc_exe_logs: X0_Y0.pelog X1_Y0.pelog
 
-OBJECT_FILES=main_small.o bsg_set_tile_x_y.o bsg_printf.o
+OBJECT_FILES=main_large.o bsg_set_tile_x_y.o bsg_printf.o
 
 include ../Makefile.include
 

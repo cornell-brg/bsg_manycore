@@ -15,7 +15,7 @@
 
 parameter int bsg_hetero_type_vec_gp [0:`bsg_global_Y-1][0:`bsg_global_X-1]  = '{ `bsg_hetero_type_vec };
 
-`define MAX_CYCLES 1000000
+`define MAX_CYCLES 1000000000
 
 
 
@@ -31,7 +31,7 @@ module test_bsg_manycore;
    localparam tile_id_ptr_lp  = -1;
    localparam dmem_size_lp    = `DMEM_SIZE ;
    localparam icache_entries_num_lp  = `ICACHE_ENTRIES;
-   localparam icache_tag_width_lp= 12;      // 16MB PC address 
+   localparam icache_tag_width_lp= 12;      // 16MB PC address
    localparam data_width_lp   = 32;
    localparam load_id_width_lp = 11;
    localparam epa_byte_addr_width_lp       = 18;

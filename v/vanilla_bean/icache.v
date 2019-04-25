@@ -17,6 +17,7 @@ module icache #(parameter
                 input                              clk_i
                ,input                              reset_i
 
+    , input flush_i
                ,input                              icache_cen_i
                ,input                              icache_w_en_i
                 //TODO: The written address should be enlarged. 
@@ -125,7 +126,7 @@ module icache #(parameter
         else if( pc_wen_i) pc_r               <= pc_i;
 
   always_ff@(posedge clk_i) 
-        if(reset_i)          icache_stall_out_r    <= 'b0;
+        if(reset_i | flush_i)          icache_stall_out_r    <= 'b0;
         else                 icache_stall_out_r    <= icache_stall_out;
 
   //this is the final output that send out, take stall into consideration

@@ -1,5 +1,5 @@
 # Shunning: choose dataset in {64,128}
-RISCV_GCC_EXTRA_OPTS = -DBRG_DATASET=64
+RISCV_GCC_EXTRA_OPTS = -DBRG_DATASET=128
 
 #########################################################
 # Network Configutaion

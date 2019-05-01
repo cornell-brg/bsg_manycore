@@ -98,12 +98,10 @@ int main()
         int total_elements = round_elements * ceil_A_rows;
 
         for (int i=0; i<P; i+=total_C_stride) {
-          bsg_print_time();
-          int PP = P;
-          bsg_printf("| i=%d | P=%d | i<P? %d | i<64? %d | P==64? %d | PP=%d | i<PP? %d|\n", i, P, i < P, i < 64, P == 64, PP, i<PP);
           int *B_ptr_tmp   = B_ptr;
           int *scp_ptr_tmp = scp_B;
 
+          bsg_print_time();
           // Bring a 4xM stride of B array into scratchpad
           for (int k=0; k<M; ++k) {
             *(scp_ptr_tmp++) = *(B_ptr_tmp++);
@@ -115,6 +113,7 @@ int main()
             B_ptr_tmp += skip_entries;
           }
           B_ptr += total_C_stride;
+          bsg_print_time();
 
           // configure col engine
           // Give the col engine a remote address of this tile
@@ -134,12 +133,13 @@ int main()
             base_ptr[6] = C_stride;
             base_ptr[0] = 1;
           }
+          bsg_print_time();
 
           wait_on_accelerator(__bsg_x, 2);
           for (int y=0; y<4; ++y)
             wait_on_accelerator(__bsg_x, 3+y);
+          /*bsg_print_time();*/
         }
-        bsg_printf("hey hey hey\n");
         bsg_barrier_wait( &tile0_barrier, 0, 0);
       }
     }

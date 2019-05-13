@@ -36,7 +36,7 @@ module rf_2r1w_sync_wrapper  #(parameter width_p=-1
 
     wire [width_p-1:0] r0_mem_data, r1_mem_data;
 
-    bsg_mem_2r1w_sync #( .width_p       ( width_p       )
+    brg_mem_2r1w_sync #( .width_p       ( width_p       )
                         ,.els_p         ( els_p         )
                         ,.addr_width_lp ( addr_width_lp )
                         ,.harden_p      ( harden_p      )

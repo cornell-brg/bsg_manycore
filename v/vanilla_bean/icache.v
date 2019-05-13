@@ -97,7 +97,7 @@ module icache #(parameter
                              
   //------------------------------------------------------------------
   // Instantiate the memory 
-  bsg_mem_1rw_sync #
+  brg_mem_1rw_sync #
     ( .width_p ( icache_format_width_lp )
      ,.els_p   (2**icache_addr_width_p)
      //,.substitute_1r1w_p(1'b0)

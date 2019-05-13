@@ -6,7 +6,7 @@
 // Date   : Mar 15, 2019
 
 `include "bsg_manycore_packet.vh"
-`include "../../alloy-sim/pymtl/build/HBIfcGcdXcelPRTL_0xeef3ea699c5ed9a.v"
+//`include "HBIfcGcdXcelPRTL_0xeef3ea699c5ed9a.v"
 
 module brg_slave_xcel_template
 #(

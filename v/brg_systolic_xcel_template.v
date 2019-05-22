@@ -6,10 +6,6 @@
 // Date   : Apr 13, 2019
 
 `include "bsg_manycore_packet.vh"
-`include "../../alloy-sim/pymtl/build/HBTile_HBIfcDotProductAltPRTL.v"
-`include "../../alloy-sim/pymtl/build/HBTile_HBIfcDotProductBasePRTL.v"
-`include "../../alloy-sim/pymtl/build/HBIfcColEnginePRTL_32_4.v"
-`include "../../alloy-sim/pymtl/build/HBIfcRowEnginePRTL_32_2.v"
 
 module brg_systolic_xcel_template
 #(
@@ -237,8 +233,8 @@ module brg_systolic_xcel_template
    // Shunning: !!! We can only instantiate those who instantiate
    //           brg_systolic_xcel_template in bsg_manycore_hetero_socket.v
 
-   `BRG_XCEL_SELECT(300,HBIfcColEnginePRTL_32_4) else // brg column engine
-   `BRG_XCEL_SELECT(301,HBIfcRowEnginePRTL_32_2) else // brg row engine
+   `BRG_XCEL_SELECT(300,HBIfcColEnginePRTL_32_8) else // brg column engine
+   `BRG_XCEL_SELECT(301,HBIfcRowEnginePRTL_32_4) else // brg row engine
    `BRG_XCEL_SELECT(302,HBTile_HBIfcDotProductBasePRTL) else // brg dense xcel base
    `BRG_XCEL_SELECT(303,HBTile_HBIfcDotProductAltPRTL) else // brg dense xcel alt
      begin : nh

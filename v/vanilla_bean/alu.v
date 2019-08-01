@@ -23,13 +23,19 @@ logic [32:0] sum;
 logic [31:0] adder_input;
 logic [32:0] shr_out;
 logic [31:0] shl_out, xor_out, and_out, or_out;
+//logic [31:0] mul;
 
+//logic is_mul;
 /////////////////////////////////////////////////////////
 assign is_imm_op    = (op_i.op ==? `RV32_OP_IMM) | (op_i.op ==? `RV32_JALR_OP);
 
 /////////////////////////////////////////////////////////
 assign op2          = is_imm_op ? `RV32_signext_Iimm(op_i) : rs2_i;
 ///////////////////////////////////////////////////////////
+//assign is_mul =  (op_i.op == `RV32_OP)
+//                             & (op_i.funct7 == 7'b0000001) & (op_i.funct3 == 3'b000);
+
+//mul_sh mul_32 (.a(rs1_i), .b(rs2_i),.c(mul)); //, .g(is_mul)) ;
 
 
 assign adder_input  = sub_not_add ? (~op2) : op2;
@@ -122,6 +128,11 @@ always_comb
         begin
           result_o    =pc_plus4_i;
         end
+
+      `RV32_MUL:
+        begin
+          result_o = rs1_i * rs2_i ;
+        end
       default:
         begin
         end
@@ -147,3 +158,20 @@ begin
 end
 
 endmodule
+/*
+module mul_sh (input [31:0] a, input [31:0] b, output [31:0] c, input g);
+logic [31:0] b_g;
+logic [31:0] a_g;
+
+assign a_g = g? a : 32'b0;
+
+assign b_g = g? b : 32'b0;
+
+assign c = a_g * b_g;
+endmodule
+*/
+/*
+module mul_sh (input [31:0] a, input [31:0] b, output [31:0] c);
+assign c = a * b;
+endmodule
+*/

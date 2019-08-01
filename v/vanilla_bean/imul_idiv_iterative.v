@@ -40,14 +40,14 @@ always_comb begin
   gets_quotient   = 1'b0;
 
   unique casez (funct3)
-    `MD_MUL_FUN3: // MUL
+/*    `MD_MUL_FUN3: // MUL
       begin
         imul_v            = v_i;
         signed_opA        = 1'b1;
         signed_opB        = 1'b1;
         gets_high_part    = 1'b0;
       end
-
+*/
     `MD_MULH_FUN3: // MULH
       begin
         imul_v            = v_i;

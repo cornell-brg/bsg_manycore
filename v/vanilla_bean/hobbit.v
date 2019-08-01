@@ -1,6 +1,6 @@
 `include "parameters.vh"
 `include "definitions.vh"
-
+`include "brg_csr.v"  //added by Shady Agwa June 10, 2019
 `ifdef bsg_FPU
 `include "float_definitions.vh"
 `endif
@@ -613,6 +613,21 @@ imul_idiv_iterative  md_0
     ,.yumi_i    (~stall_non_mem)
     );
 
+
+// Trace the stats by adding BRG_CSR_StatsEn
+// Added by Shady_Agwa June 10, 2019
+// synopsys translate_off
+  wire stats_en;
+  wire [31:0] brg_inst;
+assign brg_inst[31-:32] = exe.instruction[31-:32];
+  brg_csr brg_csr_st(
+                     clk_i
+                     ,reset_i
+                     ,brg_inst
+                     ,stats_en
+                     );
+
+// synopsys translate_on
 
 //+----------------------------------------------
 //|
@@ -1384,6 +1399,7 @@ if(debug_p | debug_lp) begin
     end
   end
 end
+
 //synopsys translate_on
 
 

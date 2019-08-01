@@ -177,7 +177,7 @@ always_comb
 //|
 //+----------------------------------------------
 assign decode_o.is_md_instr  = (instruction_i.op == `RV32_OP)
-                             & (instruction_i.funct7 == 7'b0000001);
+                             & (instruction_i.funct7 == 7'b0000001) & (instruction_i.funct3 != 3'b000);
 
 //memory order related instructions.
 assign decode_o.op_is_load_reservation = instruction_i ==? `RV32_LR_W;

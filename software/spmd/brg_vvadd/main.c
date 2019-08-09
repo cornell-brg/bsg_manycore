@@ -48,6 +48,11 @@ void vvadd( int* dest, int* src0, int* src1, int size )
 
 int main()
 {
+   __asm__ __volatile__ ( "csrrwi s9,0x7c1, 0x1;"
+                    "nop;"
+                    "nop;"
+                    "nop;"
+                  );
   // Sets the bsg_x and bsg_y global variables.
   bsg_set_tile_x_y();
   int num_tiles = bsg_num_tiles;
@@ -89,6 +94,8 @@ int main()
         }
       }
     }
+    __asm__ __volatile__ ( "csrrwi s9,0x7c1, 0x0;"
+                       );
     // Tile 0 will verify the results.
     int passed = 1;
     for ( int i = 0; i < g_size; i++ ) {

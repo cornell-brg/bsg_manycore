@@ -1,0 +1,10 @@
+
+int M=2, N=2, P=2;
+int src[] __attribute__ ( ( section(".dram") ) ) = {
+  1,2,3,4,
+  5,6,7,8
+};
+int dest[4]  __attribute__ ( ( section(".dram") ) );
+int ref[]  __attribute__ ( ( section(".dram") ) ) = {
+  6,8,10,12
+};

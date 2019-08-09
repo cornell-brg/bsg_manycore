@@ -16,6 +16,7 @@
 `include "brg_slave_xcel_template.v"
 `include "brg_xcel_template.v"
 `include "brg_systolic_xcel_template.v"
+`include "brg_streaming_xcel_template.v"
 
 `ifdef bsg_FPU
 `include "float_definitions.vh"
@@ -158,6 +159,7 @@ module bsg_manycore_hetero_socket #(  x_cord_width_p      = "inv"
 
    `HETERO_TYPE_MACRO(100, brg_slave_xcel_template) else  // brg gcd xcel
    `HETERO_TYPE_MACRO(200, brg_xcel_template) else // brg simple xcel
+   `HETERO_TYPE_MACRO(201, brg_streaming_xcel_template) else // brg streaming xcel
 
    `HETERO_TYPE_MACRO(300, brg_systolic_xcel_template) else // brg column engine
    `HETERO_TYPE_MACRO(301, brg_systolic_xcel_template) else // brg row engine

@@ -135,7 +135,7 @@ module brg_slave_xcel_template
 
     // Instantiate brg xcel
 
-    HBIfcGcdXcelPRTL_0xeef3ea699c5ed9a xcel
+    HBIfcGcdXcelPRTL_0x2296ae5343aef891 xcel
     (
        .clk            ( clk_i      ),
        .reset          ( reset_i    ),

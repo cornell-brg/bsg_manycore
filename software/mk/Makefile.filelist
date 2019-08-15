@@ -45,13 +45,17 @@ LIST_VANILLA_SRCS+= $(VANILLA_SRC)/brg_sram_28nm_1024x46.v
 LIST_VANILLA_SRCS+= $(VANILLA_SRC)/brg_sram_1024x8.v
 LIST_VANILLA_SRCS+= $(VANILLA_SRC)/brg_sram_28nm_1024x8.v
 
-#LIST_VANILLA_SRCS+= $(BSG_IP_CORES_DIR)/../alloy-sim/pymtl/build/HBIfcGcdXcelPRTL_0xeef3ea699c5ed9a.v
+LIST_VANILLA_SRCS+= $(BSG_IP_CORES_DIR)/../alloy-sim/pymtl/build/HBIfcGcdXcelPRTL_0x2296ae5343aef891.v
 LIST_VANILLA_SRCS+= $(BSG_IP_CORES_DIR)/../alloy-sim/pymtl/build/HBTile_HBIfcDotProductAltPRTL.v
 #LIST_VANILLA_SRCS+= $(BSG_IP_CORES_DIR)/../alloy-sim/pymtl/build/HBTile_HBIfcDotProductBasePRTL.v
 LIST_VANILLA_SRCS+= $(BSG_IP_CORES_DIR)/../alloy-sim/pymtl/build/HBIfcColEnginePRTL_32_8.v
 LIST_VANILLA_SRCS+= $(BSG_IP_CORES_DIR)/../alloy-sim/pymtl/build/HBIfcRowEnginePRTL_32_4.v
-#LIST_VANILLA_SRCS+= $(BSG_IP_CORES_DIR)/../alloy-sim/pymtl/build/HBIfcMemXcelPRTL_0x4cdaa0fe9049a490.v
+LIST_VANILLA_SRCS+= $(BSG_IP_CORES_DIR)/../alloy-sim/pymtl/build/HBIfcMemXcelPRTL_0x2bb0b31806e03857.v
+LIST_VANILLA_SRCS+= $(BSG_IP_CORES_DIR)/../alloy-sim/pymtl/build/HBIfcStreamingXcelPRTL_16.v
+LIST_VANILLA_SRCS+= $(BSG_IP_CORES_DIR)/../alloy-sim/pymtl/build/HBIfcStreamingXcelPRTL_8.v
+LIST_VANILLA_SRCS+= $(BSG_IP_CORES_DIR)/../alloy-sim/pymtl/build/HBIfcStreamingXcelPRTL_1.v
 LIST_VANILLA_SRCS+= $(BSG_MANYCORE_DIR)/v/brg_slave_xcel_template.v
+LIST_VANILLA_SRCS+= $(BSG_MANYCORE_DIR)/v/brg_streaming_xcel_template.v
 
 
 LIST_VANILLA_SRCS+= $(BSG_IP_CORES_DIR)/bsg_misc/bsg_mux.v

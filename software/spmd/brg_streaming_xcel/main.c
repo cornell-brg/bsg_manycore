@@ -15,6 +15,7 @@ enum {
   CSR_M, // feeding B operand
   CSR_N,
   CSR_P,
+  CSR_COUNT
 } CSRs;
 
 bsg_remote_int_ptr xcel_csr_base_ptr;
@@ -37,7 +38,9 @@ int main()
   bsg_set_tile_x_y();
 
   if ((__bsg_x == 0) && (__bsg_y == 0)) {
-    xcel_csr_base_ptr = bsg_global_ptr( 1, 1, 0);    
+    xcel_csr_base_ptr = bsg_global_ptr( 0, 2, 0);
+        
+    xcel_csr_base_ptr[CSR_COUNT    ] = 1;
     xcel_csr_base_ptr[CSR_DIM    ] = 0;
     xcel_csr_base_ptr[CSR_IN_ADDR] = src;
     xcel_csr_base_ptr[CSR_OUT_ADDR] = dest;
@@ -49,6 +52,7 @@ int main()
     xcel_csr_base_ptr[CSR_P] = P;
     xcel_csr_base_ptr[CSR_GO] = 1;
     int done = xcel_csr_base_ptr[CSR_GO];
+    xcel_csr_base_ptr[CSR_COUNT    ] = 0;
     __asm__ __volatile__ ( "csrrwi s9,0x7c1, 0x0;"
               );
     bsg_printf("d%d, in%x, out%x, bM%d, bN%d, bP%d, M%d, N%d, P%d, go%d\n",
@@ -66,16 +70,6 @@ int main()
     }
     if (mismatch) bsg_printf("###### TEST FAILED ######\n");
     else bsg_printf("###### TEST PASSED ######\n");
-    // for (int i=0; i<4; ++i) {
-    //   xcel_csr_base_ptr = bsg_global_ptr( i, 1, 0);
-
-    //   xcel_csr_base_ptr[CSR_OPA] = data_gcd_A[i];
-    //   xcel_csr_base_ptr[CSR_OPB] = data_gcd_B[i];
-    //   xcel_csr_base_ptr[CSR_GO]  = 1;
-
-    //   bsg_printf("xcel #%d returns gcd(%d,%d) = %d | ref = %d\n",
-    //              i, data_gcd_A[i], data_gcd_B[i],
-    //              xcel_csr_base_ptr[CSR_GO], data_gcd_ref[i]);
 
     /************************************************************************
       Terminates the Simulation

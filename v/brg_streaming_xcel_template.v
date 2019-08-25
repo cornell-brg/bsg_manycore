@@ -4,10 +4,12 @@
 //
 // Author : Xiaoyu Yan
 // Date   : Aug 08, 2019
-// Based on Shunning Jiang's brg_xcel_template
+// Based on Shunning Jiang's brg_xcel_template 
 // Slave and master streaming xcel
+// USED FOR VCS STANDALONE
 
 `include "bsg_manycore_packet.vh"
+`include "brg_xcel_profiler.v"
 
 module brg_streaming_xcel_template
 #(
@@ -89,8 +91,10 @@ module brg_streaming_xcel_template
     // Shunning: We use accelerator's req opaque fields only for loads.
     // We need to encode the loads into data
     always_comb begin
-      if (xcel_master_type == `ePacketOp_remote_load)
+      if (xcel_master_type == `ePacketOp_remote_load) begin
         master_data.load_info_s.load_id = xcel_master_opq;
+        master_data.load_info_s.load_info_padding = 0;
+      end
       else
         master_data = xcel_master_data;
     end
@@ -176,7 +180,7 @@ module brg_streaming_xcel_template
       );
     // Instantiate brg xcel
 
-    HBIfcStreamingXcelPRTL_8 xcel
+    HBIfcStreamingXcelPRTLAlt_20 xcel
     (
        .clk        ( clk_i      ),
        .reset      ( reset_i    ),
@@ -206,11 +210,33 @@ module brg_streaming_xcel_template
     //--------------------------------------------------------------
     // Checking
     // synopsys translate_off
-    // if (debug_p)
+    
+    // Profiler
+    brg_xcel_profiler #(
+      .x_cord_width_p(x_cord_width_p)
+      ,.y_cord_width_p(y_cord_width_p)
+      ,.count_en_addr(10)
+      ,.addr_width_p(addr_width_p)
+    )
+      xcel_profiler
+    (
+      .clk_i
+      ,.reset_i
+      ,.v_i    (in_v_lo)
+      ,.DRAM_req_v_i    (out_v_li)
+      ,.DRAM_resp_v_i    (returned_v_lo)
+      ,.addr_i (in_addr_lo)
+      ,.data_i (in_data_lo[0])
+      ,.my_x_i 
+      ,.my_y_i 
+    );
+
+    if (debug_p)
       always_ff@(negedge clk_i ) begin
           // $display("XCEL state: %d",xcel.state_reg$out);
         if (out_v_li && out_ready_lo)
-          $display("send mem req  %d %h %h", xcel_master_type, xcel_master_addr, xcel_master_data);
+          $display("send mem req  %d %d %h %h", xcel_master_type, xcel_master_opq, 
+          xcel_master_addr, xcel_master_data);
         if (returned_v_lo)
           $display("recv mem resp %d %h, credit: %d", returned_load_id_r_lo, returned_data_lo, out_credits_lo);
 

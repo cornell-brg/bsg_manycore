@@ -91,8 +91,10 @@ module brg_streaming_xcel_template
     // Shunning: We use accelerator's req opaque fields only for loads.
     // We need to encode the loads into data
     always_comb begin
-      if (xcel_master_type == `ePacketOp_remote_load)
+      if (xcel_master_type == `ePacketOp_remote_load) begin
         master_data.load_info_s.load_id = xcel_master_opq;
+        master_data.load_info_s.load_info_padding = 0;
+      end
       else
         master_data = xcel_master_data;
     end
@@ -233,7 +235,8 @@ module brg_streaming_xcel_template
       always_ff@(negedge clk_i ) begin
           // $display("XCEL state: %d",xcel.state_reg$out);
         if (out_v_li && out_ready_lo)
-          $display("send mem req  %d %h %h", xcel_master_type, xcel_master_addr, xcel_master_data);
+          $display("send mem req  %d %d %h %h", xcel_master_type, xcel_master_opq, 
+          xcel_master_addr, xcel_master_data);
         if (returned_v_lo)
           $display("recv mem resp %d %h, credit: %d", returned_load_id_r_lo, returned_data_lo, out_credits_lo);
 

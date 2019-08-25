@@ -1,6 +1,6 @@
 {
 "coord": "0 2",
-"DRAM req cycles":      33791,
-"DRAM resp cycles":      32768,
-"kernel cycles":      35684
+"DRAM req cycles":    2113535,
+"DRAM resp cycles":    2097152,
+"kernel cycles":    2219874
 }

@@ -1,0 +1,1548 @@
+/work/global/brg/install/bare-pkgs/x86_64-centos7/bsg_manycore_tools/riscv-install/bin/riscv32-unknown-elf-objcopy -O verilog -R .text main.riscv main_dmem.mem
+/work/global/brg/install/bare-pkgs/x86_64-centos7/bsg_manycore_tools/riscv-install/bin/riscv32-unknown-elf-objcopy -O verilog -j .text main.riscv main_dram.mem
+#  The objcopy program will dump the sections with @[pysical address] notation, which tells
+#  the verilog loader where to place the data.
+#
+#  Ideally the physicall address should be 0x8000_0000, which is the DRAM address used in manycore
+#  program, but the system verilog eadmemh() just can not read from such large address...
+#
+#  Instead we just use a faked physical address and assumpt the phyiscal address is aslo zero in the loader,
+#  And so we delete the first line of the dump files which is faked physical address...
+sed -i -e "1d" main_dram.mem
+/opt/synopsys/packages/vcs/N-2017.12-1/bin/vcs -full64 -sverilog +lint=PCWM -timescale=1ps/1ps +vcs+vcdpluson -debug_access+all  \
+        -top test_bsg_manycore 		\
+    	+define+SPMD=main+ +define+bsg_hetero_type_vec="default:0"+ +define+_bsg_data_start_addr=00004096 +define+_bsg_data_end_addr=00004656 +define+_bsg_dram_start_addr=0 +define+_bsg_dram_end_addr=3740 +define+_dram_init_file_name='"main_dram.mem"' +define+_dmem_init_file_name='"main_dmem.mem"' +define+bsg_tiles_org_X=0 +define+bsg_tiles_org_Y=1 +define+bsg_tiles_X=2 +define+bsg_tiles_Y=1 +define+bsg_global_Y=2 +define+bsg_global_X=2 +define+DEVICE=1                  \
+    						\
+    	+incdir+/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean +incdir+/work/global/xy97/work/hammerblade/bsg_manycore/v/ +incdir+/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_noc +incdir+/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc\
+    	 /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_defines.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_noc/bsg_noc_pkg.v  /work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/alu.v /work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/cl_decode.v /work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/cl_state_machine.v /work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/hobbit.v /work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/icache.v /work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/imul_idiv_iterative.v /work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/bsg_manycore_proc_vanilla.v /work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/rf_2r1w_sync_wrapper.v /work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/scoreboard.v /work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/load_packer.v /work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/brg_mem_1rw_sync.v /work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/brg_mem_2r1w_sync.v /work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/brg_rf_28nm_32x32.v /work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/brg_rf_32x32.v /work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/brg_sram_1024x46.v /work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/brg_sram_28nm_1024x46.v /work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/brg_sram_1024x8.v /work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/brg_sram_28nm_1024x8.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/../alloy-sim/pymtl/build/HBTile_HBIfcDotProductAltPRTL.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/../alloy-sim/pymtl/build/HBIfcColEnginePRTL_32_8.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/../alloy-sim/pymtl/build/HBIfcRowEnginePRTL_32_4.v /work/global/xy97/work/hammerblade/bsg_manycore/v/brg_slave_xcel_template.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_mux.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_dff_reset.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_imul_iterative.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_idiv_iterative_controller.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_idiv_iterative.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_adder_cin.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_nor2.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_buf_ctrl.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_buf.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_dff_en.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_xnor.v  /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_transpose.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_crossbar_o_by_i.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_cycle_counter.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_round_robin_arb.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_arb_fixed.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_priority_encode.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_priority_encode_one_hot_out.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_mux_one_hot.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_encode_one_hot.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_scan.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_counter_up_down.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_counter_clear_up.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_circular_ptr.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_decode_with_v.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_decode.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_dff_reset_en.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_inv.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_mem/bsg_mem_1r1w.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_mem/bsg_mem_1r1w_synth.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_mem/bsg_mem_1rw_sync.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_mem/bsg_mem_1rw_sync_synth.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_mem/bsg_mem_2r1w_sync.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_mem/bsg_mem_2r1w_sync_synth.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_mem/bsg_mem_banked_crossbar.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_mem/bsg_mem_1rw_sync_mask_write_byte.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_mem/bsg_mem_1rw_sync_mask_write_byte_synth.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_dataflow/bsg_fifo_1r1w_small.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_dataflow/bsg_two_fifo.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_dataflow/bsg_fifo_tracker.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_noc/bsg_mesh_router.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_noc/bsg_mesh_stitch.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_noc/bsg_mesh_to_ring_stitch.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_noc/bsg_mesh_router_buffered.v /work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_hetero_socket.v /work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_gather_scatter.v /work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_mesh.v /work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_mesh_node.v /work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_endpoint.v /work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_lock_ctrl.v /work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_1hold.v /work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_endpoint_standard.v /work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_link_sif_tieoff.v /work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_accel_default.v /work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_pkt_decode.v /work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_pkt_encode.v /work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore.v /work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_link_to_rocc.v /work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_link_sif_async_buffer.v /work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_rocc_wrapper.v /work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_rocc_dma.v /work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_tile.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_counter_dynamic_limit_en.v /work/global/xy97/work/hammerblade/bsg_manycore/testbenches/common/v/bsg_manycore_profiler.v /work/global/xy97/work/hammerblade/bsg_manycore/testbenches/common/v/bsg_manycore_spmd_loader.v /work/global/xy97/work/hammerblade/bsg_manycore/testbenches/common/v/bsg_nonsynth_manycore_monitor.v /work/global/xy97/work/hammerblade/bsg_manycore/testbenches/common/v/bsg_manycore_vscale_pipeline_trace.v /work/global/xy97/work/hammerblade/bsg_manycore/testbenches/common/v/bsg_manycore_proc_trace.v /work/global/xy97/work/hammerblade/bsg_manycore/testbenches/common/v/bsg_manycore_tile_trace.v /work/global/xy97/work/hammerblade/bsg_manycore/testbenches/common/v/bsg_nonsynth_manycore_io_complex.v /work/global/xy97/work/hammerblade/bsg_manycore/testbenches/common/v/bsg_manycore_dram_model.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_test/bsg_nonsynth_clock_gen.v /work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_test/bsg_nonsynth_reset_gen.v /work/global/xy97/work/hammerblade/bsg_manycore/software/spmd/brg_co-sim/src/device/brg_co_sim.v device_ipc.so   \
+    	/work/global/xy97/work/hammerblade/bsg_manycore/testbenches/basic/test_bsg_manycore.v 
+                         Chronologic VCS (TM)
+        Version N-2017.12-1_Full64 -- Mon Jun 17 15:52:02 2019
+               Copyright (c) 1991-2017 by Synopsys Inc.
+                         ALL RIGHTS RESERVED
+
+This program is proprietary and confidential information of Synopsys Inc.
+and may be used and disclosed only as authorized in a license agreement
+controlling such use and disclosure.
+
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_defines.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_noc/bsg_noc_pkg.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/alu.v'
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/parameters.vh'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/alu.v'.
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/definitions.vh'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/alu.v'.
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/cl_decode.v'
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/parameters.vh'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/cl_decode.v'.
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/definitions.vh'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/cl_decode.v'.
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/cl_state_machine.v'
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/parameters.vh'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/cl_state_machine.v'.
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/definitions.vh'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/cl_state_machine.v'.
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/hobbit.v'
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/parameters.vh'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/hobbit.v'.
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/definitions.vh'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/hobbit.v'.
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/icache.v'
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/parameters.vh'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/icache.v'.
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/definitions.vh'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/icache.v'.
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/imul_idiv_iterative.v'
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/parameters.vh'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/imul_idiv_iterative.v'.
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/bsg_manycore_proc_vanilla.v'
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_packet.vh'.
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_noc/bsg_noc_links.vh'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_packet.vh'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/bsg_manycore_proc_vanilla.v'.
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/definitions.vh'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/bsg_manycore_proc_vanilla.v'.
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/rf_2r1w_sync_wrapper.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/scoreboard.v'
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/parameters.vh'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/scoreboard.v'.
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/definitions.vh'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/scoreboard.v'.
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/load_packer.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/brg_mem_1rw_sync.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/brg_mem_2r1w_sync.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/brg_rf_28nm_32x32.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/brg_rf_32x32.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/brg_sram_1024x46.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/brg_sram_28nm_1024x46.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/brg_sram_1024x8.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/v/vanilla_bean/brg_sram_28nm_1024x8.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/../alloy-sim/pymtl/build/HBTile_HBIfcDotProductAltPRTL.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/../alloy-sim/pymtl/build/HBIfcColEnginePRTL_32_8.v'
+
+Warning-[OPD] Override previous declaration
+  "/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/../alloy-sim/pymtl/build/HBIfcColEnginePRTL_32_8.v",
+  627
+  Source info: module Reg_0x5e7e932e291f44db
+  Previously declared 
+  at:"/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/../alloy-sim/pymtl/build/HBTile_HBIfcDotProductAltPRTL.v",
+  273
+  This module will be overridden by the last declaration.
+  
+
+
+Warning-[OPD] Override previous declaration
+  "/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/../alloy-sim/pymtl/build/HBIfcColEnginePRTL_32_8.v",
+  697
+  Source info: module Reg_0x3392d4dd30174d2
+  Previously declared 
+  at:"/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/../alloy-sim/pymtl/build/HBTile_HBIfcDotProductAltPRTL.v",
+  305
+  This module will be overridden by the last declaration.
+  
+
+
+Warning-[OPD] Override previous declaration
+  "/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/../alloy-sim/pymtl/build/HBIfcColEnginePRTL_32_8.v",
+  729
+  Source info: module RegEn_0x3392b7c29003a00
+  Previously declared 
+  at:"/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/../alloy-sim/pymtl/build/HBTile_HBIfcDotProductAltPRTL.v",
+  3093
+  This module will be overridden by the last declaration.
+  
+
+
+Warning-[OPD] Override previous declaration
+  "/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/../alloy-sim/pymtl/build/HBIfcColEnginePRTL_32_8.v",
+  767
+  Source info: module RegEn_0x3392d4dd30174d2
+  Previously declared 
+  at:"/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/../alloy-sim/pymtl/build/HBTile_HBIfcDotProductAltPRTL.v",
+  1644
+  This module will be overridden by the last declaration.
+  
+
+
+Warning-[OPD] Override previous declaration
+  "/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/../alloy-sim/pymtl/build/HBIfcColEnginePRTL_32_8.v",
+  1249
+  Source info: module RegRst_0x3af9648ac192b2a0
+  Previously declared 
+  at:"/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/../alloy-sim/pymtl/build/HBTile_HBIfcDotProductAltPRTL.v",
+  1682
+  This module will be overridden by the last declaration.
+  
+
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/../alloy-sim/pymtl/build/HBIfcRowEnginePRTL_32_4.v'
+
+Warning-[OPD] Override previous declaration
+  "/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/../alloy-sim/pymtl/build/HBIfcRowEnginePRTL_32_4.v",
+  523
+  Source info: module Reg_0x5e7e932e291f44db
+  Previously declared 
+  at:"/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/../alloy-sim/pymtl/build/HBIfcColEnginePRTL_32_8.v",
+  627
+  This module will be overridden by the last declaration.
+  
+
+
+Warning-[OPD] Override previous declaration
+  "/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/../alloy-sim/pymtl/build/HBIfcRowEnginePRTL_32_4.v",
+  555
+  Source info: module RegEn_0x3392d4dd30174d2
+  Previously declared 
+  at:"/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/../alloy-sim/pymtl/build/HBIfcColEnginePRTL_32_8.v",
+  767
+  This module will be overridden by the last declaration.
+  
+
+
+Warning-[OPD] Override previous declaration
+  "/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/../alloy-sim/pymtl/build/HBIfcRowEnginePRTL_32_4.v",
+  593
+  Source info: module Reg_0x3392d4dd30174d2
+  Previously declared 
+  at:"/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/../alloy-sim/pymtl/build/HBIfcColEnginePRTL_32_8.v",
+  697
+  This module will be overridden by the last declaration.
+  
+
+
+Warning-[OPD] Override previous declaration
+  "/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/../alloy-sim/pymtl/build/HBIfcRowEnginePRTL_32_4.v",
+  625
+  Source info: module RegEn_0x5e7e932e2895f004
+  Previously declared 
+  at:"/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/../alloy-sim/pymtl/build/HBIfcColEnginePRTL_32_8.v",
+  659
+  This module will be overridden by the last declaration.
+  
+
+
+Warning-[OPD] Override previous declaration
+  "/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/../alloy-sim/pymtl/build/HBIfcRowEnginePRTL_32_4.v",
+  663
+  Source info: module RegEn_0x3392b7c29003a00
+  Previously declared 
+  at:"/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/../alloy-sim/pymtl/build/HBIfcColEnginePRTL_32_8.v",
+  729
+  This module will be overridden by the last declaration.
+  
+
+
+Warning-[OPD] Override previous declaration
+  "/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/../alloy-sim/pymtl/build/HBIfcRowEnginePRTL_32_4.v",
+  701
+  Source info: module NormalQueue_0x2ce6f478295d5c59
+  Previously declared 
+  at:"/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/../alloy-sim/pymtl/build/HBTile_HBIfcDotProductAltPRTL.v",
+  337
+  This module will be overridden by the last declaration.
+  
+
+
+Warning-[OPD] Override previous declaration
+  "/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/../alloy-sim/pymtl/build/HBIfcRowEnginePRTL_32_4.v",
+  788
+  Source info: module NormalQueueCtrl_0x598f3d9a03675853
+  Previously declared 
+  at:"/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/../alloy-sim/pymtl/build/HBTile_HBIfcDotProductAltPRTL.v",
+  424
+  This module will be overridden by the last declaration.
+  
+
+
+Warning-[OPD] Override previous declaration
+  "/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/../alloy-sim/pymtl/build/HBIfcRowEnginePRTL_32_4.v",
+  1005
+  Source info: module NormalQueueDpath_0x2ce6f478295d5c59
+  Previously declared 
+  at:"/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/../alloy-sim/pymtl/build/HBTile_HBIfcDotProductAltPRTL.v",
+  641
+  This module will be overridden by the last declaration.
+  
+
+
+Warning-[OPD] Override previous declaration
+  "/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/../alloy-sim/pymtl/build/HBIfcRowEnginePRTL_32_4.v",
+  1057
+  Source info: module RegisterFile_0x19ca9179e4779336
+  Previously declared 
+  at:"/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/../alloy-sim/pymtl/build/HBTile_HBIfcDotProductAltPRTL.v",
+  693
+  This module will be overridden by the last declaration.
+  
+
+
+Warning-[OPD] Override previous declaration
+  "/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/../alloy-sim/pymtl/build/HBIfcRowEnginePRTL_32_4.v",
+  1137
+  Source info: module RegRst_0x3af9648ac192b2a0
+  Previously declared 
+  at:"/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/../alloy-sim/pymtl/build/HBIfcColEnginePRTL_32_8.v",
+  1249
+  This module will be overridden by the last declaration.
+  
+
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/v/brg_slave_xcel_template.v'
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_packet.vh'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/v/brg_slave_xcel_template.v'.
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_mux.v'
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_defines.v'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_mux.v'.
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_dff_reset.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_imul_iterative.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_idiv_iterative_controller.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_idiv_iterative.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_adder_cin.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_nor2.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_buf_ctrl.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_buf.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_dff_en.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_xnor.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_transpose.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_crossbar_o_by_i.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_cycle_counter.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_round_robin_arb.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_arb_fixed.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_priority_encode.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_priority_encode_one_hot_out.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_mux_one_hot.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_encode_one_hot.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_scan.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_counter_up_down.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_counter_clear_up.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_circular_ptr.v'
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_defines.v'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_circular_ptr.v'.
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_decode_with_v.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_decode.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_dff_reset_en.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_inv.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_mem/bsg_mem_1r1w.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_mem/bsg_mem_1r1w_synth.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_mem/bsg_mem_1rw_sync.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_mem/bsg_mem_1rw_sync_synth.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_mem/bsg_mem_2r1w_sync.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_mem/bsg_mem_2r1w_sync_synth.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_mem/bsg_mem_banked_crossbar.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_mem/bsg_mem_1rw_sync_mask_write_byte.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_mem/bsg_mem_1rw_sync_mask_write_byte_synth.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_dataflow/bsg_fifo_1r1w_small.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_dataflow/bsg_two_fifo.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_dataflow/bsg_fifo_tracker.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_noc/bsg_mesh_router.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_noc/bsg_mesh_stitch.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_noc/bsg_mesh_to_ring_stitch.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_noc/bsg_mesh_router_buffered.v'
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_noc/bsg_noc_links.vh'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_noc/bsg_mesh_router_buffered.v'.
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_hetero_socket.v'
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_packet.vh'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_hetero_socket.v'.
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/v/brg_slave_xcel_template.v'.
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_packet.vh'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/v/brg_slave_xcel_template.v'.
+
+Warning-[OPD] Override previous declaration
+  "/work/global/xy97/work/hammerblade/bsg_manycore/v/brg_slave_xcel_template.v",
+  10
+  Source info: module brg_slave_xcel_template
+  Previously declared 
+  at:"/work/global/xy97/work/hammerblade/bsg_manycore/v/brg_slave_xcel_template.v",
+  10
+  This module will be overridden by the last declaration.
+  
+
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_hetero_socket.v'.
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/v/brg_xcel_template.v'.
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_packet.vh'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/v/brg_xcel_template.v'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_hetero_socket.v'.
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/v/brg_systolic_xcel_template.v'.
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_packet.vh'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/v/brg_systolic_xcel_template.v'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_hetero_socket.v'.
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_gather_scatter.v'
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_packet.vh'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_gather_scatter.v'.
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_mesh.v'
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_packet.vh'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_mesh.v'.
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_mesh_node.v'
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_packet.vh'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_mesh_node.v'.
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_endpoint.v'
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_packet.vh'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_endpoint.v'.
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_lock_ctrl.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_1hold.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_endpoint_standard.v'
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_packet.vh'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_endpoint_standard.v'.
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_link_sif_tieoff.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_accel_default.v'
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_packet.vh'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_accel_default.v'.
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_pkt_decode.v'
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_packet.vh'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_pkt_decode.v'.
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_pkt_encode.v'
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_addr.vh'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_pkt_encode.v'.
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_packet.vh'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_pkt_encode.v'.
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore.v'
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_packet.vh'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore.v'.
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_link_to_rocc.v'
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_rocc.v'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_link_to_rocc.v'.
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_packet.vh'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_link_to_rocc.v'.
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_link_sif_async_buffer.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_rocc_wrapper.v'
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_packet.vh'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_rocc_wrapper.v'.
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_rocc.v'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_rocc_wrapper.v'.
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_rocc_dma.v'
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_rocc.v'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_rocc_dma.v'.
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_tile.v'
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_packet.vh'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_tile.v'.
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_misc/bsg_counter_dynamic_limit_en.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/testbenches/common/v/bsg_manycore_profiler.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/testbenches/common/v/bsg_manycore_spmd_loader.v'
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_packet.vh'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/testbenches/common/v/bsg_manycore_spmd_loader.v'.
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_addr.vh'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/testbenches/common/v/bsg_manycore_spmd_loader.v'.
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/testbenches/common/v/bsg_nonsynth_manycore_monitor.v'
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_packet.vh'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/testbenches/common/v/bsg_nonsynth_manycore_monitor.v'.
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/testbenches/common/v/bsg_manycore_vscale_pipeline_trace.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/testbenches/common/v/bsg_manycore_proc_trace.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/testbenches/common/v/bsg_manycore_tile_trace.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/testbenches/common/v/bsg_nonsynth_manycore_io_complex.v'
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_packet.vh'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/testbenches/common/v/bsg_nonsynth_manycore_io_complex.v'.
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/testbenches/common/v/bsg_manycore_dram_model.v'
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_packet.vh'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/testbenches/common/v/bsg_manycore_dram_model.v'.
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_test/bsg_nonsynth_clock_gen.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/../bsg_ip_cores/bsg_test/bsg_nonsynth_reset_gen.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/software/spmd/brg_co-sim/src/device/brg_co_sim.v'
+Parsing design file '/work/global/xy97/work/hammerblade/bsg_manycore/testbenches/basic/test_bsg_manycore.v'
+Parsing included file '/work/global/xy97/work/hammerblade/bsg_manycore/v/bsg_manycore_packet.vh'.
+Back to file '/work/global/xy97/work/hammerblade/bsg_manycore/testbenches/basic/test_bsg_manycore.v'.
+Top Level Modules:
+       test_bsg_manycore
+TimeScale is 1 ps / 1 ps
+Starting vcs inline pass...
+24 modules and 0 UDP read.
+recompiling module test_bsg_manycore
+	However, due to incremental compilation, only 1 module needs to be compiled. 
+make[1]: Entering directory `/work/global/xy97/work/hammerblade/bsg_manycore/software/spmd/brg_co-sim/csrc'
+make[1]: Leaving directory `/work/global/xy97/work/hammerblade/bsg_manycore/software/spmd/brg_co-sim/csrc'
+make[1]: Entering directory `/work/global/xy97/work/hammerblade/bsg_manycore/software/spmd/brg_co-sim/csrc'
+rm -f _csrc*.so pre_vcsobj_*.so share_vcsobj_*.so
+ld -shared  -o .//../simv.daidir//_csrc0.so objs/amcQw_d.o 
+rm -f _csrc0.so
+if [ -x ../simv ]; then chmod -x ../simv; fi
+g++  -o ../simv   -Wl,-rpath-link=./ -Wl,-rpath='$ORIGIN'/simv.daidir/ -Wl,-rpath=./simv.daidir/ -Wl,-rpath='$ORIGIN'/simv.daidir//scsim.db.dir  -rdynamic     _48676_archive_1.so _prev_archive_1.so _csrc0.so  SIM_l.o  _csrc0.so     rmapats_mop.o rmapats.o rmar.o rmar_nd.o  rmar_llvm_0_1.o rmar_llvm_0_0.o          /opt/synopsys/packages/vcs/N-2017.12-1/linux64/lib/libzerosoft_rt_stubs.so /opt/synopsys/packages/vcs/N-2017.12-1/linux64/lib/libvirsim.so /opt/synopsys/packages/vcs/N-2017.12-1/linux64/lib/liberrorinf.so /opt/synopsys/packages/vcs/N-2017.12-1/linux64/lib/libsnpsmalloc.so /opt/synopsys/packages/vcs/N-2017.12-1/linux64/lib/libvfs.so /work/global/xy97/work/hammerblade/bsg_manycore/software/spmd/brg_co-sim/device_ipc.so    /opt/synopsys/packages/vcs/N-2017.12-1/linux64/lib/libvcsnew.so /opt/synopsys/packages/vcs/N-2017.12-1/linux64/lib/libsimprofile.so /opt/synopsys/packages/vcs/N-2017.12-1/linux64/lib/libuclinative.so /opt/synopsys/packages/vcs/N-2017.12-1/linux64/lib/vcs_tls.o   -Wl,-whole-archive /opt/synopsys/packages/vcs/N-2017.12-1/linux64/lib/libvcsucli.so -Wl,-no-whole-archive          /opt/synopsys/packages/vcs/N-2017.12-1/linux64/lib/vcs_save_restore_new.o -ldl  -lc -lm -lpthread -ldl 
+../simv up to date
+make[1]: Leaving directory `/work/global/xy97/work/hammerblade/bsg_manycore/software/spmd/brg_co-sim/csrc'
+CPU time: 2.674 seconds to compile + .566 seconds to elab + .387 seconds to link
+./simv  
+src/device/device_ipc.cc: Shm and msq removed
+src/device/device_ipc.cc: Shm and msq removed
+Chronologic VCS simulator copyright 1991-2017
+Contains Synopsys proprietary information.
+Compiler version N-2017.12-1_Full64; Runtime version N-2017.12-1_Full64;  Jun 17 15:52 2019
+VCD+ Writer N-2017.12-1_Full64 Copyright (c) 1991-2017 by Synopsys Inc.
+test_bsg_manycore.clock_gen with cycle_time_p          20
+## bsg_mem_1r1w: instantiating width_p=         47, els_p=          2, read_write_same_addr_p=          0, harden_p=          0 (test_bsg_manycore.UUT.y[1].x[0].tile.rtr.rof[1].bmrb.rof[0].fi.twofer.mem_1r1w)
+## bsg_mem_1r1w: instantiating width_p=         47, els_p=          2, read_write_same_addr_p=          0, harden_p=          0 (test_bsg_manycore.UUT.y[1].x[0].tile.rtr.rof[1].bmrb.rof[1].fi.twofer.mem_1r1w)
+## bsg_mem_1r1w: instantiating width_p=         47, els_p=          2, read_write_same_addr_p=          0, harden_p=          0 (test_bsg_manycore.UUT.y[1].x[0].tile.rtr.rof[1].bmrb.rof[2].fi.twofer.mem_1r1w)
+## bsg_mem_1r1w: instantiating width_p=         47, els_p=          2, read_write_same_addr_p=          0, harden_p=          0 (test_bsg_manycore.UUT.y[1].x[0].tile.rtr.rof[1].bmrb.rof[3].fi.twofer.mem_1r1w)
+## bsg_mem_1r1w: instantiating width_p=         47, els_p=          2, read_write_same_addr_p=          0, harden_p=          0 (test_bsg_manycore.UUT.y[1].x[0].tile.rtr.rof[1].bmrb.rof[4].fi.twofer.mem_1r1w)
+## bsg_mem_1r1w: instantiating width_p=         73, els_p=          2, read_write_same_addr_p=          0, harden_p=          0 (test_bsg_manycore.UUT.y[1].x[0].tile.rtr.rof[0].bmrb.rof[0].fi.twofer.mem_1r1w)
+## bsg_mem_1r1w: instantiating width_p=         73, els_p=          2, read_write_same_addr_p=          0, harden_p=          0 (test_bsg_manycore.UUT.y[1].x[0].tile.rtr.rof[0].bmrb.rof[1].fi.twofer.mem_1r1w)
+## bsg_mem_1r1w: instantiating width_p=         73, els_p=          2, read_write_same_addr_p=          0, harden_p=          0 (test_bsg_manycore.UUT.y[1].x[0].tile.rtr.rof[0].bmrb.rof[2].fi.twofer.mem_1r1w)
+## bsg_mem_1r1w: instantiating width_p=         73, els_p=          2, read_write_same_addr_p=          0, harden_p=          0 (test_bsg_manycore.UUT.y[1].x[0].tile.rtr.rof[0].bmrb.rof[3].fi.twofer.mem_1r1w)
+## bsg_mem_1r1w: instantiating width_p=         73, els_p=          2, read_write_same_addr_p=          0, harden_p=          0 (test_bsg_manycore.UUT.y[1].x[0].tile.rtr.rof[0].bmrb.rof[4].fi.twofer.mem_1r1w)
+## bsg_mem_1r1w: instantiating width_p=         73, els_p=          4, read_write_same_addr_p=          0, harden_p=          0 (test_bsg_manycore.UUT.y[1].x[0].tile.proc.h.z.endp.bme.fifo.mem_1r1w)
+## bsg_mem_1r1w: instantiating width_p=         47, els_p=          2, read_write_same_addr_p=          1, harden_p=          0 (test_bsg_manycore.UUT.y[1].x[0].tile.proc.h.z.endp.bme.genblk1.returned_fifo.mem_1r1w)
+## bsg_mem_1rw_sync_synth: instantiating width_p=          8, els_p=       1024 (test_bsg_manycore.UUT.y[1].x[0].tile.proc.h.z.bnkd_xbar.z[0].m1rw_mask.synth.bk[0].mem_1rw_sync.synth)
+## bsg_mem_1rw_sync_synth: instantiating width_p=          8, els_p=       1024 (test_bsg_manycore.UUT.y[1].x[0].tile.proc.h.z.bnkd_xbar.z[0].m1rw_mask.synth.bk[1].mem_1rw_sync.synth)
+## bsg_mem_1rw_sync_synth: instantiating width_p=          8, els_p=       1024 (test_bsg_manycore.UUT.y[1].x[0].tile.proc.h.z.bnkd_xbar.z[0].m1rw_mask.synth.bk[2].mem_1rw_sync.synth)
+## bsg_mem_1rw_sync_synth: instantiating width_p=          8, els_p=       1024 (test_bsg_manycore.UUT.y[1].x[0].tile.proc.h.z.bnkd_xbar.z[0].m1rw_mask.synth.bk[3].mem_1rw_sync.synth)
+## bsg_mem_1rw_sync_mask_write_byte: instantiating data_width_p=         32, els_p=       1024 (test_bsg_manycore.UUT.y[1].x[0].tile.proc.h.z.bnkd_xbar.z[0].m1rw_mask)
+## bsg_mem_1rw_sync_synth: instantiating width_p=         46, els_p=       1024 (test_bsg_manycore.UUT.y[1].x[0].tile.proc.h.z.vanilla_core.icache_0.imem_0.genblk1.synth.sram_1024.mem)
+## bsg_mem_1r1w: instantiating width_p=         47, els_p=          2, read_write_same_addr_p=          0, harden_p=          0 (test_bsg_manycore.UUT.y[1].x[1].tile.rtr.rof[1].bmrb.rof[0].fi.twofer.mem_1r1w)
+## bsg_mem_1r1w: instantiating width_p=         47, els_p=          2, read_write_same_addr_p=          0, harden_p=          0 (test_bsg_manycore.UUT.y[1].x[1].tile.rtr.rof[1].bmrb.rof[1].fi.twofer.mem_1r1w)
+## bsg_mem_1r1w: instantiating width_p=         47, els_p=          2, read_write_same_addr_p=          0, harden_p=          0 (test_bsg_manycore.UUT.y[1].x[1].tile.rtr.rof[1].bmrb.rof[2].fi.twofer.mem_1r1w)
+## bsg_mem_1r1w: instantiating width_p=         47, els_p=          2, read_write_same_addr_p=          0, harden_p=          0 (test_bsg_manycore.UUT.y[1].x[1].tile.rtr.rof[1].bmrb.rof[3].fi.twofer.mem_1r1w)
+## bsg_mem_1r1w: instantiating width_p=         47, els_p=          2, read_write_same_addr_p=          0, harden_p=          0 (test_bsg_manycore.UUT.y[1].x[1].tile.rtr.rof[1].bmrb.rof[4].fi.twofer.mem_1r1w)
+## bsg_mem_1r1w: instantiating width_p=         73, els_p=          2, read_write_same_addr_p=          0, harden_p=          0 (test_bsg_manycore.UUT.y[1].x[1].tile.rtr.rof[0].bmrb.rof[0].fi.twofer.mem_1r1w)
+## bsg_mem_1r1w: instantiating width_p=         73, els_p=          2, read_write_same_addr_p=          0, harden_p=          0 (test_bsg_manycore.UUT.y[1].x[1].tile.rtr.rof[0].bmrb.rof[1].fi.twofer.mem_1r1w)
+## bsg_mem_1r1w: instantiating width_p=         73, els_p=          2, read_write_same_addr_p=          0, harden_p=          0 (test_bsg_manycore.UUT.y[1].x[1].tile.rtr.rof[0].bmrb.rof[2].fi.twofer.mem_1r1w)
+## bsg_mem_1r1w: instantiating width_p=         73, els_p=          2, read_write_same_addr_p=          0, harden_p=          0 (test_bsg_manycore.UUT.y[1].x[1].tile.rtr.rof[0].bmrb.rof[3].fi.twofer.mem_1r1w)
+## bsg_mem_1r1w: instantiating width_p=         73, els_p=          2, read_write_same_addr_p=          0, harden_p=          0 (test_bsg_manycore.UUT.y[1].x[1].tile.rtr.rof[0].bmrb.rof[4].fi.twofer.mem_1r1w)
+## bsg_mem_1r1w: instantiating width_p=         73, els_p=          4, read_write_same_addr_p=          0, harden_p=          0 (test_bsg_manycore.UUT.y[1].x[1].tile.proc.h.z.endp.bme.fifo.mem_1r1w)
+## bsg_mem_1r1w: instantiating width_p=         47, els_p=          2, read_write_same_addr_p=          1, harden_p=          0 (test_bsg_manycore.UUT.y[1].x[1].tile.proc.h.z.endp.bme.genblk1.returned_fifo.mem_1r1w)
+## bsg_mem_1rw_sync_synth: instantiating width_p=          8, els_p=       1024 (test_bsg_manycore.UUT.y[1].x[1].tile.proc.h.z.bnkd_xbar.z[0].m1rw_mask.synth.bk[0].mem_1rw_sync.synth)
+## bsg_mem_1rw_sync_synth: instantiating width_p=          8, els_p=       1024 (test_bsg_manycore.UUT.y[1].x[1].tile.proc.h.z.bnkd_xbar.z[0].m1rw_mask.synth.bk[1].mem_1rw_sync.synth)
+## bsg_mem_1rw_sync_synth: instantiating width_p=          8, els_p=       1024 (test_bsg_manycore.UUT.y[1].x[1].tile.proc.h.z.bnkd_xbar.z[0].m1rw_mask.synth.bk[2].mem_1rw_sync.synth)
+## bsg_mem_1rw_sync_synth: instantiating width_p=          8, els_p=       1024 (test_bsg_manycore.UUT.y[1].x[1].tile.proc.h.z.bnkd_xbar.z[0].m1rw_mask.synth.bk[3].mem_1rw_sync.synth)
+## bsg_mem_1rw_sync_mask_write_byte: instantiating data_width_p=         32, els_p=       1024 (test_bsg_manycore.UUT.y[1].x[1].tile.proc.h.z.bnkd_xbar.z[0].m1rw_mask)
+## bsg_mem_1rw_sync_synth: instantiating width_p=         46, els_p=       1024 (test_bsg_manycore.UUT.y[1].x[1].tile.proc.h.z.vanilla_core.icache_0.imem_0.genblk1.synth.sram_1024.mem)
+## bsg_mem_1r1w: instantiating width_p=         47, els_p=          2, read_write_same_addr_p=          0, harden_p=          0 (test_bsg_manycore.UUT.io[0].io_router.rof[1].bmrb.rof[0].fi.twofer.mem_1r1w)
+## bsg_mem_1r1w: instantiating width_p=         47, els_p=          2, read_write_same_addr_p=          0, harden_p=          0 (test_bsg_manycore.UUT.io[0].io_router.rof[1].bmrb.rof[1].fi.twofer.mem_1r1w)
+## bsg_mem_1r1w: instantiating width_p=         47, els_p=          2, read_write_same_addr_p=          0, harden_p=          0 (test_bsg_manycore.UUT.io[0].io_router.rof[1].bmrb.rof[2].fi.twofer.mem_1r1w)
+## bsg_mem_1r1w: instantiating width_p=         47, els_p=          2, read_write_same_addr_p=          0, harden_p=          0 (test_bsg_manycore.UUT.io[0].io_router.rof[1].bmrb.rof[3].fi.twofer.mem_1r1w)
+## bsg_mem_1r1w: instantiating width_p=         47, els_p=          2, read_write_same_addr_p=          0, harden_p=          0 (test_bsg_manycore.UUT.io[0].io_router.rof[1].bmrb.rof[4].fi.twofer.mem_1r1w)
+## bsg_mem_1r1w: instantiating width_p=         73, els_p=          2, read_write_same_addr_p=          0, harden_p=          0 (test_bsg_manycore.UUT.io[0].io_router.rof[0].bmrb.rof[0].fi.twofer.mem_1r1w)
+## bsg_mem_1r1w: instantiating width_p=         73, els_p=          2, read_write_same_addr_p=          0, harden_p=          0 (test_bsg_manycore.UUT.io[0].io_router.rof[0].bmrb.rof[1].fi.twofer.mem_1r1w)
+## bsg_mem_1r1w: instantiating width_p=         73, els_p=          2, read_write_same_addr_p=          0, harden_p=          0 (test_bsg_manycore.UUT.io[0].io_router.rof[0].bmrb.rof[2].fi.twofer.mem_1r1w)
+## bsg_mem_1r1w: instantiating width_p=         73, els_p=          2, read_write_same_addr_p=          0, harden_p=          0 (test_bsg_manycore.UUT.io[0].io_router.rof[0].bmrb.rof[3].fi.twofer.mem_1r1w)
+## bsg_mem_1r1w: instantiating width_p=         73, els_p=          2, read_write_same_addr_p=          0, harden_p=          0 (test_bsg_manycore.UUT.io[0].io_router.rof[0].bmrb.rof[4].fi.twofer.mem_1r1w)
+## bsg_mem_1r1w: instantiating width_p=         47, els_p=          2, read_write_same_addr_p=          0, harden_p=          0 (test_bsg_manycore.UUT.io[1].io_router.rof[1].bmrb.rof[0].fi.twofer.mem_1r1w)
+## bsg_mem_1r1w: instantiating width_p=         47, els_p=          2, read_write_same_addr_p=          0, harden_p=          0 (test_bsg_manycore.UUT.io[1].io_router.rof[1].bmrb.rof[1].fi.twofer.mem_1r1w)
+## bsg_mem_1r1w: instantiating width_p=         47, els_p=          2, read_write_same_addr_p=          0, harden_p=          0 (test_bsg_manycore.UUT.io[1].io_router.rof[1].bmrb.rof[2].fi.twofer.mem_1r1w)
+## bsg_mem_1r1w: instantiating width_p=         47, els_p=          2, read_write_same_addr_p=          0, harden_p=          0 (test_bsg_manycore.UUT.io[1].io_router.rof[1].bmrb.rof[3].fi.twofer.mem_1r1w)
+## bsg_mem_1r1w: instantiating width_p=         47, els_p=          2, read_write_same_addr_p=          0, harden_p=          0 (test_bsg_manycore.UUT.io[1].io_router.rof[1].bmrb.rof[4].fi.twofer.mem_1r1w)
+## bsg_mem_1r1w: instantiating width_p=         73, els_p=          2, read_write_same_addr_p=          0, harden_p=          0 (test_bsg_manycore.UUT.io[1].io_router.rof[0].bmrb.rof[0].fi.twofer.mem_1r1w)
+## bsg_mem_1r1w: instantiating width_p=         73, els_p=          2, read_write_same_addr_p=          0, harden_p=          0 (test_bsg_manycore.UUT.io[1].io_router.rof[0].bmrb.rof[1].fi.twofer.mem_1r1w)
+## bsg_mem_1r1w: instantiating width_p=         73, els_p=          2, read_write_same_addr_p=          0, harden_p=          0 (test_bsg_manycore.UUT.io[1].io_router.rof[0].bmrb.rof[2].fi.twofer.mem_1r1w)
+## bsg_mem_1r1w: instantiating width_p=         73, els_p=          2, read_write_same_addr_p=          0, harden_p=          0 (test_bsg_manycore.UUT.io[1].io_router.rof[0].bmrb.rof[3].fi.twofer.mem_1r1w)
+## bsg_mem_1r1w: instantiating width_p=         73, els_p=          2, read_write_same_addr_p=          0, harden_p=          0 (test_bsg_manycore.UUT.io[1].io_router.rof[0].bmrb.rof[4].fi.twofer.mem_1r1w)
+## bsg_mem_1r1w: instantiating width_p=         73, els_p=          4, read_write_same_addr_p=          0, harden_p=          0 (test_bsg_manycore.io.dram[0].ram.ram_endpoint.bme.fifo.mem_1r1w)
+## bsg_mem_1rw_sync_synth: instantiating width_p=          8, els_p=  268435456 (test_bsg_manycore.io.dram[0].ram.mem.synth.bk[0].mem_1rw_sync.synth)
+## bsg_mem_1rw_sync_synth: instantiating width_p=          8, els_p=  268435456 (test_bsg_manycore.io.dram[0].ram.mem.synth.bk[1].mem_1rw_sync.synth)
+## bsg_mem_1rw_sync_synth: instantiating width_p=          8, els_p=  268435456 (test_bsg_manycore.io.dram[0].ram.mem.synth.bk[2].mem_1rw_sync.synth)
+## bsg_mem_1rw_sync_synth: instantiating width_p=          8, els_p=  268435456 (test_bsg_manycore.io.dram[0].ram.mem.synth.bk[3].mem_1rw_sync.synth)
+## bsg_mem_1rw_sync_mask_write_byte: instantiating data_width_p=         32, els_p=  268435456 (test_bsg_manycore.io.dram[0].ram.mem)
+## bsg_mem_1r1w: instantiating width_p=         73, els_p=          4, read_write_same_addr_p=          0, harden_p=          0 (test_bsg_manycore.io.dram[1].ram.ram_endpoint.bme.fifo.mem_1r1w)
+## bsg_mem_1rw_sync_synth: instantiating width_p=          8, els_p=  268435456 (test_bsg_manycore.io.dram[1].ram.mem.synth.bk[0].mem_1rw_sync.synth)
+## bsg_mem_1rw_sync_synth: instantiating width_p=          8, els_p=  268435456 (test_bsg_manycore.io.dram[1].ram.mem.synth.bk[1].mem_1rw_sync.synth)
+## bsg_mem_1rw_sync_synth: instantiating width_p=          8, els_p=  268435456 (test_bsg_manycore.io.dram[1].ram.mem.synth.bk[2].mem_1rw_sync.synth)
+## bsg_mem_1rw_sync_synth: instantiating width_p=          8, els_p=  268435456 (test_bsg_manycore.io.dram[1].ram.mem.synth.bk[3].mem_1rw_sync.synth)
+## bsg_mem_1rw_sync_mask_write_byte: instantiating data_width_p=         32, els_p=  268435456 (test_bsg_manycore.io.dram[1].ram.mem)
+## bsg_mem_1r1w: instantiating width_p=         73, els_p=          2, read_write_same_addr_p=          0, harden_p=          0 (test_bsg_manycore.io.rof[0].bmm.endp.bme.fifo.mem_1r1w)
+## bsg_mem_1r1w: instantiating width_p=         73, els_p=          2, read_write_same_addr_p=          0, harden_p=          0 (test_bsg_manycore.io.rof[1].bmm.endp.bme.fifo.mem_1r1w)
+
+
+|--------------------------------|
+|____________DEVICE______________|
+|________________________________|
+
+
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+## ----------------------------------------------------------------
+## MANYCORE HETERO TYPE CONFIGUREATIONS
+## ----------------------------------------------------------------
+## 0,0, //Ignored, Set to IO Router
+## 0,0,
+## ----------------------------------------------------------------
+## creating manycore complex num_tiles (x,y) = 2,2 (test_bsg_manycore.io)
+__________ ___________  _______________________________
+\______   \\_   _____/ /   _____/\_   _____/\__    ___/
+ |       _/ |    __)_  \_____  \  |    __)_   |    |   
+ |    |   \ |        \ /        \ |        \  |    |  1->0 time =          0
+ |____|_  //_______  //_______  //_______  /  |____|   
+ ASYNC  \/         \/         \/         \/            
+__________ ___________  _______________________________
+\______   \\_   _____/ /   _____/\_   _____/\__    ___/
+ |       _/ |    __)_  \_____  \  |    __)_   |    |   
+ |    |   \ |        \ /        \ |        \  |    |  0->1 time =          0
+ |____|_  //_______  //_______  //_______  /  |____|   
+ ASYNC  \/         \/         \/         \/            
+__________ ___________  _______________________________
+\______   \\_   _____/ /   _____/\_   _____/\__    ___/
+ |       _/ |    __)_  \_____  \  |    __)_   |    |   
+ |    |   \ |        \ /        \ |        \  |    |  1->0 time =        200
+ |____|_  //_______  //_______  //_______  /  |____|   
+ ASYNC  \/         \/         \/         \/            
+############################################################
+Configuring the Tile Group Association.
+############################################################
+Total Tiles in network X= 2, Y= 2
+Tile (y,x)=(1,0) Set to Group Origin(y,x)=(1,0), dim(y,x)=(1,2).
+Tile (y,x)=(1,1) Set to Group Origin(y,x)=(1,0), dim(y,x)=(1,2).
+Initilizing ICACHE, y_cord= 1, x_cord= 0, range=0000 - 000003ff
+Initilizing ICACHE, y_cord= 1, x_cord= 1, range=0000 - 000003ff
+Initilizing DMEM, y_cord= 1, x_cord= 0, range=00001000 - 00001230 (byte)
+Initilizing DMEM, y_cord= 1, x_cord= 1, range=00001000 - 00001230 (byte)
+Initilizing DRAM section:1, range=00000000 - 00000e9c
+payload=00000093
+payload=00000193
+payload=00000213
+payload=00000293
+payload=00000313
+payload=00000393
+payload=00000413
+payload=00000493
+payload=00000513
+payload=00000593
+payload=00000613
+payload=00000693
+payload=00000713
+payload=00000793
+payload=00000813
+payload=00000893
+payload=00000913
+payload=00000993
+payload=00000a13
+payload=00000a93
+payload=00000b13
+payload=00000b93
+payload=00000c13
+payload=00000c93
+payload=00000d13
+payload=00000d93
+payload=00000e13
+payload=00000e93
+payload=00000f13
+payload=00000f93
+payload=03000293
+payload=3002b073
+payload=00800293
+payload=3002a073
+payload=000032b7
+payload=3002a073
+payload=0000c2b7
+payload=3002a073
+payload=300022f3
+payload=0000c337
+payload=0062f333
+payload=00003337
+payload=0062f333
+payload=00030263
+payload=80001197
+payload=76018193
+payload=80001217
+payload=1b720213
+payload=fc027213
+payload=00002137
+payload=ffc10113
+payload=4190006f
+payload=0000006f
+payload=00000000
+payload=00000000
+payload=00000000
+payload=00000000
+payload=00000000
+payload=00000000
+payload=00000000
+payload=00000000
+payload=00000000
+payload=00000000
+payload=00000000
+payload=00000000
+payload=00001737
+payload=200007b7
+payload=01c70513
+payload=000016b7
+payload=00f56833
+payload=01868593
+payload=00082023
+payload=00f5e633
+payload=00062023
+payload=01c72783
+payload=fe07cee3
+payload=0186a783
+payload=fe07cee3
+payload=01c72783
+payload=00079663
+payload=0186a783
+payload=04078463
+payload=0186a783
+payload=01c72683
+payload=20020737
+payload=01879793
+payload=01269693
+payload=00d7e7b3
+payload=00470693
+payload=00d7e6b3
+payload=0006a683
+payload=00870713
+payload=00e7e7b3
+payload=00001737
+payload=00d72a23
+payload=0007a703
+payload=000017b7
+payload=00e7a823
+payload=00008067
+payload=00082023
+payload=200407b7
+payload=00062023
+payload=00f56533
+payload=00100613
+payload=00c52023
+payload=00f5e5b3
+payload=0005a023
+payload=f9dff06f
+payload=fa010113
+payload=04812e23
+payload=04912c23
+payload=05212a23
+payload=05312823
+payload=0407f813
+payload=1e080463
+payload=80001fb7
+payload=e5cf8f93
+payload=0107f413
+payload=1a041e63
+payload=0017f813
+payload=0117f993
+payload=03000393
+payload=1a080a63
+payload=0027f813
+payload=0207f493
+payload=1c080463
+payload=1c05c663
+payload=0047f813
+payload=20081863
+payload=0087f793
+payload=00000913
+payload=00078663
+payload=fff68693
+payload=02000913
+payload=00048c63
+payload=01000793
+payload=20f60a63
+payload=ff860793
+payload=0017b793
+payload=40f686b3
+payload=1a059263
+payload=03000793
+payload=00f10623
+payload=03000813
+payload=00000313
+payload=00100293
+payload=00100e13
+payload=00c10793
+payload=00028e93
+payload=00e2d463
+payload=00070e93
+payload=41d686b3
+payload=fff68893
+payload=02099263
+payload=00d505b3
+payload=02000713
+payload=1ed05263
+payload=00150513
+payload=fee50fa3
+payload=feb51ce3
+payload=ffe00893
+payload=fff00693
+payload=00090663
+payload=01250023
+payload=00150513
+payload=00048a63
+payload=00800713
+payload=1ae60063
+payload=01000713
+payload=16e60c63
+payload=04041463
+payload=00050713
+payload=00100613
+payload=1ad05863
+payload=00170713
+payload=40e606b3
+payload=011686b3
+payload=fe770fa3
+payload=00d506b3
+payload=fed046e3
+payload=fff8c713
+payload=41f75713
+payload=00e8f733
+payload=fff88693
+payload=40e686b3
+payload=00170713
+payload=00e50533
+payload=fff68893
+payload=405e8733
+payload=00e50733
+payload=03000613
+payload=15d2d863
+payload=00150513
+payload=fec50fa3
+payload=fee51ce3
+payload=006785b3
+payload=00070613
+payload=00100513
+payload=0080006f
+payload=0005c803
+payload=00160613
+payload=40c507b3
+payload=006787b3
+payload=ff060fa3
+payload=00f707b3
+payload=fff58593
+payload=fef042e3
+payload=01c70533
+payload=02d05e63
+payload=00050713
+payload=02000613
+payload=00100693
+payload=00170713
+payload=40e687b3
+payload=011787b3
+payload=fec70fa3
+payload=00f507b3
+payload=fef046e3
+payload=fff8c793
+payload=41f7d793
+payload=00f8f8b3
+payload=00188893
+payload=01150533
+payload=05c12403
+payload=05812483
+payload=05412903
+payload=05012983
+payload=06010113
+payload=00008067
+payload=ffe7f793
+payload=00040993
+payload=0027f813
+payload=02000393
+payload=0207f493
+payload=00080a63
+payload=e4dff06f
+payload=80001fb7
+payload=e34f8f93
+payload=e1dff06f
+payload=00000913
+payload=e59ff06f
+payload=40b005b3
+payload=fff68693
+payload=02d00913
+payload=e40496e3
+payload=00000313
+payload=00c10793
+payload=0080006f
+payload=000e0313
+payload=02c5f833
+payload=00130e13
+payload=01c78f33
+payload=00058e93
+payload=000e0293
+payload=010f8833
+payload=00084803
+payload=02c5d5b3
+payload=ff0f0fa3
+payload=fccefce3
+payload=e45ff06f
+payload=fff68693
+payload=02b00913
+payload=e01ff06f
+payload=03000713
+payload=00e50023
+payload=07800713
+payload=00e500a3
+payload=00250513
+payload=e79ff06f
+payload=ffe68693
+payload=df9ff06f
+payload=03000713
+payload=00e50023
+payload=00150513
+payload=e61ff06f
+payload=00050713
+payload=ebdff06f
+payload=ffe68713
+payload=00088693
+payload=00070893
+payload=e29ff06f
+payload=00088693
+payload=fff88893
+payload=e85ff06f
+payload=4004f7b7
+payload=aca78e23
+payload=00008067
+payload=e9010113
+payload=13312e23
+payload=14112623
+payload=14812423
+payload=14912223
+payload=15212023
+payload=13412c23
+payload=13512a23
+payload=13612823
+payload=13712623
+payload=13812423
+payload=13912223
+payload=14b12a23
+payload=14c12c23
+payload=14d12e23
+payload=16e12023
+payload=16f12223
+payload=17012423
+payload=17112623
+payload=00054783
+payload=15410993
+payload=01312223
+payload=74078263
+payload=02010913
+payload=00001a37
+payload=000014b7
+payload=80001437
+payload=00050313
+payload=024a0a13
+payload=00090513
+payload=06848493
+payload=e3440413
+payload=02500713
+payload=08e78a63
+payload=00f50023
+payload=00134783
+payload=00150513
+payload=00130313
+payload=fe0794e3
+payload=00050023
+payload=400406b7
+payload=00100713
+payload=0c06a7af
+payload=fee78ee3
+payload=02014703
+payload=6e070a63
+payload=00100693
+payload=00090793
+payload=4004f637
+payload=412686b3
+payload=00d78533
+payload=ace60e23
+payload=00178793
+payload=0007c703
+payload=fe0718e3
+payload=400407b7
+payload=0a07a02f
+payload=14c12083
+payload=14812403
+payload=14412483
+payload=14012903
+payload=13c12983
+payload=13812a03
+payload=13412a83
+payload=13012b03
+payload=12c12b83
+payload=12812c03
+payload=12412c83
+payload=17010113
+payload=00008067
+payload=00134583
+payload=01000693
+payload=00000793
+payload=fe058713
+payload=0ff77713
+payload=00130613
+payload=02e6e863
+payload=00271713
+payload=01470733
+payload=00072703
+payload=00070067
+payload=0017e793
+payload=00060313
+payload=00134583
+payload=00130613
+payload=fe058713
+payload=0ff77713
+payload=fce6fce3
+payload=fd058713
+payload=0ff77713
+payload=00900693
+payload=0ce6fa63
+payload=02a00713
+payload=fff00693
+payload=0ee58e63
+payload=02e00813
+payload=fff00713
+payload=09058863
+payload=0df5f813
+payload=04c00893
+payload=05180a63
+payload=fbf58813
+payload=0ff87813
+payload=03700893
+payload=2508e263
+payload=00281813
+payload=00980833
+payload=00082803
+payload=00080067
+payload=0107e793
+payload=00060313
+payload=f91ff06f
+payload=0047e793
+payload=00060313
+payload=f85ff06f
+payload=0207e793
+payload=00060313
+payload=f79ff06f
+payload=0087e793
+payload=00060313
+payload=f6dff06f
+payload=00164303
+payload=03700893
+payload=00160a93
+payload=fbf30813
+payload=0ff87813
+payload=1f08ea63
+payload=000018b7
+payload=00281813
+payload=14888893
+payload=01180833
+payload=00082803
+payload=00080067
+payload=00164583
+payload=00900893
+payload=00160813
+payload=fd058713
+payload=0ff77713
+payload=1ee8f263
+payload=02a00713
+payload=20e58863
+payload=00080613
+payload=00000713
+payload=f4dff06f
+payload=00000693
+payload=00900813
+payload=00269713
+payload=00d706b3
+payload=00160613
+payload=00169693
+payload=00b686b3
+payload=00064583
+payload=fd068693
+payload=fd058713
+payload=0ff77713
+payload=fce87ee3
+payload=f0dff06f
+payload=0009a683
+payload=00230613
+payload=00234583
+payload=00498993
+payload=ee06dce3
+payload=40d006b3
+payload=0107e793
+payload=eedff06f
+payload=00060a93
+payload=0407e793
+payload=01000613
+payload=00498813
+payload=0009a583
+payload=00080993
+payload=a89ff0ef
+payload=001ac783
+payload=001a8313
+payload=dc0794e3
+payload=de1ff06f
+payload=00060a93
+payload=00a00613
+payload=fd9ff06f
+payload=00060a93
+payload=0009a583
+payload=00498993
+payload=46058463
+payload=0005c603
+payload=50060263
+payload=50070063
+payload=00058613
+payload=00c0006f
+payload=40e60833
+payload=00b80863
+payload=00160613
+payload=00064803
+payload=fe0818e3
+payload=0107f793
+payload=40b60633
+payload=4a078663
+payload=52c05a63
+payload=00c50733
+payload=00158593
+payload=fff5c783
+payload=00150513
+payload=fef50fa3
+payload=fee518e3
+payload=40c68533
+payload=001a8313
+payload=00a70533
+payload=02000793
+payload=4cd65863
+payload=00170713
+payload=fef70fa3
+payload=fea71ce3
+payload=001ac783
+payload=d20798e3
+payload=d49ff06f
+payload=00060a93
+payload=fff00613
+payload=3cc68a63
+payload=0009a583
+payload=01000613
+payload=00498993
+payload=9c5ff0ef
+payload=001ac783
+payload=001a8313
+payload=d00792e3
+payload=d1dff06f
+payload=00060a93
+payload=00800613
+payload=f15ff06f
+payload=00060a93
+payload=0107f793
+payload=fff68693
+payload=3a078863
+payload=0009a603
+payload=00150713
+payload=00168793
+payload=00c50023
+payload=00498993
+payload=00f50533
+payload=001a8313
+payload=00070793
+payload=02000613
+payload=44d05463
+payload=00178793
+payload=fec78fa3
+payload=fea79ce3
+payload=001ac783
+payload=00d70533
+payload=ca0792e3
+payload=cbdff06f
+payload=00058313
+payload=00060a93
+payload=02500713
+payload=00150793
+payload=30e30e63
+payload=00e50023
+payload=000ac703
+payload=40071e63
+payload=00078513
+payload=c95ff06f
+payload=00000713
+payload=00271613
+payload=00e60733
+payload=00180813
+payload=00171713
+payload=00b70733
+payload=00084583
+payload=fd070713
+payload=fd058613
+payload=0ff67613
+payload=fcc8fee3
+payload=00080613
+payload=d4dff06f
+payload=0009a703
+payload=00264583
+payload=00498993
+payload=fff74813
+payload=41f85813
+payload=01077733
+payload=00260613
+payload=d2dff06f
+payload=06c00893
+payload=0027e793
+payload=00498813
+payload=00a00613
+payload=e3158ae3
+payload=27c0006f
+payload=06c00813
+payload=0009a703
+payload=0407e793
+payload=00498993
+payload=33059463
+payload=80001337
+payload=e5c30313
+payload=00810e13
+payload=01a10e93
+payload=000e0813
+payload=03a00f13
+payload=0080006f
+payload=ffe80fa3
+payload=00074583
+payload=00380813
+payload=00170713
+payload=0045d893
+payload=00f5f593
+payload=011308b3
+payload=00b305b3
+payload=0008c883
+payload=0005c583
+payload=ff180ea3
+payload=feb80f23
+payload=fdd818e3
+payload=0107f793
+payload=fff68593
+payload=02079663
+payload=fef68793
+payload=01100813
+payload=00f507b3
+payload=02000713
+payload=32d85e63
+payload=00150513
+payload=fee50fa3
+payload=fef51ce3
+payload=00f00593
+payload=01000693
+payload=00050813
+payload=011e0893
+payload=00050793
+payload=000e4703
+payload=00178793
+payload=001e0e13
+payload=fee78fa3
+payload=ffc898e3
+payload=01100793
+payload=01150513
+payload=02d7d463
+payload=02000893
+payload=01200693
+payload=01100713
+payload=00150513
+payload=40a687b3
+payload=010787b3
+payload=ff150fa3
+payload=00b787b3
+payload=fef746e3
+payload=00264783
+payload=00260313
+payload=b0079ce3
+payload=b31ff06f
+payload=06c00813
+payload=0009a703
+payload=00498993
+payload=23059a63
+payload=0407f593
+payload=00040313
+payload=f00586e3
+payload=f01ff06f
+payload=00060a93
+payload=01000613
+payload=d09ff06f
+payload=0009a703
+payload=00498993
+payload=00074583
+payload=00000893
+payload=00470313
+payload=06300f93
+payload=00900393
+payload=00a00e93
+payload=06400293
+payload=03000f13
+payload=02e00e13
+payload=00188813
+payload=02059a63
+payload=12010593
+payload=011588b3
+payload=efe88423
+payload=00170713
+payload=06e30e63
+payload=12010593
+payload=010585b3
+payload=efc58423
+payload=00074583
+payload=00180893
+payload=00188813
+payload=fc058ae3
+payload=16bfd663
+payload=0255ebb3
+payload=12010a93
+payload=011a8cb3
+payload=010a8c33
+payload=00288b13
+payload=00388813
+payload=0255cab3
+payload=03dbc8b3
+payload=01540ab3
+payload=000ac583
+payload=eebc8423
+payload=03dbe5b3
+payload=011408b3
+payload=0008c883
+payload=ef1c0423
+payload=00b405b3
+payload=0005c883
+payload=12010593
+payload=016585b3
+payload=ef158423
+payload=00170713
+payload=f8e316e3
+payload=0107f793
+payload=fff68893
+payload=02079663
+payload=410687b3
+payload=00f507b3
+payload=02000713
+payload=1ad85863
+payload=00150513
+payload=fee50fa3
+payload=fea79ce3
+payload=40d806b3
+payload=011686b3
+payload=fff68893
+payload=00810793
+payload=01050733
+payload=0007c583
+payload=00150513
+payload=00178793
+payload=feb50fa3
+payload=fea718e3
+payload=02d85463
+payload=00070513
+payload=02000593
+payload=00100693
+payload=00150513
+payload=40a687b3
+payload=011787b3
+payload=feb50fa3
+payload=00f707b3
+payload=fef846e3
+payload=00164783
+payload=00160313
+payload=9a0792e3
+payload=9bdff06f
+payload=0027e793
+payload=00498813
+payload=00060a93
+payload=0009a583
+payload=00a00613
+payload=00080993
+payload=bb1ff06f
+payload=0009a703
+payload=0407e793
+payload=00498993
+payload=e99ff06f
+payload=000ac703
+payload=00078693
+payload=00050793
+payload=00068513
+payload=00e78023
+payload=001ac783
+payload=001a8313
+payload=94079ae3
+payload=96dff06f
+payload=0017e793
+payload=00800693
+payload=c29ff06f
+payload=800015b7
+payload=e8458593
+payload=b9dff06f
+payload=00d50733
+payload=02000793
+payload=0ad05263
+payload=00150513
+payload=fef50fa3
+payload=fee51ce3
+payload=fff00693
+payload=c39ff06f
+payload=00088b13
+payload=ecb3d8e3
+payload=03d5cab3
+payload=12010b13
+payload=011b0bb3
+payload=00080b13
+payload=00288813
+payload=015408b3
+payload=0008c883
+payload=03d5e5b3
+payload=ef1b8423
+payload=ea9ff06f
+payload=02010913
+payload=00090513
+payload=8f9ff06f
+payload=00000513
+payload=931ff06f
+payload=000a8613
+payload=df1ff06f
+payload=fff68813
+payload=0ad65263
+payload=40c687b3
+payload=00f507b3
+payload=02000713
+payload=00150513
+payload=fee50fa3
+payload=fef51ce3
+payload=40d606b3
+payload=010686b3
+payload=b31ff06f
+payload=0107f613
+payload=06060263
+payload=00050713
+payload=00000613
+payload=b39ff06f
+payload=0009a783
+payload=00150713
+payload=00498993
+payload=00f50023
+payload=001a8313
+payload=001ac783
+payload=00070513
+payload=860796e3
+payload=885ff06f
+payload=00250513
+payload=f01ff06f
+payload=ffe68793
+payload=00088693
+payload=00078893
+payload=e61ff06f
+payload=ffe68793
+payload=00058693
+payload=00078593
+payload=cd1ff06f
+payload=00050713
+payload=ae5ff06f
+payload=fff68813
+payload=f6d048e3
+payload=00080693
+payload=00050713
+payload=ad1ff06f
+payload=00080693
+payload=aadff06f
+payload=fe010113
+payload=00912a23
+payload=01312623
+payload=00112e23
+payload=00812c23
+payload=01212823
+payload=01412423
+payload=01512223
+payload=01612023
+payload=000019b7
+payload=bf8ff0ef
+payload=01c9a583
+payload=400417b7
+payload=200004b7
+payload=26b7a023
+payload=000017b7
+payload=02078793
+payload=00f4e4b3
+payload=00100793
+payload=0c04a72f
+payload=fef70ee3
+payload=000017b7
+payload=0107a703
+payload=00001937
+payload=000017b7
+payload=0147a683
+payload=01892603
+payload=80001537
+payload=dcc50513
+payload=f24ff0ef
+payload=80001537
+payload=e0c50513
+payload=f18ff0ef
+payload=000017b7
+payload=e9978413
+payload=80001ab7
+payload=80000a37
+payload=e8978b13
+payload=01446733
+payload=00072603
+payload=00040593
+payload=e20a8513
+payload=fff40413
+payload=eecff0ef
+payload=ff6414e3
+payload=80001537
+payload=e3050513
+payload=edcff0ef
+payload=0a04a02f
+payload=01c9a783
+payload=00100713
+payload=00e78463
+payload=0000006f
+payload=01892703
+payload=fe071ce3
+payload=4004f737
+payload=acf72823
+payload=0000006f
+payload=6e614d0a
+payload=726f6379
+payload=203e3e65
+payload=6c6c6548
+payload=7266206f
+payload=63206d6f
+payload=2065726f
+payload=202c6425
+payload=69206425
+payload=7267206e
+payload=2070756f
+payload=6769726f
+payload=283d6e69
+payload=252c6425
+payload=0a2e2964
+payload=00000000
+payload=6c61560a
+payload=20736575
+payload=44206e69
+payload=3a4d4152
+payload=0000000a
+payload=4d415244
+payload=5d64255b
+payload=3023253d
+payload=000a7838
+payload=00000a0a
+payload=33323130
+payload=37363534
+payload=62613938
+payload=66656463
+payload=6a696867
+payload=6e6d6c6b
+payload=7271706f
+payload=76757473
+payload=7a797877
+payload=00000000
+payload=33323130
+payload=37363534
+payload=42413938
+payload=46454443
+payload=4a494847
+payload=4e4d4c4b
+payload=5251504f
+payload=56555453
+payload=5a595857
+payload=00000000
+payload=4c554e3c
+payload=00003e4c
+payload=00000000
+payload=00000000
+payload=00000000
+payload=00000000
+payload=01020304
+payload=01020304
+payload=01020304
+payload=01020304
+Instruction count = 939
+Unfreezing tiles ...
+## CSR_FREEZE_r <= 0 (test_bsg_manycore.UUT.y[1].x[0].tile.proc.h.z)
+## CSR_FREEZE_r <= 0 (test_bsg_manycore.UUT.y[1].x[1].tile.proc.h.z)
+## RECEIVED I/O PACKET from tile y,x= 1, 0 at I/O 00000001, addr 00001260, data 00000000 on cycle (         3415)
+## RECEIVED I/O PACKET from tile y,x= 1, 1 at I/O 00000001, addr 00001260, data 00000001 on cycle (         3429)
+
+Manycore>> Hello from core 0, 0 in group origin=(0,1).
+
+Values in DRAM:
+DRAM[3737]=0x000000
+DRAM[3736]=0x000000
+DRAM[3735]=0x000000
+DRAM[3734]=0x000000
+DRAM[3733]=0x000000
+DRAM[3732]=0x000000
+DRAM[3731]=0x000000
+DRAM[3730]=0x000000
+DRAM[3729]=0x000000
+DRAM[3728]=0x000000
+DRAM[3727]=0x000000
+DRAM[3726]=0x000000
+DRAM[3725]=0x000000
+DRAM[3724]=0x000000
+DRAM[3723]=0x003e4c
+DRAM[3722]=0x003e4c
+
+
+
+Manycore>> Hello from core 1, 0 in group origin=(0,1).
+
+Values in DRAM:
+DRAM[3737]=0x000000
+DRAM[3736]=0x000000
+DRAM[3735]=0x000000
+DRAM[3734]=0x000000
+DRAM[3733]=0x000000
+DRAM[3732]=0x000000
+DRAM[3731]=0x000000
+DRAM[3730]=0x000000
+DRAM[3729]=0x000000
+DRAM[3728]=0x000000
+DRAM[3727]=0x000000
+DRAM[3726]=0x000000
+DRAM[3725]=0x000000
+DRAM[3724]=0x000000
+DRAM[3723]=0x003e4c
+DRAM[3722]=0x003e4c
+
+
+## RECEIVED FINISH PACKET from tile y,x= 1, 1 at I/O 00000001, data 00000001 on cycle 0x000000b0aa (        45226)
+$finish called from file "/work/global/xy97/work/hammerblade/bsg_manycore/testbenches/common/v/bsg_nonsynth_manycore_monitor.v", line 109.
+$finish at simulation time               904790
+           V C S   S i m u l a t i o n   R e p o r t 
+Time: 904790 ps
+CPU Time:      9.360 seconds;       Data structure size:   1.0Mb
+Mon Jun 17 15:52:15 2019
+src/device/device_ipc.cc: Shm and msq removed
+#./simv  +vcs+stop+600000
+rm main_dmem.mem main_dram.mem

@@ -174,7 +174,7 @@ module brg_xcel_template
       );
     // Instantiate brg xcel
 
-    HBIfcMemXcelPRTL_0x4cdaa0fe9049a490 xcel
+    HBIfcMemXcelPRTL_0x2bb0b31806e03857 xcel
     (
        .clk        ( clk_i      ),
        .reset      ( reset_i    ),

@@ -1,0 +1,3 @@
+export BSG_MANYCORE_DIR := $(shell git rev-parse --show-toplevel)
+
+include $(BSG_MANYCORE_DIR)/software/mk/Makefile.master

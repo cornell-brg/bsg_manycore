@@ -18,7 +18,7 @@ llvm-install:
 	# aren't strictly necessary, but otherwise there'd be more options to
 	# pass on the command line for clang. We Only need X86 and RISCV targets.
 	cd $(LLVM_DIR)/llvm-build \
-	    && cmake3 -DCMAKE_BUILD_TYPE="Debug" \
+	    && cmake -DCMAKE_BUILD_TYPE="Debug" \
 	    -DLLVM_TARGETS_TO_BUILD="X86" \
 	    -DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD="RISCV" \
 	    -DBUILD_SHARED_LIBS=True \
@@ -29,5 +29,5 @@ llvm-install:
 	    -DDEFAULT_SYSROOT="$(RISCV_INSTALL_DIR)/riscv32-unknown-elf" \
 	    -DLLVM_DEFAULT_TARGET_TRIPLE="riscv32-unknown-elf" \
 	    ../llvm-src
-	cd  $(LLVM_DIR)/llvm-build && cmake3 --build . -- -j12 && make install
+	cd  $(LLVM_DIR)/llvm-build && cmake --build . -- -j12 && make install
 	rm -rf $(LLVM_DIR)/llvm-build $(LLVM_DIR)/llvm-src

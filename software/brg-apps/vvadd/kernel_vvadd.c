@@ -12,12 +12,16 @@ INIT_TILE_GROUP_BARRIER(r_barrier, c_barrier, 0, bsg_tiles_X-1, 0, bsg_tiles_Y-1
 
 int  __attribute__ ((noinline)) kernel_vvadd(int *A, int *B, int *C, int N, int block_size_x) {
 
+    bsg_cuda_print_stat_kernel_start();
+
     int start_x = block_size_x * (__bsg_tile_group_id_y * __bsg_grid_dim_x + __bsg_tile_group_id_x); 
     for (int iter_x = __bsg_id; iter_x < block_size_x; iter_x += bsg_tiles_X * bsg_tiles_Y) { 
         C[start_x + iter_x] = A[start_x + iter_x] + B[start_x + iter_x];
     }
 
     bsg_tile_group_barrier(&r_barrier, &c_barrier); 
+
+    bsg_cuda_print_stat_kernel_end();
 
   return 0;
 }

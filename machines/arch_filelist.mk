@@ -5,6 +5,7 @@
 VINCLUDES += $(BASEJUMP_STL_DIR)/bsg_misc
 VINCLUDES += $(BASEJUMP_STL_DIR)/bsg_cache
 VINCLUDES += $(BASEJUMP_STL_DIR)/bsg_noc
+VINCLUDES += $(BASEJUMP_STL_DIR)/bsg_fpu
 VINCLUDES += $(BSG_MANYCORE_DIR)/v
 VINCLUDES += $(BSG_MANYCORE_DIR)/v/vanilla_bean
 
@@ -13,12 +14,10 @@ VHEADERS += $(BASEJUMP_STL_DIR)/bsg_noc/bsg_noc_pkg.v
 VHEADERS += $(BASEJUMP_STL_DIR)/bsg_noc/bsg_noc_links.vh
 VHEADERS += $(BASEJUMP_STL_DIR)/bsg_cache/bsg_cache_pkg.v
 VHEADERS += $(BASEJUMP_STL_DIR)/bsg_cache/bsg_cache_non_blocking_pkg.v
-VHEADERS += $(BASEJUMP_STL_DIR)/bsg_fpu/bsg_fpu_pkg.v
+VHEADERS += $(BASEJUMP_STL_DIR)/bsg_fpu/bsg_fpu_defines.vh
 VHEADERS += $(BSG_MANYCORE_DIR)/v/bsg_manycore_pkg.v
+VHEADERS += $(BSG_MANYCORE_DIR)/v/vanilla_bean/bsg_vanilla_pkg.v
 VHEADERS += $(BSG_MANYCORE_DIR)/v/bsg_manycore_addr_pkg.v
-VHEADERS += $(BSG_MANYCORE_DIR)/v/bsg_manycore_addr.vh
-VHEADERS += $(BSG_MANYCORE_DIR)/v/vanilla_bean/parameters.vh
-VHEADERS += $(BSG_MANYCORE_DIR)/v/vanilla_bean/definitions.vh
 
 VSOURCES += $(BASEJUMP_STL_DIR)/bsg_misc/bsg_less_than.v
 VSOURCES += $(BASEJUMP_STL_DIR)/bsg_misc/bsg_reduce.v
@@ -110,7 +109,7 @@ VSOURCES += $(BASEJUMP_STL_DIR)/bsg_async/bsg_async_fifo.v
 VSOURCES += $(BASEJUMP_STL_DIR)/bsg_async/bsg_async_ptr_gray.v
 
 VSOURCES += $(BASEJUMP_STL_DIR)/bsg_cache/bsg_cache.v
-VSOURCES += $(BASEJUMP_STL_DIR)/bsg_cache/bsg_cache_pkt_decode.v
+VSOURCES += $(BASEJUMP_STL_DIR)/bsg_cache/bsg_cache_decode.v
 VSOURCES += $(BASEJUMP_STL_DIR)/bsg_cache/bsg_cache_dma.v
 VSOURCES += $(BASEJUMP_STL_DIR)/bsg_cache/bsg_cache_miss.v
 VSOURCES += $(BASEJUMP_STL_DIR)/bsg_cache/bsg_cache_sbuf.v

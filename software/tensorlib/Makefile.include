@@ -1,0 +1,10 @@
+export BSG_MANYCORE_DIR := $(shell git rev-parse --show-toplevel)
+export TENSOR_LIB_DIR   := $(BSG_MANYCORE_DIR)/software/tensorlib
+
+vpath %.c $(TENSOR_LIB_DIR)
+vpath %.c $(TENSOR_LIB_DIR)/common
+
+COMMON_OBJECTS += main.o bsg_set_tile_x_y.o
+RISCV_GCC_EXTRA_OPTS += -I$(TENSOR_LIB_DIR)/common
+
+include $(BSG_MANYCORE_DIR)/software/mk/Makefile.master

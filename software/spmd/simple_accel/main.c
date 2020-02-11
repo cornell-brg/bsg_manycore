@@ -6,6 +6,62 @@
 int foo = 23;
 int bar = 14;
 
+#ifndef bsg_tiles_X
+#error bsg_tiles_X must be defined
+#endif
+
+#ifndef bsg_tiles_Y
+#error bsg_tiles_Y must be defined
+#endif
+
+#if bsg_tiles_X == 1
+#define bsg_noc_xbits 1
+#elif bsg_tiles_X == 2
+#define bsg_noc_xbits 1
+#elif bsg_tiles_X == 3
+#define bsg_noc_xbits 2
+#elif bsg_tiles_X == 4
+#define bsg_noc_xbits 2
+#elif bsg_tiles_X == 5
+#define bsg_noc_xbits 3
+#elif bsg_tiles_X == 6
+#define bsg_noc_xbits 3
+#elif bsg_tiles_X == 7
+#define bsg_noc_xbits 3
+#elif bsg_tiles_X == 8
+#define bsg_noc_xbits 3
+#elif bsg_tiles_X == 9
+#define bsg_noc_xbits 4
+#elif bsg_tiles_X == 16
+#define bsg_noc_xbits 4
+#elif
+#error Unsupported bsg_tiles_X
+#endif
+
+#if bsg_tiles_Y == 1
+#define bsg_noc_ybits 1
+#elif bsg_tiles_Y == 2
+#define bsg_noc_ybits 2
+#elif bsg_tiles_Y == 3
+#define bsg_noc_ybits 2
+#elif bsg_tiles_Y == 4
+#define bsg_noc_ybits 3
+#elif bsg_tiles_Y == 5
+#define bsg_noc_ybits 3
+#elif bsg_tiles_Y == 6
+#define bsg_noc_ybits 3
+#elif bsg_tiles_Y == 7
+#define bsg_noc_ybits 3
+#elif bsg_tiles_Y == 8
+#define bsg_noc_ybits 4
+#elif bsg_tiles_Y == 9
+#define bsg_noc_ybits 4
+#elif bsg_tiles_Y == 16
+#define bsg_noc_ybits 5
+#elif
+#error Unsupported bsg_tiles_Y
+#endif
+
 #define byte_to_word_address(x)  (( (unsigned int) (x)) >> 2)
 #define word_to_byte_address(x)  (( (unsigned int) (x)) << 2)
 

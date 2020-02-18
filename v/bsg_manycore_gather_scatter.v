@@ -4,31 +4,31 @@
 //====================================================================
 // A module that do gather/scatter  
 //
-`include "bsg_manycore_packet.vh"
 
-module bsg_manycore_gather_scatter#( 
-                             x_cord_width_p         = "inv"
-                            ,y_cord_width_p         = "inv"
-                            ,dmem_size_p            = "inv" 
-                            ,data_width_p           = 32
-                            ,addr_width_p           = 32
-                            ,load_id_width_p        = 11
-                            ,max_out_credits_p      = 200
-                            ,packet_width_lp                = `bsg_manycore_packet_width(addr_width_p,data_width_p,x_cord_width_p,y_cord_width_p, load_id_width_p)
-                            ,return_packet_width_lp         = `bsg_manycore_return_packet_width(x_cord_width_p,y_cord_width_p,data_width_p,load_id_width_p)
-                            ,bsg_manycore_link_sif_width_lp = `bsg_manycore_link_sif_width(addr_width_p,data_width_p,x_cord_width_p,y_cord_width_p, load_id_width_p)
-                            ,debug_p                = 1
-                            /* Dummy parameter for compatability with socket*/    
-                            ,hetero_type_p          = 1
-                            ,epa_byte_addr_width_p  = "inv" 
-                            ,dram_ch_addr_width_p   = "inv"
-                            ,dram_ch_start_col_p    = "inv"
-                            ,icache_entries_p       = "inv"
-                            ,icache_tag_width_p     = "inv"
-                            //Gather/Scatter parameters
-                            ,mem_begin_word_addr_lp = dmem_size_p
-                           )
-   (  input clk_i
+module bsg_manycore_gather_scatter
+  import bsg_manycore_pkg::*;
+  #( 
+                            x_cord_width_p         = "inv"
+                           ,y_cord_width_p         = "inv"
+                           ,dmem_size_p            = "inv" 
+                           ,data_width_p           = 32
+                           ,addr_width_p           = 32
+                           ,max_out_credits_p      = 200
+                           ,packet_width_lp                = `bsg_manycore_packet_width(addr_width_p,data_width_p,x_cord_width_p,y_cord_width_p)
+                           ,return_packet_width_lp         = `bsg_manycore_return_packet_width(x_cord_width_p,y_cord_width_p,data_width_p)
+                           ,bsg_manycore_link_sif_width_lp = `bsg_manycore_link_sif_width(addr_width_p,data_width_p,x_cord_width_p,y_cord_width_p)
+                           ,debug_p                = 1
+                           /* Dummy parameter for compatability with socket*/    
+                           ,hetero_type_p          = 1
+                           ,epa_byte_addr_width_p  = "inv" 
+                           ,dram_ch_addr_width_p   = "inv"
+                           ,dram_ch_start_col_p    = "inv"
+                           ,icache_entries_p       = "inv"
+                           ,icache_tag_width_p     = "inv"
+                           //Gather/Scatter parameters
+                           ,mem_begin_word_addr_lp = dmem_size_p
+                          )
+  (  input clk_i
     , input reset_i
 
     // mesh network
@@ -56,7 +56,7 @@ module bsg_manycore_gather_scatter#(
         ,CSR_DST_ADDR_IDX       //Local Desitination  addr
         ,CSR_SIG_ADDR_HI_IDX    //Signal Addr High, using Norm_NPA_s format
         ,CSR_SIG_ADDR_LO_IDX    //Signal Addr Low, using Norm_NPA_s format
-        ,CSR_NUM_lp
+        ,CSR_NUM_lp             // How many possible elements are in this enum
     } CSR_INDX;
     
     typedef struct packed {
@@ -71,7 +71,7 @@ module bsg_manycore_gather_scatter#(
                 logic [1 : 0] y_order;
                 logic [1 : 0] x_order;
                 logic [1 : 0] epa_order;
-    }dma_cmd_order;
+    } dma_cmd_order;
 
     //--------------------------------------------------------------
     // The CSR Memory
@@ -111,7 +111,7 @@ module bsg_manycore_gather_scatter#(
     //--------------------------------------------------------------
     // instantiate the endpoint standard
 
-   `declare_bsg_manycore_packet_s(addr_width_p, data_width_p, x_cord_width_p, y_cord_width_p, load_id_width_p);
+   `declare_bsg_manycore_packet_s(addr_width_p, data_width_p, x_cord_width_p, y_cord_width_p);
     bsg_manycore_packet_s             out_packet_li     ;
     logic                             out_v_li          ;
     logic                             out_ready_lo      ;
@@ -122,7 +122,7 @@ module bsg_manycore_gather_scatter#(
 
     logic                             returned_v_lo     ;
     logic[data_width_p-1:0]           returned_data_lo  ;
-    logic[load_id_width_p-1:0]        returned_load_id_r_lo, load_id_r;
+    logic[4:0]                        returned_reg_id_r_lo, reg_id_r;
     logic[$clog2(max_out_credits_p+1)-1:0] out_credits_lo;
     bsg_manycore_endpoint_standard  #(
                               .x_cord_width_p        ( x_cord_width_p    )
@@ -130,7 +130,6 @@ module bsg_manycore_gather_scatter#(
                              ,.fifo_els_p            ( 4                 )
                              ,.data_width_p          ( data_width_p      )
                              ,.addr_width_p          ( addr_width_p      )
-                             ,.load_id_width_p       ( load_id_width_p   )
                              ,.max_out_credits_p     ( max_out_credits_p )
                         )endpoint_gs
 
@@ -162,12 +161,13 @@ module bsg_manycore_gather_scatter#(
     ,.out_v_i           ( out_v_li                      )
     ,.out_packet_i      ( out_packet_li                 )
     ,.out_ready_o       ( out_ready_lo                  )
-   // local returned data interface
-   // Like the memory interface, processor should always ready be to
-   // handle the returned data
-    ,.returned_data_r_o         (returned_data_lo     )
-    ,.returned_v_r_o            (returned_v_lo        )
-    ,.returned_load_id_r_o      (returned_load_id_r_lo)
+    // local returned data interface
+    // Like the memory interface, processor should always ready be to
+    // handle the returned data
+    ,.returned_v_r_o            (returned_v_lo       )
+    ,.returned_reg_id_r_o       (returned_reg_id_r_lo)
+    ,.returned_data_r_o         (returned_data_lo    )
+    ,.returned_pkt_type_r_o     (             )  // new field
     ,.returned_fifo_full_o      (             )
     ,.returned_yumi_i           (returned_v_lo)
 
@@ -286,13 +286,14 @@ module bsg_manycore_gather_scatter#(
     assign dma_all_credit_returned = (curr_stat_e_r == eGS_dma_wait) && ( out_credits_lo == max_out_credits_p );
     //--------------------------------------------------------------
     //  Master interface to load and signal 
+    //  TODO: what is the current remote load payload metadata?
     wire   bsg_manycore_packet_payload_u  payload_s;
+
+    assign payload_s.load_info_s.load_info.is_unsigned_op = 'b1;
     
     always_ff@(posedge clk_i) 
-        if( reset_i | dma_run_en ) load_id_r <= 'b0            ;
-        else                       load_id_r <= load_id_r + 'b1; 
-
-    assign payload_s.load_info_s.load_id=  load_id_r                     ; 
+        if( reset_i | dma_run_en ) reg_id_r <= 'b0           ;
+        else                       reg_id_r <= reg_id_r + 'b1; 
 
     wire   dma_fetching     =  (curr_stat_e_r == eGS_dma_busy) ;
     wire   dma_signaling    =  (curr_stat_e_r == eGS_dma_signal);
@@ -302,9 +303,12 @@ module bsg_manycore_gather_scatter#(
 
     assign out_packet_li    = '{
                                  addr        :   dma_fetching ? epa_send_addr :  sig_addr_s.epa32 >> 2
-                                ,op          :   dma_fetching ? `ePacketOp_remote_load
-                                                              : `ePacketOp_remote_store 
+                                ,op          :   dma_fetching ? e_remote_load
+                                                              : e_remote_store
                                 ,op_ex       :   {(data_width_p>>3){1'b1}}
+                                ,reg_id      :   reg_id_r
+                                // the data for remote store is always 1.
+                                // maybe this is why the GS xcel "only performs gather"?
                                 ,payload     :   dma_fetching ? payload_s     :   data_width_p'(1) 
                                 ,src_y_cord  :   my_y_i
                                 ,src_x_cord  :   my_x_i
@@ -351,7 +355,7 @@ module bsg_manycore_gather_scatter#(
     assign mem_v_li     [mem_local_port_lp] = returned_v_lo               ; 
     assign mem_we_li    [mem_local_port_lp] = 1'b1                        ;
     assign mem_addr_li  [mem_local_port_lp] = CSR_mem_r[ CSR_DST_ADDR_IDX ] [ 2 +: mem_addr_width_lp ] 
-                                            + returned_load_id_r_lo       ;
+                                            + returned_reg_id_r_lo       ;
     assign mem_data_li  [mem_local_port_lp] = returned_data_lo            ;
     assign mem_mask_li  [mem_local_port_lp] = { (data_width_p>>3){1'b1} } ;
 
@@ -383,7 +387,11 @@ module bsg_manycore_gather_scatter#(
         if( 1 ) begin
                 
                 if( returned_v_lo ) begin
-                        $display("## G/S recieved data = %h, load_id = %0d", returned_data_lo, returned_load_id_r_lo);
+                        $display("## G/S recieved data = %h, reg_id = %0d", returned_data_lo, returned_reg_id_r_lo);
+                end
+
+                if( out_v_li && out_ready_lo ) begin
+                        $display("## G/S sent packet: addr = %h, op = %h, reg_id = %h, src_y = %h, src_x = %h, y = %h, x = %h", out_packet_li.addr, out_packet_li.op, out_packet_li.reg_id, out_packet_li.src_y_cord, out_packet_li.src_x_cord, out_packet_li.y_cord, out_packet_li.x_cord);
                 end
 
                 //if( dma_all_credit_returned ) $finish();

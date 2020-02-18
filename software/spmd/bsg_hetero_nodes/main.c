@@ -94,6 +94,8 @@ int main()
   bsg_set_tile_x_y();
   
   GS_CSR_base_p = bsg_global_ptr( GS_X_CORD, GS_Y_CORD, 0);
+  
+  bsg_printf("y = %d, x = %d, gY = %d, gX = %d\n", __bsg_y, __bsg_x, bsg_tiles_Y, bsg_tiles_X);
 
   init_src_data(); 
 
@@ -195,8 +197,10 @@ void bsg_gather( dma_cmd_order_s * p_order
       * (int *)( p_signal -> epa32 )             =  0;
       // Fire the command
       * (GS_CSR_base_p + CSR_CMD_IDX )              =  p_order->val ;
+      bsg_printf("[HETERO_NODES][MAIN.C] Vanilla core has issues write command, waiting for GS Xcel...\n");
       //wait the done signal.
       bsg_wait_local_int( (int *)( p_signal -> epa32 ), 1);
+      bsg_printf("[HETERO_NODES][MAIN.C] bsg_wait_local_int() returned!\n");
       //print the result.
       GS_dst_ptr    = (volatile int *) bsg_global_ptr( GS_X_CORD, GS_Y_CORD, p_local_dst);
 

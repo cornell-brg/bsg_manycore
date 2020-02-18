@@ -1,5 +1,6 @@
 BSG_MACHINE_GLOBAL_X                  = 4
-BSG_MACHINE_GLOBAL_Y                  = 5
+# BSG_MACHINE_GLOBAL_Y                  = 5
+BSG_MACHINE_GLOBAL_Y                  = 4
 BSG_MACHINE_VCACHE_SET                = 128
 BSG_MACHINE_VCACHE_WAY                = 8
 BSG_MACHINE_VCACHE_BLOCK_SIZE_WORDS   = 8

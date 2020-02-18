@@ -3,6 +3,9 @@
  *
  */
 
+// PP: use `bsg_hetero_type_vec text marco to create heterogenous composition
+parameter int bsg_hetero_type_vec_gp [0:`BSG_MACHINE_GLOBAL_Y-1][0:`BSG_MACHINE_GLOBAL_X-1] = '{`BSG_HETERO_TYPE_VEC};
+
 module spmd_testbench;
   import bsg_noc_pkg::*; // {P=0, W, E, N, S}
   import bsg_manycore_pkg::*;
@@ -68,6 +71,8 @@ module spmd_testbench;
     $display("[INFO][TESTBENCH] BSG_MACHINE_DRAM_INCLUDED            = %d", bsg_dram_included_p);
     $display("[INFO][TESTBENCH] BSG_MACHINE_MAX_EPA_WIDTH            = %d", bsg_max_epa_width_p);
     $display("[INFO][TESTBENCH] BSG_MACHINE_MEM_CFG                  = %s", bsg_manycore_mem_cfg_p.name());
+    // PP: print out hetero configs
+    $display("[INFO][TESTBENCH] BSG_HETERO_TYPE_VEC                  = `BSG_HETERO_TYPE_VEC");
   end
 
 
@@ -128,6 +133,8 @@ module spmd_testbench;
     ,.num_tiles_x_p(num_tiles_x_p)
     ,.num_tiles_y_p(num_tiles_y_p)
     ,.branch_trace_en_p(bsg_branch_trace_en_p)
+    // PP: allow heterogenous xcel composition
+    ,.hetero_type_vec_p(bsg_hetero_type_vec_gp)
   ) DUT (
     .clk_i(core_clk)
     ,.reset_i(reset)

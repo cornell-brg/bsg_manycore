@@ -162,3 +162,9 @@ VSOURCES += $(BSG_MANYCORE_DIR)/v/bsg_manycore_endpoint_standard.v
 VSOURCES += $(BSG_MANYCORE_DIR)/v/bsg_manycore_lock_ctrl.v
 VSOURCES += $(BSG_MANYCORE_DIR)/v/bsg_1hold.v
 VSOURCES += $(BSG_MANYCORE_DIR)/v/bsg_manycore_link_sif_tieoff.v
+
+# PP: add customized accelerators
+VSOURCES += $(BSG_MANYCORE_DIR)/v/bsg_manycore_gather_scatter.v
+VSOURCES += $(BASEJUMP_STL_DIR)/bsg_misc/bsg_counter_dynamic_limit_en.v
+VSOURCES += $(BASEJUMP_STL_DIR)/bsg_misc/bsg_arb_fixed.v
+VSOURCES += $(BASEJUMP_STL_DIR)/bsg_mem/bsg_mem_banked_crossbar.v

@@ -5,7 +5,8 @@ BSG_MANYCORE_DIR := $(shell git rev-parse --show-toplevel)
 BASEJUMP_STL_DIR := $(BSG_MANYCORE_DIR)/../basejump_stl
 
 # Sets "VCS" variable
-include $(BSG_MANYCORE_DIR)/../bsg_cadenv/cadenv.mk
+# PP: hack
+# include $(BSG_MANYCORE_DIR)/../bsg_cadenv/cadenv.mk
 
 # Include source lists
 include arch_filelist.mk
@@ -38,7 +39,7 @@ all: $(DEFAULT_TARGETS) $(DEFAULT_DEBUG_TARGETS)
 # machine so that the *correct* Makfile.machine.include can be included
 define set_machine_variables
 	$(eval include $1)
-	$(eval VCS_DEFINES := +define+BSG_MACHINE_GLOBAL_X=${BSG_MACHINE_GLOBAL_X})
+	$(eval VCS_DEFINES += +define+BSG_MACHINE_GLOBAL_X=${BSG_MACHINE_GLOBAL_X})
 	$(eval VCS_DEFINES += +define+BSG_MACHINE_GLOBAL_Y=${BSG_MACHINE_GLOBAL_Y})
 	$(eval VCS_DEFINES += +define+BSG_MACHINE_VCACHE_SET=${BSG_MACHINE_VCACHE_SET})
 	$(eval VCS_DEFINES += +define+BSG_MACHINE_VCACHE_WAY=${BSG_MACHINE_VCACHE_WAY})
@@ -55,6 +56,8 @@ define set_machine_variables
 	# organization 	= x16
 	# allocation    = FULL_MEM
 	$(eval VCS_DEFINES += +define+den2048Mb+sg5+x16+FULL_MEM)
+	# PP: add bsg_hetero_type_vec
+	$(eval VCS_DEFINES += +define+BSG_HETERO_TYPE_VEC="${bsg_hetero_type_vec}"+)
 endef
 
 %/simv : %/Makefile.machine.include $(VSOURCES) $(CSOURCES) $(VINCLUDES) $(VHEADERS) 

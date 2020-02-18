@@ -289,7 +289,13 @@ module bsg_manycore_gather_scatter
     //  TODO: what is the current remote load payload metadata?
     wire   bsg_manycore_packet_payload_u  payload_s;
 
+    assign payload_s.load_info_s.reserved = 'b0;
+    assign payload_s.load_info_s.load_info.float_wb = 'b0;
+    assign payload_s.load_info_s.load_info.icache_fetch = 'b0;
     assign payload_s.load_info_s.load_info.is_unsigned_op = 'b1;
+    assign payload_s.load_info_s.load_info.is_byte_op = 'b0;
+    assign payload_s.load_info_s.load_info.is_hex_op = 'b0;
+    assign payload_s.load_info_s.load_info.part_sel = 'b0;
     
     always_ff@(posedge clk_i) 
         if( reset_i | dma_run_en ) reg_id_r <= 'b0           ;

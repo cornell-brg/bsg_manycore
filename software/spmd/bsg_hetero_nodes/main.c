@@ -101,21 +101,29 @@ int main()
 
   if ((__bsg_x == bsg_tiles_X-1) && (__bsg_y == bsg_tiles_Y-1)) {
       //Configure the CSR 
+      // Where do the global src_data live? in the scratcpad of (1,1)?
       src_addr_s =(Norm_NPA_s)  {  .epa32    = (unsigned int)&src_data  
                                   ,.x8       = __bsg_grp_org_x 
                                   ,.y8       = __bsg_grp_org_y 
                                  };
 
+      // Neither of dimension nor increment is an addresss.. encoding them
+      // using the NPA format looks confusing.
+
+      // Dimension of all data. For each tile there will be 2*sizeof(int)
+      // bytes. There are bsg_tiles_X * bsg_tiles_Y tiles.
       src_dim_s  =(Norm_NPA_s)  {  .epa32    =  SUB_EPA_DIM * sizeof(int) 
                                   ,.x8       =  bsg_tiles_X                
                                   ,.y8       =  bsg_tiles_Y
                                  };
 
+      // Increment of data inside a tile: one word. +1 for X and Y direction
       src_incr_s =(Norm_NPA_s)  {  .epa32    =  sizeof(int) 
                                   ,.x8       =  1
                                   ,.y8       =  1
                                 };
 
+      // Where should the accelerator send finish signal to?
       sig_addr_s =(Norm_NPA_s)  {  .epa32    = (unsigned int)& done
                                   ,.x8       = __bsg_x + __bsg_grp_org_x 
                                   ,.y8       = __bsg_y + __bsg_grp_org_y 
@@ -197,7 +205,7 @@ void bsg_gather( dma_cmd_order_s * p_order
       * (int *)( p_signal -> epa32 )             =  0;
       // Fire the command
       * (GS_CSR_base_p + CSR_CMD_IDX )              =  p_order->val ;
-      bsg_printf("[HETERO_NODES][MAIN.C] Vanilla core has issues write command, waiting for GS Xcel...\n");
+      bsg_printf("[HETERO_NODES][MAIN.C] Vanilla core has issued write command, waiting for GS Xcel...\n");
       //wait the done signal.
       bsg_wait_local_int( (int *)( p_signal -> epa32 ), 1);
       bsg_printf("[HETERO_NODES][MAIN.C] bsg_wait_local_int() returned!\n");

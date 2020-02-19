@@ -286,8 +286,8 @@ module bsg_manycore_gather_scatter
     assign dma_all_credit_returned = (curr_stat_e_r == eGS_dma_wait) && ( out_credits_lo == max_out_credits_p );
     //--------------------------------------------------------------
     //  Master interface to load and signal 
-    //  TODO: what is the current remote load payload metadata?
-    wire   bsg_manycore_packet_payload_u  payload_s;
+    //  TODO: what is the correct remote load payload metadata?
+    wire bsg_manycore_packet_payload_u  payload_s;
 
     assign payload_s.load_info_s.reserved = 'b0;
     assign payload_s.load_info_s.load_info.float_wb = 'b0;

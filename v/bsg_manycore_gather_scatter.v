@@ -88,6 +88,8 @@ module bsg_manycore_gather_scatter
     logic[addr_width_p-1:0]             in_addr_lo              ;
     logic                               in_we_lo                ;
     logic[(data_width_p>>3)-1:0]        in_mask_lo              ;
+    logic[x_cord_width_p-1:0]           in_src_x_cord_lo        ;
+    logic[y_cord_width_p-1:0]           in_src_y_cord_lo        ;
 
     wire is_CSR_addr = in_addr_lo < CSR_NUM_lp                 ;
     wire dma_run_en  =  in_v_lo & ( in_addr_lo == CSR_CMD_IDX ) & in_we_lo;
@@ -149,8 +151,8 @@ module bsg_manycore_gather_scatter
     ,.in_mask_o  ( in_mask_lo           )
     ,.in_addr_o  ( in_addr_lo           )
     ,.in_we_o    ( in_we_lo             )
-    ,.in_src_x_cord_o(  )
-    ,.in_src_y_cord_o(  )
+    ,.in_src_x_cord_o( in_src_x_cord_lo )
+    ,.in_src_y_cord_o( in_src_y_cord_lo )
 
     // The memory read value
     ,.returning_data_i  ( returning_data_li )
@@ -386,18 +388,22 @@ module bsg_manycore_gather_scatter
     // synopsys translate_off
     always_ff@(negedge clk_i ) begin
         if( in_v_lo &(~ (is_CSR_addr | is_mem_addr ) ) ) begin
-                $error("## Invalid CSR addr in Gather/Scatter Module, addr=%h,%t, %m", in_addr_lo<<2 , $time);
+                $error("## Invalid CSR addr in Gather/Scatter Module, addr = %h, data = %h, mask = %h, we = %h, src_y = %h, src_x = %h, y = %h, x = %h",
+                  in_addr_lo<<2, in_data_lo, in_mask_lo, in_we_lo, in_src_y_cord_lo, in_src_y_cord_lo, my_y_i, my_x_i);
                 $finish();
+                /* $display("## Invalid CSR addr in Gather/Scatter Module, addr=%h,%t, %m", in_addr_lo<<2 , $time); */
         end
 
         if( 1 ) begin
                 
                 if( returned_v_lo ) begin
-                        $display("## G/S recieved data = %h, reg_id = %0d", returned_data_lo, returned_reg_id_r_lo);
+                        $display("## G/S recieved data = %h, reg_id = %0d",
+                          returned_data_lo, returned_reg_id_r_lo);
                 end
 
                 if( out_v_li && out_ready_lo ) begin
-                        $display("## G/S sent packet: addr = %h, op = %h, reg_id = %h, src_y = %h, src_x = %h, y = %h, x = %h", out_packet_li.addr, out_packet_li.op, out_packet_li.reg_id, out_packet_li.src_y_cord, out_packet_li.src_x_cord, out_packet_li.y_cord, out_packet_li.x_cord);
+                        $display("## G/S sent packet: addr = %h, op = %h, reg_id = %h, src_y = %h, src_x = %h, y = %h, x = %h",
+                          out_packet_li.addr, out_packet_li.op, out_packet_li.reg_id, out_packet_li.src_y_cord, out_packet_li.src_x_cord, out_packet_li.y_cord, out_packet_li.x_cord);
                 end
 
                 //if( dma_all_credit_returned ) $finish();

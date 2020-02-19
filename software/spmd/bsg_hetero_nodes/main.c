@@ -83,6 +83,8 @@ int main()
 {
    int i, j;
 
+  bsg_printf("[HETERO_NODES][MAIN.C] Very beginning\n");
+
   /************************************************************************
    This will setup the  X/Y coordination. Current pre-defined corrdinations 
    includes:
@@ -92,6 +94,8 @@ int main()
         __bsg_org_y     : The origin Y cord of the group
   *************************************************************************/
   bsg_set_tile_x_y();
+
+  bsg_printf("[HETERO_NODES][MAIN.C] after bsg_set_tile_x_y()\n");
   
   GS_CSR_base_p = bsg_global_ptr( GS_X_CORD, GS_Y_CORD, 0);
   

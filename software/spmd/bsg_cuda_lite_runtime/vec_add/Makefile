@@ -11,8 +11,15 @@
 	bsg_tiles_org_Y ?= 1
 
 # If not configured, Will use default Values
-	bsg_tiles_X ?= 2
-	bsg_tiles_Y ?= 2
+	# bsg_tiles_X ?= 2
+	# bsg_tiles_Y ?= 2
+	bsg_tiles_X ?= 4
+	bsg_tiles_Y ?= 4
+
+IGNORE_CADENV = 1
+WAVE = 1
+export VCS=vcs
+export DVE=dve
 
 
 all: main.run

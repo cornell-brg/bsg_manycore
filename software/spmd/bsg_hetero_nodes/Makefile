@@ -13,11 +13,11 @@ bsg_global_Y = 4
 # 	bsg_hetero_type_vec = 0
 #
 # The first row is assigned to IO router and will the configuration values are ignored.
-export bsg_hetero_type_vec = \
-		{0, 0, 0, 0},  \
-		{0, 0, 0, 0},  \
-		{0, 0, 0, 0},  \
-    {1, 1, 1, 1}
+# export bsg_hetero_type_vec = \
+#         {0, 0, 0, 0},  \
+#         {0, 0, 0, 0},  \
+#         {0, 0, 0, 0},  \
+#         {1, 1, 1, 1}
 #########################################################
 #Tile group configuration
 # If not configured, Will use default Values
@@ -34,9 +34,19 @@ bsg_tiles_Y = 2
 
 # PP: hack
 IGNORE_CADENV = 1
+# Build simv-debug and enable vpd dumping
 WAVE = 1
 export VCS=vcs
 export DVE=dve
+
+# PP: $BSG_MANYCORE_DIR will be defined in spmd/Makefile.include
+# But we need it here to specify the customized machine...
+ifndef BSG_MANYCORE_DIR
+  export BSG_MANYCORE_DIR := $(call find-dir-with,.BSG_MANYCORE_ROOT)
+endif
+
+# PP: use a customized machine
+BSG_MACHINE_PATH = $(BSG_MANYCORE_DIR)/machines/4x4_gs_xcel
 
 
 all: main.run

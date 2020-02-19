@@ -57,7 +57,7 @@ define set_machine_variables
 	# allocation    = FULL_MEM
 	$(eval VCS_DEFINES += +define+den2048Mb+sg5+x16+FULL_MEM)
 	# PP: add bsg_hetero_type_vec
-	$(eval VCS_DEFINES += +define+BSG_HETERO_TYPE_VEC="${bsg_hetero_type_vec}"+)
+	$(eval VCS_DEFINES += +define+BSG_HETERO_TYPE_VEC="${BSG_HETERO_TYPE_VEC}"+)
 endef
 
 %/simv : %/Makefile.machine.include $(VSOURCES) $(CSOURCES) $(VINCLUDES) $(VHEADERS) 

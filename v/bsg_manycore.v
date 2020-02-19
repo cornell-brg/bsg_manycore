@@ -28,11 +28,6 @@ module bsg_manycore
    , parameter stub_n_p = {num_tiles_x_p{1'b0}}
    , parameter stub_s_p = {num_tiles_x_p{1'b0}}
 
-   // for heterogeneous, this is a vector of num_tiles_x_p*num_tiles_y_p bytes;
-   // each byte contains the type of core being instantiated
-   // type 0 is the standard core
-   , parameter int hetero_type_vec_p [0:num_tiles_y_p-1][0:num_tiles_x_p-1]  ='{default:0}
-
    // enable debugging
    , parameter debug_p = 0
 
@@ -40,6 +35,11 @@ module bsg_manycore
    // the network outside of the manycore array
 
    , parameter extra_io_rows_p = 1
+
+   // for heterogeneous, this is a vector of num_tiles_x_p*num_tiles_y_p bytes;
+   // each byte contains the type of core being instantiated
+   // type 0 is the standard core
+   , parameter int hetero_type_vec_p [0:num_tiles_y_p-extra_io_rows_p-1][0:num_tiles_x_p-1] = '{default:0}
 
    // this parameter sets the size of addresses that are transmitted in the network
    // and corresponds to the amount of physical words that are addressable by a remote
@@ -129,18 +129,24 @@ module bsg_manycore
    initial
    begin
         int i,j;
-       assert ((num_tiles_x_p > 0) && (num_tiles_y_p > 0))
+        assert ((num_tiles_x_p > 0) && (num_tiles_y_p > 0))
            else $error("num_tiles_x_p and num_tiles_y_p must be positive constants");
         $display("## ----------------------------------------------------------------");
         $display("## MANYCORE HETERO TYPE CONFIGUREATIONS");
         $display("## ----------------------------------------------------------------");
         for(i=0; i < num_tiles_y_p; i ++) begin
                 $write("## ");
-                for(j=0; j< num_tiles_x_p; j++) begin
-                        $write("%0d,", hetero_type_vec_p[i][j]);
+                if( i == 0 ) begin
+                  for(j=0; j< num_tiles_x_p; j++) begin
+                          $write(" 0,");
+                  end
+                  $write(" // IO Router");
                 end
-                if( i==0 ) begin
-                $write(" //Ignored, Set to IO Router");
+                else begin
+                  for(j=0; j< num_tiles_x_p; j++) begin
+                          $write(" %0d,", hetero_type_vec_p[i-1][j]);
+                  end
+                  $write(" // Row %3d of hetero_type_vec_p", i);
                 end
                 $write("\n");
         end
@@ -188,7 +194,7 @@ module bsg_manycore
                 .epa_byte_addr_width_p(epa_byte_addr_width_p),
                 .dram_ch_addr_width_p( dram_ch_addr_width_p),
                 .dram_ch_start_col_p ( dram_ch_start_col_p ),
-                .hetero_type_p( hetero_type_vec_p[r][c] ),
+                .hetero_type_p( hetero_type_vec_p[r-1-IO_row_idx_p][c] ),
                 .debug_p(debug_p)
                 ,.branch_trace_en_p(branch_trace_en_p)
                 ,.num_tiles_x_p(num_tiles_x_p)

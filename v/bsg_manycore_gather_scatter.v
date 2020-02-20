@@ -42,6 +42,8 @@ module bsg_manycore_gather_scatter
     , output                                      freeze_o
     );
 
+    localparam epa_word_addr_width_lp = epa_byte_addr_width_p-2;
+
     //--------------------------------------------------------------
     //  CSR definitions
      enum {
@@ -56,6 +58,7 @@ module bsg_manycore_gather_scatter
         ,CSR_DST_ADDR_IDX       //Local Desitination  addr
         ,CSR_SIG_ADDR_HI_IDX    //Signal Addr High, using Norm_NPA_s format
         ,CSR_SIG_ADDR_LO_IDX    //Signal Addr Low, using Norm_NPA_s format
+
         ,CSR_NUM_lp             // How many possible elements are in this enum
     } CSR_INDX;
     
@@ -76,6 +79,7 @@ module bsg_manycore_gather_scatter
     //--------------------------------------------------------------
     // The CSR Memory
     logic [data_width_p-1:0] CSR_mem_r [ CSR_NUM_lp ]           ; 
+    logic tile_CSR_dram_en;
 
     wire Norm_NPA_s src_addr_s = { CSR_mem_r[ CSR_SRC_ADDR_HI_IDX ],  CSR_mem_r[ CSR_SRC_ADDR_LO_IDX ]};
     wire Norm_NPA_s src_dim_s  = { CSR_mem_r[ CSR_SRC_DIM_HI_IDX  ],  CSR_mem_r[ CSR_SRC_DIM_LO_IDX  ]};
@@ -91,21 +95,31 @@ module bsg_manycore_gather_scatter
     logic[x_cord_width_p-1:0]           in_src_x_cord_lo        ;
     logic[y_cord_width_p-1:0]           in_src_y_cord_lo        ;
 
-    wire is_CSR_addr = in_addr_lo < CSR_NUM_lp                 ;
-    wire dma_run_en  =  in_v_lo & ( in_addr_lo == CSR_CMD_IDX ) & in_we_lo;
+    // xcel CSRs or DRAM_enable reg
+    wire is_tile_CSR_addr = in_addr_lo[epa_word_addr_width_lp-1] & (in_addr_lo[addr_width_p-1:epa_word_addr_width_lp] == '0);
+    wire is_CSR_addr      = (in_addr_lo < CSR_NUM_lp) | is_tile_CSR_addr;
+    wire dma_run_en       =  in_v_lo & ( in_addr_lo == CSR_CMD_IDX ) & in_we_lo;
     wire dma_cmd_order  cmd_order_s = dma_run_en ? in_data_lo[ $bits(dma_cmd_order)-1 : 0 ]
                                                  : CSR_mem_r[ CSR_CMD_IDX] [ $bits(dma_cmd_order)-1 : 0];
+
+    wire is_tile_dram_en_addr = is_tile_CSR_addr & (in_addr_lo[epa_word_addr_width_lp-2:0] == 'd4);
+
     // write
     always@( posedge clk_i)
         if( in_we_lo & in_v_lo  & is_CSR_addr )
+            if( ~is_tile_CSR_addr )
                 CSR_mem_r[ in_addr_lo ] <=  in_data_lo;
+            else if( is_tile_dram_en_addr )
+                tile_CSR_dram_en <= in_data_lo[0];
 
     // read
     logic                               CSR_returning_v_r           ;
-    logic[data_width_p-1:0]             CSR_returning_data_r             ;
+    logic[data_width_p-1:0]             CSR_returning_data_r        ;
     always@( posedge clk_i)
         if( ~in_we_lo & in_v_lo & is_CSR_addr )
-                CSR_returning_data_r <= CSR_mem_r[ in_addr_lo ] ;
+                CSR_returning_data_r <= CSR_mem_r[ in_addr_lo ];
+        else if( in_we_lo & in_v_lo  & is_tile_dram_en_addr )
+                CSR_returning_data_r <= '0;
 
     always_ff@(posedge clk_i)
         if( reset_i ) CSR_returning_v_r <= 1'b0;
@@ -387,6 +401,11 @@ module bsg_manycore_gather_scatter
     // Checking 
     // synopsys translate_off
     always_ff@(negedge clk_i ) begin
+        if( in_v_lo & is_tile_CSR_addr & (~is_tile_dram_en_addr) ) begin
+                $error("## Invalid CSR addr in Gather/Scatter Module (not a DRAM_enable), addr = %h, data = %h, mask = %h, we = %h, src_y = %h, src_x = %h, y = %h, x = %h",
+                  in_addr_lo<<2, in_data_lo, in_mask_lo, in_we_lo, in_src_y_cord_lo, in_src_y_cord_lo, my_y_i, my_x_i);
+                $finish();
+        end
         if( in_v_lo &(~ (is_CSR_addr | is_mem_addr ) ) ) begin
                 $error("## Invalid CSR addr in Gather/Scatter Module, addr = %h, data = %h, mask = %h, we = %h, src_y = %h, src_x = %h, y = %h, x = %h",
                   in_addr_lo<<2, in_data_lo, in_mask_lo, in_we_lo, in_src_y_cord_lo, in_src_y_cord_lo, my_y_i, my_x_i);

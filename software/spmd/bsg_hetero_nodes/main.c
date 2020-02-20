@@ -93,17 +93,20 @@ int main()
         __bsg_org_x     : The origin X cord of the group
         __bsg_org_y     : The origin Y cord of the group
   *************************************************************************/
+
   bsg_set_tile_x_y();
 
   bsg_printf("[HETERO_NODES][MAIN.C] after bsg_set_tile_x_y()\n");
   
   GS_CSR_base_p = bsg_global_ptr( GS_X_CORD, GS_Y_CORD, 0);
   
-  bsg_printf("y = %d, x = %d, gY = %d, gX = %d\n", __bsg_y, __bsg_x, bsg_tiles_Y, bsg_tiles_X);
+  bsg_printf("y = %d, x = %d, gY = %d, gX = %d, origY = %d, origX = %d\n",
+      __bsg_y, __bsg_x, bsg_tiles_Y, bsg_tiles_X, __bsg_grp_org_y, __bsg_grp_org_x);
 
   init_src_data(); 
 
-  if ((__bsg_x == bsg_tiles_X-1) && (__bsg_y == bsg_tiles_Y-1)) {
+  /* if ((__bsg_x == bsg_tiles_X-1) && (__bsg_y == bsg_tiles_Y-1)) { */
+  if ((__bsg_x == 0) && (__bsg_y == 0)) {
       //Configure the CSR 
       // Where do the global src_data live? in the scratcpad of (1,1)?
       src_addr_s =(Norm_NPA_s)  {  .epa32    = (unsigned int)&src_data  
@@ -117,8 +120,10 @@ int main()
       // Dimension of all data. For each tile there will be 2*sizeof(int)
       // bytes. There are bsg_tiles_X * bsg_tiles_Y tiles.
       src_dim_s  =(Norm_NPA_s)  {  .epa32    =  SUB_EPA_DIM * sizeof(int) 
-                                  ,.x8       =  bsg_tiles_X                
-                                  ,.y8       =  bsg_tiles_Y
+                                  /* ,.x8       =  bsg_tiles_X */                
+                                  /* ,.y8       =  bsg_tiles_Y */
+                                  ,.x8       =  1
+                                  ,.y8       =  1
                                  };
 
       // Increment of data inside a tile: one word. +1 for X and Y direction

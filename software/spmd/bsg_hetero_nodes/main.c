@@ -107,6 +107,14 @@ int main()
 
   /* if ((__bsg_x == bsg_tiles_X-1) && (__bsg_y == bsg_tiles_Y-1)) { */
   if ((__bsg_x == 0) && (__bsg_y == 0)) {
+      bsg_printf("************** Experimenting with Data Allocation **************\n");
+      bsg_printf("&src_data = %x\n", (int)&src_data);
+      bsg_printf("&src_data[0] = %x\n", (int)&src_data[0]);
+      bsg_printf("&dst_data = %x\n", (int)&dst_data);
+      bsg_printf("&dst_data[0] = %x\n", (int)&dst_data[0]);
+      bsg_printf("&done = %x\n", (int)&done);
+      bsg_printf("&i = %x\n", (int)&i);
+      bsg_printf("&j = %x\n", (int)&j);
       //Configure the CSR 
       // Where do the global src_data live? in the scratcpad of (1,1)?
       src_addr_s =(Norm_NPA_s)  {  .epa32    = (unsigned int)&src_data  
@@ -150,6 +158,8 @@ int main()
      /************************************************************************
        Interleaved Fetch
      *************************************************************************/
+      src_data[0] = 20;
+      src_data[1] = 21;
      dma_order_s = (dma_cmd_order_s) {          .epa_order = 2
                                                ,.x_order   = 0
                                                ,.y_order   = 1
@@ -170,7 +180,8 @@ int main()
 void init_src_data( void ) {
         int i;
         for( i=0; i < SUB_EPA_DIM; i++){
-                src_data[i] = (__bsg_y * bsg_tiles_X + __bsg_x) * SUB_EPA_DIM + i;
+                /* src_data[i] = (__bsg_y * bsg_tiles_X + __bsg_x) * SUB_EPA_DIM + i; */
+                src_data[i] = 42 + i;
         }
         bsg_printf("First 2 data in tile (y,x)=(%d, %d)= %d, %d\n", __bsg_y, __bsg_x, src_data[0], src_data[1]);
 }

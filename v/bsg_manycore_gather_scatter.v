@@ -18,7 +18,7 @@ module bsg_manycore_gather_scatter
                            ,return_packet_width_lp         = `bsg_manycore_return_packet_width(x_cord_width_p,y_cord_width_p,data_width_p)
                            ,bsg_manycore_link_sif_width_lp = `bsg_manycore_link_sif_width(addr_width_p,data_width_p,x_cord_width_p,y_cord_width_p)
                            ,debug_p                = 1
-                           /* Dummy parameter for compatability with socket*/    
+                           /* Dummy parameter for compatability with socket*/
                            ,hetero_type_p          = 1
                            ,epa_byte_addr_width_p  = "inv" 
                            ,dram_ch_addr_width_p   = "inv"
@@ -78,7 +78,7 @@ module bsg_manycore_gather_scatter
 
     //--------------------------------------------------------------
     // The CSR Memory
-    logic [data_width_p-1:0] CSR_mem_r [ CSR_NUM_lp ]           ; 
+    logic [data_width_p-1:0] CSR_mem_r [ CSR_NUM_lp ]           ;
     logic tile_CSR_dram_en;
 
     wire Norm_NPA_s src_addr_s = { CSR_mem_r[ CSR_SRC_ADDR_HI_IDX ],  CSR_mem_r[ CSR_SRC_ADDR_LO_IDX ]};
@@ -298,7 +298,7 @@ module bsg_manycore_gather_scatter
                           :  y_order_to[1] ? dim_addr_r[1]
                                            : dim_addr_r[2]; 
 
-    assign dma_send_finish = dim_finish[2]; 
+    assign dma_send_finish = dim_finish[2];
     assign dma_all_credit_returned = (curr_stat_e_r == eGS_dma_wait) && ( out_credits_lo == max_out_credits_p );
     //--------------------------------------------------------------
     //  Master interface to load and signal 
@@ -392,10 +392,10 @@ module bsg_manycore_gather_scatter
    
     //--------------------------------------------------------------
     // assign the signals to endpoint
-    assign    in_yumi_li        = in_v_lo & ( is_CSR_addr |  mem_yumi_lo[ mem_remote_port_lp ] ); 
+    assign    in_yumi_li        = in_v_lo & ( is_CSR_addr |  mem_yumi_lo[ mem_remote_port_lp ] );
     assign    returning_v_li    = CSR_returning_v_r | mem_v_lo[ mem_remote_port_lp ];
 
-    assign    returning_data_li = CSR_returning_v_r ? CSR_returning_data_r 
+    assign    returning_data_li = CSR_returning_v_r ? CSR_returning_data_r
                                                     : mem_data_lo[ mem_remote_port_lp ];
     //--------------------------------------------------------------
     // Checking 
@@ -416,8 +416,8 @@ module bsg_manycore_gather_scatter
         if( 1 ) begin
                 
                 if( returned_v_lo ) begin
-                        $display("## G/S recieved data = %h, reg_id = %0d",
-                          returned_data_lo, returned_reg_id_r_lo);
+                        $display("## G/S recieved data = %h, reg_id = %0d, written to %h",
+                          returned_data_lo, returned_reg_id_r_lo, mem_addr_li[mem_local_port_lp]);
                 end
 
                 if( out_v_li && out_ready_lo ) begin
@@ -433,8 +433,18 @@ module bsg_manycore_gather_scatter
                         else
                                 $display("## G/S CSR Read : addr=%h, value=%h", in_addr_lo<<2, CSR_mem_r[in_addr_lo]);  
                 end
+
+                if( in_v_lo && is_mem_addr ) begin
+                        if( in_we_lo )
+                                $display("## G/S Slave ifc mem Write: addr=%h, value=%h", in_addr_lo, in_data_lo);  
+                        else
+                                $display("## G/S Slave ifc mem Read : addr=%h, value=%h", in_addr_lo, mem_data_lo[mem_remote_port_lp]);  
+                end
         end
     end
+
+    initial
+      $display("GS: dmem_size = %h", dmem_size_p);
     // synopsys translate_on
 
 endmodule

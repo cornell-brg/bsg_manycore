@@ -8,6 +8,8 @@ VINCLUDES += $(BASEJUMP_STL_DIR)/bsg_noc
 VINCLUDES += $(BASEJUMP_STL_DIR)/bsg_fpu
 VINCLUDES += $(BSG_MANYCORE_DIR)/v
 VINCLUDES += $(BSG_MANYCORE_DIR)/v/vanilla_bean
+# PP: vvadd-xcel
+VINCLUDES += $(BSG_MANYCORE_DIR)/v/brg_vvadd_xcel
 
 VHEADERS += $(BASEJUMP_STL_DIR)/bsg_misc/bsg_defines.v
 VHEADERS += $(BASEJUMP_STL_DIR)/bsg_noc/bsg_noc_pkg.v
@@ -18,6 +20,8 @@ VHEADERS += $(BASEJUMP_STL_DIR)/bsg_fpu/bsg_fpu_defines.vh
 VHEADERS += $(BSG_MANYCORE_DIR)/v/bsg_manycore_pkg.v
 VHEADERS += $(BSG_MANYCORE_DIR)/v/vanilla_bean/bsg_vanilla_pkg.v
 VHEADERS += $(BSG_MANYCORE_DIR)/v/bsg_manycore_addr_pkg.v
+# PP: vvadd-xcel
+VHEADERS += $(BSG_MANYCORE_DIR)/v/brg_vvadd_xcel/brg_vvadd_xcel_pkg.v
 
 VSOURCES += $(BASEJUMP_STL_DIR)/bsg_misc/bsg_less_than.v
 VSOURCES += $(BASEJUMP_STL_DIR)/bsg_misc/bsg_reduce.v
@@ -168,3 +172,8 @@ VSOURCES += $(BSG_MANYCORE_DIR)/v/bsg_manycore_gather_scatter.v
 VSOURCES += $(BASEJUMP_STL_DIR)/bsg_misc/bsg_counter_dynamic_limit_en.v
 VSOURCES += $(BASEJUMP_STL_DIR)/bsg_misc/bsg_arb_fixed.v
 VSOURCES += $(BASEJUMP_STL_DIR)/bsg_mem/bsg_mem_banked_crossbar.v
+
+# PP: vvadd-xcel
+VSOURCES += $(BSG_MANYCORE_DIR)/v/brg_vvadd_xcel/brg_vvadd_xcel.v
+VSOURCES += $(BSG_MANYCORE_DIR)/v/brg_vvadd_xcel/brg_vvadd_xcel_network_rx.v
+VSOURCES += $(BSG_MANYCORE_DIR)/v/brg_vvadd_xcel/brg_vvadd_xcel_network_tx.v

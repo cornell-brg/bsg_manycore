@@ -22,6 +22,7 @@ module spmd_testbench;
   parameter bsg_manycore_mem_cfg_e bsg_manycore_mem_cfg_p = `BSG_MACHINE_MEM_CFG;
   parameter bsg_branch_trace_en_p = `BSG_MACHINE_BRANCH_TRACE_EN;
   parameter vcache_miss_fifo_els_p = `BSG_MACHINE_VCACHE_MISS_FIFO_ELS;
+  parameter int hetero_type_vec_p [0:num_tiles_y_p-2][0:num_tiles_x_p-1] = '{`BSG_MACHINE_HETERO_TYPE_VEC};
 
   // constant params
   parameter data_width_p = 32;
@@ -126,6 +127,7 @@ module spmd_testbench;
     ,.num_tiles_x_p(num_tiles_x_p)
     ,.num_tiles_y_p(num_tiles_y_p)
     ,.branch_trace_en_p(bsg_branch_trace_en_p)
+    ,.hetero_type_vec_p(hetero_type_vec_p)
   ) DUT (
     .clk_i(core_clk)
     ,.reset_i(reset)
@@ -179,11 +181,13 @@ module spmd_testbench;
   //                              //
   // Configurable Memory System   //
   //                              //
-  if ((bsg_manycore_mem_cfg_p == e_vcache_blocking_axi4_nonsynth_mem)
-      |(bsg_manycore_mem_cfg_p == e_vcache_non_blocking_axi4_nonsynth_mem)
-      |(bsg_manycore_mem_cfg_p == e_vcache_blocking_dmc_lpddr)
-      |(bsg_manycore_mem_cfg_p == e_vcache_non_blocking_dmc_lpddr)
-      |(bsg_manycore_mem_cfg_p == e_vcache_blocking_dramsim3_hbm2)
+  localparam logic [e_max_val-1:0] mem_cfg_lp = (1 << bsg_manycore_mem_cfg_p);
+
+  if (mem_cfg_lp[e_vcache_blocking_axi4_nonsynth_mem]
+      | mem_cfg_lp[e_vcache_non_blocking_axi4_nonsynth_mem]
+      | mem_cfg_lp[e_vcache_blocking_dmc_lpddr]
+      | mem_cfg_lp[e_vcache_non_blocking_dmc_lpddr]
+      | mem_cfg_lp[e_vcache_blocking_dramsim3_hbm2]
       ) begin: lv1_dma
 
     // for now blocking and non-blocking shares the same wire, since interface is
@@ -206,7 +210,7 @@ module spmd_testbench;
   end
 
   // LEVEL 1
-  if (bsg_manycore_mem_cfg_p == e_infinite_mem) begin: lv1_infty
+  if (mem_cfg_lp[e_infinite_mem]) begin: lv1_infty
 
     for (genvar j = N; j <= S; j++) begin: y
       for (genvar i = 0; i < num_tiles_x_p; i++) begin: x
@@ -215,6 +219,7 @@ module spmd_testbench;
           ,.addr_width_p(bsg_max_epa_width_p)
           ,.x_cord_width_p(x_cord_width_lp)
           ,.y_cord_width_p(y_cord_width_lp)
+          ,.id_p(num_tiles_x_p*j + i)
         ) mem_infty (
           .clk_i(core_clk)
           ,.reset_i(reset_r[2])
@@ -231,6 +236,7 @@ module spmd_testbench;
     
     bind bsg_nonsynth_mem_infinite infinite_mem_profiler #(
       .data_width_p(data_width_p)
+      ,.addr_width_p(addr_width_p)
       ,.x_cord_width_p(x_cord_width_p)
       ,.y_cord_width_p(y_cord_width_p)
     ) infinite_mem_prof (
@@ -241,9 +247,9 @@ module spmd_testbench;
     );
 
   end
-  else if ((bsg_manycore_mem_cfg_p == e_vcache_blocking_axi4_nonsynth_mem)
-          |(bsg_manycore_mem_cfg_p == e_vcache_blocking_dmc_lpddr)
-          |(bsg_manycore_mem_cfg_p == e_vcache_blocking_dramsim3_hbm2)
+  else if (mem_cfg_lp[e_vcache_blocking_axi4_nonsynth_mem]
+          | mem_cfg_lp[e_vcache_blocking_dmc_lpddr]
+          | mem_cfg_lp[e_vcache_blocking_dramsim3_hbm2]
           ) begin: lv1_vcache
 
     for (genvar j = N; j <= S; j++) begin: y
@@ -291,8 +297,8 @@ module spmd_testbench;
     );
 
   end
-  else if ((bsg_manycore_mem_cfg_p == e_vcache_non_blocking_axi4_nonsynth_mem)
-          |(bsg_manycore_mem_cfg_p == e_vcache_non_blocking_dmc_lpddr)) begin: lv1_vcache_nb
+  else if (mem_cfg_lp[e_vcache_non_blocking_axi4_nonsynth_mem]
+          |mem_cfg_lp[e_vcache_non_blocking_dmc_lpddr]) begin: lv1_vcache_nb
 
     for (genvar j = N; j <= S; j++) begin: y
       for (genvar i = 0; i < num_tiles_x_p; i++) begin: x
@@ -366,8 +372,8 @@ module spmd_testbench;
   
   // LEVEL 2
   //
-  if ((bsg_manycore_mem_cfg_p == e_vcache_blocking_axi4_nonsynth_mem)
-      |(bsg_manycore_mem_cfg_p == e_vcache_non_blocking_axi4_nonsynth_mem)) begin: lv2_axi4
+  if (mem_cfg_lp[e_vcache_blocking_axi4_nonsynth_mem]
+      | mem_cfg_lp[e_vcache_non_blocking_axi4_nonsynth_mem]) begin: lv2_axi4
 
     logic [S:N][axi_id_width_p-1:0] axi_awid;
     logic [S:N][axi_addr_width_p-1:0] axi_awaddr;
@@ -480,8 +486,8 @@ module spmd_testbench;
       );
     end
   end
-  else if ((bsg_manycore_mem_cfg_p == e_vcache_blocking_dmc_lpddr)
-          |(bsg_manycore_mem_cfg_p == e_vcache_non_blocking_dmc_lpddr)) begin: lv2_dmc
+  else if (mem_cfg_lp[e_vcache_blocking_dmc_lpddr]
+          | mem_cfg_lp[e_vcache_non_blocking_dmc_lpddr]) begin: lv2_dmc
 
     logic [S:N] app_en;
     logic [S:N] app_rdy;
@@ -541,7 +547,7 @@ module spmd_testbench;
       );
     end
   end
-  else if (bsg_manycore_mem_cfg_p == e_vcache_blocking_dramsim3_hbm2) begin: lv2_hbm2
+  else if (mem_cfg_lp[e_vcache_blocking_dramsim3_hbm2]) begin: lv2_hbm2
 
     
     typedef struct packed {
@@ -615,8 +621,8 @@ module spmd_testbench;
 
   // LEVEL 3
   //
-  if ((bsg_manycore_mem_cfg_p == e_vcache_blocking_axi4_nonsynth_mem)
-     |(bsg_manycore_mem_cfg_p == e_vcache_non_blocking_axi4_nonsynth_mem)) begin: lv3_axi_mem
+  if (mem_cfg_lp[e_vcache_blocking_axi4_nonsynth_mem]
+     | mem_cfg_lp[e_vcache_non_blocking_axi4_nonsynth_mem]) begin: lv3_axi_mem
 
     for (genvar i = N; i <= S; i++) begin
       bsg_nonsynth_manycore_axi_mem #(
@@ -660,8 +666,8 @@ module spmd_testbench;
       );
     end
   end
-  else if ((bsg_manycore_mem_cfg_p == e_vcache_blocking_dmc_lpddr)
-          |(bsg_manycore_mem_cfg_p == e_vcache_non_blocking_dmc_lpddr)) begin: lv3_dmc
+  else if (mem_cfg_lp[e_vcache_blocking_dmc_lpddr]
+          | mem_cfg_lp[e_vcache_non_blocking_dmc_lpddr]) begin: lv3_dmc
 
     import bsg_dmc_pkg::*;
 
@@ -837,7 +843,7 @@ module spmd_testbench;
       end
     end
   end
-  else if (bsg_manycore_mem_cfg_p == e_vcache_blocking_dramsim3_hbm2) begin: lv3_hbm2
+  else if (mem_cfg_lp[e_vcache_blocking_dramsim3_hbm2]) begin: lv3_hbm2
 
     typedef struct packed {
       logic [14:0] ro;
@@ -985,8 +991,8 @@ module spmd_testbench;
     ,.icache_entries_p(icache_entries_p)
     ,.data_width_p(data_width_p)
     ,.dmem_size_p(dmem_size_p)
-    ,.header_print_x_cord_p(0)
-    ,.header_print_y_cord_p(2)
+    ,.origin_x_cord_p(0)
+    ,.origin_y_cord_p(2)
   ) vcore_prof (
     .*
     ,.global_ctr_i($root.spmd_testbench.global_ctr)

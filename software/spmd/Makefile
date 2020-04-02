@@ -12,7 +12,9 @@ NO-RECURSE = \
 	go_viral \
 	bsg_remote_congestion memtest1 deprecated \
 	c++ fft memtest16 fhello_malloc striped_vector_sum striped_hello \
-	coremark coremark-top# run coremark separately.
+	coremark coremark-top \
+	beebs  # run coremark and beebs separately
+
 
 # Define this variable on cmd line to run coverage analysis. Currently
 # supports VCS coverage: run "make COVERAGE=VCS"
@@ -42,7 +44,7 @@ all:
 	@echo "Usage:"
 	@echo "  make -j <numthreads> recurse-clean # clean up after regression"
 	@echo "  make -j <numthreads> recurse-all   # run tests in all subdirs"
-	@echo "  make summarize                     # summarize results of tests"
+	@echo "  make watch-summary                 # summarize results of tests"
 	@echo ""
 	@echo -n " Hyperthreads detected: "; cat /proc/cpuinfo | grep processor | wc -l
 	@echo " Run 'top' to see what else is running to decided how many threads to run"
@@ -94,7 +96,7 @@ all:
 coverage-debug:
 	$(VCS_BIN)/dve -full64 -dir *.vdb &
 
-clean:
+clean: recurse-clean
 	rm -rf run.log cov.log coverage* DVEfiles/ common/crt.o
 	rm -rf recurse-results
 

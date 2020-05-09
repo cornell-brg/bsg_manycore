@@ -144,7 +144,7 @@ module brg_cgra_xcel
       .in_yumi_o             ( in_yumi_li            ),
 
       .returning_data_o      ( returning_data_li     ),
-      .returning_v_o         ( returning_v_li        )
+      .returning_v_o         ( returning_v_li        ),
 
       .out_credits_i         ( out_credits_lo        ),
       .out_packet_o          ( out_packet_li         ),
@@ -156,7 +156,7 @@ module brg_cgra_xcel
       .returned_pkt_type_r_i ( returned_pkt_type_lo  ),
       .returned_reg_id_r_i   ( returned_reg_id_lo    ),
       .returned_v_r_i        ( returned_v_lo         ),
-      .returned_yumi_o       ( returned_yumi_li      ),
+      .returned_yumi_o       ( returned_yumi_li      )
     );
 
 endmodule

@@ -10,6 +10,8 @@ VINCLUDES += $(BSG_MANYCORE_DIR)/v
 VINCLUDES += $(BSG_MANYCORE_DIR)/v/vanilla_bean
 # PP: vvadd-xcel
 VINCLUDES += $(BSG_MANYCORE_DIR)/v/brg_vvadd_xcel
+# PP: cgra-xcel
+VINCLUDES += $(BSG_MANYCORE_DIR)/v/brg_cgra_xcel
 
 VHEADERS += $(BASEJUMP_STL_DIR)/bsg_misc/bsg_defines.v
 VHEADERS += $(BASEJUMP_STL_DIR)/bsg_noc/bsg_noc_pkg.v
@@ -177,3 +179,7 @@ VSOURCES += $(BASEJUMP_STL_DIR)/bsg_mem/bsg_mem_banked_crossbar.v
 VSOURCES += $(BSG_MANYCORE_DIR)/v/brg_vvadd_xcel/brg_vvadd_xcel.v
 VSOURCES += $(BSG_MANYCORE_DIR)/v/brg_vvadd_xcel/brg_vvadd_xcel_network_rx.v
 VSOURCES += $(BSG_MANYCORE_DIR)/v/brg_vvadd_xcel/brg_vvadd_xcel_network_tx.v
+
+# PP: cgra-xcel
+VSOURCES += $(BSG_MANYCORE_DIR)/v/brg_cgra_xcel/brg_cgra_xcel.v
+VSOURCES += $(BSG_MANYCORE_DIR)/v/brg_cgra_xcel/HBEndpointCGRAXcel_2x2__pickled.v

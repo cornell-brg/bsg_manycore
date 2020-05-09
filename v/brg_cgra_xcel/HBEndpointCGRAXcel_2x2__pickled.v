@@ -546,7 +546,7 @@ module ConfigEngineCtrl__b5592e8a4ff43256
   //       s.reg_mem_rdata_en[i] @= 0
   
   always_comb begin : enable_reg_mem_rdata
-    for ( int i = 1'd0; i < 2'd2; i += 1'd1 )
+    for ( int unsigned i = 1'd0; i < 2'd2; i += 1'd1 )
       if ( 12'(i) == ( 12'( __const__start_at_enable_reg_mem_rdata ) - count_words ) ) begin
         reg_mem_rdata_en[1'(i)] = mem_deq_en;
       end
@@ -811,7 +811,7 @@ module ConfigEngineDpath__3b5c60331a151612
   //     s.all_words_rdata[i*p.data_width:i*p.data_width+p.data_width] @= s.reg_mem_rdata[i].out
   
   always_comb begin : join_nwords
-    for ( int i = 1'd0; i < 2'd2; i += 1'd1 )
+    for ( int unsigned i = 1'd0; i < 2'd2; i += 1'd1 )
       all_words_rdata[6'(i) * 6'd32 +: 32] = reg_mem_rdata__out[1'(i)];
   end
 
@@ -986,7 +986,7 @@ module RegisterFile__78ffd70657ac2433
   //     s.rdata[i] @= s.regs[ s.raddr[i] ]
   
   always_comb begin : up_rf_read
-    for ( int i = 1'd0; i < 1'( __const__rd_ports_at_up_rf_read ); i += 1'd1 )
+    for ( int unsigned i = 1'd0; i < 1'( __const__rd_ports_at_up_rf_read ); i += 1'd1 )
       rdata[1'(i)] = regs[raddr[1'(i)]];
   end
 
@@ -999,7 +999,7 @@ module RegisterFile__78ffd70657ac2433
   //       s.regs[ s.waddr[i] ] <<= s.wdata[i]
   
   always_ff @(posedge clk) begin : up_rf_write
-    for ( int i = 1'd0; i < 1'( __const__wr_ports_at_up_rf_write ); i += 1'd1 )
+    for ( int unsigned i = 1'd0; i < 1'( __const__wr_ports_at_up_rf_write ); i += 1'd1 )
       if ( wen[1'(i)] ) begin
         regs[waddr[1'(i)]] <= wdata[1'(i)];
       end
@@ -1424,7 +1424,7 @@ module ConfigEngineDpath__8077c4232cf786b0
   //     s.all_words_rdata[i*p.data_width:i*p.data_width+p.data_width] @= s.reg_mem_rdata[i].out
   
   always_comb begin : join_nwords
-    for ( int i = 1'd0; i < 2'd2; i += 1'd1 )
+    for ( int unsigned i = 1'd0; i < 2'd2; i += 1'd1 )
       all_words_rdata[6'(i) * 6'd32 +: 32] = reg_mem_rdata__out[1'(i)];
   end
 
@@ -1682,7 +1682,7 @@ module RegisterFile__bdf7a190bafdf6e6
   //     s.rdata[i] @= s.regs[ s.raddr[i] ]
   
   always_comb begin : up_rf_read
-    for ( int i = 1'd0; i < 1'( __const__rd_ports_at_up_rf_read ); i += 1'd1 )
+    for ( int unsigned i = 1'd0; i < 1'( __const__rd_ports_at_up_rf_read ); i += 1'd1 )
       rdata[1'(i)] = regs[raddr[1'(i)]];
   end
 
@@ -1695,7 +1695,7 @@ module RegisterFile__bdf7a190bafdf6e6
   //       s.regs[ s.waddr[i] ] <<= s.wdata[i]
   
   always_ff @(posedge clk) begin : up_rf_write
-    for ( int i = 1'd0; i < 1'( __const__wr_ports_at_up_rf_write ); i += 1'd1 )
+    for ( int unsigned i = 1'd0; i < 1'( __const__wr_ports_at_up_rf_write ); i += 1'd1 )
       if ( wen[1'(i)] ) begin
         regs[waddr[1'(i)]] <= wdata[1'(i)];
       end
@@ -2148,7 +2148,7 @@ module RegisterFile__3a42a011005ae1af
   //     s.rdata[i] @= s.regs[ s.raddr[i] ]
   
   always_comb begin : up_rf_read
-    for ( int i = 1'd0; i < 1'( __const__rd_ports_at_up_rf_read ); i += 1'd1 )
+    for ( int unsigned i = 1'd0; i < 1'( __const__rd_ports_at_up_rf_read ); i += 1'd1 )
       rdata[1'(i)] = regs[raddr[1'(i)]];
   end
 
@@ -2161,7 +2161,7 @@ module RegisterFile__3a42a011005ae1af
   //       s.regs[ s.waddr[i] ] <<= s.wdata[i]
   
   always_ff @(posedge clk) begin : up_rf_write
-    for ( int i = 1'd0; i < 1'( __const__wr_ports_at_up_rf_write ); i += 1'd1 )
+    for ( int unsigned i = 1'd0; i < 1'( __const__wr_ports_at_up_rf_write ); i += 1'd1 )
       if ( wen[1'(i)] ) begin
         regs[waddr[1'(i)]] <= wdata[1'(i)];
       end
@@ -2913,7 +2913,7 @@ module TileStaticCtrl__b5592e8a4ff43256
   //     s.altbps_send_rdy @= reduce_and( s.altbps_send_rdys )
   
   always_comb begin : up_altbps_send_rdy
-    for ( int i = 1'd0; i < 3'd5; i += 1'd1 )
+    for ( int unsigned i = 1'd0; i < 3'd5; i += 1'd1 )
       if ( cfg.dst_altbps[3'(i)] ) begin
         altbps_send_rdys[3'(i)] = send_rdys[3'(i)];
       end
@@ -3100,7 +3100,7 @@ module TileStaticCtrl__b5592e8a4ff43256
   //     s.bypass_send_rdy @= reduce_and( s.bypass_send_rdys )
   
   always_comb begin : up_bypass_send_rdy
-    for ( int i = 1'd0; i < 3'd5; i += 1'd1 )
+    for ( int unsigned i = 1'd0; i < 3'd5; i += 1'd1 )
       if ( cfg.dst_bypass[3'(i)] ) begin
         bypass_send_rdys[3'(i)] = send_rdys[3'(i)];
       end
@@ -3507,7 +3507,7 @@ module TileStaticCtrl__b5592e8a4ff43256
   //       s.node_send_rdy @= reduce_and( s.node_send_rdys )
   
   always_comb begin : up_node_send_rdy
-    for ( int i = 1'd0; i < 3'd5; i += 1'd1 )
+    for ( int unsigned i = 1'd0; i < 3'd5; i += 1'd1 )
       if ( cfg.dst_compute[3'(i)] ) begin
         node_send_rdys[3'(i)] = send_rdys[3'(i)];
       end
@@ -5172,7 +5172,7 @@ module RegisterFile__917f79746fbe7c14
   //     s.rdata[i] @= s.regs[ s.raddr[i] ]
   
   always_comb begin : up_rf_read
-    for ( int i = 1'd0; i < 1'( __const__rd_ports_at_up_rf_read ); i += 1'd1 )
+    for ( int unsigned i = 1'd0; i < 1'( __const__rd_ports_at_up_rf_read ); i += 1'd1 )
       rdata[1'(i)] = regs[raddr[1'(i)]];
   end
 
@@ -5185,7 +5185,7 @@ module RegisterFile__917f79746fbe7c14
   //       s.regs[ s.waddr[i] ] <<= s.wdata[i]
   
   always_ff @(posedge clk) begin : up_rf_write
-    for ( int i = 1'd0; i < 1'( __const__wr_ports_at_up_rf_write ); i += 1'd1 )
+    for ( int unsigned i = 1'd0; i < 1'( __const__wr_ports_at_up_rf_write ); i += 1'd1 )
       if ( wen[1'(i)] ) begin
         regs[waddr[1'(i)]] <= wdata[1'(i)];
       end
@@ -6822,7 +6822,7 @@ module StaticCGRADpath__b5592e8a4ff43256
   //       s.CSR_wen_bits[i] @= 0
   
   always_comb begin : req_bits
-    for ( int i = 1'd0; i < 5'd16; i += 1'd1 )
+    for ( int unsigned i = 1'd0; i < 5'd16; i += 1'd1 )
       if ( xminion_req_msg.addr == 12'(i) ) begin
         CSR_wen_bits[4'(i)] = CSR_wen;
       end
@@ -7674,7 +7674,7 @@ module Table__EntryType_Bits3__num_entries_2
   
   always_comb begin : up_alloc_rdy
     alloc__rdy = 1'd0;
-    for ( int i = 1'd0; i < 2'( __const__num_entries_at_up_alloc_rdy ); i += 1'd1 )
+    for ( int unsigned i = 1'd0; i < 2'( __const__num_entries_at_up_alloc_rdy ); i += 1'd1 )
       if ( ~valid_r[1'(i)] ) begin
         alloc__rdy = 1'd1;
       end
@@ -7693,7 +7693,7 @@ module Table__EntryType_Bits3__num_entries_2
   
   always_comb begin : up_avail_idx_next
     avail_idx_next = 1'd0;
-    for ( int i = 1'd0; i < 2'( __const__num_entries_at_up_avail_idx_next ); i += 1'd1 )
+    for ( int unsigned i = 1'd0; i < 2'( __const__num_entries_at_up_avail_idx_next ); i += 1'd1 )
       if ( ( ( ~valid_r[1'(i)] ) & ( ~( alloc__en & ( avail_idx_r == 1'(i) ) ) ) ) | ( dealloc__en & ( dealloc__msg == 1'(i) ) ) ) begin
         avail_idx_next = 1'(i);
       end
@@ -7710,7 +7710,7 @@ module Table__EntryType_Bits3__num_entries_2
   
   always_comb begin : up_dealloc_rdy
     dealloc__rdy = 1'd0;
-    for ( int i = 1'd0; i < 2'( __const__num_entries_at_up_dealloc_rdy ); i += 1'd1 )
+    for ( int unsigned i = 1'd0; i < 2'( __const__num_entries_at_up_dealloc_rdy ); i += 1'd1 )
       if ( valid_r[1'(i)] ) begin
         dealloc__rdy = 1'd1;
       end
@@ -7751,7 +7751,7 @@ module Table__EntryType_Bits3__num_entries_2
   
   always_ff @(posedge clk) begin : up_entry_r_valid_r
     if ( reset ) begin
-      for ( int i = 1'd0; i < 2'( __const__num_entries_at_up_entry_r_valid_r ); i += 1'd1 )
+      for ( int unsigned i = 1'd0; i < 2'( __const__num_entries_at_up_entry_r_valid_r ); i += 1'd1 )
         valid_r[1'(i)] <= 1'd0;
     end
     else begin
@@ -8508,7 +8508,7 @@ module RegisterFile__18426cfd02008ff7
   //     s.rdata[i] @= s.regs[ s.raddr[i] ]
   
   always_comb begin : up_rf_read
-    for ( int i = 1'd0; i < 1'( __const__rd_ports_at_up_rf_read ); i += 1'd1 )
+    for ( int unsigned i = 1'd0; i < 1'( __const__rd_ports_at_up_rf_read ); i += 1'd1 )
       rdata[1'(i)] = regs[raddr[1'(i)]];
   end
 
@@ -8521,7 +8521,7 @@ module RegisterFile__18426cfd02008ff7
   //       s.regs[ s.waddr[i] ] <<= s.wdata[i]
   
   always_ff @(posedge clk) begin : up_rf_write
-    for ( int i = 1'd0; i < 1'( __const__wr_ports_at_up_rf_write ); i += 1'd1 )
+    for ( int unsigned i = 1'd0; i < 1'( __const__wr_ports_at_up_rf_write ); i += 1'd1 )
       if ( wen[1'(i)] ) begin
         regs[waddr[1'(i)]] <= wdata[1'(i)];
       end
@@ -8787,7 +8787,7 @@ module XbarRouteUnitRTL__40e2c4fa5b678b08
 );
   localparam logic [0:0] __const__num_outports_at_up_ru_routing  = 1'd1;
   logic [0:0] give_ens;
-  logic [0:0] out_dir;
+  /* logic [0:0] out_dir; */
 
   // PyMTL Update Block Source
   // At /work/global/pp482/uecgra-src/src/pymtl3_net/xbar/XbarRouteUnitRTL.py:51
@@ -8811,14 +8811,16 @@ module XbarRouteUnitRTL__40e2c4fa5b678b08
   //   if s.get.rdy:
   //     s.give[ s.out_dir ].rdy @= b1(1)
   
-  always_comb begin : up_ru_routing
-    out_dir = 1'( get__ret.dst );
-    for ( int i = 1'd0; i < 1'( __const__num_outports_at_up_ru_routing ); i += 1'd1 )
-      give__rdy[1'(i)] = 1'd0;
-    if ( get__rdy ) begin
-      give__rdy[out_dir] = 1'd1;
-    end
-  end
+  /* always_comb begin : up_ru_routing */
+  /*   out_dir = 1'( get__ret.dst ); */
+  /*   for ( int i = 1'd0; i < 1'( __const__num_outports_at_up_ru_routing ); i += 1'd1 ) */
+  /*     give__rdy[1'(i)] = 1'd0; */
+  /*   if ( get__rdy ) begin */
+  /*     give__rdy[out_dir] = 1'd1; */
+  /*   end */
+  /* end */
+
+  assign give__rdy[0] = get__rdy & ( get__ret.dst == 0 ) ? 1 : 0;
 
   assign give__ret[0] = get__ret;
   assign give_ens[0:0] = give__en[0];
@@ -8913,10 +8915,15 @@ module RoundRobinArbiterEn__nreqs_4
   //   for i in range( nreqs ):
   //     s.grants[i] @= s.grants_int[i] | s.grants_int[nreqs+i]
   
-  always_comb begin : comb_grants
-    for ( int i = 1'd0; i < 3'( __const__nreqs_at_comb_grants ); i += 1'd1 )
-      grants[2'(i)] = grants_int[3'(i)] | grants_int[3'( __const__nreqs_at_comb_grants ) + 3'(i)];
-  end
+  /* always_comb begin : comb_grants */
+  /*   for ( int i = 1'd0; i < 3'( __const__nreqs_at_comb_grants ); i += 1'd1 ) */
+  /*     grants[2'(i)] = grants_int[3'(i)] | grants_int[3'( __const__nreqs_at_comb_grants ) + 3'(i)]; */
+  /* end */
+
+  assign grants[0] = grants_int[0] | grants_int[__const__nreqs_at_comb_grants+0];
+  assign grants[1] = grants_int[1] | grants_int[__const__nreqs_at_comb_grants+1];
+  assign grants[2] = grants_int[2] | grants_int[__const__nreqs_at_comb_grants+2];
+  assign grants[3] = grants_int[3] | grants_int[__const__nreqs_at_comb_grants+3];
 
   // PyMTL Update Block Source
   // At /work/global/pp482/clean/pymtl-v3/pymtl3/stdlib/rtl/arbiters.py:222
@@ -8933,14 +8940,23 @@ module RoundRobinArbiterEn__nreqs_4
   //     else:
   //       s.grants_int[i] @= ~s.kills[i] & s.reqs_int[i]
   
-  always_comb begin : comb_grants_int
-    for ( int i = 1'd0; i < 4'( __const__nreqsX2_at_comb_grants_int ); i += 1'd1 )
-      if ( priority_int[3'(i)] ) begin
-        grants_int[3'(i)] = reqs_int[3'(i)];
-      end
-      else
-        grants_int[3'(i)] = ( ~kills[4'(i)] ) & reqs_int[3'(i)];
-  end
+  /* always_comb begin : comb_grants_int */
+  /*   for ( int i = 1'd0; i < 4'( __const__nreqsX2_at_comb_grants_int ); i += 1'd1 ) */
+  /*     if ( priority_int[3'(i)] ) begin */
+  /*       grants_int[3'(i)] = reqs_int[3'(i)]; */
+  /*     end */
+  /*     else */
+  /*       grants_int[3'(i)] = ( ~kills[4'(i)] ) & reqs_int[3'(i)]; */
+  /* end */
+
+  assign grants_int[0] = priority_int[0] ? reqs_int[0] : ~kills[0] & reqs_int[0];
+  assign grants_int[1] = priority_int[1] ? reqs_int[1] : ~kills[1] & reqs_int[1];
+  assign grants_int[2] = priority_int[2] ? reqs_int[2] : ~kills[2] & reqs_int[2];
+  assign grants_int[3] = priority_int[3] ? reqs_int[3] : ~kills[3] & reqs_int[3];
+  assign grants_int[4] = priority_int[4] ? reqs_int[4] : ~kills[4] & reqs_int[4];
+  assign grants_int[5] = priority_int[5] ? reqs_int[5] : ~kills[5] & reqs_int[5];
+  assign grants_int[6] = priority_int[6] ? reqs_int[6] : ~kills[6] & reqs_int[6];
+  assign grants_int[7] = priority_int[7] ? reqs_int[7] : ~kills[7] & reqs_int[7];
 
   // PyMTL Update Block Source
   // At /work/global/pp482/clean/pymtl-v3/pymtl3/stdlib/rtl/arbiters.py:203
@@ -8958,16 +8974,27 @@ module RoundRobinArbiterEn__nreqs_4
   // 
   //     else:
   //       s.kills[i+1] @= s.kills[i] | ( ~s.kills[i] & s.reqs_int[i] )
+
+  // PP: HACK! VCS does not simulate the kill signal as we wanted it to.
+  assign kills[0] = 1;
+  assign kills[1] = priority_int[0] ? reqs_int[0] : reqs_int[0] | kills[0];
+  assign kills[2] = priority_int[1] ? reqs_int[1] : reqs_int[1] | kills[1];
+  assign kills[3] = priority_int[2] ? reqs_int[2] : reqs_int[2] | kills[2];
+  assign kills[4] = priority_int[3] ? reqs_int[3] : reqs_int[3] | kills[3];
+  assign kills[5] = priority_int[4] ? reqs_int[4] : reqs_int[4] | kills[4];
+  assign kills[6] = priority_int[5] ? reqs_int[5] : reqs_int[5] | kills[5];
+  assign kills[7] = priority_int[6] ? reqs_int[6] : reqs_int[6] | kills[6];
+  assign kills[8] = priority_int[7] ? reqs_int[7] : reqs_int[7] | kills[7];
   
-  always_comb begin : comb_kills
-    kills[4'd0] = 1'd1;
-    for ( int i = 1'd0; i < 4'( __const__nreqsX2_at_comb_kills ); i += 1'd1 )
-      if ( priority_int[3'(i)] ) begin
-        kills[4'(i) + 4'd1] = reqs_int[3'(i)];
-      end
-      else
-        kills[4'(i) + 4'd1] = kills[4'(i)] | ( ( ~kills[4'(i)] ) & reqs_int[3'(i)] );
-  end
+  /* always_comb begin : comb_kills */
+  /*   kills[4'd0] = 1'd1; */
+  /*   for ( int i = 1'd0; i < 4'( __const__nreqsX2_at_comb_kills ); i += 1'd1 ) */
+  /*     if ( priority_int[3'(i)] ) begin */
+  /*       kills[4'(i) + 4'd1] = reqs_int[3'(i)]; */
+  /*     end */
+  /*     else */
+  /*       kills[4'(i) + 4'd1] = kills[4'(i)] | ( ( ~kills[4'(i)] ) & reqs_int[3'(i)] ); */
+  /* end */
 
   // PyMTL Update Block Source
   // At /work/global/pp482/clean/pymtl-v3/pymtl3/stdlib/rtl/arbiters.py:183
@@ -9038,11 +9065,23 @@ module Encoder__in_nbits_4__out_nbits_2
   
   always_comb begin : encode
     out = 2'd0;
-    for ( int i = 1'd0; i < 3'd4; i += 1'd1 )
+    for ( int unsigned i = 1'd0; i < 3'd4; i += 1'd1 )
       if ( in_[2'(i)] ) begin
         out = 2'(i);
       end
   end
+
+  // PP: HACK!
+
+  /* logic [2:0] i; */
+
+  /* always_comb begin : encode */
+  /*   out = 2'd0; */
+  /*   for ( i = 3'd0; i < 3'd4; i += 3'd1 ) */
+  /*     if ( in_[2'(i)] ) begin */
+  /*       out = 2'(i); */
+  /*     end */
+  /* end */
 
 endmodule
 
@@ -9165,10 +9204,17 @@ module SwitchUnitRTL__c8b0a610d732275b
   //   for i in range( num_inports ):
   //     s.get_en[i] @= s.give.en & ( s.mux.sel == i )
   
-  always_comb begin : up_get_en
-    for ( int i = 1'd0; i < 3'( __const__num_inports_at_up_get_en ); i += 1'd1 )
-      get_en[2'(i)] = give__en & ( mux__sel == 2'(i) );
-  end
+  /* always_comb begin : up_get_en */
+  /*   for ( int i = 1'd0; i < 3'( __const__num_inports_at_up_get_en ); i += 1'd1 ) */
+  /*     get_en[2'(i)] = give__en & ( mux__sel == 2'(i) ); */
+  /* end */
+
+  // PP: HACK!
+
+  assign get_en[0] = give__en & (mux__sel == 0);
+  assign get_en[1] = give__en & (mux__sel == 1);
+  assign get_en[2] = give__en & (mux__sel == 2);
+  assign get_en[3] = give__en & (mux__sel == 3);
 
   // PyMTL Update Block Source
   // At /work/global/pp482/clean/pymtl3-ip/pymtl3-net/router/SwitchUnitRTL.py:57
@@ -9559,7 +9605,7 @@ module RegisterFile__1bff04de699373ab
   //     s.rdata[i] @= s.regs[ s.raddr[i] ]
   
   always_comb begin : up_rf_read
-    for ( int i = 1'd0; i < 1'( __const__rd_ports_at_up_rf_read ); i += 1'd1 )
+    for ( int unsigned i = 1'd0; i < 1'( __const__rd_ports_at_up_rf_read ); i += 1'd1 )
       rdata[1'(i)] = regs[raddr[1'(i)]];
   end
 
@@ -9572,7 +9618,7 @@ module RegisterFile__1bff04de699373ab
   //       s.regs[ s.waddr[i] ] <<= s.wdata[i]
   
   always_ff @(posedge clk) begin : up_rf_write
-    for ( int i = 1'd0; i < 1'( __const__wr_ports_at_up_rf_write ); i += 1'd1 )
+    for ( int unsigned i = 1'd0; i < 1'( __const__wr_ports_at_up_rf_write ); i += 1'd1 )
       if ( wen[1'(i)] ) begin
         regs[waddr[1'(i)]] <= wdata[1'(i)];
       end
@@ -9838,7 +9884,7 @@ module XbarRouteUnitRTL__0d167c8138ef96a2
 );
   localparam logic [2:0] __const__num_outports_at_up_ru_routing  = 3'd4;
   logic [3:0] give_ens;
-  logic [1:0] out_dir;
+  /* logic [1:0] out_dir; */
 
   // PyMTL Update Block Source
   // At /work/global/pp482/uecgra-src/src/pymtl3_net/xbar/XbarRouteUnitRTL.py:51
@@ -9862,14 +9908,21 @@ module XbarRouteUnitRTL__0d167c8138ef96a2
   //   if s.get.rdy:
   //     s.give[ s.out_dir ].rdy @= b1(1)
   
-  always_comb begin : up_ru_routing
-    out_dir = 2'( get__ret.dst );
-    for ( int i = 1'd0; i < 3'( __const__num_outports_at_up_ru_routing ); i += 1'd1 )
-      give__rdy[2'(i)] = 1'd0;
-    if ( get__rdy ) begin
-      give__rdy[out_dir] = 1'd1;
-    end
-  end
+  /* always_comb begin : up_ru_routing */
+  /*   out_dir = 2'( get__ret.dst ); */
+  /*   for ( int i = 1'd0; i < 3'( __const__num_outports_at_up_ru_routing ); i += 1'd1 ) */
+  /*     give__rdy[2'(i)] = 1'd0; */
+  /*   if ( get__rdy ) begin */
+  /*     give__rdy[out_dir] = 1'd1; */
+  /*   end */
+  /* end */
+
+  // PP: HACK!
+
+  assign give__rdy[0] = get__rdy & ( get__ret.dst == 0 ) ? 1 : 0;
+  assign give__rdy[1] = get__rdy & ( get__ret.dst == 1 ) ? 1 : 0;
+  assign give__rdy[2] = get__rdy & ( get__ret.dst == 2 ) ? 1 : 0;
+  assign give__rdy[3] = get__rdy & ( get__ret.dst == 3 ) ? 1 : 0;
 
   assign give__ret[0] = get__ret;
   assign give_ens[0:0] = give__en[0];
@@ -10717,7 +10770,7 @@ module CGRAXcelDpath__b5592e8a4ff43256
   
   always_comb begin : xcel_scratchpad_muxing
     if ( is_staging ) begin
-      for ( int i = 1'd0; i < 1'd1; i += 1'd1 ) begin
+      for ( int unsigned i = 1'd0; i < 1'd1; i += 1'd1 ) begin
         scratchpads__port0_val[1'(i)] = stage_val;
         scratchpads__port0_type[1'(i)] = xminion_req_msg.wen;
         scratchpads__port0_idx[1'(i)] = xminion_req_msg.addr[4'd11:4'( __const__lower_idx_at_xcel_scratchpad_muxing )];
@@ -10725,7 +10778,7 @@ module CGRAXcelDpath__b5592e8a4ff43256
       end
     end
     else
-      for ( int i = 1'd0; i < 1'd1; i += 1'd1 ) begin
+      for ( int unsigned i = 1'd0; i < 1'd1; i += 1'd1 ) begin
         scratchpads__port0_val[1'(i)] = scratchpad_adapters__val[1'(i)];
         scratchpads__port0_type[1'(i)] = scratchpad_adapters__type_[1'(i)];
         scratchpads__port0_idx[1'(i)] = scratchpad_adapters__idx[1'(i)];

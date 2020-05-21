@@ -22,7 +22,7 @@ module spmd_testbench;
   parameter bsg_manycore_mem_cfg_e bsg_manycore_mem_cfg_p = `BSG_MACHINE_MEM_CFG;
   parameter bsg_branch_trace_en_p = `BSG_MACHINE_BRANCH_TRACE_EN;
   parameter vcache_miss_fifo_els_p = `BSG_MACHINE_VCACHE_MISS_FIFO_ELS;
-  parameter int hetero_type_vec_p [0:num_tiles_y_p-2][0:num_tiles_x_p-1] = '{`BSG_MACHINE_HETERO_TYPE_VEC};
+  parameter int hetero_type_vec_p [0:((num_tiles_y_p-1)*num_tiles_x_p) - 1]  = '{`BSG_MACHINE_HETERO_TYPE_VEC};
 
   // constant params
   parameter data_width_p = 32;
@@ -211,12 +211,13 @@ module spmd_testbench;
 
   // LEVEL 1
   if (mem_cfg_lp[e_infinite_mem]) begin: lv1_infty
-
+    localparam infmem_els_lp = 1<<(bsg_max_epa_width_p-x_cord_width_lp-1);
     for (genvar j = N; j <= S; j++) begin: y
       for (genvar i = 0; i < num_tiles_x_p; i++) begin: x
         bsg_nonsynth_mem_infinite #(
           .data_width_p(data_width_p)
           ,.addr_width_p(bsg_max_epa_width_p)
+          ,.mem_els_p(infmem_els_lp)
           ,.x_cord_width_p(x_cord_width_lp)
           ,.y_cord_width_p(y_cord_width_lp)
           ,.id_p(num_tiles_x_p*j + i)
@@ -294,6 +295,7 @@ module spmd_testbench;
       ,.global_ctr_i($root.spmd_testbench.global_ctr)
       ,.print_stat_v_i($root.spmd_testbench.print_stat_v)
       ,.print_stat_tag_i($root.spmd_testbench.print_stat_tag)
+      ,.trace_en_i($root.spmd_testbench.trace_en)
     );
 
   end
@@ -999,6 +1001,15 @@ module spmd_testbench;
     ,.print_stat_v_i($root.spmd_testbench.print_stat_v)
     ,.print_stat_tag_i($root.spmd_testbench.print_stat_tag)
     ,.trace_en_i($root.spmd_testbench.trace_en)
+  );
+
+  // nb WAW detector
+  bind vanilla_core nb_waw_detector #(
+    .data_width_p(data_width_p)
+    ,.x_cord_width_p(x_cord_width_p)
+    ,.y_cord_width_p(y_cord_width_p)
+  ) waw0 (
+    .*
   );
 
   // tieoffs

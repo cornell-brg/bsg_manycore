@@ -1,7 +1,9 @@
 VANILLA_DIR ?= $(BSG_MANYCORE_DIR)/imports/vanilla-bean
 BSG_IP_CORES_DIR ?= $(BSG_MANYCORE_DIR)/../basejump_stl
 BERKELEY_HARDFLOAT_DIR ?= $(BSG_MANYCORE_DIR)/../berkeley-hardfloat
-RISCV_BIN_DIR ?= $(BSG_MANYCORE_DIR)/software/riscv-tools/riscv-install/bin
+# PP: use globally installed riscv bins
+# RISCV_BIN_DIR ?= $(BSG_MANYCORE_DIR)/software/riscv-tools/riscv-install/bin
+RISCV_BIN_DIR ?= $(BRG_BSG_BLADERUNNER_DIR)/bsg_manycore/software/riscv-tools/riscv-install/bin
 # PP: hack
 # CAD_DIR ?= $(BSG_MANYCORE_DIR)/../bsg_cadenv
 BSG_MACHINE_PATH ?= $(BSG_MANYCORE_DIR)/machines/4x4

@@ -154,7 +154,7 @@ LINK_SCRIPT ?= $(CURR_DIR)/bsg_link.ld
 $(CURR_DIR)/bsg_link.ld: $(LINK_GEN)
 	$(LINK_GEN) $(LINK_GEN_OPTS) --out=$@
 
-RISCV_LINK_OPTS ?= 
+RISCV_LINK_OPTS ?=
 
 ifneq ($(BSG_NEWLIB), 1)
   RISCV_LINK_OPTS += -nostdlib
@@ -244,7 +244,7 @@ endif
 ifdef ENABLE_LLVM_PASSES
 $(PASS_LIB): $(PASS_DIR)/manycore/Manycore.cpp $(LLVM_DIR)
 	mkdir -p build
-	cd build && LLVM_DIR=$(LLVM_DIR) cmake3 $(PASS_DIR) -Dbsg_group_size:INTEGER=$(bsg_group_size) && make
+	cd build && LLVM_DIR=$(LLVM_DIR) cmake $(PASS_DIR) -Dbsg_group_size:INTEGER=$(bsg_group_size) && make
 endif
 
 else
@@ -277,9 +277,9 @@ $(BSG_MANYCORE_LIB): $(BSG_MANYCORE_LIB_OBJS)
 %_dram.mem:	%.riscv
 	$(RISCV_OBJCOPY) -O verilog -j *.dram $< $@
 
-	# Load addresses to dram start with 0x8 because NPA of dram start 
+	# Load addresses to dram start with 0x8 because NPA of dram start
 	# with 0x8. But verilog loader's readmemh cannot handle large addresses
-	# starting with 0x8! Hence this changes load addresses to start with 
+	# starting with 0x8! Hence this changes load addresses to start with
 	# 0x0, and converting to actual NPA is handled in the verilog loader.
 	sed -i 's/@8/@0/' $@
 

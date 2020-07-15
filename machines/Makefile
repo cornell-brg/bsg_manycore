@@ -5,7 +5,7 @@ BSG_MANYCORE_DIR := $(shell git rev-parse --show-toplevel)
 BASEJUMP_STL_DIR := $(BSG_MANYCORE_DIR)/../basejump_stl
 
 # Sets "VCS" variable
-include $(BSG_MANYCORE_DIR)/../bsg_cadenv/cadenv.mk
+VCS = vcs
 
 # Include source lists
 include arch_filelist.mk
@@ -13,7 +13,7 @@ include sim_filelist.mk
 
 VCS_INCLUDES += $(foreach inc,$(VINCLUDES),+incdir+"$(inc)")
 VCS_DEFINES  += $(foreach def,$(VDEFINES),+define+"$(def)")
-VCS_SOURCES  += $(VHEADERS) $(VSOURCES) 
+VCS_SOURCES  += $(VHEADERS) $(VSOURCES)
 VCS_FLAGS    += +v2k -sverilog -full64 -timescale=1ps/1ps \
 	 	+lint=all,noSVA-UA,noSVA-NSVU,noVCDE,noNS -top spmd_testbench
 #VCS_FLAGS    += +vcs+loopreport
@@ -64,11 +64,11 @@ define set_machine_variables
 	$(eval VCS_DEFINES += +define+den2048Mb+sg5+x16+FULL_MEM)
 endef
 
-%/simv : %/Makefile.machine.include $(VSOURCES) $(CSOURCES) $(VINCLUDES) $(VHEADERS) 
+%/simv : %/Makefile.machine.include $(VSOURCES) $(CSOURCES) $(VINCLUDES) $(VHEADERS)
 	$(call set_machine_variables,$<)
 	$(VCS) $(VCS_FLAGS) $(VCS_CFLAGS) -o $@ $(VCS_INCLUDES) $(VCS_DEFINES) $(CSOURCES) $(VCS_SOURCES) | tee -i $(dir $@)/build.log
 
-%/simv-debug : %/Makefile.machine.include $(VSOURCES) $(CSOURCES) $(VINCLUDES) $(VHEADERS) 
+%/simv-debug : %/Makefile.machine.include $(VSOURCES) $(CSOURCES) $(VINCLUDES) $(VHEADERS)
 	$(call set_machine_variables,$<)
 	$(eval VCS_FLAGS += -debug_pp +vcs+vcdpluson) # Debug adds these two variables to generate waveforms
 	$(VCS) $(VCS_FLAGS) $(VCS_CFLAGS) -o $@ $(VCS_INCLUDES) $(VCS_DEFINES) $(CSOURCES) $(VCS_SOURCES) | tee -i $(dir $@)/build_debug.log

@@ -16,6 +16,7 @@ VCS_DEFINES  += $(foreach def,$(VDEFINES),+define+"$(def)")
 VCS_SOURCES  += $(VHEADERS) $(VSOURCES) 
 VCS_FLAGS    += +v2k -sverilog -full64 -timescale=1ps/1ps \
 	 	+lint=all,noSVA-UA,noSVA-NSVU,noVCDE,noNS -top spmd_testbench
+#VCS_FLAGS    += +vcs+loopreport
 
 VCS_CFLAGS   =  -cpp g++
 VCS_CFLAGS   += -CFLAGS "-std=c++11 -g -Wall"
@@ -54,6 +55,7 @@ define set_machine_variables
 	$(eval VCS_DEFINES += +define+BSG_MACHINE_MEM_CFG=${BSG_MACHINE_MEM_CFG})
 	$(eval VCS_DEFINES += +define+BSG_MACHINE_BRANCH_TRACE_EN=${BSG_MACHINE_BRANCH_TRACE_EN})
 	$(eval VCS_DEFINES += +define+BSG_MACHINE_HETERO_TYPE_VEC="${BSG_MACHINE_HETERO_TYPE_VEC}")
+	$(eval VCS_DEFINES += +define+BSG_MACHINE_CROSSBAR_NETWORK="${BSG_MACHINE_CROSSBAR_NETWORK}")
 	# These define are required by mobile_ddr.v.
 	# density     	= 2048 Mbit
 	# speed grade 	= 5

@@ -29,6 +29,7 @@
                           ,.icache_tag_width_p (icache_tag_width_p)                    \
                           ,.max_out_credits_p(max_out_credits_p)                       \
                           ,.num_tiles_x_p(num_tiles_x_p)                               \
+                          ,.num_tiles_y_p(num_tiles_y_p)                               \
                           ) z                                                          \
           (.clk_i                                                                      \
            ,.reset_i                                                                   \
@@ -51,9 +52,10 @@ module bsg_manycore_hetero_socket
     , parameter vcache_size_p = "inv"
     , parameter debug_p = 0
     , parameter branch_trace_en_p = 0
-    , parameter max_out_credits_p = 200
+    , parameter max_out_credits_p = 32
     , parameter int hetero_type_p = 0
     , parameter num_tiles_x_p="inv"
+    , parameter num_tiles_y_p="inv"
     , parameter vcache_block_size_in_words_p="inv"
     , parameter vcache_sets_p="inv"
 

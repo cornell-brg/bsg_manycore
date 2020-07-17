@@ -18,6 +18,7 @@ module network_tx
     , parameter vcache_sets_p="inv"
     
     , parameter num_tiles_x_p="inv"
+    , parameter num_tiles_y_p="inv"
   
     , parameter icache_entries_p="inv"
     , parameter icache_tag_width_p="inv"
@@ -28,16 +29,16 @@ module network_tx
 
     , parameter vcache_word_offset_width_lp = `BSG_SAFE_CLOG2(vcache_block_size_in_words_p)
 
-    , localparam credit_counter_width_lp=$clog2(max_out_credits_p+1)
+    , parameter credit_counter_width_lp=$clog2(max_out_credits_p+1)
 
-    , localparam icache_addr_width_lp=`BSG_SAFE_CLOG2(icache_entries_p)
-    , localparam pc_width_lp=(icache_tag_width_p+icache_addr_width_lp)
+    , parameter icache_addr_width_lp=`BSG_SAFE_CLOG2(icache_entries_p)
+    , parameter pc_width_lp=(icache_tag_width_p+icache_addr_width_lp)
 
-    , localparam epa_word_addr_width_lp=epa_word_addr_width_gp
+    , parameter epa_word_addr_width_lp=epa_word_addr_width_gp
 
-    , localparam reg_addr_width_lp=RV32_reg_addr_width_gp
+    , parameter reg_addr_width_lp=RV32_reg_addr_width_gp
 
-    , localparam packet_width_lp=
+    , parameter packet_width_lp=
       `bsg_manycore_packet_width(addr_width_p,data_width_p,x_cord_width_p,y_cord_width_p)
   )
   (
@@ -47,7 +48,7 @@ module network_tx
     // network side
     , output logic [packet_width_lp-1:0] out_packet_o
     , output logic out_v_o
-    , input out_ready_i
+    , input out_credit_or_ready_i
 
     , input returned_v_i
     , input [data_width_p-1:0] returned_data_i
@@ -60,15 +61,14 @@ module network_tx
     , input [y_cord_width_p-1:0] tgo_y_i
     , input dram_enable_i
 
-    , input [credit_counter_width_lp-1:0] out_credits_i
-
     , input [x_cord_width_p-1:0] my_x_i
     , input [y_cord_width_p-1:0] my_y_i
 
     // core side
+    // vanilla core uses valid-credit interface for outgoing requests.
     , input remote_req_s remote_req_i
     , input remote_req_v_i
-    , output logic remote_req_yumi_o
+    , output logic remote_req_credit_o
 
     , output logic ifetch_v_o
     , output logic [data_width_p-1:0] ifetch_instr_o
@@ -76,12 +76,16 @@ module network_tx
     , output logic [reg_addr_width_lp-1:0] float_remote_load_resp_rd_o
     , output logic [data_width_p-1:0] float_remote_load_resp_data_o
     , output logic float_remote_load_resp_v_o
+    , output logic float_remote_load_resp_force_o
+    , input float_remote_load_resp_yumi_i
 
     , output logic [reg_addr_width_lp-1:0] int_remote_load_resp_rd_o
     , output logic [data_width_p-1:0] int_remote_load_resp_data_o
     , output logic int_remote_load_resp_v_o
     , output logic int_remote_load_resp_force_o
     , input int_remote_load_resp_yumi_i
+
+    , output logic invalid_eva_access_o
   );
 
   wire unused = reset_i;
@@ -107,6 +111,7 @@ module network_tx
     ,.x_cord_width_p(x_cord_width_p)
     ,.y_cord_width_p(y_cord_width_p)
     ,.num_tiles_x_p(num_tiles_x_p)
+    ,.num_tiles_y_p(num_tiles_y_p)
     ,.vcache_block_size_in_words_p(vcache_block_size_in_words_p)
     ,.vcache_size_p(vcache_size_p)
     ,.vcache_sets_p(vcache_sets_p)
@@ -157,8 +162,9 @@ module network_tx
 
   // handling outgoing requests
   //
-  assign out_v_o = remote_req_v_i & (|out_credits_i) & ~is_invalid_addr_lo;
-  assign remote_req_yumi_o = (out_v_o & out_ready_i) | (remote_req_v_i & is_invalid_addr_lo);
+  assign out_v_o = remote_req_v_i & ~is_invalid_addr_lo;
+  assign remote_req_credit_o = out_credit_or_ready_i;
+  assign invalid_eva_access_o = remote_req_v_i & is_invalid_addr_lo;
 
 
   // handling response packets
@@ -170,25 +176,23 @@ module network_tx
   assign float_remote_load_resp_rd_o = returned_reg_id_i;
 
   always_comb begin
+    ifetch_v_o = 1'b0;
+    int_remote_load_resp_v_o = 1'b0;
+    int_remote_load_resp_force_o = 1'b0;
+    float_remote_load_resp_v_o = 1'b0;
+    float_remote_load_resp_force_o = 1'b0;
 
     if (returned_pkt_type_i == e_return_ifetch) begin
       ifetch_v_o = returned_v_i;
-      int_remote_load_resp_v_o = 1'b0;
-      float_remote_load_resp_v_o = 1'b0;
-      int_remote_load_resp_force_o = 1'b0;
       returned_yumi_o = returned_v_i;
     end
     else if (returned_pkt_type_i == e_return_float_wb) begin
-      ifetch_v_o = 1'b0;
-      int_remote_load_resp_v_o = 1'b0;
       float_remote_load_resp_v_o = returned_v_i;
-      int_remote_load_resp_force_o = 1'b0;
-      returned_yumi_o = returned_v_i;
+      float_remote_load_resp_force_o = returned_fifo_full_i & returned_v_i;
+      returned_yumi_o = float_remote_load_resp_yumi_i | (returned_fifo_full_i & returned_v_i);
     end
     else begin
-      ifetch_v_o = 1'b0;
       int_remote_load_resp_v_o = returned_v_i;
-      float_remote_load_resp_v_o = 1'b0;
       int_remote_load_resp_force_o = returned_fifo_full_i & returned_v_i;
       returned_yumi_o = int_remote_load_resp_yumi_i | (returned_fifo_full_i & returned_v_i);
     end
@@ -196,10 +200,9 @@ module network_tx
   end
 
   // synopsys translate_off
-
   always_ff @ (negedge clk_i) begin
 
-    if (out_v_o & is_invalid_addr_lo) begin
+    if (remote_req_v_i & is_invalid_addr_lo) begin
       $display("[ERROR][TX] Invalid EVA access. t=%0t, x=%d, y=%d, addr=%h",
         $time, my_x_i, my_y_i, remote_req_i.addr);
     end 
@@ -211,4 +214,5 @@ module network_tx
 
   end
   // synopsys translate_on
+
 endmodule

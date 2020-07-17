@@ -129,6 +129,7 @@ module bsg_manycore
                 .debug_p(debug_p)
                 ,.branch_trace_en_p(branch_trace_en_p)
                 ,.num_tiles_x_p(num_tiles_x_p)
+                ,.num_tiles_y_p(num_tiles_y_p)
                 ,.vcache_block_size_in_words_p(vcache_block_size_in_words_p)
                 ,.vcache_sets_p(vcache_sets_p)
               )
@@ -158,7 +159,7 @@ module bsg_manycore
         
       ,.links_sif_i      ( link_in [0][ c ] )
       ,.links_sif_o      ( link_out[0][ c ] )
-        
+
       ,.proc_link_sif_i  ( io_link_sif_i [ c ])
       ,.proc_link_sif_o  ( io_link_sif_o [ c ])
         

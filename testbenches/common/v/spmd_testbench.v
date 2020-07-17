@@ -22,6 +22,7 @@ module spmd_testbench;
   parameter bsg_manycore_mem_cfg_e bsg_manycore_mem_cfg_p = `BSG_MACHINE_MEM_CFG;
   parameter bsg_branch_trace_en_p = `BSG_MACHINE_BRANCH_TRACE_EN;
   parameter vcache_miss_fifo_els_p = `BSG_MACHINE_VCACHE_MISS_FIFO_ELS;
+  parameter crossbar_network_p = `BSG_MACHINE_CROSSBAR_NETWORK;
   parameter int hetero_type_vec_p [0:((num_tiles_y_p-1)*num_tiles_x_p) - 1]  = '{`BSG_MACHINE_HETERO_TYPE_VEC};
 
   // constant params
@@ -69,6 +70,7 @@ module spmd_testbench;
     $display("[INFO][TESTBENCH] BSG_MACHINE_DRAM_INCLUDED            = %d", bsg_dram_included_p);
     $display("[INFO][TESTBENCH] BSG_MACHINE_MAX_EPA_WIDTH            = %d", bsg_max_epa_width_p);
     $display("[INFO][TESTBENCH] BSG_MACHINE_MEM_CFG                  = %s", bsg_manycore_mem_cfg_p.name());
+    $display("[INFO][TESTBENCH] BSG_MACHINE_CROSSBAR_NETWORK         = %d", crossbar_network_p);
   end
 
 
@@ -115,32 +117,61 @@ module spmd_testbench;
   bsg_manycore_link_sif_s [E:W][num_tiles_y_p-1:0] hor_link_li, hor_link_lo;
   bsg_manycore_link_sif_s [num_tiles_x_p-1:0] io_link_li, io_link_lo;
 
-  bsg_manycore #(
-    .dmem_size_p(dmem_size_p)
-    ,.icache_entries_p(icache_entries_p)
-    ,.icache_tag_width_p(icache_tag_width_p)
-    ,.vcache_size_p(vcache_size_p)
-    ,.vcache_block_size_in_words_p(vcache_block_size_in_words_p)
-    ,.vcache_sets_p(vcache_sets_p)
-    ,.data_width_p(data_width_p)
-    ,.addr_width_p(bsg_max_epa_width_p)
-    ,.num_tiles_x_p(num_tiles_x_p)
-    ,.num_tiles_y_p(num_tiles_y_p)
-    ,.branch_trace_en_p(bsg_branch_trace_en_p)
-    ,.hetero_type_vec_p(hetero_type_vec_p)
-  ) DUT (
-    .clk_i(core_clk)
-    ,.reset_i(reset)
+  if (crossbar_network_p) begin: cnet
 
-    ,.hor_link_sif_i(hor_link_li)
-    ,.hor_link_sif_o(hor_link_lo)
+    bsg_manycore_top_crossbar #(
+      .dmem_size_p(dmem_size_p)
+      ,.icache_entries_p(icache_entries_p)
+      ,.icache_tag_width_p(icache_tag_width_p)
+      ,.vcache_size_p(vcache_size_p)
+      ,.vcache_block_size_in_words_p(vcache_block_size_in_words_p)
+      ,.vcache_sets_p(vcache_sets_p)
+      ,.data_width_p(data_width_p)
+      ,.addr_width_p(bsg_max_epa_width_p)
+      ,.num_tiles_x_p(num_tiles_x_p)
+      ,.num_tiles_y_p(num_tiles_y_p)
+    ) DUT (
+      .clk_i(core_clk)
+      ,.reset_i(reset)
 
-    ,.ver_link_sif_i(ver_link_li)
-    ,.ver_link_sif_o(ver_link_lo)
+      ,.ver_link_sif_i(ver_link_li)
+      ,.ver_link_sif_o(ver_link_lo)
 
-    ,.io_link_sif_i(io_link_li)
-    ,.io_link_sif_o(io_link_lo)
-  );
+      ,.io_link_sif_i(io_link_li)
+      ,.io_link_sif_o(io_link_lo)
+    );
+
+  end
+  else begin: nnet
+
+    bsg_manycore #(
+      .dmem_size_p(dmem_size_p)
+      ,.icache_entries_p(icache_entries_p)
+      ,.icache_tag_width_p(icache_tag_width_p)
+      ,.vcache_size_p(vcache_size_p)
+      ,.vcache_block_size_in_words_p(vcache_block_size_in_words_p)
+      ,.vcache_sets_p(vcache_sets_p)
+      ,.data_width_p(data_width_p)
+      ,.addr_width_p(bsg_max_epa_width_p)
+      ,.num_tiles_x_p(num_tiles_x_p)
+      ,.num_tiles_y_p(num_tiles_y_p)
+      ,.branch_trace_en_p(bsg_branch_trace_en_p)
+      ,.hetero_type_vec_p(hetero_type_vec_p)
+    ) DUT (
+      .clk_i(core_clk)
+      ,.reset_i(reset)
+
+      ,.hor_link_sif_i(hor_link_li)
+      ,.hor_link_sif_o(hor_link_lo)
+
+      ,.ver_link_sif_i(ver_link_li)
+      ,.ver_link_sif_o(ver_link_lo)
+
+      ,.io_link_sif_i(io_link_li)
+      ,.io_link_sif_o(io_link_lo)
+    );
+
+  end
 
 
   // instantiate the loader and moniter
@@ -963,7 +994,6 @@ module spmd_testbench;
     status = $value$plusargs("vanilla_trace_en=%d", trace_arg);
     assign trace_en = (trace_arg == 1);
   end
-
   bind vanilla_core vanilla_core_trace #(
     .x_cord_width_p(x_cord_width_p)
     ,.y_cord_width_p(y_cord_width_p)
@@ -992,7 +1022,6 @@ module spmd_testbench;
     ,.icache_tag_width_p(icache_tag_width_p)
     ,.icache_entries_p(icache_entries_p)
     ,.data_width_p(data_width_p)
-    ,.dmem_size_p(dmem_size_p)
     ,.origin_x_cord_p(0)
     ,.origin_y_cord_p(2)
   ) vcore_prof (
@@ -1001,15 +1030,6 @@ module spmd_testbench;
     ,.print_stat_v_i($root.spmd_testbench.print_stat_v)
     ,.print_stat_tag_i($root.spmd_testbench.print_stat_tag)
     ,.trace_en_i($root.spmd_testbench.trace_en)
-  );
-
-  // nb WAW detector
-  bind vanilla_core nb_waw_detector #(
-    .data_width_p(data_width_p)
-    ,.x_cord_width_p(x_cord_width_p)
-    ,.y_cord_width_p(y_cord_width_p)
-  ) waw0 (
-    .*
   );
 
   // tieoffs

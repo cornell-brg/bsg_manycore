@@ -10,8 +10,8 @@ module instr_trace
 
     , input trace_en_i
 
-    , input stall
-    , input stall_depend
+    , input stall_all
+    , input stall_id
     , input flush
     , input id_signals_s id_r
     , input exe_signals_s exe_n
@@ -26,13 +26,13 @@ module instr_trace
     fd = $fopen("instr.log", "w");
     $fwrite(fd, "");
     $fclose(fd);
+  end
 
-    forever begin
-      @(negedge clk_i) begin
+   always @(negedge clk_i) begin
       if (my_x_i == 1'b0 & my_y_i == 2'b01 & ~reset_i && (trace_en_i == 1)) begin //
 
         fd = $fopen("instr.log", "a");
-        if (~stall & ~(stall_depend | flush | id_r.decode.is_fp_float_op) & ~exe_n.icache_miss
+        if (~stall_all & ~(stall_id | flush | id_r.decode.is_fp_op) & ~exe_n.icache_miss
             & ~(exe_n.pc_plus4 == '0)) begin
           $fwrite(fd, "t=%08t pc=%08x instr=%08x\n",
             $time,
@@ -43,11 +43,7 @@ module instr_trace
     
         $fclose(fd);
 
-      end //
       end
-    end
-    
-
-  end
-
+   end
+   
 endmodule

@@ -60,9 +60,8 @@ VSOURCES += $(BASEJUMP_STL_DIR)/bsg_cache/bsg_cache_to_test_dram_tx.v
 VSOURCES += $(BASEJUMP_STL_DIR)/bsg_cache/bsg_cache_to_test_dram_rx.v
 VSOURCES += $(BASEJUMP_STL_DIR)/bsg_cache/bsg_cache_to_test_dram_rx_reorder.v
 
-VSOURCES += $(BSG_MANYCORE_DIR)/testbenches/common/v/nb_waw_detector.v
-VSOURCES += $(BSG_MANYCORE_DIR)/testbenches/common/v/instr_trace.v
 VSOURCES += $(BSG_MANYCORE_DIR)/testbenches/common/v/vanilla_core_trace.v
+VSOURCES += $(BSG_MANYCORE_DIR)/testbenches/common/v/instr_trace.v
 VSOURCES += $(BSG_MANYCORE_DIR)/testbenches/common/v/vanilla_core_profiler.v
 VSOURCES += $(BSG_MANYCORE_DIR)/testbenches/common/v/vcache_profiler.v
 VSOURCES += $(BSG_MANYCORE_DIR)/testbenches/common/v/vcache_non_blocking_profiler.v
@@ -72,3 +71,11 @@ VSOURCES += $(BSG_MANYCORE_DIR)/testbenches/common/v/bsg_nonsynth_manycore_spmd_
 VSOURCES += $(BSG_MANYCORE_DIR)/testbenches/common/v/bsg_nonsynth_manycore_monitor.v
 VSOURCES += $(BSG_MANYCORE_DIR)/testbenches/common/v/spmd_testbench.v
 
+
+VSOURCES += $(BASEJUMP_STL_DIR)/bsg_misc/bsg_arb_round_robin.v
+VSOURCES += $(BASEJUMP_STL_DIR)/bsg_misc/bsg_crossbar_control_basic_o_by_i.v
+VSOURCES += $(BASEJUMP_STL_DIR)/bsg_noc/bsg_router_crossbar_o_by_i.v
+
+VSOURCES += $(BSG_MANYCORE_DIR)/testbenches/common/v/bsg_manycore_top_crossbar.v
+VSOURCES += $(BSG_MANYCORE_DIR)/testbenches/common/v/bsg_manycore_crossbar.v
+VSOURCES += $(BSG_MANYCORE_DIR)/testbenches/common/v/bsg_manycore_link_to_crossbar.v

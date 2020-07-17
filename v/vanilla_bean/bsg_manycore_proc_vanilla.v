@@ -21,6 +21,7 @@ module bsg_manycore_proc_vanilla
     , parameter vcache_sets_p = "inv"
 
     , parameter num_tiles_x_p="inv"
+    , parameter num_tiles_y_p="inv"
 
     , parameter max_out_credits_p = 32
     , parameter proc_fifo_els_p = 4
@@ -29,14 +30,14 @@ module bsg_manycore_proc_vanilla
     
     , parameter branch_trace_en_p = 0
 
-    , localparam credit_counter_width_lp=$clog2(max_out_credits_p+1)
-    , localparam icache_addr_width_lp = `BSG_SAFE_CLOG2(icache_entries_p)
-    , localparam dmem_addr_width_lp = `BSG_SAFE_CLOG2(dmem_size_p)
-    , localparam pc_width_lp=(icache_addr_width_lp+icache_tag_width_p)
-    , localparam data_mask_width_lp=(data_width_p>>3)
-    , localparam reg_addr_width_lp=RV32_reg_addr_width_gp
+    , parameter credit_counter_width_lp=$clog2(max_out_credits_p+1)
+    , parameter icache_addr_width_lp = `BSG_SAFE_CLOG2(icache_entries_p)
+    , parameter dmem_addr_width_lp = `BSG_SAFE_CLOG2(dmem_size_p)
+    , parameter pc_width_lp=(icache_addr_width_lp+icache_tag_width_p)
+    , parameter data_mask_width_lp=(data_width_p>>3)
+    , parameter reg_addr_width_lp=RV32_reg_addr_width_gp
 
-    , localparam link_sif_width_lp =
+    , parameter link_sif_width_lp =
       `bsg_manycore_link_sif_width(addr_width_p,data_width_p,x_cord_width_p,y_cord_width_p)
 
   )
@@ -68,7 +69,8 @@ module bsg_manycore_proc_vanilla
 
   bsg_manycore_packet_s out_packet_li;
   logic out_v_li;
-  logic out_ready_lo;
+  logic out_credit_or_ready_lo;
+  logic link_credit_lo;
 
   logic returned_v_r_lo;
   logic returned_yumi_li;
@@ -88,6 +90,8 @@ module bsg_manycore_proc_vanilla
     ,.fifo_els_p(proc_fifo_els_p)
     ,.max_out_credits_p(max_out_credits_p)
     ,.debug_p(debug_p)
+
+    ,.use_credits_for_local_fifo_p(1)
   ) endp (
     .clk_i(clk_i)
     ,.reset_i(reset_i)
@@ -112,7 +116,7 @@ module bsg_manycore_proc_vanilla
     // tx
     ,.out_packet_i(out_packet_li)
     ,.out_v_i(out_v_li)
-    ,.out_ready_o(out_ready_lo)
+    ,.out_credit_or_ready_o(out_credit_or_ready_lo)
 
     ,.returned_v_r_o(returned_v_r_lo)
     ,.returned_data_r_o(returned_data_r_lo)
@@ -200,7 +204,7 @@ module bsg_manycore_proc_vanilla
   //
   remote_req_s remote_req;
   logic remote_req_v;
-  logic remote_req_yumi;
+  logic remote_req_credit;
 
   logic ifetch_v_lo;
   logic [data_width_p-1:0] ifetch_instr_lo;
@@ -208,6 +212,8 @@ module bsg_manycore_proc_vanilla
   logic [reg_addr_width_lp-1:0] float_remote_load_resp_rd_lo;
   logic [data_width_p-1:0] float_remote_load_resp_data_lo;
   logic float_remote_load_resp_v_lo;
+  logic float_remote_load_resp_force_lo;
+  logic float_remote_load_resp_yumi_li;
 
   logic [reg_addr_width_lp-1:0] int_remote_load_resp_rd_lo;
   logic [data_width_p-1:0] int_remote_load_resp_data_lo;
@@ -215,7 +221,7 @@ module bsg_manycore_proc_vanilla
   logic int_remote_load_resp_force_lo;
   logic int_remote_load_resp_yumi_li;
 
-
+  logic invalid_eva_access_lo;
 
   network_tx #(
     .data_width_p(data_width_p)
@@ -232,13 +238,14 @@ module bsg_manycore_proc_vanilla
     ,.max_out_credits_p(max_out_credits_p)
 
     ,.num_tiles_x_p(num_tiles_x_p)
+    ,.num_tiles_y_p(num_tiles_y_p)
   ) tx (
     .clk_i(clk_i)
     ,.reset_i(reset_i)
 
     ,.out_packet_o(out_packet_li)
     ,.out_v_o(out_v_li)
-    ,.out_ready_i(out_ready_lo)
+    ,.out_credit_or_ready_i(out_credit_or_ready_lo)
 
     ,.returned_v_i(returned_v_r_lo)
     ,.returned_data_i(returned_data_r_lo)
@@ -250,14 +257,13 @@ module bsg_manycore_proc_vanilla
     ,.tgo_x_i(tgo_x)
     ,.tgo_y_i(tgo_y) 
     ,.dram_enable_i(dram_enable)
-    ,.out_credits_i(out_credits_lo)
 
     ,.my_x_i(my_x_i)
     ,.my_y_i(my_y_i)
 
     ,.remote_req_i(remote_req)
     ,.remote_req_v_i(remote_req_v)
-    ,.remote_req_yumi_o(remote_req_yumi)
+    ,.remote_req_credit_o(remote_req_credit)
 
     ,.ifetch_v_o(ifetch_v_lo)
     ,.ifetch_instr_o(ifetch_instr_lo)
@@ -265,6 +271,8 @@ module bsg_manycore_proc_vanilla
     ,.float_remote_load_resp_rd_o(float_remote_load_resp_rd_lo)
     ,.float_remote_load_resp_data_o(float_remote_load_resp_data_lo)
     ,.float_remote_load_resp_v_o(float_remote_load_resp_v_lo)
+    ,.float_remote_load_resp_force_o(float_remote_load_resp_force_lo)
+    ,.float_remote_load_resp_yumi_i(float_remote_load_resp_yumi_li)
 
     ,.int_remote_load_resp_rd_o(int_remote_load_resp_rd_lo)
     ,.int_remote_load_resp_data_o(int_remote_load_resp_data_lo)
@@ -272,6 +280,8 @@ module bsg_manycore_proc_vanilla
     ,.int_remote_load_resp_force_o(int_remote_load_resp_force_lo)
     ,.int_remote_load_resp_yumi_i(int_remote_load_resp_yumi_li)
 
+
+    ,.invalid_eva_access_o(invalid_eva_access_lo)
   );
 
   // Vanilla Core
@@ -284,6 +294,7 @@ module bsg_manycore_proc_vanilla
     ,.x_cord_width_p(x_cord_width_p)
     ,.y_cord_width_p(y_cord_width_p)
     ,.branch_trace_en_p(branch_trace_en_p)
+    ,.max_out_credits_p(max_out_credits_p)
   ) vcore (
     .clk_i(clk_i)
     ,.reset_i(reset_i | freeze)
@@ -292,7 +303,7 @@ module bsg_manycore_proc_vanilla
     
     ,.remote_req_o(remote_req)
     ,.remote_req_v_o(remote_req_v)
-    ,.remote_req_yumi_i(remote_req_yumi)
+    ,.remote_req_credit_i(remote_req_credit)
 
     ,.icache_v_i(icache_v_lo)
     ,.icache_pc_i(icache_pc_lo)
@@ -313,6 +324,8 @@ module bsg_manycore_proc_vanilla
     ,.float_remote_load_resp_rd_i(float_remote_load_resp_rd_lo)
     ,.float_remote_load_resp_data_i(float_remote_load_resp_data_lo)
     ,.float_remote_load_resp_v_i(float_remote_load_resp_v_lo)
+    ,.float_remote_load_resp_force_i(float_remote_load_resp_force_lo)
+    ,.float_remote_load_resp_yumi_o(float_remote_load_resp_yumi_li)
 
     ,.int_remote_load_resp_rd_i(int_remote_load_resp_rd_lo)
     ,.int_remote_load_resp_data_i(int_remote_load_resp_data_lo)
@@ -320,7 +333,8 @@ module bsg_manycore_proc_vanilla
     ,.int_remote_load_resp_force_i(int_remote_load_resp_force_lo)
     ,.int_remote_load_resp_yumi_o(int_remote_load_resp_yumi_li)
 
-    ,.outstanding_req_i(out_credits_lo != max_out_credits_p)
+    ,.out_credits_i(out_credits_lo)
+    ,.invalid_eva_access_i(invalid_eva_access_lo)
 
     ,.my_x_i(my_x_i)
     ,.my_y_i(my_y_i)

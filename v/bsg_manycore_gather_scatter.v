@@ -45,6 +45,7 @@ module bsg_manycore_gather_scatter
     , parameter vcache_sets_p = "inv"
 
     , parameter num_tiles_x_p = "inv"
+    , parameter num_tiles_y_p = "inv"
 
     , parameter max_out_credits_p = 32 // this is fixed.
     , parameter ep_fifo_els_p = 16
@@ -136,7 +137,7 @@ module bsg_manycore_gather_scatter
 
     ,.out_v_i(out_v_li)
     ,.out_packet_i(out_packet_li)
-    ,.out_ready_o(out_ready_lo)
+    ,.out_credit_or_ready_o(out_ready_lo)
 
     ,.returned_data_r_o(returned_data_lo)
     ,.returned_reg_id_r_o(returned_reg_id_lo)
@@ -290,6 +291,7 @@ module bsg_manycore_gather_scatter
     ,.y_cord_width_p(y_cord_width_p)
 
     ,.num_tiles_x_p(num_tiles_x_p)
+    ,.num_tiles_y_p(num_tiles_y_p)
 
     ,.vcache_block_size_in_words_p(vcache_block_size_in_words_p)
     ,.vcache_size_p(vcache_size_p)

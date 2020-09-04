@@ -33,13 +33,14 @@ TARGET_CFLAGS     := '-fno-common'
 
 TOOLCHAIN_REPO    := riscv-gnu-toolchain
 TOOLCHAIN_URL     := https://github.com/bespoke-silicon-group/$(TOOLCHAIN_REPO)
-TOOLCHAIN_VERSION := 5245929
+TOOLCHAIN_VERSION := 656708846d723936eb5ba2648f6f919608a8ccaf
 
 DEPENDS_DIR       := $(CURDIR)/depends
 
 SPIKE_REPO        := riscv-isa-sim
 SPIKE_URL         := https://github.com/riscv/riscv-isa-sim.git
 SPIKE_PATCH       := spike.patch
+SPIKE_GCC_PATCH   := spike-gcc.patch
 SPIKE_TAG         := v1.0.0
 
 LLVM_DIR          := $(CURDIR)/llvm
@@ -104,7 +105,7 @@ checkout-spike:
 	@rm -rf $(SPIKE_REPO);
 	git clone --recursive $(SPIKE_URL);
 	cd $(SPIKE_REPO) && git checkout tags/$(SPIKE_TAG)
-	cd $(SPIKE_REPO) && git apply ../$(SPIKE_PATCH)
+	cd $(SPIKE_REPO) && git apply ../$(SPIKE_PATCH) && git apply ../$(SPIKE_GCC_PATCH)
 
 checkout-all: 
 	$(MAKE) checkout-repos 

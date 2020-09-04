@@ -156,17 +156,17 @@ class bsg_manycore_link_gen:
       ['.text.dram'        , ['.crtbegin','.text','.text.startup','.text.*']],
       ['.dmem'             , ['.dmem','.dmem.*']],
       ['.data'             , ['.data','.data*']],
-      ['.sdata'            , ['.srodata.cst16','.srodata.cst8','.srodata.cst4',
-                              '.srodata.cst2','.srodata*','.sdata','.sdata.*',
+      ['.sdata'            , ['.sdata','.sdata.*','.sdata*','.sdata*.*'
                               '.gnu.linkonce.s.*']],
       ['.sbss'             , ['.sbss','.sbss.*','.gnu.linkonce.sb.*','.scommon']],
       ['.bss'              , ['.bss','.bss*']],
       ['.tdata'            , ['.tdata','.tdata*']],
       ['.tbss'             , ['.tbss','.tbss*']],
-      ['.eh_frame'         , ['.eh_frame','.eh_frame*']],
       ['.striped.data.dmem', ['.striped.data']],
-      ['.rodata.dram'      , ['.rodata','.rodata*']],
-      ['.dram'             , ['.dram','.dram.*', '.*']],
+      ['.eh_frame.dram'    , ['.eh_frame','.eh_frame*']],
+      ['.rodata.dram'      , ['.rodata','.rodata*','.srodata.cst16','.srodata.cst8',
+                              '.srodata.cst4', '.srodata.cst2','.srodata*']],
+      ['.dram'             , ['.dram','.dram.*']],
       ]
 
     sections = "SECTIONS {\n\n"

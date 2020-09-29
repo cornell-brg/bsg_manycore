@@ -5,7 +5,7 @@
 
 
 module bsg_nonsynth_manycore_monitor
- 
+
   // Import address parameters
   import bsg_manycore_pkg::*;
   import bsg_manycore_addr_pkg::*;
@@ -80,16 +80,16 @@ module bsg_nonsynth_manycore_monitor
   logic [data_width_p-1:0] mem_data_lo;
   logic [data_mask_width_lp-1:0] mem_mask_li;
   logic [mem_addr_width_lp-1:0] mem_addr_li;
-  
+
   bsg_mem_1rw_sync_mask_write_byte #(
     .data_width_p(data_width_p)
     ,.els_p(mem_els_p) // 1MB in total
   ) host_dram (
     .clk_i(clk_i)
     ,.reset_i(reset_i)
-  
+
     ,.v_i(mem_v_li)
-    ,.w_i(mem_w_li)  
+    ,.w_i(mem_w_li)
     ,.addr_i(mem_addr_li)
     ,.data_i(mem_data_li)
     ,.write_mask_i(mem_mask_li)
@@ -172,7 +172,7 @@ module bsg_nonsynth_manycore_monitor
             $finish;
           end
           else if (epa_addr == bsg_stdout_epa_gp || epa_addr == bsg_stderr_epa_gp) begin
-            out_fd = (epa_addr == bsg_stdout_epa_gp) 
+            out_fd = (epa_addr == bsg_stdout_epa_gp)
                        ? 32'h8000_0001  // 0xEADC => stdout
                        : 32'h8000_0002; // 0xEEE0 => stderr
 
@@ -190,7 +190,7 @@ module bsg_nonsynth_manycore_monitor
           end
           else if (epa_addr == bsg_print_stat_epa_gp) begin
             $display("[INFO][MONITOR] RECEIVED PRINT_STAT PACKET from tile y,x=%2d,%2d, data=%x, time=%0t",
-              src_y_cord_i, src_x_cord_i, data_i, $time);      
+              src_y_cord_i, src_x_cord_i, data_i, $time);
           end
           else begin
             $display("[INFO][MONITOR] RECEIVED BSG_IO PACKET from tile y,x=%2d,%2d, data=%x, addr=%x, time=%0t",
@@ -199,10 +199,11 @@ module bsg_nonsynth_manycore_monitor
         end
       end
       else if (v_i & ~we_i) begin
-        if (~addr_i[addr_width_p-1]) begin
-          $display("[INFO][MONITOR] RECEIVED BSG_IO PACKET from tile y,x=%2d,%2d, time=%0t",
-            src_y_cord_i, src_x_cord_i, $time);
-        end
+        // moyang: disable printing for reads to the monitor
+        // if (~addr_i[addr_width_p-1]) begin
+        //   $display("[INFO][MONITOR] RECEIVED BSG_IO PACKET from tile y,x=%2d,%2d, time=%0t",
+        //     src_y_cord_i, src_x_cord_i, $time);
+        // end
       end
     end
   end

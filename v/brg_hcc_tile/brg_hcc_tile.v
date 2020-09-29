@@ -48,6 +48,7 @@ logic                    returned_yumi;
 logic                    in_v_li;
 logic                    in_yumi_lo;
 logic [addr_width_p-1:0] in_addr_li;
+logic [data_width_p-1:0] in_data_li;
 
 logic returning_v_lo;
 
@@ -75,8 +76,11 @@ BrgHBFreezeUnit
 (
    .clk_i (clk_i)
   ,.reset_i (reset_i)
+  ,.my_x_i (my_x_i)
+  ,.my_y_i (my_y_i)
   ,.in_v_i (in_v_li)
   ,.in_addr_i (in_addr_li)
+  ,.in_data_i (in_data_li)
   ,.in_yumi_o (in_yumi_lo)
   ,.returning_v_o (returning_v_lo)
   ,.freeze_o (freeze_lo)
@@ -157,6 +161,7 @@ bsg_manycore_endpoint_standard
   ,.in_yumi_i (in_yumi_lo)
   ,.in_v_o    (in_v_li)
   ,.in_addr_o (in_addr_li)
+  ,.in_data_o (in_data_li)
 
   // slave response (out_response), tied-down
   ,.returning_data_i ('d0)

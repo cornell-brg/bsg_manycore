@@ -36146,10 +36146,10 @@ endmodule
 
 
 // PyMTL Component HBResp2MshrEntry Definition
-// Full name: HBResp2MshrEntry__hb_params_<brg_tile.hb_transducer.hb_params.HBParams object at 0x7fd51d9ea790>
+// Full name: HBResp2MshrEntry__hb_params_<brg_tile.hb_transducer.hb_params.HBParams object at 0x7f262049b6d0>
 // At /work/global/mw828/cifer/cifer-chip/brg_tile/hb_transducer/mshr_entry_encoders.py
 
-module HBResp2MshrEntry__d801bbc4812dddbf
+module HBResp2MshrEntry__da1cb5d10d0f04ac
 (
   input  logic [0:0] clk ,
   output TransducerMshrMsg__e1bbe4e01acd977d out ,
@@ -36249,7 +36249,7 @@ module TransducerMshr_noparam
   end
 
   // PyMTL Update Block Source
-  // At /work/global/mw828/cifer/cifer-chip/brg_tile/hb_transducer/TransducerMshr.py:204
+  // At /work/global/mw828/cifer/cifer-chip/brg_tile/hb_transducer/TransducerMshr.py:210
   // @update
   // def up_dealloc_ret():
   //   s.dealloc.ret.threadid   @= s.entry_r_threadid
@@ -36301,7 +36301,7 @@ module TransducerMshr_noparam
   end
 
   // PyMTL Update Block Source
-  // At /work/global/mw828/cifer/cifer-chip/brg_tile/hb_transducer/TransducerMshr.py:213
+  // At /work/global/mw828/cifer/cifer-chip/brg_tile/hb_transducer/TransducerMshr.py:219
   // @update
   // def up_issue_ret():
   //   s.issue.ret.threadid @= s.entry_r_threadid
@@ -36470,7 +36470,13 @@ module TransducerMshr_noparam
   //   # Issue
   // 
   //   elif s.issue.en:
-  //     s.entry_r_issued <<= 1
+  //     # HB does not send store ack (returned credit pkts are consumed by
+  //     # endpoints)
+  //     if (s.entry_r_type == MemMsgType_WRITE):
+  //       s.entry_r_pending <<= s.pending_next
+  //     else:
+  //       # for other types (e.g., load, amo), wait for update
+  //       s.entry_r_issued <<= 1
   // 
   //   # Update
   // 
@@ -36499,7 +36505,11 @@ module TransducerMshr_noparam
         entry_r_pending <= 4'd15;
     end
     else if ( issue__en ) begin
-      entry_r_issued <= 1'd1;
+      if ( entry_r_type == 4'( __const__MemMsgType_WRITE ) ) begin
+        entry_r_pending <= pending_next;
+      end
+      else
+        entry_r_issued <= 1'd1;
     end
     else if ( update___en ) begin
       entry_r_pending <= pending_next;
@@ -36652,10 +36662,10 @@ endmodule
 
 
 // PyMTL Component MshrEntry2HBReq Definition
-// Full name: MshrEntry2HBReq__num_tiles_x_4__num_tiles_y_5__vcache_block_size_in_words_8__vcache_size_8192__vcache_sets_128__hb_params_<brg_tile.hb_transducer.hb_params.HBParams object at 0x7fd51d9ea790>
+// Full name: MshrEntry2HBReq__num_tiles_x_4__num_tiles_y_5__vcache_block_size_in_words_8__vcache_size_8192__vcache_sets_128__hb_params_<brg_tile.hb_transducer.hb_params.HBParams object at 0x7f262049b6d0>
 // At /work/global/mw828/cifer/cifer-chip/brg_tile/hb_transducer/mshr_entry_encoders.py
 
-module MshrEntry2HBReq__df026b0421e65f8c
+module MshrEntry2HBReq__023811b05df9ef24
 (
   input  logic [0:0] clk ,
   input  TransducerMshrMsg__e1bbe4e01acd977d in_ ,
@@ -36706,7 +36716,7 @@ module MshrEntry2HBReq__df026b0421e65f8c
   //-------------------------------------------------------------
 
   // PyMTL Update Block Source
-  // At /work/global/mw828/cifer/cifer-chip/brg_tile/hb_transducer/mshr_entry_encoders.py:123
+  // At /work/global/mw828/cifer/cifer-chip/brg_tile/hb_transducer/mshr_entry_encoders.py:124
   // @update
   // def up_encoder():
   //   s.out.addr       @= s.eva2npa.epa_o
@@ -36722,6 +36732,7 @@ module MshrEntry2HBReq__df026b0421e65f8c
   //   if   s.in_.type_ == MemMsgType_WRITE:
   //     s.out.op      @= hb_params.packet_op.e_remote_store
   //     s.out.payload @= s.in_.data[0:hb_params_data.data_width]
+  //     s.out.op_ex   @= op_ex_bits(-1)
   //   elif s.in_.type_ == MemMsgType_READ:
   //     s.out.op      @= hb_params.packet_op.e_remote_load
   //   elif ( s.in_.type_ >= MemMsgType_AMO_ADD ) & \
@@ -36751,6 +36762,7 @@ module MshrEntry2HBReq__df026b0421e65f8c
     if ( in_.type_ == 4'( __const__MemMsgType_WRITE ) ) begin
       out.op = 2'd1;
       out.payload = in_.data[7'd31:7'd0];
+      out.op_ex = 4'd15;
     end
     else if ( in_.type_ == 4'( __const__MemMsgType_READ ) ) begin
       out.op = 2'd0;
@@ -36837,10 +36849,10 @@ endmodule
 
 
 // PyMTL Component HBTransducer Definition
-// Full name: HBTransducer__MemReqType_MemReqMsg_8_32_128_m1__35a1cc23a1d2d863__MemRespType_MemRespMsg_8_128_m1__c72937e2b7853c90__num_tiles_x_4__num_tiles_y_5__vcache_block_size_in_words_8__vcache_size_8192__vcache_sets_128__hb_params_<brg_tile.hb_transducer.hb_params.HBParams object at 0x7fd51d9ea790>
+// Full name: HBTransducer__MemReqType_MemReqMsg_8_32_128_m1__35a1cc23a1d2d863__MemRespType_MemRespMsg_8_128_m1__c72937e2b7853c90__num_tiles_x_4__num_tiles_y_5__vcache_block_size_in_words_8__vcache_size_8192__vcache_sets_128__hb_params_<brg_tile.hb_transducer.hb_params.HBParams object at 0x7f262049b6d0>
 // At /work/global/mw828/cifer/cifer-chip/brg_tile/hb_transducer/HBTransducer.py
 
-module HBTransducer__0f78080ad6c36d18
+module HBTransducer__c17b6e3d208cad61
 (
   input  logic [0:0] clk ,
   input  logic [27:0] in_addr ,
@@ -36883,7 +36895,7 @@ module HBTransducer__0f78080ad6c36d18
   logic [0:0] hb2mshr__reset;
   logic [31:0] hb2mshr__returned_data_r;
 
-  HBResp2MshrEntry__d801bbc4812dddbf hb2mshr
+  HBResp2MshrEntry__da1cb5d10d0f04ac hb2mshr
   (
     .clk( hb2mshr__clk ),
     .out( hb2mshr__out ),
@@ -36947,7 +36959,7 @@ module HBTransducer__0f78080ad6c36d18
   HBEndpointPacket__29ee445108156f7d mshr2hb__out;
   logic [0:0] mshr2hb__reset;
 
-  MshrEntry2HBReq__df026b0421e65f8c mshr2hb
+  MshrEntry2HBReq__023811b05df9ef24 mshr2hb
   (
     .clk( mshr2hb__clk ),
     .in_( mshr2hb__in_ ),
@@ -37060,7 +37072,7 @@ endmodule
 
 
 // PyMTL Component HBTile Definition
-// Full name: HBTile__reset_pc_2147483648__num_tiles_x_4__num_tiles_y_5__vcache_block_size_in_words_8__vcache_size_8192__vcache_sets_128__hb_params_<brg_tile.hb_transducer.hb_params.HBParams object at 0x7fd51d9ea790>
+// Full name: HBTile__reset_pc_2147483648__num_tiles_x_4__num_tiles_y_5__vcache_block_size_in_words_8__vcache_size_8192__vcache_sets_128__hb_params_<brg_tile.hb_transducer.hb_params.HBParams object at 0x7f262049b6d0>
 // At /work/global/mw828/cifer/cifer-chip/brg_tile/HBTile.py
 
 module BrgHBTile
@@ -37507,7 +37519,7 @@ module BrgHBTile
   MemRespMsg_8_128_m1__c72937e2b7853c90 trans__mem_minion_ifc__resp__msg;
   logic [0:0] trans__mem_minion_ifc__resp__rdy;
 
-  HBTransducer__0f78080ad6c36d18 trans
+  HBTransducer__c17b6e3d208cad61 trans
   (
     .clk( trans__clk ),
     .in_addr( trans__in_addr ),

@@ -258,14 +258,14 @@ module spmd_testbench;
 
           ,.link_sif_i(ver_link_lo[j][i])
           ,.link_sif_o(ver_link_li[j][i])
-        
+
           ,.my_x_i((x_cord_width_lp)'(i))
           ,.my_y_i((y_cord_width_lp)'(0))
         );
       end
     end
-    
-    
+
+
     bind bsg_nonsynth_mem_infinite infinite_mem_profiler #(
       .data_width_p(data_width_p)
       ,.addr_width_p(addr_width_p)
@@ -301,7 +301,7 @@ module spmd_testbench;
 
           ,.link_sif_i(ver_link_lo[j][i])
           ,.link_sif_o(ver_link_li[j][i])
-  
+
           ,.dma_pkt_o(lv1_dma.dma_pkt[j][i])
           ,.dma_pkt_v_o(lv1_dma.dma_pkt_v_lo[j][i])
           ,.dma_pkt_yumi_i(lv1_dma.dma_pkt_yumi_li[j][i])
@@ -402,7 +402,7 @@ module spmd_testbench;
     );
   end
 
-  
+
   // LEVEL 2
   //
   if (mem_cfg_lp[e_vcache_blocking_axi4_nonsynth_mem]
@@ -550,7 +550,7 @@ module spmd_testbench;
         ,.reset_i(reset_r[2])
 
         ,.dram_size_i(3'b100) // 4Gb
-    
+
         ,.dma_pkt_i(lv1_dma.dma_pkt[i])
         ,.dma_pkt_v_i(lv1_dma.dma_pkt_v_lo[i])
         ,.dma_pkt_yumi_o(lv1_dma.dma_pkt_yumi_li[i])
@@ -567,7 +567,7 @@ module spmd_testbench;
         ,.app_rdy_i(app_rdy[i])
         ,.app_cmd_o(app_cmd[i])
         ,.app_addr_o(app_addr[i])
-  
+
         ,.app_wdf_wren_o(app_wdf_wren[i])
         ,.app_wdf_rdy_i(app_wdf_rdy[i])
         ,.app_wdf_data_o(app_wdf_data[i])
@@ -582,15 +582,15 @@ module spmd_testbench;
   end
   else if (mem_cfg_lp[e_vcache_blocking_dramsim3_hbm2]) begin: lv2_hbm2
 
-    
+
     typedef struct packed {
       logic [1:0] bg;
       logic [1:0] ba;
       logic [14:0] ro;
       logic [5:0] co;
       logic [4:0] byte_offset;
-    } dram_ch_addr_s; 
-  
+    } dram_ch_addr_s;
+
     logic [S:N] dram_req_v_lo;
     logic [S:N] dram_write_not_read_lo;
     dram_ch_addr_s [S:N] dram_ch_addr_lo;
@@ -599,12 +599,12 @@ module spmd_testbench;
     logic [S:N] dram_data_v_lo;
     logic [S:N][hbm2_data_width_p-1:0] dram_data_lo;
     logic [S:N] dram_data_yumi_li;
-    
+
     logic [S:N] dram_data_v_li;
     logic [S:N][hbm2_data_width_p-1:0] dram_data_li;
     dram_ch_addr_s [S:N] dram_ch_addr_li;
-    
- 
+
+
     for (genvar i = N; i <= S; i++) begin
       bsg_cache_to_test_dram #(
         .num_cache_p(num_tiles_x_p)
@@ -619,7 +619,7 @@ module spmd_testbench;
       ) cache_to_test_dram0 (
         .core_clk_i(core_clk)
         ,.core_reset_i(reset_r[2])
-      
+
         ,.dma_pkt_i(lv1_dma.dma_pkt[i])
         ,.dma_pkt_v_i(lv1_dma.dma_pkt_v_lo[i])
         ,.dma_pkt_yumi_o(lv1_dma.dma_pkt_yumi_li[i])
@@ -634,7 +634,7 @@ module spmd_testbench;
 
         ,.dram_clk_i(core_clk)
         ,.dram_reset_i(reset_r[2])
-    
+
         ,.dram_req_v_o(dram_req_v_lo[i])
         ,.dram_write_not_read_o(dram_write_not_read_lo[i])
         ,.dram_ch_addr_o(dram_ch_addr_lo[i])
@@ -647,7 +647,7 @@ module spmd_testbench;
         ,.dram_data_v_i(dram_data_v_li[i])
         ,.dram_data_i(dram_data_li[i])
         ,.dram_ch_addr_i(dram_ch_addr_li[i])
-      );    
+      );
     end
   end
 
@@ -740,7 +740,7 @@ module spmd_testbench;
     ) dfi_cg (
       .o(dfi_clk)
     );
-    
+
     bsg_nonsynth_clock_gen #(
       .cycle_time_p(dfi_clk_2x_period_p)
     ) dfi_2x_cg (
@@ -770,13 +770,13 @@ module spmd_testbench;
     wire [S:N][dq_data_width_p-1:0] ddr_dq_oen_lo;
     wire [S:N][dq_data_width_p-1:0] ddr_dq_lo;
     wire [S:N][dq_data_width_p-1:0] ddr_dq_li;
-  
+
     wire [S:N][(dq_data_width_p>>3)-1:0] ddr_dm;
     wire [S:N][(dq_data_width_p>>3)-1:0] ddr_dqs_p;
     wire [S:N][(dq_data_width_p>>3)-1:0] ddr_dqs_n;
     wire [S:N][dq_data_width_p-1:0] ddr_dq;
-   
-    for (genvar j = N; j <= S; j++) begin 
+
+    for (genvar j = N; j <= S; j++) begin
       bsg_dmc #(
         .ui_addr_width_p(ui_addr_width_p)
         ,.ui_data_width_p(ui_data_width_p)
@@ -845,7 +845,7 @@ module spmd_testbench;
 
         ,.ui_clk_sync_rst_o()
         ,.device_temp_o()
-      );    
+      );
 
       for (genvar i = 0; i < 2; i++) begin
         mobile_ddr ddr_inst (
@@ -898,7 +898,7 @@ module spmd_testbench;
     logic [hbm2_num_channels_p-1:0][hbm2_data_width_p-1:0] dramsim3_data_lo;
     logic [hbm2_num_channels_p-1:0] dramsim3_data_v_lo;
     dram_ch_addr_rev_s [hbm2_num_channels_p-1:0] dramsim3_ch_addr_lo;
-    
+
     bsg_nonsynth_dramsim3 #(
       .channel_addr_width_p(hbm2_channel_addr_width_p)
       ,.data_width_p(hbm2_data_width_p)
@@ -911,7 +911,7 @@ module spmd_testbench;
     ) hbm0 (
       .clk_i(core_clk)
       ,.reset_i(reset_r[2])
-    
+
       ,.v_i(dramsim3_v_li)
       ,.write_not_read_i(dramsim3_write_not_read_li)
       ,.ch_addr_i(dramsim3_ch_addr_li)
@@ -983,17 +983,22 @@ module spmd_testbench;
 
   end
 
- 
+
   // vanilla core tracer
   //
   int status;
   int trace_arg;
   logic trace_en;
 
+  // moyang
+  // TODO: include vanilla trace and profiler only when vanilla cores are
+  // present
   initial begin
     status = $value$plusargs("vanilla_trace_en=%d", trace_arg);
     assign trace_en = (trace_arg == 1);
   end
+
+/*
   bind vanilla_core vanilla_core_trace #(
     .x_cord_width_p(x_cord_width_p)
     ,.y_cord_width_p(y_cord_width_p)
@@ -1031,6 +1036,7 @@ module spmd_testbench;
     ,.print_stat_tag_i($root.spmd_testbench.print_stat_tag)
     ,.trace_en_i($root.spmd_testbench.trace_en)
   );
+*/
 
   // tieoffs
   //

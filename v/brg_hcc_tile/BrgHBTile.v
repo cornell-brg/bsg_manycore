@@ -479,7 +479,7 @@ module RegEnRst__Type_3__reset_value_0
   input  logic [0:0] en ,
   input  logic [2:0] in_ ,
   output logic [2:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [2:0] __const__reset_value_at_up_regenrst  = 3'd0;
 
@@ -489,7 +489,7 @@ module RegEnRst__Type_3__reset_value_0
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 3'( __const__reset_value_at_up_regenrst );
@@ -513,7 +513,7 @@ module CounterEnRst__Type_8__reset_value_255
   input  logic [0:0] load ,
   input  logic [7:0] load_value ,
   output logic [7:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [7:0] __const__reset_value_at_counter_ff_logic  = 8'd255;
 
@@ -528,7 +528,7 @@ module CounterEnRst__Type_8__reset_value_255
   //       s.out <<= s.out - 1
   //     else:
   //       s.out <<= s.out + 1
-
+  
   always_ff @(posedge clk) begin : counter_ff_logic
     if ( reset ) begin
       out <= 8'( __const__reset_value_at_counter_ff_logic );
@@ -554,7 +554,7 @@ module RegEnRst__Type_1__reset_value_0
   input  logic [0:0] en ,
   input  logic [0:0] in_ ,
   output logic [0:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [0:0] __const__reset_value_at_up_regenrst  = 1'd0;
 
@@ -564,7 +564,7 @@ module RegEnRst__Type_1__reset_value_0
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 1'( __const__reset_value_at_up_regenrst );
@@ -589,7 +589,7 @@ module ReplacementPolicy__p_BlockingCache_4096_128_32_32_2__policy_0
   input  logic [0:0] repreq_ptr ,
   output logic [0:0] repreq_rdy ,
   output logic [0:0] represp_ptr ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
 
   // PyMTL Update Block Source
@@ -602,7 +602,7 @@ module ReplacementPolicy__p_BlockingCache_4096_128_32_32_2__policy_0
   //       s.represp_ptr @= ~s.repreq_ptr
   //     elif s.repreq_is_hit:
   //       s.represp_ptr @= ~s.repreq_hit_ptr
-
+  
   always_comb begin : pointer_logic
     represp_ptr = repreq_ptr;
     if ( repreq_en ) begin
@@ -629,7 +629,7 @@ module RegEnRst__Type_5__reset_value_0
   input  logic [0:0] en ,
   input  logic [4:0] in_ ,
   output logic [4:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [0:0] __const__reset_value_at_up_regenrst  = 1'd0;
 
@@ -639,7 +639,7 @@ module RegEnRst__Type_5__reset_value_0
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 5'( __const__reset_value_at_up_regenrst );
@@ -660,7 +660,7 @@ module RegRst__Type_1__reset_value_0
   input  logic [0:0] clk ,
   input  logic [0:0] in_ ,
   output logic [0:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [0:0] __const__reset_value_at_up_regrst  = 1'd0;
 
@@ -670,7 +670,7 @@ module RegRst__Type_1__reset_value_0
   // def up_regrst():
   //   if s.reset: s.out <<= reset_value
   //   else:       s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regrst
     if ( reset ) begin
       out <= 1'( __const__reset_value_at_up_regrst );
@@ -698,7 +698,7 @@ module BlockingCacheCtrlRTL__p_BlockingCache_4096_128_32_32_2
   input  logic [0:0] memresp_en ,
   output logic [0:0] memresp_rdy ,
   input  logic [0:0] reset ,
-  input  StructDpathStatus_4096_128_32_32_2__d99bb19c96f0c7bf status
+  input  StructDpathStatus_4096_128_32_32_2__d99bb19c96f0c7bf status 
 );
   localparam logic [3:0] __const__WRITE  = 4'd1;
   localparam logic [2:0] __const__M0_FSM_STATE_INIT  = 3'd0;
@@ -1083,7 +1083,7 @@ module BlockingCacheCtrlRTL__p_BlockingCache_4096_128_32_32_2
   // s.cachereq_rdy //= lambda: ~( (s.FSM_state_M0.out == M0_FSM_STATE_INIT) |
   //          s.is_write_hit_clean_M0 | s.stall_M0 | (~s.status.MSHR_empty ) |
   //          s.status.MSHR_full )
-
+  
   always_comb begin : _lambda__s_dcaches_0__cacheCtrl_cachereq_rdy
     cachereq_rdy = ~( ( ( ( ( FSM_state_M0__out == 3'( __const__M0_FSM_STATE_INIT ) ) | is_write_hit_clean_M0 ) | stall_M0 ) | ( ~status.MSHR_empty ) ) | status.MSHR_full );
   end
@@ -1091,16 +1091,16 @@ module BlockingCacheCtrlRTL__p_BlockingCache_4096_128_32_32_2
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_mem/blocking_cache/BlockingCacheCtrlRTL.py:298
   // s.counter_M0.en         //= lambda: s.ctrl.reg_en_M0 & s.counter_en_M0
-
+  
   always_comb begin : _lambda__s_dcaches_0__cacheCtrl_counter_M0_en
     counter_M0__en = ctrl.reg_en_M0 & counter_en_M0;
   end
 
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_mem/blocking_cache/BlockingCacheCtrlRTL.py:324
-  // s.ctrl.cachereq_memresp_mux_sel_M0 //= lambda: ((s.FSM_state_M0.out == M0_FSM_STATE_REPLAY)
+  // s.ctrl.cachereq_memresp_mux_sel_M0 //= lambda: ((s.FSM_state_M0.out == M0_FSM_STATE_REPLAY) 
   //                                                | s.memresp_en_M0.out)
-
+  
   always_comb begin : _lambda__s_dcaches_0__cacheCtrl_ctrl_cachereq_memresp_mux_sel_M0
     ctrl.cachereq_memresp_mux_sel_M0 = ( FSM_state_M0__out == 3'( __const__M0_FSM_STATE_REPLAY ) ) | memresp_en_M0__out;
   end
@@ -1108,7 +1108,7 @@ module BlockingCacheCtrlRTL__p_BlockingCache_4096_128_32_32_2
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_mem/blocking_cache/BlockingCacheCtrlRTL.py:656
   // s.ctrl.dirty_evict_mask_M1 //= lambda: 0 if s.is_evict_M1 else maskf
-
+  
   always_comb begin : _lambda__s_dcaches_0__cacheCtrl_ctrl_dirty_evict_mask_M1
     ctrl.dirty_evict_mask_M1 = is_evict_M1 ? 4'd0 : 4'( __const__maskf_at__lambda__s_dcaches_0__cacheCtrl_ctrl_dirty_evict_mask_M1 );
   end
@@ -1118,7 +1118,7 @@ module BlockingCacheCtrlRTL__p_BlockingCache_4096_128_32_32_2
   // s.ctrl.flush_idx_mux_sel_M1 //= lambda: (
   //   (s.trans_M1.out == TRANS_TYPE_FLUSH_READ) |
   //   (s.trans_M1.out == TRANS_TYPE_CACHE_INIT))
-
+  
   always_comb begin : _lambda__s_dcaches_0__cacheCtrl_ctrl_flush_idx_mux_sel_M1
     ctrl.flush_idx_mux_sel_M1 = ( trans_M1__out == 5'( __const__TRANS_TYPE_FLUSH_READ ) ) | ( trans_M1__out == 5'( __const__TRANS_TYPE_CACHE_INIT ) );
   end
@@ -1126,7 +1126,7 @@ module BlockingCacheCtrlRTL__p_BlockingCache_4096_128_32_32_2
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_mem/blocking_cache/BlockingCacheCtrlRTL.py:648
   // s.ctrl.flush_init_reg_en_M1 //= lambda: s.ctrl_pipeline_reg_en_M1
-
+  
   always_comb begin : _lambda__s_dcaches_0__cacheCtrl_ctrl_flush_init_reg_en_M1
     ctrl.flush_init_reg_en_M1 = ctrl_pipeline_reg_en_M1;
   end
@@ -1134,7 +1134,7 @@ module BlockingCacheCtrlRTL__p_BlockingCache_4096_128_32_32_2
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_mem/blocking_cache/BlockingCacheCtrlRTL.py:644
   // s.ctrl.hit_stall_eng_en_M1 //= lambda: ~s.was_stalled.out & ~s.evict_bypass
-
+  
   always_comb begin : _lambda__s_dcaches_0__cacheCtrl_ctrl_hit_stall_eng_en_M1
     ctrl.hit_stall_eng_en_M1 = ( ~was_stalled__out ) & ( ~evict_bypass );
   end
@@ -1143,7 +1143,7 @@ module BlockingCacheCtrlRTL__p_BlockingCache_4096_128_32_32_2
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_mem/blocking_cache/BlockingCacheCtrlRTL.py:405
   // s.ctrl.is_amo_M0 //= lambda: (( s.trans_M0 == TRANS_TYPE_REPLAY_AMO ) |
   //                               ( s.trans_M0 == TRANS_TYPE_AMO_REQ ))
-
+  
   always_comb begin : _lambda__s_dcaches_0__cacheCtrl_ctrl_is_amo_M0
     ctrl.is_amo_M0 = ( trans_M0 == 5'( __const__TRANS_TYPE_REPLAY_AMO ) ) | ( trans_M0 == 5'( __const__TRANS_TYPE_AMO_REQ ) );
   end
@@ -1153,7 +1153,7 @@ module BlockingCacheCtrlRTL__p_BlockingCache_4096_128_32_32_2
   // s.ctrl.is_amo_M2 //= lambda: ( ((s.trans_M2.out == TRANS_TYPE_AMO_REQ) |
   //                                 (s.trans_M2.out == TRANS_TYPE_REPLAY_AMO)) &
   //                                 (~s.is_evict_M2.out) )
-
+  
   always_comb begin : _lambda__s_dcaches_0__cacheCtrl_ctrl_is_amo_M2
     ctrl.is_amo_M2 = ( ( trans_M2__out == 5'( __const__TRANS_TYPE_AMO_REQ ) ) | ( trans_M2__out == 5'( __const__TRANS_TYPE_REPLAY_AMO ) ) ) & ( ~is_evict_M2__out );
   end
@@ -1161,7 +1161,7 @@ module BlockingCacheCtrlRTL__p_BlockingCache_4096_128_32_32_2
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_mem/blocking_cache/BlockingCacheCtrlRTL.py:645
   // s.ctrl.is_init_M1          //= lambda: s.trans_M1.out == TRANS_TYPE_INIT_REQ
-
+  
   always_comb begin : _lambda__s_dcaches_0__cacheCtrl_ctrl_is_init_M1
     ctrl.is_init_M1 = trans_M1__out == 5'( __const__TRANS_TYPE_INIT_REQ );
   end
@@ -1170,16 +1170,16 @@ module BlockingCacheCtrlRTL__p_BlockingCache_4096_128_32_32_2
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_mem/blocking_cache/BlockingCacheCtrlRTL.py:638
   // s.ctrl_pipeline_reg_en_M1 //= lambda: (s.ctrl.reg_en_M1 |
   //                                       (s.trans_M0 == TRANS_TYPE_CACHE_INIT))
-
+  
   always_comb begin : _lambda__s_dcaches_0__cacheCtrl_ctrl_pipeline_reg_en_M1
     ctrl_pipeline_reg_en_M1 = ctrl.reg_en_M1 | ( trans_M0 == 5'( __const__TRANS_TYPE_CACHE_INIT ) );
   end
 
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_mem/blocking_cache/BlockingCacheCtrlRTL.py:746
-  // s.ctrl_pipeline_reg_en_M2 //= lambda: ( s.ctrl.reg_en_M2 | ( s.trans_M1.out
+  // s.ctrl_pipeline_reg_en_M2 //= lambda: ( s.ctrl.reg_en_M2 | ( s.trans_M1.out 
   //                                                   == TRANS_TYPE_CACHE_INIT ) )
-
+  
   always_comb begin : _lambda__s_dcaches_0__cacheCtrl_ctrl_pipeline_reg_en_M2
     ctrl_pipeline_reg_en_M2 = ctrl.reg_en_M2 | ( trans_M1__out == 5'( __const__TRANS_TYPE_CACHE_INIT ) );
   end
@@ -1187,7 +1187,7 @@ module BlockingCacheCtrlRTL__p_BlockingCache_4096_128_32_32_2
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_mem/blocking_cache/BlockingCacheCtrlRTL.py:401
   // s.ctrl.reg_en_M0 //= lambda: ~s.stall_M0
-
+  
   always_comb begin : _lambda__s_dcaches_0__cacheCtrl_ctrl_reg_en_M0
     ctrl.reg_en_M0 = ~stall_M0;
   end
@@ -1196,16 +1196,16 @@ module BlockingCacheCtrlRTL__p_BlockingCache_4096_128_32_32_2
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_mem/blocking_cache/BlockingCacheCtrlRTL.py:634
   // s.ctrl.reg_en_M1 //= lambda: (~s.stall_M1 & ~s.is_evict_M1 &
   //                              (s.trans_M0 != TRANS_TYPE_CACHE_INIT))
-
+  
   always_comb begin : _lambda__s_dcaches_0__cacheCtrl_ctrl_reg_en_M1
     ctrl.reg_en_M1 = ( ( ~stall_M1 ) & ( ~is_evict_M1 ) ) & ( trans_M0 != 5'( __const__TRANS_TYPE_CACHE_INIT ) );
   end
 
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_mem/blocking_cache/BlockingCacheCtrlRTL.py:742
-  // s.ctrl.reg_en_M2 //= lambda: ( ( ~s.stall_M2 ) & ( s.trans_M1.out !=
+  // s.ctrl.reg_en_M2 //= lambda: ( ( ~s.stall_M2 ) & ( s.trans_M1.out != 
   //                                                   TRANS_TYPE_CACHE_INIT ) )
-
+  
   always_comb begin : _lambda__s_dcaches_0__cacheCtrl_ctrl_reg_en_M2
     ctrl.reg_en_M2 = ( ~stall_M2 ) & ( trans_M1__out != 5'( __const__TRANS_TYPE_CACHE_INIT ) );
   end
@@ -1213,7 +1213,7 @@ module BlockingCacheCtrlRTL__p_BlockingCache_4096_128_32_32_2
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_mem/blocking_cache/BlockingCacheCtrlRTL.py:643
   // s.ctrl.stall_reg_en_M1     //= lambda: ~s.was_stalled.out
-
+  
   always_comb begin : _lambda__s_dcaches_0__cacheCtrl_ctrl_stall_reg_en_M1
     ctrl.stall_reg_en_M1 = ~was_stalled__out;
   end
@@ -1221,7 +1221,7 @@ module BlockingCacheCtrlRTL__p_BlockingCache_4096_128_32_32_2
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_mem/blocking_cache/BlockingCacheCtrlRTL.py:749
   // s.ctrl.stall_reg_en_M2 //= lambda: ~s.was_stalled.out
-
+  
   always_comb begin : _lambda__s_dcaches_0__cacheCtrl_ctrl_stall_reg_en_M2
     ctrl.stall_reg_en_M2 = ~was_stalled__out;
   end
@@ -1229,20 +1229,20 @@ module BlockingCacheCtrlRTL__p_BlockingCache_4096_128_32_32_2
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_mem/blocking_cache/BlockingCacheCtrlRTL.py:404
   // s.ctrl.tag_array_init_idx_M0 //= lambda: s.update_way_idx_M0[ clog_asso : p.bitwidth_num_lines ]
-
+  
   always_comb begin : _lambda__s_dcaches_0__cacheCtrl_ctrl_tag_array_init_idx_M0
     ctrl.tag_array_init_idx_M0 = update_way_idx_M0[3'd7:3'( __const__clog_asso_at__lambda__s_dcaches_0__cacheCtrl_ctrl_tag_array_init_idx_M0 )];
   end
 
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_mem/blocking_cache/BlockingCacheCtrlRTL.py:577
-  // s.ctrl.tag_processing_en_M1 //= lambda:( (~s.is_evict_M2.out) &
-  //                                          ((s.trans_M1.out==TRANS_TYPE_READ_REQ) |
-  //                                          (s.trans_M1.out==TRANS_TYPE_WRITE_REQ) |
-  //                                          (s.trans_M1.out==TRANS_TYPE_AMO_REQ) |
-  //                                          (s.trans_M1.out==TRANS_TYPE_FLUSH_READ) )
-  //                                         )
-
+  // s.ctrl.tag_processing_en_M1 //= lambda:( (~s.is_evict_M2.out) & 
+  //                                          ((s.trans_M1.out==TRANS_TYPE_READ_REQ) |  
+  //                                          (s.trans_M1.out==TRANS_TYPE_WRITE_REQ) |  
+  //                                          (s.trans_M1.out==TRANS_TYPE_AMO_REQ) |  
+  //                                          (s.trans_M1.out==TRANS_TYPE_FLUSH_READ) ) 
+  //                                         ) 
+  
   always_comb begin : _lambda__s_dcaches_0__cacheCtrl_ctrl_tag_processing_en_M1
     ctrl.tag_processing_en_M1 = ( ~is_evict_M2__out ) & ( ( ( ( trans_M1__out == 5'( __const__TRANS_TYPE_READ_REQ ) ) | ( trans_M1__out == 5'( __const__TRANS_TYPE_WRITE_REQ ) ) ) | ( trans_M1__out == 5'( __const__TRANS_TYPE_AMO_REQ ) ) ) | ( trans_M1__out == 5'( __const__TRANS_TYPE_FLUSH_READ ) ) );
   end
@@ -1250,7 +1250,7 @@ module BlockingCacheCtrlRTL__p_BlockingCache_4096_128_32_32_2
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_mem/blocking_cache/BlockingCacheCtrlRTL.py:500
   // s.flush_refill_M1_bypass //= lambda: s.trans_M1.out == TRANS_TYPE_FLUSH_WRITE
-
+  
   always_comb begin : _lambda__s_dcaches_0__cacheCtrl_flush_refill_M1_bypass
     flush_refill_M1_bypass = trans_M1__out == 5'( __const__TRANS_TYPE_FLUSH_WRITE );
   end
@@ -1258,7 +1258,7 @@ module BlockingCacheCtrlRTL__p_BlockingCache_4096_128_32_32_2
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_mem/blocking_cache/BlockingCacheCtrlRTL.py:132
   // s.memresp_val_M0 //= lambda: s.memresp_en_M0.out & ( s.status.memresp_type_M0 != WRITE )
-
+  
   always_comb begin : _lambda__s_dcaches_0__cacheCtrl_memresp_val_M0
     memresp_val_M0 = memresp_en_M0__out & ( status.memresp_type_M0 != 4'( __const__WRITE ) );
   end
@@ -1266,16 +1266,16 @@ module BlockingCacheCtrlRTL__p_BlockingCache_4096_128_32_32_2
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_mem/blocking_cache/BlockingCacheCtrlRTL.py:136
   // s.memresp_wr_ack_M0 //= lambda: s.memresp_en_M0.out & ( s.status.memresp_type_M0 == WRITE )
-
+  
   always_comb begin : _lambda__s_dcaches_0__cacheCtrl_memresp_wr_ack_M0
     memresp_wr_ack_M0 = memresp_en_M0__out & ( status.memresp_type_M0 == 4'( __const__WRITE ) );
   end
 
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_mem/blocking_cache/BlockingCacheCtrlRTL.py:152
-  // s.prev_flush_done_M0 //= lambda: (s.no_flush_needed_M1_bypass | s.memresp_wr_ack_M0
+  // s.prev_flush_done_M0 //= lambda: (s.no_flush_needed_M1_bypass | s.memresp_wr_ack_M0 
   //                                 | s.flush_refill_M1_bypass )
-
+  
   always_comb begin : _lambda__s_dcaches_0__cacheCtrl_prev_flush_done_M0
     prev_flush_done_M0 = ( no_flush_needed_M1_bypass | memresp_wr_ack_M0 ) | flush_refill_M1_bypass;
   end
@@ -1283,7 +1283,7 @@ module BlockingCacheCtrlRTL__p_BlockingCache_4096_128_32_32_2
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_mem/blocking_cache/BlockingCacheCtrlRTL.py:319
   // s.stall_M0 //= lambda: s.ostall_M1 | s.ostall_M2
-
+  
   always_comb begin : _lambda__s_dcaches_0__cacheCtrl_stall_M0
     stall_M0 = ostall_M1 | ostall_M2;
   end
@@ -1291,7 +1291,7 @@ module BlockingCacheCtrlRTL__p_BlockingCache_4096_128_32_32_2
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_mem/blocking_cache/BlockingCacheCtrlRTL.py:467
   // s.stall_M1 //= lambda: s.ostall_M1 | s.ostall_M2
-
+  
   always_comb begin : _lambda__s_dcaches_0__cacheCtrl_stall_M1
     stall_M1 = ostall_M1 | ostall_M2;
   end
@@ -1317,7 +1317,7 @@ module BlockingCacheCtrlRTL__p_BlockingCache_4096_128_32_32_2
   //   elif ( (s.trans_M1.out == TRANS_TYPE_FLUSH_READ) |
   //          (s.trans_M1.out == TRANS_TYPE_CACHE_INIT) ):
   //     s.ctrl.way_offset_M1 @= s.update_tag_way_M1.out
-
+  
   always_comb begin : asso_data_array_offset_way_M1
     ctrl.way_offset_M1 = status.hit_way_M1;
     if ( ( ( trans_M1__out == 5'( __const__TRANS_TYPE_REPLAY_READ ) ) | ( trans_M1__out == 5'( __const__TRANS_TYPE_REPLAY_WRITE ) ) ) | ( trans_M1__out == 5'( __const__TRANS_TYPE_REFILL ) ) ) begin
@@ -1373,7 +1373,7 @@ module BlockingCacheCtrlRTL__p_BlockingCache_4096_128_32_32_2
   //   elif s.trans_M0 == TRANS_TYPE_FLUSH_WAIT:   s.cs0 @= concat( wben_none, b1(0),   b1(0),   rd,   none,      b1(0),   b1(0),     n )
   //   elif s.trans_M0 == TRANS_TYPE_FLUSH_WRITE:  s.cs0 @= concat( wben_dty,  b1(0),   b1(0),   wr,   flush,     b1(1),   b1(1),     n )
   //   elif s.trans_M0 == TRANS_TYPE_REPLAY_FLUSH: s.cs0 @= concat( wben_dty,  b1(0),   b1(0),   wr,   flush,     b1(1),   b1(1),     y )
-  //
+  // 
   //   s.ctrl.tag_array_wben_M0    @= s.cs0[ CS_tag_array_wben_M0     ]
   //   s.ctrl.wdata_mux_sel_M0     @= s.cs0[ CS_wdata_mux_sel_M0      ]
   //   s.ctrl.addr_mux_sel_M0      @= s.cs0[ CS_addr_mux_sel_M0       ]
@@ -1382,7 +1382,7 @@ module BlockingCacheCtrlRTL__p_BlockingCache_4096_128_32_32_2
   //   s.ctrl.tag_array_idx_sel_M0 @= s.cs0[ CS_tag_array_idx_sel_M0  ]
   //   s.ctrl.update_tag_sel_M0    @= s.cs0[ CS_update_tag_tag_sel_M0 ]
   //   s.ctrl.MSHR_dealloc_en      @= s.cs0[ CS_mshr_dealloc_M0       ] & ~s.stall_M0
-
+  
   always_comb begin : cs_table_M0
     __tmpvar__cs_table_M0_wben_none = 26'd0;
     __tmpvar__cs_table_M0_wben_all = 26'd67108863;
@@ -1490,14 +1490,14 @@ module BlockingCacheCtrlRTL__p_BlockingCache_4096_128_32_32_2
   //   elif s.hit_M1:
   //     if   s.trans_M1.out == TRANS_TYPE_READ_REQ:   s.cs1 @= concat( none, rd, y,      n,     b1(0),    n       )
   //     elif s.trans_M1.out == TRANS_TYPE_WRITE_REQ:  s.cs1 @= concat(  req, wr, y,      n,     b1(0),    n       )
-  //
+  // 
   //   s.ctrl.wben_cmd_M1        @= s.cs1[ CS_data_array_wben_M1 ]
   //   s.ctrl.data_array_type_M1 @= s.cs1[ CS_data_array_type_M1 ]
   //   s.ctrl.data_array_val_M1  @= s.cs1[ CS_data_array_val_M1  ]
   //   s.ostall_M1               @= s.cs1[ CS_ostall_M1          ]
   //   s.ctrl.evict_mux_sel_M1   @= s.cs1[ CS_evict_mux_sel_M1   ]
   //   s.ctrl.MSHR_alloc_en      @= s.cs1[ CS_MSHR_alloc_en      ] & ~s.stall_M1
-
+  
   always_comb begin : cs_table_M1
     __tmpvar__cs_table_M1_none = 2'( __const__WriteBitEnGen_CMD_NONE );
     __tmpvar__cs_table_M1_req = 2'( __const__WriteBitEnGen_CMD_REQ );
@@ -1609,7 +1609,7 @@ module BlockingCacheCtrlRTL__p_BlockingCache_4096_128_32_32_2
   //   elif s.trans_M2.out == TRANS_TYPE_WRITE_REQ:
   //     if  s.ctrl.hit_M2[0]:                         s.cs2 @= concat( n,       b1(1),    n,     READ,       n,     y        )
   //     elif ~s.ctrl.hit_M2[0]:                       s.cs2 @= concat( n,       b1(1),    n,     READ,       y,     n        )
-  //
+  // 
   //   s.ctrl.data_size_mux_en_M2  @= s.cs2[ CS_data_size_mux_en_M2  ]
   //   s.ctrl.read_data_mux_sel_M2 @= s.cs2[ CS_read_data_mux_sel_M2 ]
   //   s.ostall_M2                 @= s.cs2[ CS_ostall_M2            ]
@@ -1619,7 +1619,7 @@ module BlockingCacheCtrlRTL__p_BlockingCache_4096_128_32_32_2
   //     s.ctrl.memreq_type        @= s.cs2[ CS_memreq_type          ]
   //   s.cacheresp_en              @= s.cs2[ CS_cacheresp_en         ]
   //   s.memreq_en                 @= s.cs2[ CS_memreq_en            ]
-
+  
   always_comb begin : cs_table_M2
     __tmpvar__cs_table_M2_flush = has_flush_sent_M2__out;
     __tmpvar__cs_table_M2_fl_sel = __tmpvar__cs_table_M2_flush ? 1'd0 : 1'd1;
@@ -1711,13 +1711,13 @@ module BlockingCacheCtrlRTL__p_BlockingCache_4096_128_32_32_2
   // @update
   // def fsm_M0_next_state():
   //   s.FSM_state_M0_next @= M0_FSM_STATE_INIT
-  //
+  //   
   //   if   s.FSM_state_M0.out == M0_FSM_STATE_INIT:
   //     if s.counter_M0.out == 0:
   //       s.FSM_state_M0_next @= M0_FSM_STATE_READY
   //     else:
   //       s.FSM_state_M0_next @= M0_FSM_STATE_INIT
-  //
+  //   
   //   elif s.FSM_state_M0.out == M0_FSM_STATE_READY:
   //     if s.memresp_val_M0 & ((s.status.MSHR_type == WRITE) | (s.status.MSHR_type == READ)):
   //       # Have valid replays in the MSHR
@@ -1731,13 +1731,13 @@ module BlockingCacheCtrlRTL__p_BlockingCache_4096_128_32_32_2
   //         s.FSM_state_M0_next @= M0_FSM_STATE_READY
   //     else:
   //       s.FSM_state_M0_next @= M0_FSM_STATE_READY
-  //
+  //   
   //   elif s.FSM_state_M0.out == M0_FSM_STATE_INV:
   //     if s.counter_M0.out == 0:
   //       s.FSM_state_M0_next @= M0_FSM_STATE_REPLAY
   //     else:
   //       s.FSM_state_M0_next @= M0_FSM_STATE_INV
-  //
+  //   
   //   elif s.FSM_state_M0.out == M0_FSM_STATE_REPLAY:
   //     # For flush we need to wait for the final write_ack
   //     if (~s.status.MSHR_empty) & (s.status.MSHR_type == FLUSH):
@@ -1748,7 +1748,7 @@ module BlockingCacheCtrlRTL__p_BlockingCache_4096_128_32_32_2
   //     # MSHR will be dealloc this cycle
   //     else:
   //       s.FSM_state_M0_next @= M0_FSM_STATE_READY
-  //
+  //   
   //   elif s.FSM_state_M0.out == M0_FSM_STATE_FLUSH:
   //     if s.has_flush_sent_M1_bypass:
   //       s.FSM_state_M0_next @= M0_FSM_STATE_FLUSH_WAIT
@@ -1756,7 +1756,7 @@ module BlockingCacheCtrlRTL__p_BlockingCache_4096_128_32_32_2
   //       s.FSM_state_M0_next @= M0_FSM_STATE_REPLAY
   //     else:
   //       s.FSM_state_M0_next @= M0_FSM_STATE_FLUSH
-  //
+  //   
   //   elif s.FSM_state_M0.out == M0_FSM_STATE_FLUSH_WAIT:
   //     if s.memresp_wr_ack_M0:
   //       if s.counter_M0.out == trunc(Bits32(p.total_num_cachelines - 1), p.bitwidth_num_lines):
@@ -1765,7 +1765,7 @@ module BlockingCacheCtrlRTL__p_BlockingCache_4096_128_32_32_2
   //         s.FSM_state_M0_next @= M0_FSM_STATE_FLUSH
   //     else:
   //       s.FSM_state_M0_next @= M0_FSM_STATE_FLUSH_WAIT
-
+  
   always_comb begin : fsm_M0_next_state
     FSM_state_M0_next = 3'( __const__M0_FSM_STATE_INIT );
     if ( FSM_state_M0__out == 3'( __const__M0_FSM_STATE_INIT ) ) begin
@@ -1845,7 +1845,7 @@ module BlockingCacheCtrlRTL__p_BlockingCache_4096_128_32_32_2
   //   s.repreq_hit_ptr_M1 @= x
   //   s.hit_M1            @= n
   //   s.is_write_hit_clean_M0 @= n
-  //
+  // 
   //   if ( (s.trans_M1.out == TRANS_TYPE_INIT_REQ) |
   //        (s.trans_M1.out == TRANS_TYPE_WRITE_REQ)|
   //        (s.trans_M1.out == TRANS_TYPE_READ_REQ) ):
@@ -1853,11 +1853,11 @@ module BlockingCacheCtrlRTL__p_BlockingCache_4096_128_32_32_2
   //     # if hit, dty bit will come from the way where the hit occured
   //     if s.hit_M1:
   //       s.is_dty_M1 @= s.status.ctrl_bit_dty_rd_word_M1[s.status.hit_way_M1]
-  //
+  // 
   //     if s.trans_M1.out == TRANS_TYPE_INIT_REQ:
   //       s.repreq_en_M1      @= y
   //       s.repreq_is_hit_M1  @= n
-  //
+  // 
   //     # Check that we don't have a situation where ~val and dty but we're
   //     # still accessing the same address.
   //     if ~s.status.inval_hit_M1:
@@ -1869,7 +1869,7 @@ module BlockingCacheCtrlRTL__p_BlockingCache_4096_128_32_32_2
   //       elif s.hit_M1 & ~s.is_dty_M1:
   //         if s.trans_M1.out == TRANS_TYPE_WRITE_REQ:
   //           s.is_write_hit_clean_M0 @= y
-  //
+  // 
   //     if ~s.is_evict_M1:
   //       # Better to update replacement bit right away because we need it
   //       # for nonblocking capability. For blocking, we can also update
@@ -1877,7 +1877,7 @@ module BlockingCacheCtrlRTL__p_BlockingCache_4096_128_32_32_2
   //       s.repreq_en_M1      @= y
   //       s.repreq_hit_ptr_M1 @= s.status.hit_way_M1
   //       s.repreq_is_hit_M1  @= s.hit_M1 | s.status.inval_hit_M1
-  //
+  // 
   //   elif s.trans_M1.out == TRANS_TYPE_AMO_REQ:
   //     s.hit_M1 @= s.status.hit_M1
   //     s.is_dty_M1 @= s.status.ctrl_bit_dty_rd_line_M1[s.status.hit_way_M1]
@@ -1886,9 +1886,9 @@ module BlockingCacheCtrlRTL__p_BlockingCache_4096_128_32_32_2
   //       s.repreq_en_M1      @= y
   //       s.repreq_hit_ptr_M1 @= ~s.status.hit_way_M1
   //       s.repreq_is_hit_M1  @= y
-  //
+  // 
   //   s.ctrl.ctrl_bit_rep_en_M1 @= s.repreq_en_M1 & ~s.stall_M2
-
+  
   always_comb begin : status_logic_M1
     is_evict_M1 = 1'( __const__n );
     is_dty_M1 = status.ctrl_bit_dty_rd_line_M1[status.ctrl_bit_rep_rd_M1];
@@ -1968,7 +1968,7 @@ module BlockingCacheCtrlRTL__p_BlockingCache_4096_128_32_32_2
   //          (s.trans_M0 == TRANS_TYPE_AMO_REQ) ):
   //     for i in range(p.associativity):
   //       s.ctrl.tag_array_val_M0[i] @= y # Enable all SRAMs since we are reading
-
+  
   always_comb begin : tag_array_val_logic_M0
     ctrl.update_tag_way_M0 = 1'd0;
     for ( int unsigned i = 1'd0; i < 2'd2; i += 1'd1 )
@@ -2038,7 +2038,7 @@ module BlockingCacheCtrlRTL__p_BlockingCache_4096_128_32_32_2
   //       elif ( (s.status.MSHR_type >= AMO_ADD) &
   //              (s.status.MSHR_type <  INV) ):
   //         s.trans_M0 @= TRANS_TYPE_REPLAY_AMO
-  //
+  // 
   //     elif s.status.MSHR_empty & s.cachereq_en:
   //       # Request from s.cachereq, not MSHR
   //       if s.status.cachereq_type_M0 == INIT:
@@ -2054,7 +2054,7 @@ module BlockingCacheCtrlRTL__p_BlockingCache_4096_128_32_32_2
   //         s.trans_M0 @= TRANS_TYPE_INV_START
   //       elif s.status.cachereq_type_M0 == FLUSH:
   //         s.trans_M0 @= TRANS_TYPE_FLUSH_START
-
+  
   always_comb begin : transaction_logic_M0
     trans_M0 = 5'( __const__TRANS_TYPE_INVALID );
     if ( FSM_state_M0__out == 3'( __const__M0_FSM_STATE_INIT ) ) begin
@@ -2140,7 +2140,7 @@ module BlockingCacheCtrlRTL__p_BlockingCache_4096_128_32_32_2
   //     s.counter_en_M0 @= 1
   //   elif s.trans_M0 == TRANS_TYPE_FLUSH_READ:
   //     s.counter_en_M0 @= 1
-
+  
   always_comb begin : up_counter_en_logic_M0
     counter_en_M0 = 1'd0;
     if ( ( FSM_state_M0__out == 3'( __const__M0_FSM_STATE_INIT ) ) | ( FSM_state_M0__out == 3'( __const__M0_FSM_STATE_INV ) ) ) begin
@@ -2164,7 +2164,7 @@ module BlockingCacheCtrlRTL__p_BlockingCache_4096_128_32_32_2
   //     else:
   //       s.no_flush_needed_M1_bypass @= 1
   //       s.has_flush_sent_M1_bypass  @= 0
-
+  
   always_comb begin : up_flush_tag_read_logic_M1
     no_flush_needed_M1_bypass = 1'd0;
     has_flush_sent_M1_bypass = 1'd0;
@@ -2188,7 +2188,7 @@ module BlockingCacheCtrlRTL__p_BlockingCache_4096_128_32_32_2
   //   if ( ( s.trans_M0 == TRANS_TYPE_FLUSH_WRITE ) |
   //        ( s.trans_M0 == TRANS_TYPE_REPLAY_FLUSH ) ):
   //     s.update_way_idx_M0 @= s.counter_M0.out + 1
-
+  
   always_comb begin : update_way_idx_M0_loigc
     update_way_idx_M0 = counter_M0__out;
     if ( ( trans_M0 == 5'( __const__TRANS_TYPE_FLUSH_WRITE ) ) | ( trans_M0 == 5'( __const__TRANS_TYPE_REPLAY_FLUSH ) ) ) begin
@@ -2265,7 +2265,7 @@ module WriteBitEnGen__p_BlockingCache_4096_128_32_32_2
   input  logic [1:0] len_ ,
   input  logic [3:0] offset ,
   output logic [127:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [1:0] __const__WriteBitEnGen_CMD_REQ  = 2'd1;
   localparam logic [1:0] __const__WriteBitEnGen_CMD_DIRTY  = 2'd2;
@@ -2279,7 +2279,7 @@ module WriteBitEnGen__p_BlockingCache_4096_128_32_32_2
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_mem/blocking_cache/units/arithmetics.py:201
   // s.shifted //= lambda: s.word_mask << zext(s.offset, bitwidth_nbyte)
-
+  
   always_comb begin : _lambda__s_dcaches_0__cacheDpath_WbenGen_M1_shifted
     shifted = word_mask << { { 12 { 1'b0 } }, offset };
   end
@@ -2296,7 +2296,7 @@ module WriteBitEnGen__p_BlockingCache_4096_128_32_32_2
   //     s.out @= s.wben_dirty
   //   else: # s.cmd == WriteBitEnGen_CMD_NONE
   //     s.out @= 0
-
+  
   always_comb begin : output_logic
     if ( cmd == 2'( __const__WriteBitEnGen_CMD_REQ ) ) begin
       out = wben_req;
@@ -2332,7 +2332,7 @@ module WriteBitEnGen__p_BlockingCache_4096_128_32_32_2
   //     s.word_mask @= 0xffff
   //   else:
   //     s.word_mask @= 0
-
+  
   always_comb begin : req_word_mask_logic
     if ( len_ == 2'd1 ) begin
       word_mask = 16'd1;
@@ -2367,7 +2367,7 @@ module WriteBitEnGen__p_BlockingCache_4096_128_32_32_2
   //     i_mask = trunc(Bits32(i >> 5), bitwidth_clog_dirty)
   //     s.wben_req[i]   @= s.shifted[ i_byte ]
   //     s.wben_dirty[i] @= ~(s.dty_mask[ i_mask ])
-
+  
   always_comb begin : wben_shift_logic
     for ( int unsigned i = 1'd0; i < 8'd128; i += 1'd1 ) begin
       __tmpvar__wben_shift_logic_i_byte = 4'(32'( 7'(i) >> 2'd3 ));
@@ -2389,7 +2389,7 @@ module Mux__Type_32__ninputs_2
   input  logic [31:0] in_ [0:1],
   output logic [31:0] out ,
   input  logic [0:0] reset ,
-  input  logic [0:0] sel
+  input  logic [0:0] sel 
 );
 
   // PyMTL Update Block Source
@@ -2397,7 +2397,7 @@ module Mux__Type_32__ninputs_2
   // @update
   // def up_mux():
   //   s.out @= s.in_[ s.sel ]
-
+  
   always_comb begin : up_mux
     out = in_[sel];
   end
@@ -2415,7 +2415,7 @@ module RegEnRst__2b7c680d98a49c34
   input  logic [0:0] en ,
   input  StructDpathPipeline_128_2__f3cfe859759af9fc in_ ,
   output StructDpathPipeline_128_2__f3cfe859759af9fc out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam StructDpathPipeline_128_2__f3cfe859759af9fc __const__reset_value_at_up_regenrst  = { 4'd0, 8'd0, { 21'd0, 7'd0, 4'd0 }, 2'd0, 128'd0 };
 
@@ -2425,7 +2425,7 @@ module RegEnRst__2b7c680d98a49c34
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 174'( __const__reset_value_at_up_regenrst );
@@ -2448,7 +2448,7 @@ module Mux__c4fd530f829680a2
   input  MemReqMsg__type__4__opaque_8__addr_32__len_2__data_32 in_ [0:1],
   output MemReqMsg__type__4__opaque_8__addr_32__len_2__data_32 out ,
   input  logic [0:0] reset ,
-  input  logic [0:0] sel
+  input  logic [0:0] sel 
 );
 
   // PyMTL Update Block Source
@@ -2456,7 +2456,7 @@ module Mux__c4fd530f829680a2
   // @update
   // def up_mux():
   //   s.out @= s.in_[ s.sel ]
-
+  
   always_comb begin : up_mux
     out = in_[sel];
   end
@@ -2478,7 +2478,7 @@ module SramGenericPRTL__num_bits_128__num_words_256
   input  logic [127:0] WBM1 ,
   input  logic [0:0] WEB1 ,
   input  logic [0:0] clk ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [8:0] __const__num_words_at_write_logic  = 9'd256;
   localparam logic [7:0] __const__num_bits_at_write_logic  = 8'd128;
@@ -2493,7 +2493,7 @@ module SramGenericPRTL__num_bits_128__num_words_256
   // @update
   // def comb_logic():
   //   s.O1 @= s.dout if ~s.OEB1 else 0
-
+  
   always_comb begin : comb_logic
     O1 = ( ~OEB1 ) ? dout : 128'd0;
   end
@@ -2503,7 +2503,7 @@ module SramGenericPRTL__num_bits_128__num_words_256
   // @update
   // def read_logic():
   //   s.dout_next @= s.ram[ s.A1 ] if (~s.CSB1 & s.WEB1) else s.dout
-
+  
   always_comb begin : read_logic
     dout_next = ( ( ~CSB1 ) & WEB1 ) ? ram[A1] : dout;
   end
@@ -2517,7 +2517,7 @@ module SramGenericPRTL__num_bits_128__num_words_256
   //   for i in range( num_bits ):
   //     if ~s.CSB1 & ~s.WEB1 & s.WBM1[i]:
   //       s.ram_next[s.A1][i] @= s.I1[i]
-
+  
   always_comb begin : write_logic
     for ( int unsigned i = 1'd0; i < 9'( __const__num_words_at_write_logic ); i += 1'd1 )
       ram_next[8'(i)] = ram[8'(i)];
@@ -2534,7 +2534,7 @@ module SramGenericPRTL__num_bits_128__num_words_256
   //   s.dout <<= s.dout_next
   //   for i in range( num_words ):
   //     s.ram[i] <<= s.ram_next[i]
-
+  
   always_ff @(posedge clk) begin : update_sram
     dout <= dout_next;
     for ( int unsigned i = 1'd0; i < 9'( __const__num_words_at_update_sram ); i += 1'd1 )
@@ -2556,7 +2556,7 @@ module SramPRTL__num_bits_128__num_words_256
   input  logic [0:0] port0_val ,
   input  logic [127:0] port0_wben ,
   input  logic [127:0] port0_wdata ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   logic [0:0] port0_type_bar;
   logic [0:0] port0_val_bar;
@@ -2599,7 +2599,7 @@ module SramPRTL__num_bits_128__num_words_256
   // def inverters():
   //   s.port0_val_bar  @= ~s.port0_val
   //   s.port0_type_bar @= ~s.port0_type
-
+  
   always_comb begin : inverters
     port0_val_bar = ~port0_val;
     port0_type_bar = ~port0_type;
@@ -2628,7 +2628,7 @@ module Mux__Type_8__ninputs_16
   input  logic [7:0] in_ [0:15],
   output logic [7:0] out ,
   input  logic [0:0] reset ,
-  input  logic [3:0] sel
+  input  logic [3:0] sel 
 );
 
   // PyMTL Update Block Source
@@ -2636,7 +2636,7 @@ module Mux__Type_8__ninputs_16
   // @update
   // def up_mux():
   //   s.out @= s.in_[ s.sel ]
-
+  
   always_comb begin : up_mux
     out = in_[sel];
   end
@@ -2654,7 +2654,7 @@ module FastSubInputMux__d4a126000fc2355e
   input  logic [127:0] in_ ,
   output logic [31:0] out ,
   input  logic [0:0] reset ,
-  input  logic [3:0] sel
+  input  logic [3:0] sel 
 );
   //-------------------------------------------------------------
   // Component mux
@@ -2713,7 +2713,7 @@ module Mux__Type_16__ninputs_8
   input  logic [15:0] in_ [0:7],
   output logic [15:0] out ,
   input  logic [0:0] reset ,
-  input  logic [2:0] sel
+  input  logic [2:0] sel 
 );
 
   // PyMTL Update Block Source
@@ -2721,7 +2721,7 @@ module Mux__Type_16__ninputs_8
   // @update
   // def up_mux():
   //   s.out @= s.in_[ s.sel ]
-
+  
   always_comb begin : up_mux
     out = in_[sel];
   end
@@ -2739,7 +2739,7 @@ module FastSubInputMux__2fb1f558461068b7
   input  logic [127:0] in_ ,
   output logic [31:0] out ,
   input  logic [0:0] reset ,
-  input  logic [3:0] sel
+  input  logic [3:0] sel 
 );
   //-------------------------------------------------------------
   // Component mux
@@ -2790,7 +2790,7 @@ module Mux__Type_32__ninputs_4
   input  logic [31:0] in_ [0:3],
   output logic [31:0] out ,
   input  logic [0:0] reset ,
-  input  logic [1:0] sel
+  input  logic [1:0] sel 
 );
 
   // PyMTL Update Block Source
@@ -2798,7 +2798,7 @@ module Mux__Type_32__ninputs_4
   // @update
   // def up_mux():
   //   s.out @= s.in_[ s.sel ]
-
+  
   always_comb begin : up_mux
     out = in_[sel];
   end
@@ -2816,7 +2816,7 @@ module FastSubInputMux__cfaa87c09659bf86
   input  logic [127:0] in_ ,
   output logic [31:0] out ,
   input  logic [0:0] reset ,
-  input  logic [3:0] sel
+  input  logic [3:0] sel 
 );
   //-------------------------------------------------------------
   // Component mux
@@ -2862,7 +2862,7 @@ module Mux__Type_32__ninputs_5
   input  logic [31:0] in_ [0:4],
   output logic [31:0] out ,
   input  logic [0:0] reset ,
-  input  logic [2:0] sel
+  input  logic [2:0] sel 
 );
 
   // PyMTL Update Block Source
@@ -2870,7 +2870,7 @@ module Mux__Type_32__ninputs_5
   // @update
   // def up_mux():
   //   s.out @= s.in_[ s.sel ]
-
+  
   always_comb begin : up_mux
     out = in_[sel];
   end
@@ -2890,7 +2890,7 @@ module FastDataSelectMux__p_BlockingCache_4096_128_32_32_2
   input  logic [1:0] len_ ,
   input  logic [3:0] offset ,
   output logic [31:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [2:0] __const__ninputs_at_output_mux_selection_logic  = 3'd5;
   //-------------------------------------------------------------
@@ -2968,12 +2968,12 @@ module FastDataSelectMux__p_BlockingCache_4096_128_32_32_2
   //     s.output_mux.sel @= 0
   //   else:
   //     if s.len_ == 0:
-  //       s.output_mux.sel @= ninputs - 1
+  //       s.output_mux.sel @= ninputs - 1  
   //     else:
   //       for i in range(ninputs - 3):
   //         if s.len_ == 2**i:
   //           s.output_mux.sel @= BitsSel(i) + 2
-
+  
   always_comb begin : output_mux_selection_logic
     output_mux__sel = 3'd0;
     if ( amo ) begin
@@ -3025,7 +3025,7 @@ module RegEnRst__Type_4__reset_value_0
   input  logic [0:0] en ,
   input  logic [3:0] in_ ,
   output logic [3:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [0:0] __const__reset_value_at_up_regenrst  = 1'd0;
 
@@ -3035,7 +3035,7 @@ module RegEnRst__Type_4__reset_value_0
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 4'( __const__reset_value_at_up_regenrst );
@@ -3058,7 +3058,7 @@ module Mux__fb9b5ee67e2c4c7c
   input  StructAddr_21_7_4__tag_21__index_7__offset_4 in_ [0:1],
   output StructAddr_21_7_4__tag_21__index_7__offset_4 out ,
   input  logic [0:0] reset ,
-  input  logic [0:0] sel
+  input  logic [0:0] sel 
 );
 
   // PyMTL Update Block Source
@@ -3066,7 +3066,7 @@ module Mux__fb9b5ee67e2c4c7c
   // @update
   // def up_mux():
   //   s.out @= s.in_[ s.sel ]
-
+  
   always_comb begin : up_mux
     out = in_[sel];
   end
@@ -3083,7 +3083,7 @@ module Mux__Type_21__ninputs_2
   input  logic [20:0] in_ [0:1],
   output logic [20:0] out ,
   input  logic [0:0] reset ,
-  input  logic [0:0] sel
+  input  logic [0:0] sel 
 );
 
   // PyMTL Update Block Source
@@ -3091,7 +3091,7 @@ module Mux__Type_21__ninputs_2
   // @update
   // def up_mux():
   //   s.out @= s.in_[ s.sel ]
-
+  
   always_comb begin : up_mux
     out = in_[sel];
   end
@@ -3108,7 +3108,7 @@ module RegEnRst__Type_7__reset_value_0
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [0:0] __const__reset_value_at_up_regenrst  = 1'd0;
 
@@ -3118,7 +3118,7 @@ module RegEnRst__Type_7__reset_value_0
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -3140,7 +3140,7 @@ module Mux__Type_7__ninputs_2
   input  logic [6:0] in_ [0:1],
   output logic [6:0] out ,
   input  logic [0:0] reset ,
-  input  logic [0:0] sel
+  input  logic [0:0] sel 
 );
 
   // PyMTL Update Block Source
@@ -3148,7 +3148,7 @@ module Mux__Type_7__ninputs_2
   // @update
   // def up_mux():
   //   s.out @= s.in_[ s.sel ]
-
+  
   always_comb begin : up_mux
     out = in_[sel];
   end
@@ -3165,7 +3165,7 @@ module Mux__Type_StructHitInfo_1__hit_1__hit_way_1__ninputs_2
   input  StructHitInfo_1__hit_1__hit_way_1 in_ [0:1],
   output StructHitInfo_1__hit_1__hit_way_1 out ,
   input  logic [0:0] reset ,
-  input  logic [0:0] sel
+  input  logic [0:0] sel 
 );
 
   // PyMTL Update Block Source
@@ -3173,7 +3173,7 @@ module Mux__Type_StructHitInfo_1__hit_1__hit_way_1__ninputs_2
   // @update
   // def up_mux():
   //   s.out @= s.in_[ s.sel ]
-
+  
   always_comb begin : up_mux
     out = in_[sel];
   end
@@ -3190,7 +3190,7 @@ module RegEn__Type_StructHitInfo_1__hit_1__hit_way_1
   input  logic [0:0] en ,
   input  StructHitInfo_1__hit_1__hit_way_1 in_ ,
   output StructHitInfo_1__hit_1__hit_way_1 out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
 
   // PyMTL Update Block Source
@@ -3199,7 +3199,7 @@ module RegEn__Type_StructHitInfo_1__hit_1__hit_way_1
   // def up_regen():
   //   if s.en:
   //     s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regen
     if ( en ) begin
       out <= in_;
@@ -3218,7 +3218,7 @@ module StallEngine__dtype_StructHitInfo_1__hit_1__hit_way_1
   input  logic [0:0] en ,
   input  StructHitInfo_1__hit_1__hit_way_1 in_ ,
   output StructHitInfo_1__hit_1__hit_way_1 out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   //-------------------------------------------------------------
   // Component stall_mux
@@ -3269,7 +3269,7 @@ module StallEngine__dtype_StructHitInfo_1__hit_1__hit_way_1
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_mem/blocking_cache/units/StallEngine.py:41
   // m.sel    //= lambda: ~s.en
-
+  
   always_comb begin : _lambda__s_dcaches_0__cacheDpath_hit_stall_engine_stall_mux_sel
     stall_mux__sel = ~en;
   end
@@ -3296,7 +3296,7 @@ module Indexer__p_BlockingCache_4096_128_32_32_2
   input  logic [6:0] index ,
   input  logic [0:0] offset ,
   output logic [7:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
 
   // PyMTL Update Block Source
@@ -3307,7 +3307,7 @@ module Indexer__p_BlockingCache_4096_128_32_32_2
   //   # on which way we want to access. For Dmapped, the offset will always be 0.
   //   s.out @= zext(s.index, p.bitwidth_num_lines) + zext(s.offset, p.bitwidth_num_lines) * \
   //            trunc( Bits32(p.nblocks_per_way), p.bitwidth_num_lines )
-
+  
   always_comb begin : index_logic
     out = { { 1 { 1'b0 } }, index } + ( { { 7 { 1'b0 } }, offset } * 8'(32'd128) );
   end
@@ -3326,7 +3326,7 @@ module OffsetLenSelector__p_BlockingCache_4096_128_32_32_2
   output logic [3:0] len_o ,
   input  logic [3:0] offset_i ,
   output logic [3:0] offset_o ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   logic [3:0] amo_len;
 
@@ -3341,7 +3341,7 @@ module OffsetLenSelector__p_BlockingCache_4096_128_32_32_2
   //     # Not AMO, the we want full line access where offset doesn't matter
   //     s.offset_o @= 0
   //     s.len_o    @= 0
-
+  
   always_comb begin : offset_selection_logic
     if ( is_amo ) begin
       offset_o = offset_i;
@@ -3368,7 +3368,7 @@ module RegEnRst__a27e4ad979cbccb7
   input  logic [0:0] en ,
   input  StructMSHR_32_2__4f9bfcd81ca6f13c in_ ,
   output StructMSHR_32_2__4f9bfcd81ca6f13c out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam StructMSHR_32_2__4f9bfcd81ca6f13c __const__reset_value_at_up_regenrst  = { 4'd0, 8'd0, 32'd0, 2'd0, 32'd0, 1'd0, 1'd0, 4'd0 };
 
@@ -3378,7 +3378,7 @@ module RegEnRst__a27e4ad979cbccb7
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 84'( __const__reset_value_at_up_regenrst );
@@ -3405,7 +3405,7 @@ module MSHR__p_BlockingCache_4096_128_32_32_2__entries_1
   output StructMSHR_32_2__4f9bfcd81ca6f13c dealloc_out ,
   output logic [0:0] empty ,
   output logic [0:0] full ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [0:0] __const__entries_at_full_logic  = 1'd1;
   logic [0:0] num_entries_in;
@@ -3463,7 +3463,7 @@ module MSHR__p_BlockingCache_4096_128_32_32_2__entries_1
   //     s.num_entries_in @= s.num_entries_reg.out - 1
   //   else:
   //     s.num_entries_in @= s.num_entries_reg.out
-
+  
   always_comb begin : entry_logic
     if ( alloc_en ) begin
       num_entries_in = num_entries_reg__out + 1'd1;
@@ -3483,7 +3483,7 @@ module MSHR__p_BlockingCache_4096_128_32_32_2__entries_1
   //   # have one less and are allocating an entry
   //   s.full  @= (s.num_entries_reg.out == entries) | ((s.num_entries_reg.out == entries-1) & s.alloc_en)
   //   s.empty @= (s.num_entries_reg.out == 0)
-
+  
   always_comb begin : full_logic
     full = ( num_entries_reg__out == 1'( __const__entries_at_full_logic ) ) | ( ( num_entries_reg__out == ( 1'( __const__entries_at_full_logic ) - 1'd1 ) ) & alloc_en );
     empty = num_entries_reg__out == 1'd0;
@@ -3512,7 +3512,7 @@ module RegEnRst__b7ac6c1e2cfbe42d
   input  logic [0:0] en ,
   input  MemRespMsg_8_128_m1__c72937e2b7853c90 in_ ,
   output MemRespMsg_8_128_m1__c72937e2b7853c90 out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam MemRespMsg_8_128_m1__c72937e2b7853c90 __const__reset_value_at_up_regenrst  = { 4'd0, 8'd0, 2'd0, 4'd0, 4'd0, 128'd0 };
 
@@ -3522,7 +3522,7 @@ module RegEnRst__b7ac6c1e2cfbe42d
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 150'( __const__reset_value_at_up_regenrst );
@@ -3544,7 +3544,7 @@ module Mux__Type_128__ninputs_2
   input  logic [127:0] in_ [0:1],
   output logic [127:0] out ,
   input  logic [0:0] reset ,
-  input  logic [0:0] sel
+  input  logic [0:0] sel 
 );
 
   // PyMTL Update Block Source
@@ -3552,7 +3552,7 @@ module Mux__Type_128__ninputs_2
   // @update
   // def up_mux():
   //   s.out @= s.in_[ s.sel ]
-
+  
   always_comb begin : up_mux
     out = in_[sel];
   end
@@ -3569,7 +3569,7 @@ module RegEnRst__Type_Bits128__reset_value_0
   input  logic [0:0] en ,
   input  logic [127:0] in_ ,
   output logic [127:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [0:0] __const__reset_value_at_up_regenrst  = 1'd0;
 
@@ -3579,7 +3579,7 @@ module RegEnRst__Type_Bits128__reset_value_0
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 128'( __const__reset_value_at_up_regenrst );
@@ -3603,7 +3603,7 @@ module ReplacementBitsReg__p_BlockingCache_4096_128_32_32_2
   input  logic [0:0] reset ,
   input  logic [6:0] waddr ,
   input  logic [0:0] wdata ,
-  input  logic [0:0] wen
+  input  logic [0:0] wen 
 );
   localparam logic [7:0] __const__nblocks_per_way_at_update_register_bits  = 8'd128;
   //-------------------------------------------------------------
@@ -3638,9 +3638,9 @@ module ReplacementBitsReg__p_BlockingCache_4096_128_32_32_2
   //       s.replacement_register.in_[i] @= s.wdata
   //     else:
   //       s.replacement_register.in_[i] @= s.replacement_register.out[i]
-  //
+  // 
   //   s.rdata @= s.replacement_register.out[s.raddr]
-
+  
   always_comb begin : update_register_bits
     for ( int unsigned i = 1'd0; i < 8'( __const__nblocks_per_way_at_update_register_bits ); i += 1'd1 )
       if ( waddr == 7'(i) ) begin
@@ -3667,7 +3667,7 @@ module Mux__Type_128__ninputs_5
   input  logic [127:0] in_ [0:4],
   output logic [127:0] out ,
   input  logic [0:0] reset ,
-  input  logic [2:0] sel
+  input  logic [2:0] sel 
 );
 
   // PyMTL Update Block Source
@@ -3675,7 +3675,7 @@ module Mux__Type_128__ninputs_5
   // @update
   // def up_mux():
   //   s.out @= s.in_[ s.sel ]
-
+  
   always_comb begin : up_mux
     out = in_[sel];
   end
@@ -3693,7 +3693,7 @@ module DataReplicator__p_BlockingCache_4096_128_32_32_2
   input  logic [31:0] in_ ,
   input  logic [1:0] len_ ,
   output logic [127:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [2:0] __const__ninputs_at_output_mux_selection_logic  = 3'd5;
   logic [127:0] double_word;
@@ -3724,7 +3724,7 @@ module DataReplicator__p_BlockingCache_4096_128_32_32_2
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_mem/blocking_cache/units/arithmetics.py:46
   // s.double_word[j:j+64] //= lambda: zext( s.in_, 64 )
-
+  
   always_comb begin : _lambda__s_dcaches_0__cacheDpath_replicator_M0_double_word_0_64_
     double_word[7'd63:7'd0] = { { 32 { 1'b0 } }, in_ };
   end
@@ -3732,7 +3732,7 @@ module DataReplicator__p_BlockingCache_4096_128_32_32_2
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_mem/blocking_cache/units/arithmetics.py:46
   // s.double_word[j:j+64] //= lambda: zext( s.in_, 64 )
-
+  
   always_comb begin : _lambda__s_dcaches_0__cacheDpath_replicator_M0_double_word_64_128_
     double_word[7'd127:7'd64] = { { 32 { 1'b0 } }, in_ };
   end
@@ -3754,7 +3754,7 @@ module DataReplicator__p_BlockingCache_4096_128_32_32_2
   //       for i in range(ninputs - 3):
   //         if s.len_ == BitsLen(2**i):
   //           s.output_mux.sel @= BitsSel(i) + 1
-
+  
   always_comb begin : output_mux_selection_logic
     output_mux__sel = 3'd0;
     if ( ~amo ) begin
@@ -3823,7 +3823,7 @@ module RegEn__Type_128
   input  logic [0:0] en ,
   input  logic [127:0] in_ ,
   output logic [127:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
 
   // PyMTL Update Block Source
@@ -3832,7 +3832,7 @@ module RegEn__Type_128
   // def up_regen():
   //   if s.en:
   //     s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regen
     if ( en ) begin
       out <= in_;
@@ -3851,7 +3851,7 @@ module StallEngine__dtype_128
   input  logic [0:0] en ,
   input  logic [127:0] in_ ,
   output logic [127:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   //-------------------------------------------------------------
   // Component stall_mux
@@ -3902,7 +3902,7 @@ module StallEngine__dtype_128
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_mem/blocking_cache/units/StallEngine.py:41
   // m.sel    //= lambda: ~s.en
-
+  
   always_comb begin : _lambda__s_dcaches_0__cacheDpath_stall_engine_M2_stall_mux_sel
     stall_mux__sel = ~en;
   end
@@ -3937,7 +3937,7 @@ module TagArrayRDataProcessUnit__p_BlockingCache_4096_128_32_32_2
   input  logic [0:0] reset ,
   input  StructTagArray_1_4_21__val_1__dty_4__tag_21 tag_array [0:1],
   output StructTagArray_1_4_21__val_1__dty_4__tag_21 tag_entires [0:1],
-  output logic [1:0] word_dirty
+  output logic [1:0] word_dirty 
 );
   localparam logic [0:0] __const__i_at__lambda__s_dcaches_0__cacheDpath_tag_array_PU_word_dirty_0_1_  = 1'd0;
   localparam logic [0:0] __const__i_at__lambda__s_dcaches_0__cacheDpath_tag_array_PU_word_dirty_1_2_  = 1'd1;
@@ -3949,7 +3949,7 @@ module TagArrayRDataProcessUnit__p_BlockingCache_4096_128_32_32_2
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_mem/blocking_cache/units/arithmetics.py:254
   // s.word_dirty[i] //= lambda: s.tag_array[i].dty[ s.offset[2 : p.bitwidth_offset] ]
-
+  
   always_comb begin : _lambda__s_dcaches_0__cacheDpath_tag_array_PU_word_dirty_0_1_
     word_dirty[1'd0:1'd0] = tag_array[1'( __const__i_at__lambda__s_dcaches_0__cacheDpath_tag_array_PU_word_dirty_0_1_ )].dty[offset[2'd3:2'd2]];
   end
@@ -3957,7 +3957,7 @@ module TagArrayRDataProcessUnit__p_BlockingCache_4096_128_32_32_2
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_mem/blocking_cache/units/arithmetics.py:254
   // s.word_dirty[i] //= lambda: s.tag_array[i].dty[ s.offset[2 : p.bitwidth_offset] ]
-
+  
   always_comb begin : _lambda__s_dcaches_0__cacheDpath_tag_array_PU_word_dirty_1_2_
     word_dirty[1'd1:1'd1] = tag_array[1'( __const__i_at__lambda__s_dcaches_0__cacheDpath_tag_array_PU_word_dirty_1_2_ )].dty[offset[2'd3:2'd2]];
   end
@@ -3982,7 +3982,7 @@ module TagArrayRDataProcessUnit__p_BlockingCache_4096_128_32_32_2
   //         if s.tag_array[i].tag == s.addr_tag:
   //           s.inval_hit @= y
   //           s.hit_way   @= i
-
+  
   always_comb begin : comparing_logic
     hit = 1'( __const__n );
     inval_hit = 1'( __const__n );
@@ -4015,7 +4015,7 @@ module TagArrayRDataProcessUnit__p_BlockingCache_4096_128_32_32_2
   //     for j in range(p.bitwidth_dirty):
   //       if s.tag_array[i].dty[j] & s.en:
   //         s.line_dirty[i] @= y
-
+  
   always_comb begin : line_dirty_logic
     line_dirty = 2'd0;
     for ( int unsigned i = 1'd0; i < 2'd2; i += 1'd1 )
@@ -4036,7 +4036,7 @@ module TagArrayRDataProcessUnit__p_BlockingCache_4096_128_32_32_2
   //       s.tag_entires[i] @= s.tag_array[i]
   //     else:
   //       s.tag_entires[i] @= p.StructTagArray()
-
+  
   always_comb begin : tag_entry_output_logic
     for ( int unsigned i = 1'd0; i < 2'd2; i += 1'd1 )
       if ( en ) begin
@@ -4059,7 +4059,7 @@ module Mux__16ac68cc30145a43
   input  StructTagArray_1_4_21__val_1__dty_4__tag_21 in_ [0:1],
   output StructTagArray_1_4_21__val_1__dty_4__tag_21 out ,
   input  logic [0:0] reset ,
-  input  logic [0:0] sel
+  input  logic [0:0] sel 
 );
 
   // PyMTL Update Block Source
@@ -4067,7 +4067,7 @@ module Mux__16ac68cc30145a43
   // @update
   // def up_mux():
   //   s.out @= s.in_[ s.sel ]
-
+  
   always_comb begin : up_mux
     out = in_[sel];
   end
@@ -4084,7 +4084,7 @@ module RegEn__Type_StructTagArray_1_4_21__val_1__dty_4__tag_21
   input  logic [0:0] en ,
   input  StructTagArray_1_4_21__val_1__dty_4__tag_21 in_ ,
   output StructTagArray_1_4_21__val_1__dty_4__tag_21 out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
 
   // PyMTL Update Block Source
@@ -4093,7 +4093,7 @@ module RegEn__Type_StructTagArray_1_4_21__val_1__dty_4__tag_21
   // def up_regen():
   //   if s.en:
   //     s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regen
     if ( en ) begin
       out <= in_;
@@ -4112,7 +4112,7 @@ module StallEngine__dtype_StructTagArray_1_4_21__val_1__dty_4__tag_21
   input  logic [0:0] en ,
   input  StructTagArray_1_4_21__val_1__dty_4__tag_21 in_ ,
   output StructTagArray_1_4_21__val_1__dty_4__tag_21 out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   //-------------------------------------------------------------
   // Component stall_mux
@@ -4163,7 +4163,7 @@ module StallEngine__dtype_StructTagArray_1_4_21__val_1__dty_4__tag_21
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_mem/blocking_cache/units/StallEngine.py:41
   // m.sel    //= lambda: ~s.en
-
+  
   always_comb begin : _lambda__s_dcaches_0__cacheDpath_tag_array_rdata_M1_0__stall_mux_sel
     stall_mux__sel = ~en;
   end
@@ -4195,7 +4195,7 @@ module SramGenericPRTL__num_bits_26__num_words_128
   input  logic [25:0] WBM1 ,
   input  logic [0:0] WEB1 ,
   input  logic [0:0] clk ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [7:0] __const__num_words_at_write_logic  = 8'd128;
   localparam logic [4:0] __const__num_bits_at_write_logic  = 5'd26;
@@ -4210,7 +4210,7 @@ module SramGenericPRTL__num_bits_26__num_words_128
   // @update
   // def comb_logic():
   //   s.O1 @= s.dout if ~s.OEB1 else 0
-
+  
   always_comb begin : comb_logic
     O1 = ( ~OEB1 ) ? dout : 26'd0;
   end
@@ -4220,7 +4220,7 @@ module SramGenericPRTL__num_bits_26__num_words_128
   // @update
   // def read_logic():
   //   s.dout_next @= s.ram[ s.A1 ] if (~s.CSB1 & s.WEB1) else s.dout
-
+  
   always_comb begin : read_logic
     dout_next = ( ( ~CSB1 ) & WEB1 ) ? ram[A1] : dout;
   end
@@ -4234,7 +4234,7 @@ module SramGenericPRTL__num_bits_26__num_words_128
   //   for i in range( num_bits ):
   //     if ~s.CSB1 & ~s.WEB1 & s.WBM1[i]:
   //       s.ram_next[s.A1][i] @= s.I1[i]
-
+  
   always_comb begin : write_logic
     for ( int unsigned i = 1'd0; i < 8'( __const__num_words_at_write_logic ); i += 1'd1 )
       ram_next[7'(i)] = ram[7'(i)];
@@ -4251,7 +4251,7 @@ module SramGenericPRTL__num_bits_26__num_words_128
   //   s.dout <<= s.dout_next
   //   for i in range( num_words ):
   //     s.ram[i] <<= s.ram_next[i]
-
+  
   always_ff @(posedge clk) begin : update_sram
     dout <= dout_next;
     for ( int unsigned i = 1'd0; i < 8'( __const__num_words_at_update_sram ); i += 1'd1 )
@@ -4273,7 +4273,7 @@ module SramPRTL__num_bits_26__num_words_128
   input  logic [0:0] port0_val ,
   input  logic [25:0] port0_wben ,
   input  logic [25:0] port0_wdata ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   logic [0:0] port0_type_bar;
   logic [0:0] port0_val_bar;
@@ -4316,7 +4316,7 @@ module SramPRTL__num_bits_26__num_words_128
   // def inverters():
   //   s.port0_val_bar  @= ~s.port0_val
   //   s.port0_type_bar @= ~s.port0_type
-
+  
   always_comb begin : inverters
     port0_val_bar = ~port0_val;
     port0_type_bar = ~port0_type;
@@ -4348,7 +4348,7 @@ module UpdateTagArrayUnit__p_BlockingCache_4096_128_32_32_2
   output StructTagArray_1_4_21__val_1__dty_4__tag_21 out ,
   input  logic [3:0] refill_dty ,
   input  logic [0:0] reset ,
-  input  logic [0:0] way
+  input  logic [0:0] way 
 );
   localparam logic [2:0] __const__UpdateTagArrayUnit_CMD_WR_REFILL  = 3'd3;
   localparam logic [0:0] __const__CACHE_LINE_STATE_VALID  = 1'd1;
@@ -4388,7 +4388,7 @@ module UpdateTagArrayUnit__p_BlockingCache_4096_128_32_32_2
   //     # For cache invalidation, leave the dirty bits as is, clear the
   //     # valid bit
   //     s.out.val @= CACHE_LINE_STATE_INVALID
-
+  
   always_comb begin : new_tag_array_entry_logic
     out.tag = old_entries[way].tag;
     out.val = old_entries[way].val;
@@ -4427,7 +4427,7 @@ module Mux__Type_1__ninputs_2
   input  logic [0:0] in_ [0:1],
   output logic [0:0] out ,
   input  logic [0:0] reset ,
-  input  logic [0:0] sel
+  input  logic [0:0] sel 
 );
 
   // PyMTL Update Block Source
@@ -4435,7 +4435,7 @@ module Mux__Type_1__ninputs_2
   // @update
   // def up_mux():
   //   s.out @= s.in_[ s.sel ]
-
+  
   always_comb begin : up_mux
     out = in_[sel];
   end
@@ -4455,7 +4455,7 @@ module BlockingCacheDpathRTL__p_BlockingCache_4096_128_32_32_2
   output MemReqMsg_8_32_128_m1__35a1cc23a1d2d863 memreq_M2 ,
   input  MemRespMsg_8_128_m1__c72937e2b7853c90 memresp_Y ,
   input  logic [0:0] reset ,
-  output StructDpathStatus_4096_128_32_32_2__d99bb19c96f0c7bf status
+  output StructDpathStatus_4096_128_32_32_2__d99bb19c96f0c7bf status 
 );
   localparam logic [0:0] __const__i_at__lambda__s_dcaches_0__cacheDpath_tag_array_rdata_M1_0__in_  = 1'd0;
   localparam logic [0:0] __const__i_at__lambda__s_dcaches_0__cacheDpath_tag_array_rdata_M1_1__in_  = 1'd1;
@@ -5253,7 +5253,7 @@ module BlockingCacheDpathRTL__p_BlockingCache_4096_128_32_32_2
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_mem/blocking_cache/BlockingCacheDpathRTL.py:189
   // s.MSHR_alloc_in.addr    //= lambda: s.cachereq_M1.out.addr
-
+  
   always_comb begin : _lambda__s_dcaches_0__cacheDpath_MSHR_alloc_in_addr
     MSHR_alloc_in.addr = cachereq_M1__out.addr;
   end
@@ -5261,7 +5261,7 @@ module BlockingCacheDpathRTL__p_BlockingCache_4096_128_32_32_2
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_mem/blocking_cache/BlockingCacheDpathRTL.py:198
   // s.MSHR_alloc_in.dirty_bits //= lambda: (s.write_mask_M1 & s.ctrl.dirty_evict_mask_M1)
-
+  
   always_comb begin : _lambda__s_dcaches_0__cacheDpath_MSHR_alloc_in_dirty_bits
     MSHR_alloc_in.dirty_bits = write_mask_M1 & ctrl.dirty_evict_mask_M1;
   end
@@ -5271,7 +5271,7 @@ module BlockingCacheDpathRTL__p_BlockingCache_4096_128_32_32_2
   // s.MSHR_dealloc_mux_in_M0 //= lambda: p.CacheReqType(s.MSHR_dealloc_out.type_,
   //   s.MSHR_dealloc_out.opaque, s.MSHR_dealloc_out.addr, s.MSHR_dealloc_out.len,
   //   s.MSHR_dealloc_out.data)
-
+  
   always_comb begin : _lambda__s_dcaches_0__cacheDpath_MSHR_dealloc_mux_in_M0
     MSHR_dealloc_mux_in_M0 = { MSHR_dealloc_out.type_, MSHR_dealloc_out.opaque, MSHR_dealloc_out.addr, MSHR_dealloc_out.len, MSHR_dealloc_out.data };
   end
@@ -5280,7 +5280,7 @@ module BlockingCacheDpathRTL__p_BlockingCache_4096_128_32_32_2
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_mem/blocking_cache/BlockingCacheDpathRTL.py:237
   // m.in_ //= lambda: StructHit(s.tag_array_PU.hit | s.tag_array_PU.inval_hit,
   //                             s.tag_array_PU.hit_way)
-
+  
   always_comb begin : _lambda__s_dcaches_0__cacheDpath_hit_stall_engine_in_
     hit_stall_engine__in_ = { tag_array_PU__hit | tag_array_PU__inval_hit, tag_array_PU__hit_way };
   end
@@ -5288,7 +5288,7 @@ module BlockingCacheDpathRTL__p_BlockingCache_4096_128_32_32_2
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_mem/blocking_cache/BlockingCacheDpathRTL.py:183
   // m.in_ //= lambda: s.tag_arrays_M1[i].port0_rdata
-
+  
   always_comb begin : _lambda__s_dcaches_0__cacheDpath_tag_array_rdata_M1_0__in_
     tag_array_rdata_M1__in_[1'd0] = tag_arrays_M1__port0_rdata[1'( __const__i_at__lambda__s_dcaches_0__cacheDpath_tag_array_rdata_M1_0__in_ )];
   end
@@ -5296,7 +5296,7 @@ module BlockingCacheDpathRTL__p_BlockingCache_4096_128_32_32_2
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_mem/blocking_cache/BlockingCacheDpathRTL.py:183
   // m.in_ //= lambda: s.tag_arrays_M1[i].port0_rdata
-
+  
   always_comb begin : _lambda__s_dcaches_0__cacheDpath_tag_array_rdata_M1_1__in_
     tag_array_rdata_M1__in_[1'd1] = tag_arrays_M1__port0_rdata[1'( __const__i_at__lambda__s_dcaches_0__cacheDpath_tag_array_rdata_M1_1__in_ )];
   end
@@ -5304,7 +5304,7 @@ module BlockingCacheDpathRTL__p_BlockingCache_4096_128_32_32_2
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_mem/blocking_cache/BlockingCacheDpathRTL.py:232
   // s.write_mask_M1 //= lambda: s.tag_array_PU.tag_entires[s.ctrl.way_offset_M1].dty
-
+  
   always_comb begin : _lambda__s_dcaches_0__cacheDpath_write_mask_M1
     write_mask_M1 = tag_array_PU__tag_entires[ctrl.way_offset_M1].dty;
   end
@@ -5314,7 +5314,7 @@ module BlockingCacheDpathRTL__p_BlockingCache_4096_128_32_32_2
   // @update
   // def cachereq_M0_addr_bits_to_bitstruct():
   //   s.cachereq_M0.addr @= s.addr_mux_M0.out
-
+  
   always_comb begin : cachereq_M0_addr_bits_to_bitstruct
     cachereq_M0.addr = addr_mux_M0__out;
   end
@@ -5324,7 +5324,7 @@ module BlockingCacheDpathRTL__p_BlockingCache_4096_128_32_32_2
   // @update
   // def memreq_addr_bits_to_bitstruct():
   //   s.memreq_addr_bits @= s.memreq_addr_out
-
+  
   always_comb begin : memreq_addr_bits_to_bitstruct
     memreq_addr_bits = memreq_addr_out;
   end
@@ -5334,7 +5334,7 @@ module BlockingCacheDpathRTL__p_BlockingCache_4096_128_32_32_2
   // @update
   // def tag_array_struct_M0_bits_to_bitstruct():
   //   s.tag_array_wdata_M0 @= s.tag_array_struct_M0
-
+  
   always_comb begin : tag_array_struct_M0_bits_to_bitstruct
     tag_array_wdata_M0 = tag_array_struct_M0;
   end
@@ -5344,7 +5344,7 @@ module BlockingCacheDpathRTL__p_BlockingCache_4096_128_32_32_2
   // @update
   // def up_cachereq_addr_M1_forward_bits_to_bitstruct():
   //   s.cachereq_addr_M1_forward @= s.cachereq_M1.out.addr
-
+  
   always_comb begin : up_cachereq_addr_M1_forward_bits_to_bitstruct
     cachereq_addr_M1_forward = cachereq_M1__out.addr;
   end
@@ -5592,7 +5592,7 @@ module BlockingCacheRTL__97559d5d0b1f6da0
   output logic [0:0] mem_minion_ifc__req__rdy ,
   output logic [0:0] mem_minion_ifc__resp__en ,
   output MemRespMsg__type__4__opaque_8__test_2__len_2__data_32 mem_minion_ifc__resp__msg ,
-  input logic [0:0] mem_minion_ifc__resp__rdy
+  input logic [0:0] mem_minion_ifc__resp__rdy 
 );
   //-------------------------------------------------------------
   // Component cacheCtrl
@@ -5696,7 +5696,7 @@ module PipeQueue1EntryRTL__a2c155c77a0d04b2
   output FpuReqMsg_8_32__type__4__opaque_8__op_a_32__op_b_32__frnd_3 deq__ret  ,
   input logic [0:0] enq__en  ,
   input FpuReqMsg_8_32__type__4__opaque_8__op_a_32__op_b_32__frnd_3 enq__msg  ,
-  output logic [0:0] enq__rdy
+  output logic [0:0] enq__rdy  
 );
   FpuReqMsg_8_32__type__4__opaque_8__op_a_32__op_b_32__frnd_3 entry;
   logic [0:0] full;
@@ -5704,7 +5704,7 @@ module PipeQueue1EntryRTL__a2c155c77a0d04b2
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/pymtl3/pymtl3/stdlib/queues/queues.py:490
   // s.deq.rdy //= lambda: s.full & ~s.reset
-
+  
   always_comb begin : _lambda__s_fpus_0__fp_addsub_in_q_q_deq_rdy
     deq__rdy = full & ( ~reset );
   end
@@ -5712,7 +5712,7 @@ module PipeQueue1EntryRTL__a2c155c77a0d04b2
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/pymtl3/pymtl3/stdlib/queues/queues.py:489
   // s.enq.rdy //= lambda: ~s.reset & ( ~s.full | s.deq.en )
-
+  
   always_comb begin : _lambda__s_fpus_0__fp_addsub_in_q_q_enq_rdy
     enq__rdy = ( ~reset ) & ( ( ~full ) | deq__en );
   end
@@ -5722,10 +5722,10 @@ module PipeQueue1EntryRTL__a2c155c77a0d04b2
   // @update_ff
   // def ff_pipe1():
   //   s.full <<= ~s.reset & ( s.enq.en | s.full & ~s.deq.en )
-  //
+  // 
   //   if s.enq.en:
   //     s.entry <<= s.enq.msg
-
+  
   always_ff @(posedge clk) begin : ff_pipe1
     full <= ( ~reset ) & ( enq__en | ( full & ( ~deq__en ) ) );
     if ( enq__en ) begin
@@ -5753,7 +5753,7 @@ module PipeQueueRTL__86a7c3aeb6713f23
   output FpuReqMsg_8_32__type__4__opaque_8__op_a_32__op_b_32__frnd_3 deq__ret  ,
   input logic [0:0] enq__en  ,
   input FpuReqMsg_8_32__type__4__opaque_8__op_a_32__op_b_32__frnd_3 enq__msg  ,
-  output logic [0:0] enq__rdy
+  output logic [0:0] enq__rdy  
 );
   //-------------------------------------------------------------
   // Component q
@@ -5813,7 +5813,7 @@ module PipeQueue1EntryRTL__34c6e99e9b0fdfd1
   output FpuRespMsg_8_32__opaque_8__result_32__fexc_5 deq__ret  ,
   input logic [0:0] enq__en  ,
   input FpuRespMsg_8_32__opaque_8__result_32__fexc_5 enq__msg  ,
-  output logic [0:0] enq__rdy
+  output logic [0:0] enq__rdy  
 );
   FpuRespMsg_8_32__opaque_8__result_32__fexc_5 entry;
   logic [0:0] full;
@@ -5821,7 +5821,7 @@ module PipeQueue1EntryRTL__34c6e99e9b0fdfd1
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/pymtl3/pymtl3/stdlib/queues/queues.py:490
   // s.deq.rdy //= lambda: s.full & ~s.reset
-
+  
   always_comb begin : _lambda__s_fpus_0__fp_addsub_out_q_0__q_deq_rdy
     deq__rdy = full & ( ~reset );
   end
@@ -5829,7 +5829,7 @@ module PipeQueue1EntryRTL__34c6e99e9b0fdfd1
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/pymtl3/pymtl3/stdlib/queues/queues.py:489
   // s.enq.rdy //= lambda: ~s.reset & ( ~s.full | s.deq.en )
-
+  
   always_comb begin : _lambda__s_fpus_0__fp_addsub_out_q_0__q_enq_rdy
     enq__rdy = ( ~reset ) & ( ( ~full ) | deq__en );
   end
@@ -5839,10 +5839,10 @@ module PipeQueue1EntryRTL__34c6e99e9b0fdfd1
   // @update_ff
   // def ff_pipe1():
   //   s.full <<= ~s.reset & ( s.enq.en | s.full & ~s.deq.en )
-  //
+  // 
   //   if s.enq.en:
   //     s.entry <<= s.enq.msg
-
+  
   always_ff @(posedge clk) begin : ff_pipe1
     full <= ( ~reset ) & ( enq__en | ( full & ( ~deq__en ) ) );
     if ( enq__en ) begin
@@ -5870,7 +5870,7 @@ module PipeQueueRTL__f55b0708e52dd198
   output FpuRespMsg_8_32__opaque_8__result_32__fexc_5 deq__ret  ,
   input logic [0:0] enq__en  ,
   input FpuRespMsg_8_32__opaque_8__result_32__fexc_5 enq__msg  ,
-  output logic [0:0] enq__rdy
+  output logic [0:0] enq__rdy  
 );
   //-------------------------------------------------------------
   // Component q
@@ -5965,16 +5965,16 @@ endmodule
 //-------------------------------------------------------------------------------
 //
 // ABSTRACT: Floating-point two-operand Adder/Subtractor
-//           Computes the addition/subtraction of two FP numbers.
-//           The format of the FP numbers is defined by the number of bits
-//           in the significand (sig_width) and the number of bits in the
+//           Computes the addition/subtraction of two FP numbers. 
+//           The format of the FP numbers is defined by the number of bits 
+//           in the significand (sig_width) and the number of bits in the 
 //           exponent (exp_width).
 //           The total number of bits in the FP number is sig_width+exp_width+1
 //           since the sign bit takes the place of the MS bits in the significand
-//           which is always 1 (unless the number is a denormal; a condition
+//           which is always 1 (unless the number is a denormal; a condition 
 //           that can be detected testing the exponent value).
 //           The output is a FP number and status flags with information about
-//           special number representations and exceptions.
+//           special number representations and exceptions. 
 //           Subtraction is forced when op=1.
 //              parameters      valid values (defined in the DW manual)
 //              ==========      ============
@@ -6001,7 +6001,7 @@ endmodule
 //                              info about FP results
 //
 // MODIFIED:
-//        7/21/2006:
+//        7/21/2006: 
 //           - includes manipulation of inexact bit
 //           - fixes value assigned to HugeInfinity when rnd=4 (up) RND_eval
 //           - fixes some special cases when rounding close to inf and zero
@@ -6011,8 +6011,8 @@ endmodule
 
 module DW_fp_addsub (a, b, rnd, op, z, status);
 parameter sig_width=23;
-parameter exp_width=8;
-parameter ieee_compliance=0;
+parameter exp_width=8;  
+parameter ieee_compliance=0;                    
 
 // declaration of inputs and outputs
 input  [sig_width+exp_width:0] a,b;
@@ -6026,42 +6026,42 @@ output [sig_width+exp_width:0] z;
   //-------------------------------------------------------------------------
   // Parameter legality check
   //-------------------------------------------------------------------------
-
-
+  
+ 
   initial begin : parameter_check
     integer param_err_flg;
 
     param_err_flg = 0;
-
-
+    
+  
     if ( (sig_width < 2) || (sig_width > 253) ) begin
       param_err_flg = 1;
       $display(
 	"ERROR: %m :\n  Invalid value (%d) for parameter sig_width (legal range: 2 to 253)",
 	sig_width );
     end
-
+  
     if ( (exp_width < 3) || (exp_width > 31) ) begin
       param_err_flg = 1;
       $display(
 	"ERROR: %m :\n  Invalid value (%d) for parameter exp_width (legal range: 3 to 31)",
 	exp_width );
     end
-
+  
     if ( (ieee_compliance < 0) || (ieee_compliance > 1) ) begin
       param_err_flg = 1;
       $display(
 	"ERROR: %m :\n  Invalid value (%d) for parameter ieee_compliance (legal range: 0 to 1)",
 	ieee_compliance );
     end
-
+  
     if ( param_err_flg == 1) begin
       $display(
         "%m :\n  Simulation aborted due to invalid parameter value(s)");
       $finish;
     end
 
-  end // parameter_check
+  end // parameter_check 
 
 
 
@@ -6157,9 +6157,9 @@ begin
   F_Large = Large[(sig_width - 1):0];
   F_Small = Small[(sig_width - 1):0];
 
-  //
+  // 
   // NaN Input
-  //
+  // 
   if ((((E_Large === ((((1 << (exp_width-1)) - 1) * 2) + 1)) && (F_Large !== 0)) ||
       ((E_Small === ((((1 << (exp_width-1)) - 1) * 2) + 1)) && (F_Large !== 0))) && ieee_compliance === 1)
     begin
@@ -6169,8 +6169,8 @@ begin
   //
   // Infinity Input
   //
-  else
-    if (E_Large === ((((1 << (exp_width-1)) - 1) * 2) + 1) && (F_Large === 0 || ieee_compliance === 0))
+  else 
+    if (E_Large === ((((1 << (exp_width-1)) - 1) * 2) + 1) && (F_Large === 0 || ieee_compliance === 0)) 
       begin
    	status_int[1] = 1;
         z_temp = Large;
@@ -6180,7 +6180,7 @@ begin
    	if ( (E_Small === ((((1 << (exp_width-1)) - 1) * 2) + 1)) && (F_Large === 0 || ieee_compliance === 0) && (subtract === 1) )
     	  begin
             status_int[2] = 1;
-            if (ieee_compliance)
+            if (ieee_compliance)   
               begin
                 status_int[1] = 0;
                 z_temp = NaNFp;
@@ -6192,7 +6192,7 @@ begin
     //
     // Zero Input (or denormal input when ieee_compliance == 0)
     //
-    else
+    else 
       if (E_Small == 0 && ((ieee_compliance == 0) || (F_Small == 0)))
         begin
            z_temp = Large;
@@ -6202,7 +6202,7 @@ begin
       	       status_int[0] = 1;
                // Set the fraction to 000...
                z_temp = 0;
-               if (subtract)
+               if (subtract) 
                  if (rnd === 3'b011) z_temp[(exp_width + sig_width)] = 1;
                  else                z_temp[(exp_width + sig_width)] = 0;
                else                  z_temp[(exp_width + sig_width)] = a[(exp_width + sig_width)];
@@ -6214,7 +6214,7 @@ begin
       else
         begin
           // Detect the denormal input case
-          if ((E_Large == 0) && (F_Large != 0))
+          if ((E_Large == 0) && (F_Large != 0)) 
             begin
               // M_Large contains the Mantissa of denormal value
               M_Large = {2'b00,F_Large,3'b000};
@@ -6226,8 +6226,8 @@ begin
               M_Large = {2'b01,F_Large,3'b000};
               Denormal_Large = 1'b0;
             end
-
-          if ((E_Small == 0) && (F_Small != 0))
+   
+          if ((E_Small == 0) && (F_Small != 0)) 
             begin
               // M_Small contains the Mantissa of denormal value
               M_Small = {2'b00,F_Small,3'b000};
@@ -6243,7 +6243,7 @@ begin
           // When one of the inputs is a denormal, we need to
           // compensate because the exponent for a denormal is
           // actually 1, and not 0.
-          if ((Denormal_Large ^ Denormal_Small) == 1'b1)
+          if ((Denormal_Large ^ Denormal_Small) == 1'b1) 
             E_Diff = E_Large - E_Small - 1;
 	  else
             E_Diff = E_Large - E_Small;
@@ -6274,7 +6274,7 @@ begin
               begin
                 status_int[0] = 1;
                 z_temp = 0;
-                // If rounding mode is -Infinity, the sign bit is 1;
+                // If rounding mode is -Infinity, the sign bit is 1; 
                 // otherwise the sign bit is 0.
                 if (rnd === 3'b011) z_temp[(exp_width + sig_width)] = 1;
               end
@@ -6301,20 +6301,20 @@ begin
 
                 // test if the output of the normalization unit is still not normalized
                 if (M_Z[((sig_width + 3 + 3        ) - 2):((sig_width + 3 + 3        ) - 2)-1] === 0)
-	          if (ieee_compliance == 1)
+	          if (ieee_compliance == 1) 
                     begin
                       z_temp = {Large[(exp_width + sig_width)],{exp_width{1'b0}}, M_Z[((sig_width + 3 + 3        ) - 2)-2:3]};
                       status_int[3] = 0;
                       if ((STK == 1) || (M_Z[(3 - 1):0] != 0))
                         status_int[5] = 1;
-                      if (M_Z[((sig_width + 3 + 3        ) - 2)-2:3] == 0)
-                        status_int[0] = 1;
+                      if (M_Z[((sig_width + 3 + 3        ) - 2)-2:3] == 0) 
+                        status_int[0] = 1; 
                     end
                   else // when denormal is not used --> becomes zero or minFP
                     begin
-                      if ((rnd == 2 & ~Large[(exp_width + sig_width)]) |
-                          (rnd == 3 & Large[(exp_width + sig_width)]) |
-                          (rnd == 5))
+                      if ((rnd == 2 & ~Large[(exp_width + sig_width)]) | 
+                          (rnd == 3 & Large[(exp_width + sig_width)]) | 
+                          (rnd == 5)) 
                         begin
                           z_temp = {Large[(exp_width + sig_width)],{exp_width-1{1'b0}},{1'b1},{sig_width{1'b0}}};
                           status_int[0] = 0;
@@ -6333,7 +6333,7 @@ begin
                     RND_val = RND_eval(rnd, Large[(exp_width + sig_width)], M_Z[3], M_Z[(3 - 1)], (|{M_Z[1:0]}));
 
                     if (RND_val[0] === 1) M_Z = M_Z + (1<<3);
-
+ 
                     // Normalize the Mantissa for overflow case after rounding.
                     if ( (M_Z[((sig_width + 3 + 3        ) - 2)] === 1) )
                       begin
@@ -6365,16 +6365,16 @@ begin
                     //
                     // Tiny or Denormal
                     //
-                    else
+                    else 
                       if (E_Comp <= 0) E_Comp = 0 + 1;
-
+    
                     //
                     // Normal  (continues)
                     //
                     status_int[5] = status_int[5] | RND_val[1];
                     // Reconstruct the floating point format.
                     z_temp = {Large[(exp_width + sig_width)],E_Comp[exp_width-1:0],M_Z[((sig_width + 3 + 3        ) - 2)-2:3]};
-                  end //  result is normal value
+                  end //  result is normal value 
               end  // Normal computation case
         end    // non-special inputs
 end
@@ -6405,7 +6405,7 @@ module DW_fp_addsub_wrapper_noparam
   input logic [1-1:0] op ,
   input logic [3-1:0] rnd ,
   output logic [8-1:0] status ,
-  output logic [32-1:0] z
+  output logic [32-1:0] z 
 );
   DW_fp_addsub
   #(
@@ -6440,7 +6440,7 @@ module DW_fp_addsub__5367206e2cb8f6c7
   output logic [0:0] req__rdy  ,
   output logic [0:0] resp__en  ,
   output FpuRespMsg_8_32__opaque_8__result_32__fexc_5 resp__msg  ,
-  input logic [0:0] resp__rdy
+  input logic [0:0] resp__rdy  
 );
   localparam logic [2:0] __const__nstages_at_up_queues  = 3'd4;
   localparam logic [2:0] __const__DW_FRND_NE  = 3'd0;
@@ -6577,22 +6577,22 @@ module DW_fp_addsub__5367206e2cb8f6c7
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/fpu/DW_fp_addsub.py:109
   // @update
   // def comb():
-  //
+  // 
   //   # default
   //   s.out_val.opaque @= 0
   //   s.out_val.result @= 0
   //   s.out_val.fexc   @= 0
-  //
+  // 
   //   s.unit.a    @= 0
   //   s.unit.b    @= 0
   //   s.unit.op   @= 0
   //   s.unit.rnd  @= 0
-  //
+  // 
   //   if s.in_q.deq.rdy & s.out_q[ 0 ].enq.rdy:
-  //
+  // 
   //     s.unit.a @= s.in_q.deq.ret.op_a
   //     s.unit.b @= s.in_q.deq.ret.op_b
-  //
+  // 
   //     # rounding mode
   //     if    s.in_q.deq.ret.frnd == FpuReqType.FRND_NE:
   //       s.unit.rnd @= DW_FRND_NE
@@ -6604,16 +6604,16 @@ module DW_fp_addsub__5367206e2cb8f6c7
   //       s.unit.rnd @= DW_FRND_UP
   //     elif  s.in_q.deq.ret.frnd == FpuReqType.FRND_MM:
   //       s.unit.rnd @= DW_FRND_MM
-  //
+  // 
   //     # op type
   //     if    s.in_q.deq.ret.type_ == FpuReqType.TYPE_FADD:
   //       s.unit.op @= DW_ADDSUB_ADD
   //     elif  s.in_q.deq.ret.type_ == FpuReqType.TYPE_FSUB:
   //       s.unit.op @= DW_ADDSUB_SUB
-  //
+  // 
   //     s.out_val.opaque @= s.in_q.deq.ret.opaque
   //     s.out_val.result @= s.unit.z
-  //
+  // 
   //     if s.unit.status & DW_FEXC_NX:
   //       s.out_val.fexc @= s.out_val.fexc | FpuRespType.FEXC_NX
   //     if s.unit.status & DW_FEXC_UF:
@@ -6624,7 +6624,7 @@ module DW_fp_addsub__5367206e2cb8f6c7
   //       s.out_val.fexc @= s.out_val.fexc | FpuRespType.FEXC_DZ
   //     if s.unit.status & DW_FEXC_NV:
   //       s.out_val.fexc @= s.out_val.fexc | FpuRespType.FEXC_NV
-
+  
   always_comb begin : comb
     out_val.opaque = 8'd0;
     out_val.result = 32'd0;
@@ -6681,24 +6681,24 @@ module DW_fp_addsub__5367206e2cb8f6c7
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/fpu/DW_fp_addsub.py:89
   // @update
   // def up_queues():
-  //
+  // 
   //   # in_q <-> out_q[ 0 ]
   //   s.in_q.deq.en        @= s.in_q.deq.rdy & s.out_q[ 0 ].enq.rdy
   //   s.out_q[ 0 ].enq.en  @= s.in_q.deq.rdy & s.out_q[ 0 ].enq.rdy
   //   s.out_q[ 0 ].enq.msg @= s.out_val
-  //
+  // 
   //   # chian middle out_q
   //   if nstages > 2:
   //     for i in range( nstages - 2 ):
   //       s.out_q[ i   ].deq.en  @= s.out_q[ i ].deq.rdy & s.out_q[ i+1 ].enq.rdy
   //       s.out_q[ i+1 ].enq.en  @= s.out_q[ i ].deq.rdy & s.out_q[ i+1 ].enq.rdy
   //       s.out_q[ i+1 ].enq.msg @= s.out_q[ i ].deq.ret
-  //
+  // 
   //   # out_q[ nstages-2 ] <-> s.resp
   //   s.out_q[ nstages-2 ].deq.en @= s.resp.rdy & s.out_q[ nstages-2 ].deq.rdy
   //   s.resp.en                   @= s.resp.rdy & s.out_q[ nstages-2 ].deq.rdy
   //   s.resp.msg                  @= s.out_q[ nstages-2 ].deq.ret
-
+  
   always_comb begin : up_queues
     in_q__deq__en = in_q__deq__rdy & out_q__enq__rdy[2'd0];
     out_q__enq__en[2'd0] = in_q__deq__rdy & out_q__enq__rdy[2'd0];
@@ -6746,7 +6746,7 @@ module NormalQueue1EntryRTL__34c6e99e9b0fdfd1
   output FpuRespMsg_8_32__opaque_8__result_32__fexc_5 deq__ret  ,
   input logic [0:0] enq__en  ,
   input FpuRespMsg_8_32__opaque_8__result_32__fexc_5 enq__msg  ,
-  output logic [0:0] enq__rdy
+  output logic [0:0] enq__rdy  
 );
   FpuRespMsg_8_32__opaque_8__result_32__fexc_5 entry;
   logic [0:0] full;
@@ -6754,7 +6754,7 @@ module NormalQueue1EntryRTL__34c6e99e9b0fdfd1
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/pymtl3/pymtl3/stdlib/queues/queues.py:453
   // s.deq.rdy //= lambda: ~s.reset & s.full
-
+  
   always_comb begin : _lambda__s_fpus_0__fp_addsub_resp_q_q_deq_rdy
     deq__rdy = ( ~reset ) & full;
   end
@@ -6762,7 +6762,7 @@ module NormalQueue1EntryRTL__34c6e99e9b0fdfd1
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/pymtl3/pymtl3/stdlib/queues/queues.py:452
   // s.enq.rdy //= lambda: ~s.reset & ~s.full
-
+  
   always_comb begin : _lambda__s_fpus_0__fp_addsub_resp_q_q_enq_rdy
     enq__rdy = ( ~reset ) & ( ~full );
   end
@@ -6774,7 +6774,7 @@ module NormalQueue1EntryRTL__34c6e99e9b0fdfd1
   //   s.full <<= ~s.reset & ( ~s.deq.en & (s.enq.en | s.full) )
   //   if s.enq.en:
   //     s.entry <<= s.enq.msg
-
+  
   always_ff @(posedge clk) begin : ff_normal1
     full <= ( ~reset ) & ( ( ~deq__en ) & ( enq__en | full ) );
     if ( enq__en ) begin
@@ -6802,7 +6802,7 @@ module NormalQueueRTL__f55b0708e52dd198
   output FpuRespMsg_8_32__opaque_8__result_32__fexc_5 deq__ret  ,
   input logic [0:0] enq__en  ,
   input FpuRespMsg_8_32__opaque_8__result_32__fexc_5 enq__msg  ,
-  output logic [0:0] enq__rdy
+  output logic [0:0] enq__rdy  
 );
   //-------------------------------------------------------------
   // Component q
@@ -6897,8 +6897,8 @@ endmodule
 //-------------------------------------------------------------------------------
 //
 // ABSTRACT: Floating-point Comparator
-//           Compares two FP numbers and generates outputs that indicate when
-//           A>B, A<B and A=B. The component also provides outputs for MAX and
+//           Compares two FP numbers and generates outputs that indicate when 
+//           A>B, A<B and A=B. The component also provides outputs for MAX and 
 //           MIN values, with corresponding status flags.
 //
 //              parameters      valid values (defined in the DW manual)
@@ -6937,7 +6937,7 @@ endmodule
 //              status1         byte
 //                              info about FP value in z1
 //
-// MODIFIED:
+// MODIFIED: 
 //    4/18 - the ieee_compliance parameter is also controlling the use of nans
 //           When 0, the component behaves as the MC component (no denormals
 //           and no NaNs).
@@ -6960,46 +6960,46 @@ output [7:0] status0, status1;
   //-------------------------------------------------------------------------
   // Parameter legality check
   //-------------------------------------------------------------------------
-
-
+  
+ 
   initial begin : parameter_check
     integer param_err_flg;
 
     param_err_flg = 0;
-
-
+    
+  
     if ( (sig_width < 2) || (sig_width > 253) ) begin
       param_err_flg = 1;
       $display(
 	"ERROR: %m :\n  Invalid value (%d) for parameter sig_width (legal range: 2 to 253)",
 	sig_width );
     end
-
+  
     if ( (exp_width < 3) || (exp_width > 31) ) begin
       param_err_flg = 1;
       $display(
 	"ERROR: %m :\n  Invalid value (%d) for parameter exp_width (legal range: 3 to 31)",
 	exp_width );
     end
-
+  
     if ( (ieee_compliance < 0) || (ieee_compliance > 1) ) begin
       param_err_flg = 1;
       $display(
 	"ERROR: %m :\n  Invalid value (%d) for parameter ieee_compliance (legal range: 0 to 1)",
 	ieee_compliance );
     end
-
+  
     if ( param_err_flg == 1) begin
       $display(
         "%m :\n  Simulation aborted due to invalid parameter value(s)");
       $finish;
     end
 
-  end // parameter_check
+  end // parameter_check 
 
 
 // definitions used in the code
-
+ 
 reg [0:0] sign;
 reg [exp_width-1:0] Ea,Eb;
 reg [sig_width:0] Ma,Mb;
@@ -7010,7 +7010,7 @@ reg [0:0] agtb_int,aeqb_int,altb_int, unordered_int;
 reg [1:0] chk;
 reg zer_a, zer_b;
 
-always @(a or b or zctr)
+always @(a or b or zctr) 
 begin
 
   Ea = a[((exp_width + sig_width) - 1):sig_width];
@@ -7044,7 +7044,7 @@ begin
     end
   else
     Mb = {1'b1,b[(sig_width - 1):0]};
-
+  
   sign = (a[(exp_width + sig_width)] && !zer_a) ^ (b[(exp_width + sig_width)] && !zer_b);
 
   status0_int = 0;
@@ -7113,11 +7113,11 @@ begin
     if ( (!a[(exp_width + sig_width)] && Ea>Eb) || (a[(exp_width + sig_width)] && Ea<Eb) ) agtb_int = 1;
     else altb_int = 1;
   end
-  else
+  else 
   begin
-    if ( (!a[(exp_width + sig_width)] && Fa>Fb) || (a[(exp_width + sig_width)] && Fa<Fb) )
+    if ( (!a[(exp_width + sig_width)] && Fa>Fb) || (a[(exp_width + sig_width)] && Fa<Fb) ) 
        agtb_int = 1;   // a and b have the same exponent and sign but different fractions
-    else if (Fa === Fb)
+    else if (Fa === Fb) 
        aeqb_int = 1;
     else
        altb_int = 1;
@@ -7128,7 +7128,7 @@ begin
   if (chk !== 1) $display ("Error! agtb, aeqb, altb, and unordered are NOT mutually exclusive.");
 
   // assign a or b to zx outputs according to zctr flag.
-  if ( (agtb_int && zctr) || (altb_int && !zctr) || (aeqb_int && !zctr) || (unordered_int) )
+  if ( (agtb_int && zctr) || (altb_int && !zctr) || (aeqb_int && !zctr) || (unordered_int) ) 
   begin
     z0_int = a;
     z1_int = b;
@@ -7208,7 +7208,7 @@ module DW_fp_cmp_wrapper_noparam
   output logic [1-1:0] unordered ,
   output logic [32-1:0] z0 ,
   output logic [32-1:0] z1 ,
-  input logic [1-1:0] zctr
+  input logic [1-1:0] zctr 
 );
   DW_fp_cmp
   #(
@@ -7248,7 +7248,7 @@ module DW_fp_cmp__5367206e2cb8f6c7
   output logic [0:0] req__rdy  ,
   output logic [0:0] resp__en  ,
   output FpuRespMsg_8_32__opaque_8__result_32__fexc_5 resp__msg  ,
-  input logic [0:0] resp__rdy
+  input logic [0:0] resp__rdy  
 );
   localparam logic [2:0] __const__nstages_at_up_queues  = 3'd4;
   FpuRespMsg_8_32__opaque_8__result_32__fexc_5 out_val;
@@ -7383,28 +7383,28 @@ module DW_fp_cmp__5367206e2cb8f6c7
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/fpu/DW_fp_cmp.py:114
   // @update
   // def comb():
-  //
+  // 
   //   # default
   //   s.out_val.opaque @= 0
   //   s.out_val.result @= 0
   //   s.out_val.fexc   @= 0
-  //
+  // 
   //   s.unit.a    @= 0
   //   s.unit.b    @= 0
   //   s.unit.zctr @= 0
-  //
+  // 
   //   if s.in_q.deq.rdy & s.out_q[ 0 ].enq.rdy:
-  //
+  // 
   //     s.unit.a @= s.in_q.deq.ret.op_a
   //     s.unit.b @= s.in_q.deq.ret.op_b
-  //
+  // 
   //     # zctr
   //     if    s.in_q.deq.ret.type_ == FpuReqType.TYPE_FMAX:
   //       s.unit.zctr @= 1
-  //
+  // 
   //     # opaque
   //     s.out_val.opaque @= s.in_q.deq.ret.opaque
-  //
+  // 
   //     # output
   //     if    s.in_q.deq.ret.type_ == FpuReqType.TYPE_FMIN:
   //       s.out_val.result @= s.unit.z0
@@ -7416,11 +7416,11 @@ module DW_fp_cmp__5367206e2cb8f6c7
   //       s.out_val.result @= zext( s.unit.altb, 32 )
   //     elif  s.in_q.deq.ret.type_ == FpuReqType.TYPE_FCLE:
   //       s.out_val.result @= zext( s.unit.altb | s.unit.aeqb, 32 )
-  //
+  // 
   //     # output fexc
   //     if s.unit.unordered:
   //       s.out_val.fexc @= FpuRespType.FEXC_NV
-
+  
   always_comb begin : comb
     out_val.opaque = 8'd0;
     out_val.result = 32'd0;
@@ -7460,24 +7460,24 @@ module DW_fp_cmp__5367206e2cb8f6c7
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/fpu/DW_fp_cmp.py:94
   // @update
   // def up_queues():
-  //
+  // 
   //   # in_q <-> out_q[ 0 ]
   //   s.in_q.deq.en         @= s.in_q.deq.rdy & s.out_q[ 0 ].enq.rdy
   //   s.out_q[ 0 ].enq.en   @= s.in_q.deq.rdy & s.out_q[ 0 ].enq.rdy
   //   s.out_q[ 0 ].enq.msg  @= s.out_val
-  //
+  // 
   //   # chian middle out_q
   //   if nstages > 2:
   //     for i in range( nstages - 2 ):
   //       s.out_q[ i   ].deq.en  @= s.out_q[ i ].deq.rdy & s.out_q[ i+1 ].enq.rdy
   //       s.out_q[ i+1 ].enq.en  @= s.out_q[ i ].deq.rdy & s.out_q[ i+1 ].enq.rdy
   //       s.out_q[ i+1 ].enq.msg @= s.out_q[ i ].deq.ret
-  //
+  // 
   //   # out_q[ nstages-2 ] <-> s.resp
   //   s.out_q[ nstages-2 ].deq.en @= s.resp.rdy & s.out_q[ nstages-2 ].deq.rdy
   //   s.resp.en                   @= s.resp.rdy & s.out_q[ nstages-2 ].deq.rdy
   //   s.resp.msg                  @= s.out_q[ nstages-2 ].deq.ret
-
+  
   always_comb begin : up_queues
     in_q__deq__en = in_q__deq__rdy & out_q__enq__rdy[2'd0];
     out_q__enq__en[2'd0] = in_q__deq__rdy & out_q__enq__rdy[2'd0];
@@ -7572,7 +7572,7 @@ endmodule
 //              sig_width       significand size,  2 to 253 bits
 //              exp_width       exponent size,     3 to 31 bits
 //              isize           integer size,      3 to 512 bits
-//              ieee_compliance support the IEEE Compliance
+//              ieee_compliance support the IEEE Compliance 
 //                              including NaN and denormal expressions.
 //                              0 - IEEE 754 compatible without denormal support
 //                                  (NaN becomes Infinity, Denormal becomes Zero)
@@ -7592,7 +7592,7 @@ endmodule
 //
 // Modified:
 //  Mar. 13. 2008 Kyung-Nam Han (from 0712-SP3)
-//    Removed VCS Warning Message (STAR 9000232556)
+//    Removed VCS Warning Message (STAR 9000232556) 
 //  Sep. 09. 2009 Kyung-Nam Han (0903-SP3)
 //    Added ieee_compliance parameter
 //-----------------------------------------------------------------------------
@@ -7603,16 +7603,16 @@ module DW_fp_flt2i (a, rnd, z, status);
   parameter exp_width=8;         // RANGE 3 TO 31
   parameter isize=32;            // RANGE 3 TO 512
   parameter ieee_compliance = 0; // RANGE 0 to 1
-
+  
   input  [exp_width + sig_width:0] a;
   input  [2:0] rnd;
   output [isize - 1:0] z;
   output [7:0] status;
-
+  
   // synopsys translate_off
 
 
-  `define isign               0  // 0 : signed, 1 : unsigned
+  `define isign               0  // 0 : signed, 1 : unsigned 
   `define rnd_Width           4
   `define rnd_Inc             0
   `define rnd_Inexact         1
@@ -7626,73 +7626,73 @@ module DW_fp_flt2i (a, rnd, z, status);
   `define MS                  (`ML - 2)
   `define af_lsb              ((sig_width <= isize) ? 0 : (sig_width - 1) - isize + 1)
   `define DW_MI_LSB           ((sig_width <= isize) ? `MR - sig_width + 1 : 0)
-
+  
   //-------------------------------------------------------------------------
   // Parameter legality check
   //-------------------------------------------------------------------------
-
+    
 
   // XXX: berkin
   /* verilator lint_off WIDTH */
-
+ 
   initial begin : parameter_check
     integer param_err_flg;
 
     param_err_flg = 0;
-
-
+    
+        
     if ( (sig_width < 2) || (sig_width > 253) ) begin
       param_err_flg = 1;
       $display(
 	"ERROR: %m :\n  Invalid value (%d) for parameter sig_width (legal range: 2 to 253)",
 	sig_width );
     end
-
+        
     if ( (exp_width < 3) || (exp_width > 31) ) begin
       param_err_flg = 1;
       $display(
 	"ERROR: %m :\n  Invalid value (%d) for parameter exp_width (legal range: 3 to 31)",
 	exp_width );
     end
-
+        
     if ( (isize < 3) || (isize > 512) ) begin
       param_err_flg = 1;
       $display(
 	"ERROR: %m :\n  Invalid value (%d) for parameter isize (legal range: 3 to 512)",
 	isize );
     end
-
+        
     if ( (ieee_compliance < 0) || (ieee_compliance > 1) ) begin
       param_err_flg = 1;
       $display(
 	"ERROR: %m :\n  Invalid value (%d) for parameter ieee_compliance (legal range: 0 to 1)",
 	ieee_compliance );
     end
-
+     
     if ( param_err_flg == 1) begin
       $display(
         "%m :\n  Simulation aborted due to invalid parameter value(s)");
       $finish;
     end
 
-  end // parameter_check
+  end // parameter_check 
 
-  //-----------------------------------------------------
-
-
+  //-----------------------------------------------------  
+  
+  
   function [`rnd_Width-1:0] rnd_eval;
-
+  
     input [2:0] rnd;
     input [0:0] Sign;
     input [0:0] L,R,stk;
-
-
+    
+    
     begin
       rnd_eval[`rnd_Inc] = 0;
       rnd_eval[`rnd_Inexact] = R|stk;
       rnd_eval[`rnd_HugeInfinity] = 0;
       rnd_eval[`rnd_TinyminNorm] = 0;
-
+      
       if ($time > 0) begin
         case (rnd)
           3'b000:
@@ -7742,7 +7742,7 @@ module DW_fp_flt2i (a, rnd, z, status);
 
     end
   endfunction
-
+  
   reg [(exp_width + sig_width):0] af;
   reg [8    -1:0] status_reg;
   reg [isize-1:0] z_reg;
@@ -7750,7 +7750,7 @@ module DW_fp_flt2i (a, rnd, z, status);
   reg [`Mwidth-1:0] mi;
   reg [exp_width-1:0] exp;
   reg [0:0] stk;
-  reg [`rnd_Width-1:0] rnd_val;
+  reg [`rnd_Width-1:0] rnd_val;  
   reg [isize-1:0] maxneg;
   reg [isize-1:0] maxpos;
   reg [(sig_width - 1):0] sig;
@@ -7760,12 +7760,12 @@ module DW_fp_flt2i (a, rnd, z, status);
   reg zero_input;
 
   integer num;
-
+  
   assign status = status_reg;
   assign z = z_reg;
-
+  
   always @(a or rnd) begin : a1000_PROC
-
+    
     af = a;
     status_reg = 0;
     mi = 0;
@@ -7787,9 +7787,9 @@ module DW_fp_flt2i (a, rnd, z, status);
       denorm_input = 0;
       zero_input = (eaf == 0 );
     end
-
+    
     if (inf_input) begin
-
+      
       if (ieee_compliance) begin
         status_reg[2] = 1;
       end
@@ -7797,136 +7797,136 @@ module DW_fp_flt2i (a, rnd, z, status);
         status_reg[6] = 1;
         status_reg[5] = 1;
       end
-
+      
     end
     else if (nan_input) begin
-
+      
       status_reg[2] = 1;
 
     end
     else if (zero_input) begin
-
+      
       status_reg[0] = 1;
-
+      
     end
     else begin
-
+      
       mi[`ML] = 1;
-
+      
       if (sig_width <= isize) begin
-
+        
         mi[`MR:`DW_MI_LSB] = af[(sig_width - 1):0];
-
+        
       end
       else begin
-
+        
 
         mi[`MR:`MR-isize+1] = af[(sig_width - 1):`af_lsb];
         num = (sig_width - 1) - isize;  // >= 0
         stk = 0;
-
+        
         while (num != 0) begin
           stk = stk | af[num];
           num = num - 1;
         end
-
+        
         stk = stk | af[num];
         mi[0] = stk;
       end
 
       if (eaf >= ((1 << (exp_width-1)) - 1)) begin
         exp = eaf - ((1 << (exp_width-1)) - 1);
-
+        
         while (exp !== 0) begin
           if (mi[`Movf] !== 1) begin
             mi = mi << 1;
           end
-
+          
           exp = exp - 1;
         end
       end
       else begin
-
+        
         exp = ((1 << (exp_width-1)) - 1) - eaf;
-
+        
         while (exp != 0) begin
-
+          
           stk = mi[0];
           mi = mi >> 1;
           mi[0] = stk | mi[0];
           exp = exp - 1;
-
+          
         end
       end
-
-
+      
+      
       if (mi[`Movf] === 1) begin
-
+      
         status_reg[6] = 1;
         status_reg[5] = 1;
-
+        
       end
       else begin
-
+      
         stk = 0;
         num = `MS;
-
+        
         while (num != 0) begin
           stk = stk | mi[num];
           num = num - 1;
         end
-
+        
         stk = stk | mi[num];
         mi[`MS] = stk;
-
+        
         rnd_val = rnd_eval(rnd, af[(exp_width + sig_width)], mi[`ML], mi[`MR], mi[`MS]);
 
         if (rnd_val[`rnd_Inc] === 1) begin
           mi = mi + (1<<`ML);
         end
-
+        
         status_reg[5] =
         status_reg[5] | rnd_val[`rnd_Inexact];
-
+        
         if (mi[`Movf] === 1) begin
-
+          
           status_reg[6] = 1;
           status_reg[5] = 1;
-
+          
         end
         else if (mi[`MM:`ML] === 0) begin
-
+          
           status_reg[0] = 1;
 
           if (denorm_input) begin
             status_reg[3] = 1;
           end
-
+          
         end
       end
-
+      
     end
 
-
-
+    
+    
     if (`isign === 0) begin
 
       maxneg = 0;
       maxneg[isize-1] = 1;
       maxpos = -1;
       maxpos[isize-1] = 0;
-
+      
       if ( (af[(exp_width + sig_width)] === 1 && mi[`MM:`ML] > maxneg) ||
         (af[(exp_width + sig_width)] === 0 && mi[`MM:`ML] > maxpos) ) begin
-
+        
         status_reg[6] = 1;
         status_reg[5] = 1;
-
+        
       end
-
+      
       if (af[(exp_width + sig_width)] === 1) begin
-
-        if (status_reg[6] === 1 ||
+        
+        if (status_reg[6] === 1 || 
             status_reg[2] === 1) begin
           z_reg = -maxneg;
         end
@@ -7936,10 +7936,10 @@ module DW_fp_flt2i (a, rnd, z, status);
         else begin
           z_reg = -mi[`MM:`ML];
         end
-
+        
       end
       else begin
-
+        
         if (status_reg[6] === 1 ||
             status_reg[2] === 1) begin
           z_reg = maxpos;
@@ -7950,14 +7950,14 @@ module DW_fp_flt2i (a, rnd, z, status);
         else begin
           z_reg = mi[`MM:`ML];
         end
-
+        
       end
-
+      
     end
     else begin
-
+      
       $display("Error! Unsigned integer for DW_fp_flt2i is not supported.");
-
+      
     end
   end
 
@@ -7996,7 +7996,7 @@ module DW_fp_flt2i_wrapper_noparam
   input logic [32-1:0] a ,
   input logic [3-1:0] rnd ,
   output logic [8-1:0] status ,
-  output logic [32-1:0] z
+  output logic [32-1:0] z 
 );
   DW_fp_flt2i
   #(
@@ -8106,9 +8106,9 @@ module DW_fp_i2flt (a, rnd, z, status);
   parameter isign = 1;	     // RANGE 0 TO 1
                              // 0 : unsigned, 1 : signed
   input  [isize-1:0] a;
-  input  [2:0] rnd;
+  input  [2:0] rnd; 
   output [exp_width + sig_width:0] z;
-  output [7:0] status;
+  output [7:0] status; 
 
   // synopsys translate_off
 
@@ -8124,9 +8124,9 @@ module DW_fp_i2flt (a, rnd, z, status);
   `define rnd_HugeInfinity  2
   `define rnd_TinyminNorm  3
   `define ai_lsb ((isize - sig_width - 2 >= 0) ? isize - sig_width - 2 : 0)
-
+	    
   // --------------------------------------------------------------------
-
+  
 
   //-------------------------------------------------------------------------
   // Parameter legality check
@@ -8134,67 +8134,67 @@ module DW_fp_i2flt (a, rnd, z, status);
 
   // XXX: berkin
   /* verilator lint_off WIDTH */
-
-
+    
+ 
   initial begin : parameter_check
     integer param_err_flg;
 
     param_err_flg = 0;
-
-
+    
+      
     if ( (sig_width < 2) || (sig_width > 253) ) begin
       param_err_flg = 1;
       $display(
 	"ERROR: %m :\n  Invalid value (%d) for parameter sig_width (legal range: 2 to 253)",
 	sig_width );
     end
-
+      
     if ( (exp_width < 3) || (exp_width > 31) ) begin
       param_err_flg = 1;
       $display(
 	"ERROR: %m :\n  Invalid value (%d) for parameter exp_width (legal range: 3 to 31)",
 	exp_width );
     end
-
+     
     if ( (isize < 3+isign) || (isize > 512) ) begin
       param_err_flg = 1;
       $display(
 	"ERROR: %m : Parameter isize must be at least 3+isign and no greater than 512" );
-    end
-
+    end 
+      
     if ( (isign < 0) || (isign > 1) ) begin
       param_err_flg = 1;
       $display(
 	"ERROR: %m :\n  Invalid value (%d) for parameter isign (legal range: 0 to 1)",
 	isign );
     end
-
+    
     if ( param_err_flg == 1) begin
       $display(
         "%m :\n  Simulation aborted due to invalid parameter value(s)");
       $finish;
     end
 
-  end // parameter_check
+  end // parameter_check 
 
   //---------------------------------------------------------------------
 
 
-
+  
   function [`rnd_Width-1:0] rnd_eval;
-
+  
     input [2:0] rnd;
     input [0:0] Sign;
     input [0:0] L,R,stk;
-
-
+    
+    
     begin
       rnd_eval[`rnd_Inc] = 0;
       rnd_eval[`rnd_Inexact] = R|stk;
       rnd_eval[`rnd_HugeInfinity] = 0;
       rnd_eval[`rnd_TinyminNorm] = 0;
-
-      if ($time > 0)
+      
+      if ($time > 0) 
       begin
         case (rnd)
           3'b000:
@@ -8251,9 +8251,9 @@ module DW_fp_i2flt (a, rnd, z, status);
   endfunction
 
   // --------------------------------------------------------------------
-
+  
   reg [isize-1:0] Ai;
-  reg [8    -1:0] status_reg;
+  reg [8    -1:0] status_reg; 
   reg [(exp_width + sig_width):0] z_reg;
   reg [isize-1:0] LZ;
   reg [isize-1:0] num;
@@ -8261,9 +8261,9 @@ module DW_fp_i2flt (a, rnd, z, status);
   reg [exp_width:0] EXP;
   reg [0:0] STK;
   reg [`rnd_Width-1:0] rnd_val;
-
+  
   // --------------------------------------------------------------------
-
+  
   always @(a or rnd)
   begin
     Ai = a;
@@ -8272,11 +8272,11 @@ module DW_fp_i2flt (a, rnd, z, status);
     Mf = 0;
     EXP = 0;
     STK = 0;
-
+  
     if (Ai === 0)				// Exact Zero
       begin
-      status_reg[0] = 1; z_reg = 0;
-      end
+      status_reg[0] = 1; z_reg = 0; 
+      end 
     else					// Nonzero Integer
       begin
       // Convert signed integer (two's complement) to unsigned magnitude representation.
@@ -8297,7 +8297,7 @@ module DW_fp_i2flt (a, rnd, z, status);
         begin
         z_reg[(exp_width + sig_width)] = 0;
         end
-
+  
       // Convert the unsigned magnitude representation to floating point format.
       // Left shift to normalize Ai.
       while(Ai[isize-1] != 1)
@@ -8305,13 +8305,13 @@ module DW_fp_i2flt (a, rnd, z, status);
         Ai = Ai << 1;
         LZ = LZ + 1;
         end
-
+  
       // Calculate the Biased Exponent.
       if(isize - 1 - LZ + ((1 << (exp_width-1)) - 1) >= ((((1 << (exp_width-1)) - 1) * 2) + 1))
         EXP = ((((1 << (exp_width-1)) - 1) * 2) + 1);
       else
         EXP = isize - 1 - LZ + ((1 << (exp_width-1)) - 1);
-
+  
       // Converts integer to fraction.
       if(isize <= sig_width+2)
         // If the Mantissa fraction (sig_width+2) is big enough to hold Ai,
@@ -8334,19 +8334,19 @@ module DW_fp_i2flt (a, rnd, z, status);
         STK = STK | Ai[num];
         Mf[`MS] = STK;
         end
-
+  
       // Round the Mantissa according to the rounding modes.
       rnd_val = rnd_eval(rnd, z_reg[(exp_width + sig_width)], Mf[`ML], Mf[`MR], Mf[`MS]);
       if (rnd_val[`rnd_Inc] === 1) Mf = Mf + (1<<`ML);
       status_reg[5] = rnd_val[`rnd_Inexact];
-
+  
       // Normalize the Mantissa for overflow case after rounding.
       if ( (Mf[`Movf] === 1) )
         begin
         EXP = EXP + 1;
         Mf = Mf >> 1;
         end
-
+  
       // Note: "Tiny" situation doesn't exist.
       if(EXP >= ((((1 << (exp_width-1)) - 1) * 2) + 1))			// Huge
         begin
@@ -8367,11 +8367,11 @@ module DW_fp_i2flt (a, rnd, z, status);
           Mf[`Movf-2:`ML] = -1;
           end
         end
-
+  
       z_reg = {z_reg[(exp_width + sig_width)],EXP[exp_width-1:0],Mf[`Movf-2:`ML]};
       end
   end
-
+  
   assign status = status_reg;
   assign z = z_reg;
 
@@ -8388,7 +8388,7 @@ module DW_fp_i2flt (a, rnd, z, status);
   `undef ai_lsb
 
   // synopsys translate_on
-
+  
  endmodule
 
 `endif /* DW_FP_I2FLT_WRAPPER */
@@ -8407,7 +8407,7 @@ module DW_fp_i2flt_wrapper_noparam
   input logic [32-1:0] a ,
   input logic [3-1:0] rnd ,
   output logic [8-1:0] status ,
-  output logic [32-1:0] z
+  output logic [32-1:0] z 
 );
   DW_fp_i2flt
   #(
@@ -8441,7 +8441,7 @@ module DW_fp_cvt__5367206e2cb8f6c7
   output logic [0:0] req__rdy  ,
   output logic [0:0] resp__en  ,
   output FpuRespMsg_8_32__opaque_8__result_32__fexc_5 resp__msg  ,
-  input logic [0:0] resp__rdy
+  input logic [0:0] resp__rdy  
 );
   localparam logic [2:0] __const__nstages_at_up_queues  = 3'd4;
   localparam logic [2:0] __const__DW_FRND_NE  = 3'd0;
@@ -8597,29 +8597,29 @@ module DW_fp_cvt__5367206e2cb8f6c7
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/fpu/DW_fp_cvt.py:142
   // @update
   // def comb():
-  //
+  // 
   //   # default
   //   s.out_val.opaque @= 0
   //   s.out_val.result @= 0
   //   s.out_val.fexc   @= 0
-  //
+  // 
   //   s.i2flt.a   @= 0
   //   s.i2flt.rnd @= 0
-  //
+  // 
   //   s.flt2i.a   @= 0
   //   s.flt2i.rnd @= 0
-  //
+  // 
   //   if s.in_q.deq.rdy & s.out_q[ 0 ].enq.rdy:
-  //
+  // 
   //     s.out_val.opaque @= s.in_q.deq.ret.opaque
-  //
+  // 
   //     #
   //     # float to int
   //     #
   //     if    s.in_q.deq.ret.type_ == FpuReqType.TYPE_FI2F:
   //       # input
   //       s.i2flt.a @= s.in_q.deq.ret.op_a
-  //
+  // 
   //       # rounding mode
   //       if    s.in_q.deq.ret.frnd == FpuReqType.FRND_NE:
   //         s.i2flt.rnd @= DW_FRND_NE
@@ -8631,10 +8631,10 @@ module DW_fp_cvt__5367206e2cb8f6c7
   //         s.i2flt.rnd @= DW_FRND_UP
   //       elif  s.in_q.deq.ret.frnd == FpuReqType.FRND_MM:
   //         s.i2flt.rnd @= DW_FRND_MM
-  //
+  // 
   //       # output
   //       s.out_val.result @= s.i2flt.z
-  //
+  // 
   //       # exception
   //       if s.i2flt.status & DW_FEXC_NX:
   //         s.out_val.fexc @= s.out_val.fexc | FpuRespType.FEXC_NX
@@ -8646,14 +8646,14 @@ module DW_fp_cvt__5367206e2cb8f6c7
   //         s.out_val.fexc @= s.out_val.fexc | FpuRespType.FEXC_DZ
   //       if s.i2flt.status & DW_FEXC_NV:
   //         s.out_val.fexc @= s.out_val.fexc | FpuRespType.FEXC_NV
-  //
+  // 
   //     #
   //     # int to float
   //     #
   //     elif  s.in_q.deq.ret.type_ == FpuReqType.TYPE_FF2I:
   //       # input
   //       s.flt2i.a @= s.in_q.deq.ret.op_a
-  //
+  // 
   //       # rounding mode
   //       if    s.in_q.deq.ret.frnd == FpuReqType.FRND_NE:
   //         s.flt2i.rnd @= DW_FRND_NE
@@ -8665,10 +8665,10 @@ module DW_fp_cvt__5367206e2cb8f6c7
   //         s.flt2i.rnd @= DW_FRND_UP
   //       elif  s.in_q.deq.ret.frnd == FpuReqType.FRND_MM:
   //         s.flt2i.rnd @= DW_FRND_MM
-  //
+  // 
   //       # output
   //       s.out_val.result @= s.flt2i.z
-  //
+  // 
   //       # exception
   //       if s.flt2i.status & DW_FEXC_NX:
   //         s.out_val.fexc @= s.out_val.fexc | FpuRespType.FEXC_NX
@@ -8680,7 +8680,7 @@ module DW_fp_cvt__5367206e2cb8f6c7
   //         s.out_val.fexc @= s.out_val.fexc | FpuRespType.FEXC_DZ
   //       if s.flt2i.status & DW_FEXC_NV:
   //         s.out_val.fexc @= s.out_val.fexc | FpuRespType.FEXC_NV
-
+  
   always_comb begin : comb
     out_val.opaque = 8'd0;
     out_val.result = 32'd0;
@@ -8766,24 +8766,24 @@ module DW_fp_cvt__5367206e2cb8f6c7
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/fpu/DW_fp_cvt.py:122
   // @update
   // def up_queues():
-  //
+  // 
   //   # in_q <-> out_q[ 0 ]
   //   s.in_q.deq.en         @= s.in_q.deq.rdy & s.out_q[ 0 ].enq.rdy
   //   s.out_q[ 0 ].enq.en   @= s.in_q.deq.rdy & s.out_q[ 0 ].enq.rdy
   //   s.out_q[ 0 ].enq.msg  @= s.out_val
-  //
+  // 
   //   # chian middle out_q
   //   if nstages > 2:
   //     for i in range( nstages - 2 ):
   //       s.out_q[ i   ].deq.en  @= s.out_q[ i ].deq.rdy & s.out_q[ i+1 ].enq.rdy
   //       s.out_q[ i+1 ].enq.en  @= s.out_q[ i ].deq.rdy & s.out_q[ i+1 ].enq.rdy
   //       s.out_q[ i+1 ].enq.msg @= s.out_q[ i ].deq.ret
-  //
+  // 
   //   # out_q[ nstages-2 ] <-> s.resp
   //   s.out_q[ nstages-2 ].deq.en @= s.resp.rdy & s.out_q[ nstages-2 ].deq.rdy
   //   s.resp.en                   @= s.resp.rdy & s.out_q[ nstages-2 ].deq.rdy
   //   s.resp.msg                  @= s.out_q[ nstages-2 ].deq.ret
-
+  
   always_comb begin : up_queues
     in_q__deq__en = in_q__deq__rdy & out_q__enq__rdy[2'd0];
     out_q__enq__en[2'd0] = in_q__deq__rdy & out_q__enq__rdy[2'd0];
@@ -8877,7 +8877,7 @@ endmodule
 //              ==========      ============
 //              sig_width       significand size,  2 to 253 bits
 //              exp_width       exponent size,     3 to 31 bits
-//              ieee_compliance support the IEEE Compliance
+//              ieee_compliance support the IEEE Compliance 
 //                              0 - IEEE 754 compatible without denormal support
 //                                  (NaN becomes Infinity, Denormal becomes Zero)
 //                              1 - IEEE 754 compatible with denormal support
@@ -8904,10 +8904,10 @@ endmodule
 //                              Status Flags Output
 //
 // MODIFIED: May   7. 2007 Kyung-Nam Han (from 0703-SP2)
-//             Fixed the rounding error of denormal numbers
+//             Fixed the rounding error of denormal numbers 
 //             when ieee_compliance = 1
 //           Oct. 18. 2007 Kyung-Nam Han from 0712
-//             Fixed the 'divide by zero' flag when 0/0
+//             Fixed the 'divide by zero' flag when 0/0 
 //           Jan.  2. 2008 Kyung-Nam Han from 0712-SP1
 //             New parameter, faithful_round, is introduced
 //           Jun.  4. 2010 Kyung-Nam Han (from D-2010.03-SP3)
@@ -8935,55 +8935,55 @@ module DW_fp_div (a, b, rnd, z, status);
   //-------------------------------------------------------------------------
   // parameter legality check
   //-------------------------------------------------------------------------
-
-
+    
+ 
   initial begin : parameter_check
     integer param_err_flg;
 
     param_err_flg = 0;
-
-
+    
+      
     if ( (sig_width < 2) || (sig_width > 253) ) begin
       param_err_flg = 1;
       $display(
 	"ERROR: %m :\n  Invalid value (%d) for parameter sig_width (legal range: 2 to 253)",
 	sig_width );
     end
-
+      
     if ( (exp_width < 3) || (exp_width > 31) ) begin
       param_err_flg = 1;
       $display(
 	"ERROR: %m :\n  Invalid value (%d) for parameter exp_width (legal range: 3 to 31)",
 	exp_width );
     end
-
+      
     if ( (ieee_compliance < 0) || (ieee_compliance > 1) ) begin
       param_err_flg = 1;
       $display(
 	"ERROR: %m :\n  Invalid value (%d) for parameter ieee_compliance (legal range: 0 to 1)",
 	ieee_compliance );
     end
-
+      
     if ( (faithful_round < 0) || (faithful_round > 1) ) begin
       param_err_flg = 1;
       $display(
 	"ERROR: %m :\n  Invalid value (%d) for parameter faithful_round (legal range: 0 to 1)",
 	faithful_round );
     end
-
+    
     if ( param_err_flg == 1) begin
       $display(
         "%m :\n  Simulation aborted due to invalid parameter value(s)");
       $finish;
     end
 
-  end // parameter_check
+  end // parameter_check 
 
   //-------------------------------------------------------------------------
 
 
   function [4-1:0] OIIlOlO1;
-
+  
     input [2:0] rnd;
     input [0:0] I101O11O;
     input [0:0] I11110O0,O10110O1,O011IOO0;
@@ -8993,7 +8993,7 @@ module DW_fp_div (a, b, rnd, z, status);
       OIIlOlO1[1] = O10110O1|O011IOO0;
       OIIlOlO1[2] = 0;
       OIIlOlO1[3] = 0;
-
+      
       if ($time > 0)
       begin
         case (rnd)
@@ -9155,8 +9155,8 @@ module DW_fp_div (a, b, rnd, z, status);
     //         0      |      any     |         0
     //        any     |      inf     |         0
     //  -------------------------------------------------
-    // when ieee_compliance = 0,
-    // denormal numbers are considered as zero and
+    // when ieee_compliance = 0, 
+    // denormal numbers are considered as zero and 
     // nans are considered as infinity
 
     if (ieee_compliance)
@@ -9170,7 +9170,7 @@ module DW_fp_div (a, b, rnd, z, status);
       l1OllI0I = (l1l1O100 == 0) & (OOO111OO != 0);
       lO00I10I = (lO101111 == 0) & (l000I1O0 != 0);
 
-      O00OO1I0 = {I101O11O, {(exp_width){1'b1}}, {(sig_width){1'b0}}};
+      O00OO1I0 = {I101O11O, {(exp_width){1'b1}}, {(sig_width){1'b0}}}; 
       IIl1O10O = {1'b0, {(exp_width){1'b1}}, {(sig_width - 1){1'b0}}, 1'b1};
     end
     else
@@ -9188,10 +9188,10 @@ module DW_fp_div (a, b, rnd, z, status);
       IIl1O10O = {1'b0, {(exp_width){1'b1}}, {(sig_width){1'b0}}};
     end
 
-    //OO000O0O[7] = I000lO00 & ~l1O1Ol0O;
+    //OO000O0O[7] = I000lO00 & ~l1O1Ol0O; 
     OO000O0O[7] = (ieee_compliance) ?
             I000lO00 & ~(l1O1Ol0O | O100O11l | I00lIO1l) :
-            I000lO00 & ~(l1O1Ol0O | O100O11l);
+            I000lO00 & ~(l1O1Ol0O | O100O11l); 
 
     if (O100O11l || l10OO1I0 || (I00lIO1l && lOI111I1) || (l1O1Ol0O && I000lO00))
     begin
@@ -9209,13 +9209,13 @@ module DW_fp_div (a, b, rnd, z, status);
       IOOIlI0I = 0;
       IOOIlI0I[(exp_width + sig_width)] = I101O11O;
     end
-
+  
     else
     begin
-      if (ieee_compliance)
+      if (ieee_compliance) 
       begin
 
-        if (l1OllI0I)
+        if (l1OllI0I) 
         begin
           OlOO00lO = {1'b0, a[(sig_width - 1):0]};
 
@@ -9224,13 +9224,13 @@ module DW_fp_div (a, b, rnd, z, status);
             OlOO00lO = OlOO00lO << 1;
             O00O1Ol1 = O00O1Ol1 + 1;
           end
-        end
+        end 
         else
         begin
           OlOO00lO = {1'b1, a[(sig_width - 1):0]};
         end
 
-        if (lO00I10I)
+        if (lO00I10I) 
         begin
           OOIl0010 = {1'b0, b[(sig_width - 1):0]};
           while(OOIl0010[sig_width] != 1)
@@ -9238,7 +9238,7 @@ module DW_fp_div (a, b, rnd, z, status);
             OOIl0010 = OOIl0010 << 1;
             II01O1O0 = II01O1O0 + 1;
           end
-        end
+        end 
         else
         begin
           OOIl0010 = {1'b1, b[(sig_width - 1):0]};
@@ -9285,14 +9285,14 @@ module DW_fp_div (a, b, rnd, z, status);
       OOOl110I = O0l0O011 + O010I0IO;
       O00O00O1 = OOOl110I[sig_width + 3];
       lI100I0I = ((O00O00O1) ? OOOl110I : {OOOl110I[sig_width + 2:0], 1'b0});
-      I10l01Il = (sig_width == 8) ? OOI10OIO + 1 :
-               (sig_width < 8)  ? OOI10OIO + {1'b1, {(((sig_width >= 8) ? 1 : ((sig_width >= 8) ? 0 : 8 - sig_width - 1) + 1)){1'b0}}} :
+      I10l01Il = (sig_width == 8) ? OOI10OIO + 1 : 
+               (sig_width < 8)  ? OOI10OIO + {1'b1, {(((sig_width >= 8) ? 1 : ((sig_width >= 8) ? 0 : 8 - sig_width - 1) + 1)){1'b0}}} : 
                                   0;
       O1O0011O = l0I1OOll + 4'b1000;
       O1O1O01l = O0l0O011 + 4'b1000;
       l0I1OI0l = lI100I0I + 4'b1000;
-      IIOI0lOO = (sig_width == 8)  ? OOI10OIO[8:0] :
-                   (OOI10OIO[((sig_width >= 8) ? 0 : 8 - sig_width - 1)]) ? I10l01Il[8:((sig_width >= 8) ? 0 : 8 - sig_width - 1) + 1] :
+      IIOI0lOO = (sig_width == 8)  ? OOI10OIO[8:0] : 
+                   (OOI10OIO[((sig_width >= 8) ? 0 : 8 - sig_width - 1)]) ? I10l01Il[8:((sig_width >= 8) ? 0 : 8 - sig_width - 1) + 1] : 
                                        OOI10OIO[8:((sig_width >= 8) ? 0 : 8 - sig_width - 1) + 1];
       O11OOOOl = (l0I1OOll[2]) ? O1O0011O[sig_width + 3:3] : l0I1OOll[sig_width + 3:3];
       OO1110O0 = (O0l0O011[2]) ? O1O1O01l[sig_width + 3:3] : O0l0O011[sig_width + 3:3];
@@ -9314,16 +9314,16 @@ module DW_fp_div (a, b, rnd, z, status);
       lO011100 = ~IOIlII10[(sig_width + 2)] ? IOIlII10[1:0] : IOIlII10[2:1];
       IO10IOO1 = ~IOIlII10[(sig_width + 2)] ? O10101O1 : lI00O00I;
       IIIl11O1 = ((IO10IOO1 <= 0) | (IO10IOO1[exp_width + 1] == 1));
-      O011IOO0 = (faithful_round) ?
+      O011IOO0 = (faithful_round) ? 
               ((Ol01O010 | I010IlI0) & ~IIIl11O1 ? 0 : 1) :
-              ((O10110O1===0)?1'b0:1'b1);
+              ((O10110O1===0)?1'b0:1'b1); 
 
 
       if (ieee_compliance) begin
         if ((IO10IOO1 <= 0) | (IO10IOO1[exp_width + 1] == 1)) begin
 
           OIIO0OOl = 1 - IO10IOO1;
-
+        
           {l11Illl0, I0OI1lO0} = {l11Illl0, {(sig_width + 1){1'b0}}} >> OIIO0OOl;
 
           if (OIIO0OOl > sig_width + 1) begin
@@ -9340,7 +9340,7 @@ module DW_fp_div (a, b, rnd, z, status);
       end
 
       I11IO1I1 = OIIlOlO1(rnd, I101O11O, lO011100[1], lO011100[0], O011IOO0);
-
+   
       lO001Ol0 = (faithful_round) ? l11Illl0 :
                     (I11IO1I1[0] === 1)? (l11Illl0+1):l11Illl0;
 
@@ -9360,7 +9360,7 @@ module DW_fp_div (a, b, rnd, z, status);
           lO1O0OI1 = ((((1 << (exp_width-1)) - 1) * 2) + 1) - 1;
         end
       end
-
+  
       else if ((IO10IOO1 <= 0) | (IO10IOO1[exp_width+1] === 1'b1)) begin
         OO000O0O[3] = 1;
 
@@ -9392,22 +9392,22 @@ module DW_fp_div (a, b, rnd, z, status);
       if ((IOOl0lII[sig_width - 1:0] == 0) & (lO1O0OI1[exp_width - 1:0] == 0)) begin
         OO000O0O[0] = 1;
       end
-
+  
       OO000O0O[5] = OO000O0O[5] | I11IO1I1[1];
-
+   
       IOOIlI0I = {I101O11O,lO1O0OI1[exp_width-1:0],IOOl0lII[sig_width-1:0]};
     end
   end
-
+   
   assign status = ((^(a ^ a) !== 1'b0) || (^(b ^ b) !== 1'b0) || (^(rnd ^ rnd) !== 1'b0)) ? {8'bx} : OO000O0O;
   assign z = ((^(a ^ a) !== 1'b0) || (^(b ^ b) !== 1'b0) || (^(rnd ^ rnd) !== 1'b0)) ? {8'bx} : IOOIlI0I;
 
   // synopsys translate_on
 
 endmodule
-
-
-
+  
+  
+  
 
 // End of all v_libs files for component DW_fp_div_seq_wrapper__7baf9b00dddd9d01
 
@@ -9550,90 +9550,90 @@ module DW_fp_div_seq (a, b, rnd, clk, rst_n, start, z, status, complete);
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-
-
+  
+ 
   initial begin : parameter_check
     integer param_err_flg;
 
     param_err_flg = 0;
-
-
+    
+    
     if ( (sig_width < 2) || (sig_width > 253) ) begin
       param_err_flg = 1;
       $display(
 	"ERROR: %m :\n  Invalid value (%d) for parameter sig_width (legal range: 2 to 253)",
 	sig_width );
     end
-
+    
     if ( (exp_width < 3) || (exp_width > 31) ) begin
       param_err_flg = 1;
       $display(
 	"ERROR: %m :\n  Invalid value (%d) for parameter exp_width (legal range: 3 to 31)",
 	exp_width );
     end
-
+    
     if ( (ieee_compliance < 0) || (ieee_compliance > 1) ) begin
       param_err_flg = 1;
       $display(
 	"ERROR: %m :\n  Invalid value (%d) for parameter ieee_compliance (legal range: 0 to 1)",
 	ieee_compliance );
     end
-
+    
     if ( (num_cyc < 4) || (num_cyc > 2*sig_width+3) ) begin
       param_err_flg = 1;
       $display(
 	"ERROR: %m :\n  Invalid value (%d) for parameter num_cyc (legal range: 4 to 2*sig_width+3)",
 	num_cyc );
     end
-
+    
     if ( (rst_mode < 0) || (rst_mode > 1) ) begin
       param_err_flg = 1;
       $display(
 	"ERROR: %m :\n  Invalid value (%d) for parameter rst_mode (legal range: 0 to 1)",
 	rst_mode );
     end
-
+    
     if ( (input_mode < 0) || (input_mode > 1) ) begin
       param_err_flg = 1;
       $display(
 	"ERROR: %m :\n  Invalid value (%d) for parameter input_mode (legal range: 0 to 1)",
 	input_mode );
     end
-
+    
     if ( (output_mode < 0) || (output_mode > 1) ) begin
       param_err_flg = 1;
       $display(
 	"ERROR: %m :\n  Invalid value (%d) for parameter output_mode (legal range: 0 to 1)",
 	output_mode );
     end
-
+    
     if ( (early_start < 0) || (early_start > 1) ) begin
       param_err_flg = 1;
       $display(
 	"ERROR: %m :\n  Invalid value (%d) for parameter early_start (legal range: 0 to 1)",
 	early_start );
     end
-
+    
     if ( (internal_reg < 0) || (internal_reg > 1) ) begin
       param_err_flg = 1;
       $display(
 	"ERROR: %m :\n  Invalid value (%d) for parameter internal_reg (legal range: 0 to 1)",
 	internal_reg );
     end
-
+    
     if ( (input_mode===0 && early_start===1) ) begin
       param_err_flg = 1;
       $display(
 	"ERROR: %m : Invalid parameter combination: when input_mode=0, early_start=1 is not possible" );
     end
-
+  
     if ( param_err_flg == 1) begin
       $display(
         "%m :\n  Simulation aborted due to invalid parameter value(s)");
       $finish;
     end
 
-  end // parameter_check
+  end // parameter_check 
 
 
 //-----------------------------------------------------------------------------
@@ -10312,12 +10312,12 @@ endgenerate
   end
   endgenerate
 
-
-  always @ (clk) begin : P_monitor_clk
+  
+  always @ (clk) begin : P_monitor_clk 
     if ( (clk !== 1'b0) && (clk !== 1'b1) && ($time > 0) )
       $display( "WARNING: %m :\n  at time = %t, detected unknown value, %b, on clk input.",
                 $time, clk );
-    end // P_monitor_clk
+    end // P_monitor_clk 
 
 // synopsys translate_on
 
@@ -10343,7 +10343,7 @@ module DW_fp_div_seq_wrapper__7baf9b00dddd9d01
   input logic [1-1:0] rst_n ,
   input logic [1-1:0] start ,
   output logic [8-1:0] status ,
-  output logic [32-1:0] z
+  output logic [32-1:0] z 
 );
   DW_fp_div_seq
   #(
@@ -10387,7 +10387,7 @@ module DW_fp_div_seq__57be055cf8afa8d8
   output logic [0:0] req__rdy  ,
   output logic [0:0] resp__en  ,
   output FpuRespMsg_8_32__opaque_8__result_32__fexc_5 resp__msg  ,
-  input logic [0:0] resp__rdy
+  input logic [0:0] resp__rdy  
 );
   localparam logic [0:0] __const__IDLE_at_up_state  = 1'd0;
   localparam logic [0:0] __const__START_at_up_state  = 1'd1;
@@ -10443,7 +10443,7 @@ module DW_fp_div_seq__57be055cf8afa8d8
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/fpu/DW_fp_div_seq.py:102
   // s.unit.rst_n //= lambda: ~s.reset
-
+  
   always_comb begin : _lambda__s_fpus_0__fp_div_unit_rst_n
     unit__rst_n = ~reset;
   end
@@ -10452,25 +10452,25 @@ module DW_fp_div_seq__57be055cf8afa8d8
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/fpu/DW_fp_div_seq.py:129
   // @update
   // def comb():
-  //
+  // 
   //   #
   //   # req
   //   #
-  //
+  // 
   //   s.req.rdy @= ~s.reset & ( s.state_reg == IDLE )
-  //
+  // 
   //   # default
   //   s.unit.a     @= 0
   //   s.unit.b     @= 0
   //   s.unit.rnd   @= 0
   //   s.unit.start @= 0
-  //
+  // 
   //   # request
   //   if s.req.en:
   //     # set inputs to the unit
   //     s.unit.a @= s.req.msg.op_a
   //     s.unit.b @= s.req.msg.op_b
-  //
+  // 
   //     # rounding mode
   //     if    s.req.msg.frnd == FpuReqType.FRND_NE:
   //       s.unit.rnd @= DW_FRND_NE
@@ -10482,24 +10482,24 @@ module DW_fp_div_seq__57be055cf8afa8d8
   //       s.unit.rnd @= DW_FRND_UP
   //     elif  s.req.msg.frnd == FpuReqType.FRND_MM:
   //       s.unit.rnd @= DW_FRND_MM
-  //
+  // 
   //     # start the unit
   //     s.unit.start @= 1
-  //
+  // 
   //   #
   //   # resp
   //   #
-  //
+  // 
   //   # default
   //   s.resp.en         @= 0
   //   s.resp.msg.opaque @= s.opq_reg
   //   s.resp.msg.result @= 0
   //   s.resp.msg.fexc   @= 0
-  //
+  // 
   //   if s.resp.rdy & ( s.state_reg == END ):
   //     s.resp.en         @= 1
   //     s.resp.msg.result @= s.unit.z
-  //
+  // 
   //     if s.unit.status & DW_FEXC_NX:
   //       s.resp.msg.fexc @= s.resp.msg.fexc | FpuRespType.FEXC_NX
   //     if s.unit.status & DW_FEXC_UF:
@@ -10510,7 +10510,7 @@ module DW_fp_div_seq__57be055cf8afa8d8
   //       s.resp.msg.fexc @= s.resp.msg.fexc | FpuRespType.FEXC_DZ
   //     if s.unit.status & DW_FEXC_NV:
   //       s.resp.msg.fexc @= s.resp.msg.fexc | FpuRespType.FEXC_NV
-
+  
   always_comb begin : comb
     req__rdy = ( ~reset ) & ( state_reg == 2'( __const__IDLE_at_comb ) );
     unit__a = 32'd0;
@@ -10570,7 +10570,7 @@ module DW_fp_div_seq__57be055cf8afa8d8
   //     s.opq_reg <<= 0
   //   elif  s.req.en:
   //     s.opq_reg <<= s.req.msg.opaque
-
+  
   always_ff @(posedge clk) begin : up_opq
     if ( reset ) begin
       opq_reg <= 8'd0;
@@ -10599,7 +10599,7 @@ module DW_fp_div_seq__57be055cf8afa8d8
   //     # END -> IDLE
   //     elif  ( s.state_reg == END ) & s.resp.en:
   //       s.state_reg <<= IDLE
-
+  
   always_ff @(posedge clk) begin : up_state
     if ( reset ) begin
       state_reg <= 2'( __const__IDLE_at_up_state );
@@ -11190,7 +11190,7 @@ module DW_fp_mult_wrapper_noparam
   input logic [32-1:0] b ,
   input logic [3-1:0] rnd ,
   output logic [8-1:0] status ,
-  output logic [32-1:0] z
+  output logic [32-1:0] z 
 );
   DW_fp_mult
   #(
@@ -11224,7 +11224,7 @@ module DW_fp_mult__5367206e2cb8f6c7
   output logic [0:0] req__rdy  ,
   output logic [0:0] resp__en  ,
   output FpuRespMsg_8_32__opaque_8__result_32__fexc_5 resp__msg  ,
-  input logic [0:0] resp__rdy
+  input logic [0:0] resp__rdy  
 );
   localparam logic [2:0] __const__nstages_at_up_queues  = 3'd4;
   localparam logic [2:0] __const__DW_FRND_NE  = 3'd0;
@@ -11357,21 +11357,21 @@ module DW_fp_mult__5367206e2cb8f6c7
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/fpu/DW_fp_mult.py:106
   // @update
   // def comb():
-  //
+  // 
   //   # default
   //   s.out_val.opaque @= 0
   //   s.out_val.result @= 0
   //   s.out_val.fexc   @= 0
-  //
+  // 
   //   s.unit.a    @= 0
   //   s.unit.b    @= 0
   //   s.unit.rnd  @= 0
-  //
+  // 
   //   if s.in_q.deq.rdy & s.out_q[ 0 ].enq.rdy:
-  //
+  // 
   //     s.unit.a @= s.in_q.deq.ret.op_a
   //     s.unit.b @= s.in_q.deq.ret.op_b
-  //
+  // 
   //     # rounding mode
   //     if    s.in_q.deq.ret.frnd == FpuReqType.FRND_NE:
   //       s.unit.rnd @= DW_FRND_NE
@@ -11383,10 +11383,10 @@ module DW_fp_mult__5367206e2cb8f6c7
   //       s.unit.rnd @= DW_FRND_UP
   //     elif  s.in_q.deq.ret.frnd == FpuReqType.FRND_MM:
   //       s.unit.rnd @= DW_FRND_MM
-  //
+  // 
   //     s.out_val.opaque @= s.in_q.deq.ret.opaque
   //     s.out_val.result @= s.unit.z
-  //
+  // 
   //     if s.unit.status & DW_FEXC_NX:
   //       s.out_val.fexc @= s.out_val.fexc | FpuRespType.FEXC_NX
   //     if s.unit.status & DW_FEXC_UF:
@@ -11397,7 +11397,7 @@ module DW_fp_mult__5367206e2cb8f6c7
   //       s.out_val.fexc @= s.out_val.fexc | FpuRespType.FEXC_DZ
   //     if s.unit.status & DW_FEXC_NV:
   //       s.out_val.fexc @= s.out_val.fexc | FpuRespType.FEXC_NV
-
+  
   always_comb begin : comb
     out_val.opaque = 8'd0;
     out_val.result = 32'd0;
@@ -11447,24 +11447,24 @@ module DW_fp_mult__5367206e2cb8f6c7
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/fpu/DW_fp_mult.py:86
   // @update
   // def up_queues():
-  //
+  // 
   //   # in_q <-> out_q[ 0 ]
   //   s.in_q.deq.en         @= s.in_q.deq.rdy & s.out_q[ 0 ].enq.rdy
   //   s.out_q[ 0 ].enq.en   @= s.in_q.deq.rdy & s.out_q[ 0 ].enq.rdy
   //   s.out_q[ 0 ].enq.msg  @= s.out_val
-  //
+  // 
   //   # chian middle out_q
   //   if nstages > 2:
   //     for i in range( nstages - 2 ):
   //       s.out_q[ i   ].deq.en  @= s.out_q[ i ].deq.rdy & s.out_q[ i+1 ].enq.rdy
   //       s.out_q[ i+1 ].enq.en  @= s.out_q[ i ].deq.rdy & s.out_q[ i+1 ].enq.rdy
   //       s.out_q[ i+1 ].enq.msg @= s.out_q[ i ].deq.ret
-  //
+  // 
   //   # out_q[ nstages-2 ] <-> s.resp
   //   s.out_q[ nstages-2 ].deq.en @= s.resp.rdy & s.out_q[ nstages-2 ].deq.rdy
   //   s.resp.en                   @= s.resp.rdy & s.out_q[ nstages-2 ].deq.rdy
   //   s.resp.msg                  @= s.out_q[ nstages-2 ].deq.ret
-
+  
   always_comb begin : up_queues
     in_q__deq__en = in_q__deq__rdy & out_q__enq__rdy[2'd0];
     out_q__enq__en[2'd0] = in_q__deq__rdy & out_q__enq__rdy[2'd0];
@@ -11512,7 +11512,7 @@ module NormalQueue1EntryRTL__a2c155c77a0d04b2
   output FpuReqMsg_8_32__type__4__opaque_8__op_a_32__op_b_32__frnd_3 deq__ret  ,
   input logic [0:0] enq__en  ,
   input FpuReqMsg_8_32__type__4__opaque_8__op_a_32__op_b_32__frnd_3 enq__msg  ,
-  output logic [0:0] enq__rdy
+  output logic [0:0] enq__rdy  
 );
   FpuReqMsg_8_32__type__4__opaque_8__op_a_32__op_b_32__frnd_3 entry;
   logic [0:0] full;
@@ -11520,7 +11520,7 @@ module NormalQueue1EntryRTL__a2c155c77a0d04b2
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/pymtl3/pymtl3/stdlib/queues/queues.py:453
   // s.deq.rdy //= lambda: ~s.reset & s.full
-
+  
   always_comb begin : _lambda__s_fpus_0__recv_q_q_deq_rdy
     deq__rdy = ( ~reset ) & full;
   end
@@ -11528,7 +11528,7 @@ module NormalQueue1EntryRTL__a2c155c77a0d04b2
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/pymtl3/pymtl3/stdlib/queues/queues.py:452
   // s.enq.rdy //= lambda: ~s.reset & ~s.full
-
+  
   always_comb begin : _lambda__s_fpus_0__recv_q_q_enq_rdy
     enq__rdy = ( ~reset ) & ( ~full );
   end
@@ -11540,7 +11540,7 @@ module NormalQueue1EntryRTL__a2c155c77a0d04b2
   //   s.full <<= ~s.reset & ( ~s.deq.en & (s.enq.en | s.full) )
   //   if s.enq.en:
   //     s.entry <<= s.enq.msg
-
+  
   always_ff @(posedge clk) begin : ff_normal1
     full <= ( ~reset ) & ( ( ~deq__en ) & ( enq__en | full ) );
     if ( enq__en ) begin
@@ -11568,7 +11568,7 @@ module NormalQueueRTL__86a7c3aeb6713f23
   output FpuReqMsg_8_32__type__4__opaque_8__op_a_32__op_b_32__frnd_3 deq__ret  ,
   input logic [0:0] enq__en  ,
   input FpuReqMsg_8_32__type__4__opaque_8__op_a_32__op_b_32__frnd_3 enq__msg  ,
-  output logic [0:0] enq__rdy
+  output logic [0:0] enq__rdy  
 );
   //-------------------------------------------------------------
   // Component q
@@ -11627,7 +11627,7 @@ module FloatingPointUnit__57be055cf8afa8d8
   output logic [0:0] req__rdy  ,
   output logic [0:0] resp__en  ,
   output FpuRespMsg_8_32__opaque_8__result_32__fexc_5 resp__msg  ,
-  input logic [0:0] resp__rdy
+  input logic [0:0] resp__rdy  
 );
   //-------------------------------------------------------------
   // Component fp_addsub
@@ -11964,7 +11964,7 @@ module FloatingPointUnit__57be055cf8afa8d8
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/fpu/FloatingPointUnit.py:68
   // @update
   // def up_req():
-  //
+  // 
   //   # default
   //   s.recv_q.deq.en     @= 0
   //   s.fp_addsub.req.en  @= 0
@@ -11972,25 +11972,25 @@ module FloatingPointUnit__57be055cf8afa8d8
   //   s.fp_div.req.en     @= 0
   //   s.fp_cmp.req.en     @= 0
   //   s.fp_cvt.req.en     @= 0
-  //
+  // 
   //   if s.recv_q.deq.rdy:
-  //
+  // 
   //     # FADD & FSUB
   //     if    ( s.recv_q.deq.ret.type_ == FpuReqType.TYPE_FADD ) | \
   //           ( s.recv_q.deq.ret.type_ == FpuReqType.TYPE_FSUB ):
   //       s.recv_q.deq.en     @= s.fp_addsub.req.rdy
   //       s.fp_addsub.req.en  @= s.fp_addsub.req.rdy
-  //
+  // 
   //     # FMULT
   //     elif  ( s.recv_q.deq.ret.type_ == FpuReqType.TYPE_FMUL ):
   //       s.recv_q.deq.en   @= s.fp_mult.req.rdy
   //       s.fp_mult.req.en  @= s.fp_mult.req.rdy
-  //
+  // 
   //     # FDIV
   //     elif  ( s.recv_q.deq.ret.type_ == FpuReqType.TYPE_FDIV ):
   //       s.recv_q.deq.en @= s.fp_div.req.rdy
   //       s.fp_div.req.en @= s.fp_div.req.rdy
-  //
+  // 
   //     # FMIN, FMAX, FCEQ, FCLT, FCLE
   //     elif  ( s.recv_q.deq.ret.type_ == FpuReqType.TYPE_FMIN ) | \
   //           ( s.recv_q.deq.ret.type_ == FpuReqType.TYPE_FMAX ) | \
@@ -11999,13 +11999,13 @@ module FloatingPointUnit__57be055cf8afa8d8
   //           ( s.recv_q.deq.ret.type_ == FpuReqType.TYPE_FCLE ):
   //       s.recv_q.deq.en @= s.fp_cmp.req.rdy
   //       s.fp_cmp.req.en @= s.fp_cmp.req.rdy
-  //
+  // 
   //     # FI2F, FF2I
   //     elif  ( s.recv_q.deq.ret.type_ == FpuReqType.TYPE_FI2F ) | \
   //           ( s.recv_q.deq.ret.type_ == FpuReqType.TYPE_FF2I ):
   //       s.recv_q.deq.en @= s.fp_cvt.req.rdy
   //       s.fp_cvt.req.en @= s.fp_cvt.req.rdy
-
+  
   always_comb begin : up_req
     recv_q__deq__en = 1'd0;
     fp_addsub__req__en = 1'd0;
@@ -12041,43 +12041,43 @@ module FloatingPointUnit__57be055cf8afa8d8
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/fpu/FloatingPointUnit.py:119
   // @update
   // def up_resp():
-  //
+  // 
   //   # default
   //   s.resp.en   @= 0
   //   s.resp.msg  @= FpuResp()
-  //
+  // 
   //   s.fp_addsub_resp_q.deq.en @= 0
   //   s.fp_mult_resp_q.deq.en   @= 0
   //   s.fp_div_resp_q.deq.en    @= 0
   //   s.fp_cmp_resp_q.deq.en    @= 0
   //   s.fp_cvt_resp_q.deq.en    @= 0
-  //
+  // 
   //   if s.resp.rdy:
   //     if    s.fp_addsub_resp_q.deq.rdy:
   //       s.resp.en                 @= 1
   //       s.resp.msg                @= s.fp_addsub_resp_q.deq.ret
   //       s.fp_addsub_resp_q.deq.en @= 1
-  //
+  // 
   //     elif  s.fp_mult_resp_q.deq.rdy:
   //       s.resp.en               @= 1
   //       s.resp.msg              @= s.fp_mult_resp_q.deq.ret
   //       s.fp_mult_resp_q.deq.en @= 1
-  //
+  // 
   //     elif  s.fp_div_resp_q.deq.rdy:
   //       s.resp.en              @= 1
   //       s.resp.msg             @= s.fp_div_resp_q.deq.ret
   //       s.fp_div_resp_q.deq.en @= 1
-  //
+  // 
   //     elif  s.fp_cmp_resp_q.deq.rdy:
   //       s.resp.en              @= 1
   //       s.resp.msg             @= s.fp_cmp_resp_q.deq.ret
   //       s.fp_cmp_resp_q.deq.en @= 1
-  //
+  // 
   //     elif  s.fp_cvt_resp_q.deq.rdy:
   //       s.resp.en              @= 1
   //       s.resp.msg             @= s.fp_cvt_resp_q.deq.ret
   //       s.fp_cvt_resp_q.deq.en @= 1
-
+  
   always_comb begin : up_resp
     resp__en = 1'd0;
     resp__msg = { 8'd0, 32'd0, 5'd0 };
@@ -12178,7 +12178,7 @@ module NormalQueueCtrlRTL__num_entries_2
   output logic [0:0] raddr ,
   input  logic [0:0] reset ,
   output logic [0:0] waddr ,
-  output logic [0:0] wen
+  output logic [0:0] wen 
 );
   logic [0:0] deq_xfer;
   logic [0:0] enq_xfer;
@@ -12188,7 +12188,7 @@ module NormalQueueCtrlRTL__num_entries_2
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/pymtl3/pymtl3/stdlib/queues/queues.py:84
   // s.deq_rdy //= lambda: ~s.reset & ( s.count > CountType(0) )
-
+  
   always_comb begin : _lambda__s_intra_tile_net_m2p_net_input_units_0__queue_ctrl_deq_rdy
     deq_rdy = ( ~reset ) & ( count > 2'd0 );
   end
@@ -12196,7 +12196,7 @@ module NormalQueueCtrlRTL__num_entries_2
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/pymtl3/pymtl3/stdlib/queues/queues.py:87
   // s.deq_xfer //= lambda: s.deq_en & s.deq_rdy
-
+  
   always_comb begin : _lambda__s_intra_tile_net_m2p_net_input_units_0__queue_ctrl_deq_xfer
     deq_xfer = deq_en & deq_rdy;
   end
@@ -12204,7 +12204,7 @@ module NormalQueueCtrlRTL__num_entries_2
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/pymtl3/pymtl3/stdlib/queues/queues.py:83
   // s.enq_rdy //= lambda: ~s.reset & ( s.count < s.num_entries )
-
+  
   always_comb begin : _lambda__s_intra_tile_net_m2p_net_input_units_0__queue_ctrl_enq_rdy
     enq_rdy = ( ~reset ) & ( count < 2'd2 );
   end
@@ -12212,7 +12212,7 @@ module NormalQueueCtrlRTL__num_entries_2
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/pymtl3/pymtl3/stdlib/queues/queues.py:86
   // s.enq_xfer //= lambda: s.enq_en & s.enq_rdy
-
+  
   always_comb begin : _lambda__s_intra_tile_net_m2p_net_input_units_0__queue_ctrl_enq_xfer
     enq_xfer = enq_en & enq_rdy;
   end
@@ -12221,24 +12221,24 @@ module NormalQueueCtrlRTL__num_entries_2
   // At /work/global/mw828/cifer/pymtl3/pymtl3/stdlib/queues/queues.py:89
   // @update_ff
   // def up_reg():
-  //
+  // 
   //   if s.reset:
   //     s.head  <<= PtrType(0)
   //     s.tail  <<= PtrType(0)
   //     s.count <<= CountType(0)
-  //
+  // 
   //   else:
   //     if s.deq_xfer:
   //       s.head <<= s.head + PtrType(1) if s.head < s.last_idx else PtrType(0)
-  //
+  // 
   //     if s.enq_xfer:
   //       s.tail <<= s.tail + PtrType(1) if s.tail < s.last_idx else PtrType(0)
-  //
+  // 
   //     if s.enq_xfer & ~s.deq_xfer:
   //       s.count <<= s.count + CountType(1)
   //     if ~s.enq_xfer & s.deq_xfer:
   //       s.count <<= s.count - CountType(1)
-
+  
   always_ff @(posedge clk) begin : up_reg
     if ( reset ) begin
       head <= 1'd0;
@@ -12292,7 +12292,7 @@ module RegisterFile__168e68246e4364ad
   // def up_rf_read():
   //   for i in range( rd_ports ):
   //     s.rdata[i] @= s.regs[ s.raddr[i] ]
-
+  
   always_comb begin : up_rf_read
     for ( int unsigned i = 1'd0; i < 1'( __const__rd_ports_at_up_rf_read ); i += 1'd1 )
       rdata[1'(i)] = regs[raddr[1'(i)]];
@@ -12305,7 +12305,7 @@ module RegisterFile__168e68246e4364ad
   //   for i in range( wr_ports ):
   //     if s.wen[i]:
   //       s.regs[ s.waddr[i] ] <<= s.wdata[i]
-
+  
   always_ff @(posedge clk) begin : up_rf_write
     for ( int unsigned i = 1'd0; i < 1'( __const__wr_ports_at_up_rf_write ); i += 1'd1 )
       if ( wen[1'(i)] ) begin
@@ -12328,7 +12328,7 @@ module NormalQueueDpathRTL__bde4d933cf41d046
   input  logic [0:0] raddr ,
   input  logic [0:0] reset ,
   input  logic [0:0] waddr ,
-  input  logic [0:0] wen
+  input  logic [0:0] wen 
 );
   //-------------------------------------------------------------
   // Component queue
@@ -12382,7 +12382,7 @@ module NormalQueueRTL__bde4d933cf41d046
   output RingMsg_2__src_1__dst_1__payload_32 deq__ret  ,
   input logic [0:0] enq__en  ,
   input RingMsg_2__src_1__dst_1__payload_32 enq__msg  ,
-  output logic [0:0] enq__rdy
+  output logic [0:0] enq__rdy  
 );
   //-------------------------------------------------------------
   // Component ctrl
@@ -12475,7 +12475,7 @@ module InputUnitRTL__04428dd15860572e
   output RingMsg_2__src_1__dst_1__payload_32 give__ret  ,
   input logic [0:0] recv__en  ,
   input RingMsg_2__src_1__dst_1__payload_32 recv__msg  ,
-  output logic [0:0] recv__rdy
+  output logic [0:0] recv__rdy  
 );
   //-------------------------------------------------------------
   // Component queue
@@ -12533,14 +12533,14 @@ module OutputUnitRTL__10412371c9808a03
   input RingMsg_2__src_1__dst_1__payload_32 get__ret  ,
   output logic [0:0] send__en  ,
   output RingMsg_2__src_1__dst_1__payload_32 send__msg  ,
-  input logic [0:0] send__rdy
+  input logic [0:0] send__rdy  
 );
   logic [0:0] __tmpvar__up_get_send_both_rdy;
 
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_net/router/OutputUnitRTL.py:52
   // s.send.msg //= lambda: s.get.ret if s.send.en else PacketType()
-
+  
   always_comb begin : _lambda__s_intra_tile_net_m2p_net_output_units_0__send_msg
     send__msg = send__en ? get__ret : { 1'd0, 1'd0, 32'd0 };
   end
@@ -12552,7 +12552,7 @@ module OutputUnitRTL__10412371c9808a03
   //   both_rdy = s.get.rdy & s.send.rdy
   //   s.get.en  @= both_rdy
   //   s.send.en @= both_rdy
-
+  
   always_comb begin : up_get_send
     __tmpvar__up_get_send_both_rdy = get__rdy & send__rdy;
     get__en = __tmpvar__up_get_send_both_rdy;
@@ -12575,7 +12575,7 @@ module XbarRouteUnitRTL__593864738d4fc0e6
   input RingMsg_2__src_1__dst_1__payload_32 get__ret  ,
   input logic [0:0] give__en [0:0] ,
   output logic [0:0] give__rdy [0:0] ,
-  output RingMsg_2__src_1__dst_1__payload_32 give__ret [0:0]
+  output RingMsg_2__src_1__dst_1__payload_32 give__ret [0:0] 
 );
   localparam logic [0:0] __const__num_outports_at_up_ru_routing  = 1'd1;
   logic [0:0] give_ens;
@@ -12586,7 +12586,7 @@ module XbarRouteUnitRTL__593864738d4fc0e6
   // @update
   // def up_ru_give_en():
   //   s.get.en @= s.give_ens > 0
-
+  
   always_comb begin : up_ru_give_en
     get__en = give_ens > 1'd0;
   end
@@ -12596,13 +12596,13 @@ module XbarRouteUnitRTL__593864738d4fc0e6
   // @update
   // def up_ru_routing():
   //   s.out_dir @= trunc( s.get.ret.dst, dir_nbits )
-  //
+  // 
   //   for i in range( num_outports ):
   //     s.give[i].rdy @= b1(0)
-  //
+  // 
   //   if s.get.rdy:
   //     s.give[ s.out_dir ].rdy @= b1(1)
-
+  
   always_comb begin : up_ru_routing
     out_dir = get__ret.dst;
     for ( int unsigned i = 1'd0; i < 1'( __const__num_outports_at_up_ru_routing ); i += 1'd1 )
@@ -12632,7 +12632,7 @@ module SwitchUnitNullRTL__16e1e34e5445ae99
   input RingMsg_2__src_1__dst_1__payload_32 get__ret [0:0] ,
   input logic [0:0] give__en  ,
   output logic [0:0] give__rdy  ,
-  output RingMsg_2__src_1__dst_1__payload_32 give__ret
+  output RingMsg_2__src_1__dst_1__payload_32 give__ret  
 );
 
   assign get__en[0] = give__en;
@@ -12655,7 +12655,7 @@ module XbarRTL__a7c7e18db18bc973
   output logic [0:0] recv__rdy [0:0] ,
   output logic [0:0] send__en [0:0] ,
   output RingMsg_2__src_1__dst_1__payload_32 send__msg [0:0] ,
-  input logic [0:0] send__rdy [0:0]
+  input logic [0:0] send__rdy [0:0] 
 );
   //-------------------------------------------------------------
   // Component input_units[0:0]
@@ -12821,7 +12821,7 @@ module IntraTileCtrlNet__2a28ef76eb7cf049
   input logic [0:0] to_mngr__rdy  ,
   output logic [0:0] to_proc__en [0:0] ,
   output logic [31:0] to_proc__msg [0:0] ,
-  input logic [0:0] to_proc__rdy [0:0]
+  input logic [0:0] to_proc__rdy [0:0] 
 );
   localparam logic [0:0] __const__ncores_at_up_comb  = 1'd1;
   //-------------------------------------------------------------
@@ -12886,7 +12886,7 @@ module IntraTileCtrlNet__2a28ef76eb7cf049
   // At /work/global/mw828/cifer/cifer-chip/brg_tile/tmu/IntraTileCtrlNet.py:69
   // @update
   // def up_comb():
-  //
+  // 
   //   # from_proc <-> p2m_net.recv
   //   for proc_id in range( ncores ):
   //     s.p2m_net.recv[ proc_id ].en          @= s.from_proc[ proc_id ].en
@@ -12894,26 +12894,26 @@ module IntraTileCtrlNet__2a28ef76eb7cf049
   //     s.p2m_net.recv[ proc_id ].msg.src     @= proc_id
   //     s.p2m_net.recv[ proc_id ].msg.dst     @= 0
   //     s.p2m_net.recv[ proc_id ].msg.payload @= s.from_proc[ proc_id ].msg
-  //
+  // 
   //   # p2m_net.send <-> to_mngr
   //   s.to_mngr.en            @= s.p2m_net.send[ 0 ].en
   //   s.p2m_net.send[ 0 ].rdy @= s.to_mngr.rdy
   //   s.to_mngr.msg.coreid    @= s.p2m_net.send[ 0 ].msg.src
   //   s.to_mngr.msg.data      @= s.p2m_net.send[ 0 ].msg.payload
-  //
+  // 
   //   # to_proc <-> m2p_net.send
   //   for proc_id in range( ncores ):
   //     s.to_proc[ proc_id ].en       @= s.m2p_net.send[ proc_id ].en
   //     s.m2p_net.send[ proc_id ].rdy @= s.to_proc[ proc_id ].rdy
   //     s.to_proc[ proc_id ].msg      @= s.m2p_net.send[ proc_id ].msg.payload
-  //
+  // 
   //   # m2p_net.recv <-> from_mngr
   //   s.m2p_net.recv[ 0 ].en           @= s.from_mngr.en
   //   s.from_mngr.rdy                  @= s.m2p_net.recv[ 0 ].rdy
   //   s.m2p_net.recv[ 0 ].msg.src      @= 0
   //   s.m2p_net.recv[ 0 ].msg.dst      @= s.from_mngr.msg.coreid
   //   s.m2p_net.recv[ 0 ].msg.payload  @= s.from_mngr.msg.data
-
+  
   always_comb begin : up_comb
     for ( int unsigned proc_id = 1'd0; proc_id < 1'( __const__ncores_at_up_comb ); proc_id += 1'd1 ) begin
       p2m_net__recv__en[1'(proc_id)] = from_proc__en[1'(proc_id)];
@@ -12954,7 +12954,7 @@ module RegRst__Type_Bits5__reset_value_00
   input  logic [0:0] clk ,
   input  logic [4:0] in_ ,
   output logic [4:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [4:0] __const__reset_value_at_up_regrst  = 5'd0;
 
@@ -12964,7 +12964,7 @@ module RegRst__Type_Bits5__reset_value_00
   // def up_regrst():
   //   if s.reset: s.out <<= reset_value
   //   else:       s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regrst
     if ( reset ) begin
       out <= 5'( __const__reset_value_at_up_regrst );
@@ -12998,7 +12998,7 @@ module IntDivRem4Ctrl__a04e5aace91dda76
   output logic [0:0] resp_en ,
   input  logic [0:0] resp_rdy ,
   input  logic [0:0] sub_negative1 ,
-  input  logic [0:0] sub_negative2
+  input  logic [0:0] sub_negative2 
 );
   localparam logic [0:0] __const__R_MUX_SEL_IN  = 1'd0;
   localparam logic [0:0] __const__Q_MUX_SEL_0  = 1'd0;
@@ -13032,13 +13032,13 @@ module IntDivRem4Ctrl__a04e5aace91dda76
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/mdu/IntDivRem4.py:88
   // @update
   // def state_outputs():
-  //
+  // 
   //   s.req_rdy     @= 0
   //   s.resp_en     @= 0
   //   s.buffers_en  @= 0
   //   s.is_div      @= 0
   //   s.is_signed   @= 0
-  //
+  // 
   //   if   s.state.out == s.STATE_IDLE:
   //     s.req_rdy           @= 1
   //     s.remainder_mux_sel @= R_MUX_SEL_IN
@@ -13046,11 +13046,11 @@ module IntDivRem4Ctrl__a04e5aace91dda76
   //     s.quotient_mux_sel  @= Q_MUX_SEL_0
   //     s.quotient_reg_en   @= 1
   //     s.divisor_mux_sel   @= D_MUX_SEL_IN
-  //
+  // 
   //     s.buffers_en        @= 1
   //     s.is_div            @= ( s.req_type[1] == 0 ) # div/divu = 0b100, 0b101
   //     s.is_signed         @= ( s.req_type[0] == 0 ) # div/rem = 0b100, 0b110
-  //
+  // 
   //   elif s.state.out == s.STATE_DONE:
   //     s.resp_en           @= s.resp_rdy
   //     s.remainder_mux_sel @= R_MUX_SEL_IN
@@ -13058,20 +13058,20 @@ module IntDivRem4Ctrl__a04e5aace91dda76
   //     s.quotient_mux_sel  @= Q_MUX_SEL_0
   //     s.quotient_reg_en   @= 0
   //     s.divisor_mux_sel   @= D_MUX_SEL_IN
-  //
+  // 
   //   else: # calculating
-  //
+  // 
   //     s.remainder_reg_en @= ~( s.sub_negative1 & s.sub_negative2 )
-  //
+  // 
   //     if s.sub_negative2:
   //       s.remainder_mux_sel @= R_MUX_SEL_SUB1
   //     else:
   //       s.remainder_mux_sel @= R_MUX_SEL_SUB2
-  //
+  // 
   //     s.quotient_reg_en  @= 1
   //     s.quotient_mux_sel @= Q_MUX_SEL_LSH
   //     s.divisor_mux_sel  @= D_MUX_SEL_RSH
-
+  
   always_comb begin : state_outputs
     req_rdy = 1'd0;
     resp_en = 1'd0;
@@ -13114,20 +13114,20 @@ module IntDivRem4Ctrl__a04e5aace91dda76
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/mdu/IntDivRem4.py:72
   // @update
   // def state_transitions():
-  //
+  // 
   //   s.state.in_ @= s.state.out
-  //
+  // 
   //   if   s.state.out == s.STATE_IDLE:
   //     if s.req_en:
   //       s.state.in_ @= s.STATE_CALC
-  //
+  // 
   //   elif s.state.out == s.STATE_DONE:
   //     if s.resp_rdy:
   //       s.state.in_ @= s.STATE_IDLE
-  //
+  // 
   //   else:
   //     s.state.in_ @= s.state.out - 1
-
+  
   always_comb begin : state_transitions
     state__in_ = state__out;
     if ( state__out == 5'd0 ) begin
@@ -13159,7 +13159,7 @@ module Mux__Type_Bits64__ninputs_2
   input  logic [63:0] in_ [0:1],
   output logic [63:0] out ,
   input  logic [0:0] reset ,
-  input  logic [0:0] sel
+  input  logic [0:0] sel 
 );
 
   // PyMTL Update Block Source
@@ -13167,7 +13167,7 @@ module Mux__Type_Bits64__ninputs_2
   // @update
   // def up_mux():
   //   s.out @= s.in_[ s.sel ]
-
+  
   always_comb begin : up_mux
     out = in_[sel];
   end
@@ -13183,7 +13183,7 @@ module Reg__Type_Bits64
   input  logic [0:0] clk ,
   input  logic [63:0] in_ ,
   output logic [63:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
 
   // PyMTL Update Block Source
@@ -13191,7 +13191,7 @@ module Reg__Type_Bits64
   // @update_ff
   // def up_reg():
   //   s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_reg
     out <= in_;
   end
@@ -13208,7 +13208,7 @@ module RightLogicalShifter__Type_Bits64__shamt_nbits_64
   input  logic [63:0] in_ ,
   output logic [63:0] out ,
   input  logic [0:0] reset ,
-  input  logic [63:0] shamt
+  input  logic [63:0] shamt 
 );
 
   // PyMTL Update Block Source
@@ -13216,7 +13216,7 @@ module RightLogicalShifter__Type_Bits64__shamt_nbits_64
   // @update
   // def up_rshifter():
   //   s.out @= s.in_ >> s.shamt
-
+  
   always_comb begin : up_rshifter
     out = in_ >> shamt;
   end
@@ -13233,7 +13233,7 @@ module RegEn__Type_Bits1
   input  logic [0:0] en ,
   input  logic [0:0] in_ ,
   output logic [0:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
 
   // PyMTL Update Block Source
@@ -13242,7 +13242,7 @@ module RegEn__Type_Bits1
   // def up_regen():
   //   if s.en:
   //     s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regen
     if ( en ) begin
       out <= in_;
@@ -13261,7 +13261,7 @@ module RegEn__Type_Bits8
   input  logic [0:0] en ,
   input  logic [7:0] in_ ,
   output logic [7:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
 
   // PyMTL Update Block Source
@@ -13270,7 +13270,7 @@ module RegEn__Type_Bits8
   // def up_regen():
   //   if s.en:
   //     s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regen
     if ( en ) begin
       out <= in_;
@@ -13289,7 +13289,7 @@ module LeftLogicalShifter__Type_Bits32__shamt_nbits_32
   input  logic [31:0] in_ ,
   output logic [31:0] out ,
   input  logic [0:0] reset ,
-  input  logic [31:0] shamt
+  input  logic [31:0] shamt 
 );
 
   // PyMTL Update Block Source
@@ -13297,7 +13297,7 @@ module LeftLogicalShifter__Type_Bits32__shamt_nbits_32
   // @update
   // def up_lshifter():
   //   s.out @= s.in_ << s.shamt
-
+  
   always_comb begin : up_lshifter
     out = in_ << shamt;
   end
@@ -13314,7 +13314,7 @@ module Mux__Type_Bits32__ninputs_2
   input  logic [31:0] in_ [0:1],
   output logic [31:0] out ,
   input  logic [0:0] reset ,
-  input  logic [0:0] sel
+  input  logic [0:0] sel 
 );
 
   // PyMTL Update Block Source
@@ -13322,7 +13322,7 @@ module Mux__Type_Bits32__ninputs_2
   // @update
   // def up_mux():
   //   s.out @= s.in_[ s.sel ]
-
+  
   always_comb begin : up_mux
     out = in_[sel];
   end
@@ -13339,7 +13339,7 @@ module RegEn__Type_Bits32
   input  logic [0:0] en ,
   input  logic [31:0] in_ ,
   output logic [31:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
 
   // PyMTL Update Block Source
@@ -13348,7 +13348,7 @@ module RegEn__Type_Bits32
   // def up_regen():
   //   if s.en:
   //     s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regen
     if ( en ) begin
       out <= in_;
@@ -13367,7 +13367,7 @@ module Mux__Type_Bits64__ninputs_3
   input  logic [63:0] in_ [0:2],
   output logic [63:0] out ,
   input  logic [0:0] reset ,
-  input  logic [1:0] sel
+  input  logic [1:0] sel 
 );
 
   // PyMTL Update Block Source
@@ -13375,7 +13375,7 @@ module Mux__Type_Bits64__ninputs_3
   // @update
   // def up_mux():
   //   s.out @= s.in_[ s.sel ]
-
+  
   always_comb begin : up_mux
     out = in_[sel];
   end
@@ -13392,7 +13392,7 @@ module RegEn__Type_Bits64
   input  logic [0:0] en ,
   input  logic [63:0] in_ ,
   output logic [63:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
 
   // PyMTL Update Block Source
@@ -13401,7 +13401,7 @@ module RegEn__Type_Bits64
   // def up_regen():
   //   if s.en:
   //     s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regen
     if ( en ) begin
       out <= in_;
@@ -13420,7 +13420,7 @@ module Subtractor__Type_Bits64
   input  logic [63:0] in0 ,
   input  logic [63:0] in1 ,
   output logic [63:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
 
   // PyMTL Update Block Source
@@ -13428,7 +13428,7 @@ module Subtractor__Type_Bits64
   // @update
   // def up_subtractor():
   //   s.out @= s.in0 - s.in1
-
+  
   always_comb begin : up_subtractor
     out = in0 - in1;
   end
@@ -13458,7 +13458,7 @@ module IntDivRem4Dpath__a04e5aace91dda76
   output logic [7:0] resp_opaque ,
   output logic [31:0] resp_result ,
   output logic [0:0] sub_negative1 ,
-  output logic [0:0] sub_negative2
+  output logic [0:0] sub_negative2 
 );
   localparam logic [5:0] __const__nbits_at_comb_negate_if_needed  = 6'd32;
   localparam logic [0:0] __const__Q_MUX_SEL_0  = 1'd0;
@@ -13912,14 +13912,14 @@ module IntDivRem4Dpath__a04e5aace91dda76
   // def comb_negate_if_needed():
   //   s.a_negate @= s.req_msg_a
   //   s.b_negate @= s.req_msg_b
-  //
+  // 
   //   if s.is_signed & ( s.req_msg_b != 0 ):
   //     if s.req_msg_a[ nbits - 1 ]:
   //       s.a_negate @= ~s.req_msg_a + 1
-  //
+  // 
   //     if s.req_msg_b[ nbits - 1 ]:
   //       s.b_negate @= ~s.req_msg_b + 1
-
+  
   always_comb begin : comb_negate_if_needed
     a_negate = req_msg_a;
     b_negate = req_msg_b;
@@ -13939,7 +13939,7 @@ module IntDivRem4Dpath__a04e5aace91dda76
   // def comb_negate_rem_quo():
   //   s.rem_negate @= ~s.remainder_reg.out[ 0:nbits ] + 1
   //   s.quo_negate @= ~s.quotient_reg.out + 1
-
+  
   always_comb begin : comb_negate_rem_quo
     rem_negate = ( ~remainder_reg__out[6'd31:6'd0] ) + 32'd1;
     quo_negate = ( ~quotient_reg__out ) + 32'd1;
@@ -13951,7 +13951,7 @@ module IntDivRem4Dpath__a04e5aace91dda76
   // def comb_quotient_mux_in():
   //   s.quotient_mux.in_[ Q_MUX_SEL_0   ] @= 0
   //   s.quotient_mux.in_[ Q_MUX_SEL_LSH ] @= s.quotient_lsh.out + zext( concat( ~s.sub_negative1, ~s.sub_negative2 ), DataT )
-
+  
   always_comb begin : comb_quotient_mux_in
     quotient_mux__in_[1'( __const__Q_MUX_SEL_0 )] = 32'd0;
     quotient_mux__in_[1'( __const__Q_MUX_SEL_LSH )] = quotient_lsh__out + { { 30 { 1'b0 } }, { ~sub_negative1, ~sub_negative2 } };
@@ -13963,7 +13963,7 @@ module IntDivRem4Dpath__a04e5aace91dda76
   // def comb_res_negate_flags():
   //   s.res_rem_negate @= s.is_signed & ( s.req_msg_b != 0 ) & s.req_msg_a[nbits-1]
   //   s.res_quo_negate @= s.is_signed & ( s.req_msg_b != 0 ) & ( s.req_msg_a[nbits-1] ^ s.req_msg_b[nbits-1] )
-
+  
   always_comb begin : comb_res_negate_flags
     res_rem_negate = ( is_signed & ( req_msg_b != 32'd0 ) ) & req_msg_a[6'( __const__nbits_at_comb_res_negate_flags ) - 6'd1];
     res_quo_negate = ( is_signed & ( req_msg_b != 32'd0 ) ) & ( req_msg_a[6'( __const__nbits_at_comb_res_negate_flags ) - 6'd1] ^ req_msg_b[6'( __const__nbits_at_comb_res_negate_flags ) - 6'd1] );
@@ -14073,7 +14073,7 @@ module IntDivRem4__opq_nbits_8__data_nbits_32
   output logic [0:0] req__rdy  ,
   output logic [0:0] resp__en  ,
   output MduRespMsg_8_32__opaque_8__res_32 resp__msg  ,
-  input logic [0:0] resp__rdy
+  input logic [0:0] resp__rdy  
 );
   //-------------------------------------------------------------
   // Component ctrl
@@ -14206,7 +14206,7 @@ module Mux__Type_MduRespMsg_8_32__opaque_8__res_32__ninputs_2
   input  MduRespMsg_8_32__opaque_8__res_32 in_ [0:1],
   output MduRespMsg_8_32__opaque_8__res_32 out ,
   input  logic [0:0] reset ,
-  input  logic [0:0] sel
+  input  logic [0:0] sel 
 );
 
   // PyMTL Update Block Source
@@ -14214,7 +14214,7 @@ module Mux__Type_MduRespMsg_8_32__opaque_8__res_32__ninputs_2
   // @update
   // def up_mux():
   //   s.out @= s.in_[ s.sel ]
-
+  
   always_comb begin : up_mux
     out = in_[sel];
   end
@@ -14236,7 +14236,7 @@ module BypassQueue1EntryRTL__0dcef6d9ec748696
   output MduRespMsg_8_32__opaque_8__res_32 deq__ret  ,
   input logic [0:0] enq__en  ,
   input MduRespMsg_8_32__opaque_8__res_32 enq__msg  ,
-  output logic [0:0] enq__rdy
+  output logic [0:0] enq__rdy  
 );
   MduRespMsg_8_32__opaque_8__res_32 entry;
   logic [0:0] full;
@@ -14266,7 +14266,7 @@ module BypassQueue1EntryRTL__0dcef6d9ec748696
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/pymtl3/pymtl3/stdlib/queues/queues.py:532
   // s.deq.rdy //= lambda: ~s.reset & ( s.full | s.enq.en )
-
+  
   always_comb begin : _lambda__s_mdus_0__div_resp_q_q_deq_rdy
     deq__rdy = ( ~reset ) & ( full | enq__en );
   end
@@ -14274,7 +14274,7 @@ module BypassQueue1EntryRTL__0dcef6d9ec748696
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/pymtl3/pymtl3/stdlib/queues/queues.py:531
   // s.enq.rdy //= lambda: ~s.reset & ~s.full
-
+  
   always_comb begin : _lambda__s_mdus_0__div_resp_q_q_enq_rdy
     enq__rdy = ( ~reset ) & ( ~full );
   end
@@ -14284,10 +14284,10 @@ module BypassQueue1EntryRTL__0dcef6d9ec748696
   // @update_ff
   // def ff_bypass1():
   //   s.full <<= ~s.reset & ( ~s.deq.en & (s.enq.en | s.full) )
-  //
+  // 
   //   if s.enq.en & ~s.deq.en:
   //     s.entry <<= s.enq.msg
-
+  
   always_ff @(posedge clk) begin : ff_bypass1
     full <= ( ~reset ) & ( ( ~deq__en ) & ( enq__en | full ) );
     if ( enq__en & ( ~deq__en ) ) begin
@@ -14320,7 +14320,7 @@ module BypassQueueRTL__8ad97cf91a193d28
   output MduRespMsg_8_32__opaque_8__res_32 deq__ret  ,
   input logic [0:0] enq__en  ,
   input MduRespMsg_8_32__opaque_8__res_32 enq__msg  ,
-  output logic [0:0] enq__rdy
+  output logic [0:0] enq__rdy  
 );
   //-------------------------------------------------------------
   // Component q
@@ -14380,7 +14380,7 @@ module PipeQueue1EntryRTL__085dd9bb56afbe07
   output MduReqMsg_8_32__type__3__opaque_8__op_a_32__op_b_32 deq__ret  ,
   input logic [0:0] enq__en  ,
   input MduReqMsg_8_32__type__3__opaque_8__op_a_32__op_b_32 enq__msg  ,
-  output logic [0:0] enq__rdy
+  output logic [0:0] enq__rdy  
 );
   MduReqMsg_8_32__type__3__opaque_8__op_a_32__op_b_32 entry;
   logic [0:0] full;
@@ -14388,7 +14388,7 @@ module PipeQueue1EntryRTL__085dd9bb56afbe07
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/pymtl3/pymtl3/stdlib/queues/queues.py:490
   // s.deq.rdy //= lambda: s.full & ~s.reset
-
+  
   always_comb begin : _lambda__s_mdus_0__mul_recv_q_q_deq_rdy
     deq__rdy = full & ( ~reset );
   end
@@ -14396,7 +14396,7 @@ module PipeQueue1EntryRTL__085dd9bb56afbe07
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/pymtl3/pymtl3/stdlib/queues/queues.py:489
   // s.enq.rdy //= lambda: ~s.reset & ( ~s.full | s.deq.en )
-
+  
   always_comb begin : _lambda__s_mdus_0__mul_recv_q_q_enq_rdy
     enq__rdy = ( ~reset ) & ( ( ~full ) | deq__en );
   end
@@ -14406,10 +14406,10 @@ module PipeQueue1EntryRTL__085dd9bb56afbe07
   // @update_ff
   // def ff_pipe1():
   //   s.full <<= ~s.reset & ( s.enq.en | s.full & ~s.deq.en )
-  //
+  // 
   //   if s.enq.en:
   //     s.entry <<= s.enq.msg
-
+  
   always_ff @(posedge clk) begin : ff_pipe1
     full <= ( ~reset ) & ( enq__en | ( full & ( ~deq__en ) ) );
     if ( enq__en ) begin
@@ -14437,7 +14437,7 @@ module PipeQueueRTL__71368e97a9270167
   output MduReqMsg_8_32__type__3__opaque_8__op_a_32__op_b_32 deq__ret  ,
   input logic [0:0] enq__en  ,
   input MduReqMsg_8_32__type__3__opaque_8__op_a_32__op_b_32 enq__msg  ,
-  output logic [0:0] enq__rdy
+  output logic [0:0] enq__rdy  
 );
   //-------------------------------------------------------------
   // Component q
@@ -14496,7 +14496,7 @@ module PipeQueue1EntryRTL__EntryType_MduRespMsg_8_32__opaque_8__res_32
   output MduRespMsg_8_32__opaque_8__res_32 deq__ret  ,
   input logic [0:0] enq__en  ,
   input MduRespMsg_8_32__opaque_8__res_32 enq__msg  ,
-  output logic [0:0] enq__rdy
+  output logic [0:0] enq__rdy  
 );
   MduRespMsg_8_32__opaque_8__res_32 entry;
   logic [0:0] full;
@@ -14504,7 +14504,7 @@ module PipeQueue1EntryRTL__EntryType_MduRespMsg_8_32__opaque_8__res_32
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/pymtl3/pymtl3/stdlib/queues/queues.py:490
   // s.deq.rdy //= lambda: s.full & ~s.reset
-
+  
   always_comb begin : _lambda__s_mdus_0__mul_result_q_0__q_deq_rdy
     deq__rdy = full & ( ~reset );
   end
@@ -14512,7 +14512,7 @@ module PipeQueue1EntryRTL__EntryType_MduRespMsg_8_32__opaque_8__res_32
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/pymtl3/pymtl3/stdlib/queues/queues.py:489
   // s.enq.rdy //= lambda: ~s.reset & ( ~s.full | s.deq.en )
-
+  
   always_comb begin : _lambda__s_mdus_0__mul_result_q_0__q_enq_rdy
     enq__rdy = ( ~reset ) & ( ( ~full ) | deq__en );
   end
@@ -14522,10 +14522,10 @@ module PipeQueue1EntryRTL__EntryType_MduRespMsg_8_32__opaque_8__res_32
   // @update_ff
   // def ff_pipe1():
   //   s.full <<= ~s.reset & ( s.enq.en | s.full & ~s.deq.en )
-  //
+  // 
   //   if s.enq.en:
   //     s.entry <<= s.enq.msg
-
+  
   always_ff @(posedge clk) begin : ff_pipe1
     full <= ( ~reset ) & ( enq__en | ( full & ( ~deq__en ) ) );
     if ( enq__en ) begin
@@ -14553,7 +14553,7 @@ module PipeQueueRTL__8ad97cf91a193d28
   output MduRespMsg_8_32__opaque_8__res_32 deq__ret  ,
   input logic [0:0] enq__en  ,
   input MduRespMsg_8_32__opaque_8__res_32 enq__msg  ,
-  output logic [0:0] enq__rdy
+  output logic [0:0] enq__rdy  
 );
   //-------------------------------------------------------------
   // Component q
@@ -14611,7 +14611,7 @@ module IntMulPipelined__data_nbits_32__opq_nbits_8__nstages_4
   output logic [0:0] req__rdy  ,
   output logic [0:0] resp__en  ,
   output MduRespMsg_8_32__opaque_8__res_32 resp__msg  ,
-  input logic [0:0] resp__rdy
+  input logic [0:0] resp__rdy  
 );
   localparam logic [2:0] __const__nstages_at_up_morestages  = 3'd4;
   localparam logic [5:0] __const__data_nbits_at_comb_a_mulh_negate  = 6'd32;
@@ -14718,7 +14718,7 @@ module IntMulPipelined__data_nbits_32__opq_nbits_8__nstages_4
   // def comb_a_mulh_negate():
   //   s.a_mulh_negate[ 0 :          data_nbits   ] @= 0
   //   s.a_mulh_negate[ data_nbits : data_nbitsx2 ] @= ~s.in_msg.op_a + 1
-
+  
   always_comb begin : comb_a_mulh_negate
     a_mulh_negate[6'd31:6'd0] = 32'd0;
     a_mulh_negate[6'd63:6'( __const__data_nbits_at_comb_a_mulh_negate )] = ( ~in_msg.op_a ) + 32'd1;
@@ -14733,7 +14733,7 @@ module IntMulPipelined__data_nbits_32__opq_nbits_8__nstages_4
   //     s.mul_result @= zext( s.ext_opa, data_nbitsx3 ) * zext( s.in_msg.op_b, data_nbitsx3 ) + zext( s.a_mulh_negate, data_nbitsx3 )
   //   else:
   //     s.mul_result @= zext( s.ext_opa, data_nbitsx3 ) * zext( s.in_msg.op_b, data_nbitsx3 )
-
+  
   always_comb begin : comb_multiply
     if ( ( in_msg.type_ == 3'd1 ) & in_msg.op_b[6'( __const__data_nbits_at_comb_multiply ) - 6'd1] ) begin
       mul_result = ( { { 32 { 1'b0 } }, ext_opa } * { { 64 { 1'b0 } }, in_msg.op_b } ) + { { 32 { 1'b0 } }, a_mulh_negate };
@@ -14751,7 +14751,7 @@ module IntMulPipelined__data_nbits_32__opq_nbits_8__nstages_4
   //     s.ext_opa @= sext( s.in_msg.op_a, data_nbitsx2 )
   //   else:
   //     s.ext_opa @= zext( s.in_msg.op_a, data_nbitsx2 )
-
+  
   always_comb begin : comb_opa
     if ( ( in_msg.type_ == 3'd2 ) | ( in_msg.type_ == 3'd1 ) ) begin
       ext_opa = { { 32 { in_msg.op_a[31] } }, in_msg.op_a };
@@ -14768,7 +14768,7 @@ module IntMulPipelined__data_nbits_32__opq_nbits_8__nstages_4
   //     s.resp_result @= s.mul_result[ 0 : data_nbits ]
   //   else:
   //     s.resp_result @= s.mul_result[ data_nbits : data_nbitsx2 ]
-
+  
   always_comb begin : comb_select_hilo
     if ( in_msg.type_ == 3'd0 ) begin
       resp_result = mul_result[7'd31:7'd0];
@@ -14786,18 +14786,18 @@ module IntMulPipelined__data_nbits_32__opq_nbits_8__nstages_4
   //   s.result_q[ 0 ].enq.en          @= s.recv_q.deq.rdy & s.result_q[ 0 ].enq.rdy
   //   s.result_q[ 0 ].enq.msg.opaque  @= s.recv_q.deq.ret.opaque
   //   s.result_q[ 0 ].enq.msg.res     @= s.resp_result
-  //
+  // 
   //   # chain middle result_q
   //   for i in range( nstages-2 ):
   //     s.result_q[ i   ].deq.en  @= s.result_q[ i ].deq.rdy & s.result_q[ i+1 ].enq.rdy
   //     s.result_q[ i+1 ].enq.en  @= s.result_q[ i ].deq.rdy & s.result_q[ i+1 ].enq.rdy
   //     s.result_q[ i+1 ].enq.msg @= s.result_q[ i ].deq.ret
-  //
+  // 
   //   # result_q[ nstages-2 ] <-> s.resp
   //   s.result_q[ nstages-2 ].deq.en @= s.resp.rdy & s.result_q[ nstages-2 ].deq.rdy
   //   s.resp.en                      @= s.resp.rdy & s.result_q[ nstages-2 ].deq.rdy
   //   s.resp.msg                     @= s.result_q[ nstages-2 ].deq.ret
-
+  
   always_comb begin : up_morestages
     recv_q__deq__en = recv_q__deq__rdy & result_q__enq__rdy[2'd0];
     result_q__enq__en[2'd0] = recv_q__deq__rdy & result_q__enq__rdy[2'd0];
@@ -14842,7 +14842,7 @@ module IntMulDivUnit__c5b256859b3294d6
   output logic [0:0] req__rdy  ,
   output logic [0:0] resp__en  ,
   output MduRespMsg_8_32__opaque_8__res_32 resp__msg  ,
-  input logic [0:0] resp__rdy
+  input logic [0:0] resp__rdy  
 );
   //-------------------------------------------------------------
   // Component div
@@ -14999,32 +14999,32 @@ module IntMulDivUnit__c5b256859b3294d6
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/mdu/IntMulDivUnit.py:59
   // @update
   // def up_req():
-  //
+  // 
   //   # default
   //   s.recv_q.deq.en @= 0
   //   s.mul.req.en    @= 0
   //   s.div.req.en    @= 0
-  //
+  // 
   //   if s.recv_q.deq.rdy:
-  //
+  // 
   //     # multiply request
   //     if ( s.recv_q.deq.ret.type_ == MduMsgType.TYPE_MUL    ) | \
   //        ( s.recv_q.deq.ret.type_ == MduMsgType.TYPE_MULH   ) | \
   //        ( s.recv_q.deq.ret.type_ == MduMsgType.TYPE_MULHSU ) | \
   //        ( s.recv_q.deq.ret.type_ == MduMsgType.TYPE_MULHU  ):
-  //
+  // 
   //       s.mul.req.en    @= s.mul.req.rdy
   //       s.recv_q.deq.en @= s.mul.req.rdy
-  //
+  // 
   //     # divide request
   //     elif ( s.recv_q.deq.ret.type_ == MduMsgType.TYPE_DIV  ) | \
   //          ( s.recv_q.deq.ret.type_ == MduMsgType.TYPE_DIVU ) | \
   //          ( s.recv_q.deq.ret.type_ == MduMsgType.TYPE_REM  ) | \
   //          ( s.recv_q.deq.ret.type_ == MduMsgType.TYPE_REMU ):
-  //
+  // 
   //       s.div.req.en    @= s.div.req.rdy
   //       s.recv_q.deq.en @= s.div.req.rdy
-
+  
   always_comb begin : up_req
     recv_q__deq__en = 1'd0;
     mul__req__en = 1'd0;
@@ -15045,13 +15045,13 @@ module IntMulDivUnit__c5b256859b3294d6
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/mdu/IntMulDivUnit.py:94
   // @update
   // def up_resp():
-  //
+  // 
   //   # default
   //   s.resp.en           @= 0
   //   s.resp.msg          @= MduResp()
   //   s.mul_resp_q.deq.en @= 0
   //   s.div_resp_q.deq.en @= 0
-  //
+  // 
   //   if s.resp.rdy:
   //     if    s.mul_resp_q.deq.rdy:
   //       s.resp.en           @= 1
@@ -15061,7 +15061,7 @@ module IntMulDivUnit__c5b256859b3294d6
   //       s.resp.en           @= 1
   //       s.resp.msg          @= s.div_resp_q.deq.ret
   //       s.div_resp_q.deq.en @= 1
-
+  
   always_comb begin : up_resp
     resp__en = 1'd0;
     resp__msg = { 8'd0, 32'd0 };
@@ -15118,7 +15118,7 @@ module MemReq2NetAdapter8B__src_id_0
   output logic [0:0] recv__rdy  ,
   output logic [0:0] send__en  ,
   output logic [191:0] send__msg  ,
-  input logic [0:0] send__rdy
+  input logic [0:0] send__rdy  
 );
   localparam logic [3:0] __const__READ  = 4'd0;
   localparam logic [3:0] __const__WRITE  = 4'd1;
@@ -15135,7 +15135,7 @@ module MemReq2NetAdapter8B__src_id_0
   //     s.header.plen @= 2
   //   else:
   //     s.header.plen @= 2  # AMO etc. have data field
-
+  
   always_comb begin : up_plen
     if ( recv__msg.type_ == 4'( __const__READ ) ) begin
       header.plen = 4'd0;
@@ -15184,7 +15184,7 @@ module MemReq2NetAdapter8B__src_id_1
   output logic [0:0] recv__rdy  ,
   output logic [0:0] send__en  ,
   output logic [191:0] send__msg  ,
-  input logic [0:0] send__rdy
+  input logic [0:0] send__rdy  
 );
   localparam logic [3:0] __const__READ  = 4'd0;
   localparam logic [3:0] __const__WRITE  = 4'd1;
@@ -15201,7 +15201,7 @@ module MemReq2NetAdapter8B__src_id_1
   //     s.header.plen @= 2
   //   else:
   //     s.header.plen @= 2  # AMO etc. have data field
-
+  
   always_comb begin : up_plen
     if ( recv__msg.type_ == 4'( __const__READ ) ) begin
       header.plen = 4'd0;
@@ -15249,7 +15249,7 @@ module Counter__Type_Bits2__reset_value_0
   input  logic [0:0] incr ,
   input  logic [0:0] load ,
   input  logic [1:0] load_value ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [0:0] __const__reset_value_at_up_count  = 1'd0;
 
@@ -15257,19 +15257,19 @@ module Counter__Type_Bits2__reset_value_0
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_net/ocnlib/rtl/Counter.py:28
   // @update_ff
   // def up_count():
-  //
+  // 
   //   if s.reset:
   //     s.count <<= reset_value
-  //
+  // 
   //   elif s.load:
   //     s.count <<= s.load_value
-  //
+  // 
   //   elif s.incr & ~s.decr:
   //     s.count <<= s.count + 1
-  //
+  // 
   //   elif ~s.incr & s.decr:
   //     s.count <<= s.count - 1
-
+  
   always_ff @(posedge clk) begin : up_count
     if ( reset ) begin
       count <= 2'( __const__reset_value_at_up_count );
@@ -15301,7 +15301,7 @@ module DeserializerRTL__in_nbits_64__max_nblocks_3
   output logic [0:0] recv__rdy  ,
   output logic [0:0] send__en  ,
   output logic [191:0] send__msg  ,
-  input logic [0:0] send__rdy
+  input logic [0:0] send__rdy  
 );
   localparam logic [1:0] __const__max_nblocks_at_up_out_r  = 2'd3;
   logic [1:0] idx;
@@ -15339,7 +15339,7 @@ module DeserializerRTL__in_nbits_64__max_nblocks_3
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_net/ocnlib/rtl/DeserializerRTL.py:90
   // s.send.en //= lambda: ( s.state == s.STATE_RECV ) & ( s.idx ==  s.len_r ) & s.send.rdy
-
+  
   always_comb begin : _lambda__s_mem_net_des_0__send_en
     send__en = ( ( state == 1'd1 ) & ( idx == len_r ) ) & send__rdy;
   end
@@ -15350,16 +15350,16 @@ module DeserializerRTL__in_nbits_64__max_nblocks_3
   // def up_recv_rdy():
   //   if s.state == s.STATE_IDLE:
   //     s.recv.rdy @= 1
-  //
+  // 
   //   else: # STATE_RECV
   //     if s.idx < s.len_r:
   //       s.recv.rdy @= 1
   //     elif s.send.en:
   //       s.recv.rdy @= 1
-  //
+  // 
   //     else:
   //       s.recv.rdy @= 0
-
+  
   always_comb begin : up_recv_rdy
     if ( state == 1'd0 ) begin
       recv__rdy = 1'd1;
@@ -15383,12 +15383,12 @@ module DeserializerRTL__in_nbits_64__max_nblocks_3
   //       s.state_next         @= s.STATE_RECV
   //       s.counter.load       @= 1
   //       s.counter.load_value @= 1
-  //
+  // 
   //     else:
   //       s.state_next         @= s.STATE_IDLE
   //       s.counter.load       @= 0
   //       s.counter.load_value @= CountType(0)
-  //
+  // 
   //   else: # STATE_RECV
   //     if ( s.idx == s.len_r ) & s.send.en:
   //       if s.recv.en:
@@ -15399,12 +15399,12 @@ module DeserializerRTL__in_nbits_64__max_nblocks_3
   //         s.state_next         @= s.STATE_IDLE
   //         s.counter.load       @= 1
   //         s.counter.load_value @= 0
-  //
+  // 
   //     else:
   //       s.state_next         @= s.STATE_RECV
   //       s.counter.load       @= 0
   //       s.counter.load_value @= 0
-
+  
   always_comb begin : up_state_next
     if ( state == 1'd0 ) begin
       if ( ( len > 2'd0 ) & recv__en ) begin
@@ -15447,7 +15447,7 @@ module DeserializerRTL__in_nbits_64__max_nblocks_3
   //   else:
   //     if s.state_next == s.STATE_IDLE:
   //       s.len_r <<= 0
-
+  
   always_ff @(posedge clk) begin : up_len_r
     if ( ( ( state == 1'd0 ) & recv__en ) | ( ( ( state == 1'd1 ) & ( idx == len_r ) ) & send__en ) ) begin
       len_r <= ( len > 2'd0 ) ? len : 2'd1;
@@ -15464,7 +15464,7 @@ module DeserializerRTL__in_nbits_64__max_nblocks_3
   //   if s.reset:
   //     for i in range( max_nblocks ):
   //       s.out_r[i] <<= InType(0)
-  //
+  // 
   //   elif ( s.state == s.STATE_RECV ) & ( s.idx == s.len_r ) & s.send.en:
   //     if s.recv.en:
   //       s.out_r[0] <<= s.recv.msg
@@ -15472,10 +15472,10 @@ module DeserializerRTL__in_nbits_64__max_nblocks_3
   //       s.out_r[0] <<= 0
   //     for i in range(1, max_nblocks):
   //       s.out_r[i] <<= 0
-  //
+  // 
   //   elif s.recv.en:
   //     s.out_r[ trunc(s.idx, SelType) ] <<= s.recv.msg
-
+  
   always_ff @(posedge clk) begin : up_out_r
     if ( reset ) begin
       for ( int unsigned i = 1'd0; i < 2'( __const__max_nblocks_at_up_out_r ); i += 1'd1 )
@@ -15503,7 +15503,7 @@ module DeserializerRTL__in_nbits_64__max_nblocks_3
   //     s.state <<= s.STATE_IDLE
   //   else:
   //     s.state <<= s.state_next
-
+  
   always_ff @(posedge clk) begin : up_state
     if ( reset ) begin
       state <= 1'd0;
@@ -15536,7 +15536,7 @@ module MemResp2NetAdapter8B_noparam
   output logic [0:0] recv__rdy  ,
   output logic [0:0] send__en  ,
   output logic [191:0] send__msg  ,
-  input logic [0:0] send__rdy
+  input logic [0:0] send__rdy  
 );
   localparam logic [3:0] __const__READ  = 4'd0;
   localparam logic [3:0] __const__WRITE  = 4'd1;
@@ -15553,7 +15553,7 @@ module MemResp2NetAdapter8B_noparam
   //     s.header.plen @= 0
   //   else:
   //     s.header.plen @= 2    # AMO etc. have data field
-
+  
   always_comb begin : up_plen
     if ( recv__msg.type_ == 4'( __const__READ ) ) begin
       header.plen = 4'd2;
@@ -15602,7 +15602,7 @@ module Net2MemRespAdapter_noparam
   output logic [0:0] recv__rdy  ,
   output logic [0:0] send__en  ,
   output MemRespMsg_8_128_m1__c72937e2b7853c90 send__msg  ,
-  input logic [0:0] send__rdy
+  input logic [0:0] send__rdy  
 );
   NetHeader4B__ab3e1322e1bcfddf header;
   logic [31:0] header_bits;
@@ -15639,7 +15639,7 @@ module Net2MemReqAdapter_noparam
   output logic [0:0] recv__rdy  ,
   output logic [0:0] send__en  ,
   output MemReqMsg_8_32_128_m1__35a1cc23a1d2d863 send__msg  ,
-  input logic [0:0] send__rdy
+  input logic [0:0] send__rdy  
 );
   NetHeader4B__ab3e1322e1bcfddf header;
   logic [31:0] header_bits;
@@ -15689,7 +15689,7 @@ module RegisterFile__3935155bbb528c9b
   // def up_rf_read():
   //   for i in range( rd_ports ):
   //     s.rdata[i] @= s.regs[ s.raddr[i] ]
-
+  
   always_comb begin : up_rf_read
     for ( int unsigned i = 1'd0; i < 1'( __const__rd_ports_at_up_rf_read ); i += 1'd1 )
       rdata[1'(i)] = regs[raddr[1'(i)]];
@@ -15702,7 +15702,7 @@ module RegisterFile__3935155bbb528c9b
   //   for i in range( wr_ports ):
   //     if s.wen[i]:
   //       s.regs[ s.waddr[i] ] <<= s.wdata[i]
-
+  
   always_ff @(posedge clk) begin : up_rf_write
     for ( int unsigned i = 1'd0; i < 1'( __const__wr_ports_at_up_rf_write ); i += 1'd1 )
       if ( wen[1'(i)] ) begin
@@ -15724,7 +15724,7 @@ module NormalQueueDpathRTL__EntryType_Bits64__num_entries_2
   input  logic [0:0] raddr ,
   input  logic [0:0] reset ,
   input  logic [0:0] waddr ,
-  input  logic [0:0] wen
+  input  logic [0:0] wen 
 );
   //-------------------------------------------------------------
   // Component queue
@@ -15777,7 +15777,7 @@ module NormalQueueRTL__EntryType_Bits64__num_entries_2
   output logic [63:0] deq__ret  ,
   input logic [0:0] enq__en  ,
   input logic [63:0] enq__msg  ,
-  output logic [0:0] enq__rdy
+  output logic [0:0] enq__rdy  
 );
   //-------------------------------------------------------------
   // Component ctrl
@@ -15869,7 +15869,7 @@ module InputUnitRTL__PacketType_Bits64__QueueType_NormalQueueRTL
   output logic [63:0] give__ret  ,
   input logic [0:0] recv__en  ,
   input logic [63:0] recv__msg  ,
-  output logic [0:0] recv__rdy
+  output logic [0:0] recv__rdy  
 );
   //-------------------------------------------------------------
   // Component queue
@@ -15926,14 +15926,14 @@ module OutputUnitRTL__PacketType_Bits64__QueueType_None
   input logic [63:0] get__ret  ,
   output logic [0:0] send__en  ,
   output logic [63:0] send__msg  ,
-  input logic [0:0] send__rdy
+  input logic [0:0] send__rdy  
 );
   logic [0:0] __tmpvar__up_get_send_both_rdy;
 
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_net/router/OutputUnitRTL.py:52
   // s.send.msg //= lambda: s.get.ret if s.send.en else PacketType()
-
+  
   always_comb begin : _lambda__s_mem_net_req_net_output_units_0__send_msg
     send__msg = send__en ? get__ret : 64'd0;
   end
@@ -15945,7 +15945,7 @@ module OutputUnitRTL__PacketType_Bits64__QueueType_None
   //   both_rdy = s.get.rdy & s.send.rdy
   //   s.get.en  @= both_rdy
   //   s.send.en @= both_rdy
-
+  
   always_comb begin : up_get_send
     __tmpvar__up_get_send_both_rdy = get__rdy & send__rdy;
     get__en = __tmpvar__up_get_send_both_rdy;
@@ -15966,7 +15966,7 @@ module Counter__Type_Bits4__reset_value_0
   input  logic [0:0] incr ,
   input  logic [0:0] load ,
   input  logic [3:0] load_value ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [0:0] __const__reset_value_at_up_count  = 1'd0;
 
@@ -15974,19 +15974,19 @@ module Counter__Type_Bits4__reset_value_0
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_net/ocnlib/rtl/Counter.py:28
   // @update_ff
   // def up_count():
-  //
+  // 
   //   if s.reset:
   //     s.count <<= reset_value
-  //
+  // 
   //   elif s.load:
   //     s.count <<= s.load_value
-  //
+  // 
   //   elif s.incr & ~s.decr:
   //     s.count <<= s.count + 1
-  //
+  // 
   //   elif ~s.incr & s.decr:
   //     s.count <<= s.count - 1
-
+  
   always_ff @(posedge clk) begin : up_count
     if ( reset ) begin
       count <= 4'( __const__reset_value_at_up_count );
@@ -16019,7 +16019,7 @@ module XbarRouteUnitMflitRTL__683f89cb3fc5db3b
   input logic [63:0] get__ret  ,
   input logic [0:0] give__en [0:0] ,
   output logic [0:0] give__rdy [0:0] ,
-  output logic [63:0] give__ret [0:0]
+  output logic [63:0] give__ret [0:0] 
 );
   localparam logic [0:0] __const__dir_nbits_at_up_out_dir  = 1'd1;
   logic [0:0] any_give_en;
@@ -16063,7 +16063,7 @@ module XbarRouteUnitMflitRTL__683f89cb3fc5db3b
   //   for i in range( s.num_outports ):
   //     if s.give[i].en:
   //       s.any_give_en @= 1
-
+  
   always_comb begin : up_any_give_en
     any_give_en = 1'd0;
     for ( int unsigned i = 1'd0; i < 1'd1; i += 1'd1 )
@@ -16080,7 +16080,7 @@ module XbarRouteUnitMflitRTL__683f89cb3fc5db3b
   //     s.counter.decr @= 0
   //   else:
   //     s.counter.decr @= s.any_give_en
-
+  
   always_comb begin : up_counter_decr
     if ( state == 1'd0 ) begin
       counter__decr = 1'd0;
@@ -16097,7 +16097,7 @@ module XbarRouteUnitMflitRTL__683f89cb3fc5db3b
   //     s.counter.load @= ( s.state_next == s.STATE_BODY )
   //   else:
   //     s.counter.load @= 0
-
+  
   always_comb begin : up_counter_load
     if ( state == 1'd0 ) begin
       counter__load = state_next == 1'd1;
@@ -16113,7 +16113,7 @@ module XbarRouteUnitMflitRTL__683f89cb3fc5db3b
   //   for i in range( s.num_outports ):
   //     s.give[i].rdy @= ( i == s.out_dir ) & s.get.rdy
   //     s.hold[i]     @= ( i == s.out_dir ) & ( s.state == s.STATE_BODY )
-
+  
   always_comb begin : up_give_rdy_hold
     for ( int unsigned i = 1'd0; i < 1'd1; i += 1'd1 ) begin
       give__rdy[1'(i)] = ( 1'(i) == out_dir ) & get__rdy;
@@ -16126,7 +16126,7 @@ module XbarRouteUnitMflitRTL__683f89cb3fc5db3b
   // @update
   // def up_header():
   //   s.header @= s.get.ret
-
+  
   always_comb begin : up_header
     header = get__ret;
   end
@@ -16139,7 +16139,7 @@ module XbarRouteUnitMflitRTL__683f89cb3fc5db3b
   //     s.out_dir @= s.header.dst[0:dir_nbits]
   //   else:
   //     s.out_dir @= s.out_dir_r
-
+  
   always_comb begin : up_out_dir
     if ( ( state == 1'd0 ) & get__rdy ) begin
       out_dir = header.dst[2'd0:2'd0];
@@ -16157,11 +16157,11 @@ module XbarRouteUnitMflitRTL__683f89cb3fc5db3b
   //     # If the packet has body flits
   //     if s.any_give_en & ( s.header.plen > 0 ):
   //       s.state_next @= s.STATE_BODY
-  //
+  // 
   //   else: # STATE_BODY
   //     if ( s.counter.count == 1 ) & s.any_give_en:
   //       s.state_next @= s.STATE_HEADER
-
+  
   always_comb begin : up_state_next
     state_next = state;
     if ( state == 1'd0 ) begin
@@ -16179,7 +16179,7 @@ module XbarRouteUnitMflitRTL__683f89cb3fc5db3b
   // @update_ff
   // def up_out_dir_r():
   //   s.out_dir_r <<= s.out_dir
-
+  
   always_ff @(posedge clk) begin : up_out_dir_r
     out_dir_r <= out_dir;
   end
@@ -16192,7 +16192,7 @@ module XbarRouteUnitMflitRTL__683f89cb3fc5db3b
   //     s.state <<= s.STATE_HEADER
   //   else:
   //     s.state <<= s.state_next
-
+  
   always_ff @(posedge clk) begin : up_state_r
     if ( reset ) begin
       state <= 1'd0;
@@ -16220,7 +16220,7 @@ module RegEnRst__Type_Bits2__reset_value_1
   input  logic [0:0] en ,
   input  logic [1:0] in_ ,
   output logic [1:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [0:0] __const__reset_value_at_up_regenrst  = 1'd1;
 
@@ -16230,7 +16230,7 @@ module RegEnRst__Type_Bits2__reset_value_1
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 2'( __const__reset_value_at_up_regenrst );
@@ -16252,7 +16252,7 @@ module RoundRobinArbiterEn__nreqs_2
   input  logic [0:0] en ,
   output logic [1:0] grants ,
   input  logic [1:0] reqs ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [1:0] __const__nreqs_at_comb_reqs_int  = 2'd2;
   localparam logic [2:0] __const__nreqsX2_at_comb_reqs_int  = 3'd4;
@@ -16295,7 +16295,7 @@ module RoundRobinArbiterEn__nreqs_2
   // def comb_grants():
   //   for i in range( nreqs ):
   //     s.grants[i] @= s.grants_int[i] | s.grants_int[nreqs+i]
-
+  
   always_comb begin : comb_grants
     for ( int unsigned i = 1'd0; i < 2'( __const__nreqs_at_comb_grants ); i += 1'd1 )
       grants[1'(i)] = grants_int[2'(i)] | grants_int[2'( __const__nreqs_at_comb_grants ) + 2'(i)];
@@ -16310,7 +16310,7 @@ module RoundRobinArbiterEn__nreqs_2
   //       s.grants_int[i] @= s.reqs_int[i]
   //     else:
   //       s.grants_int[i] @= ~s.kills[i] & s.reqs_int[i]
-
+  
   always_comb begin : comb_grants_int
     for ( int unsigned i = 1'd0; i < 3'( __const__nreqsX2_at_comb_grants_int ); i += 1'd1 )
       if ( priority_int[2'(i)] ) begin
@@ -16330,7 +16330,7 @@ module RoundRobinArbiterEn__nreqs_2
   //       s.kills[i+1] @= s.reqs_int[i]
   //     else:
   //       s.kills[i+1] @= s.kills[i] | ( ~s.kills[i] & s.reqs_int[i] )
-
+  
   always_comb begin : comb_kills
     kills[3'd0] = 1'd1;
     for ( int unsigned i = 1'd0; i < 3'( __const__nreqsX2_at_comb_kills ); i += 1'd1 )
@@ -16346,7 +16346,7 @@ module RoundRobinArbiterEn__nreqs_2
   // @update
   // def comb_priority_en():
   //   s.priority_en @= ( s.grants != 0 ) & s.en
-
+  
   always_comb begin : comb_priority_en
     priority_en = ( grants != 2'd0 ) & en;
   end
@@ -16357,7 +16357,7 @@ module RoundRobinArbiterEn__nreqs_2
   // def comb_priority_int():
   //   s.priority_int[    0:nreqs  ] @= s.priority_reg.out
   //   s.priority_int[nreqs:nreqsX2] @= 0
-
+  
   always_comb begin : comb_priority_int
     priority_int[2'd1:2'd0] = priority_reg__out;
     priority_int[2'd3:2'( __const__nreqs_at_comb_priority_int )] = 2'd0;
@@ -16369,7 +16369,7 @@ module RoundRobinArbiterEn__nreqs_2
   // def comb_reqs_int():
   //   s.reqs_int [    0:nreqs  ] @= s.reqs
   //   s.reqs_int [nreqs:nreqsX2] @= s.reqs
-
+  
   always_comb begin : comb_reqs_int
     reqs_int[2'd1:2'd0] = reqs;
     reqs_int[2'd3:2'( __const__nreqs_at_comb_reqs_int )] = reqs;
@@ -16394,7 +16394,7 @@ module GrantHoldArbiter__nreqs_2
   output logic [1:0] grants ,
   input  logic [0:0] hold ,
   input  logic [1:0] reqs ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   logic [1:0] last_r;
   //-------------------------------------------------------------
@@ -16423,7 +16423,7 @@ module GrantHoldArbiter__nreqs_2
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_net/ocnlib/rtl/GrantHoldArbiter.py:30
   // s.arb.en   //= lambda: s.en
-
+  
   always_comb begin : _lambda__s_mem_net_req_net_switch_units_0__arbiter_arb_en
     arb__en = en;
   end
@@ -16431,7 +16431,7 @@ module GrantHoldArbiter__nreqs_2
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_net/ocnlib/rtl/GrantHoldArbiter.py:29
   // s.arb.reqs //= lambda: 0 if s.hold else s.reqs
-
+  
   always_comb begin : _lambda__s_mem_net_req_net_switch_units_0__arbiter_arb_reqs
     arb__reqs = hold ? 2'd0 : reqs;
   end
@@ -16439,7 +16439,7 @@ module GrantHoldArbiter__nreqs_2
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_net/ocnlib/rtl/GrantHoldArbiter.py:31
   // s.grants   //= lambda: s.arb.grants if ~s.hold else s.last_r
-
+  
   always_comb begin : _lambda__s_mem_net_req_net_switch_units_0__arbiter_grants
     grants = ( ~hold ) ? arb__grants : last_r;
   end
@@ -16449,7 +16449,7 @@ module GrantHoldArbiter__nreqs_2
   // @update_ff
   // def up_last_r():
   //   s.last_r <<= s.grants
-
+  
   always_ff @(posedge clk) begin : up_last_r
     last_r <= grants;
   end
@@ -16468,7 +16468,7 @@ module Encoder__in_nbits_2__out_nbits_1
   input  logic [0:0] clk ,
   input  logic [1:0] in_ ,
   output logic [0:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
 
   // PyMTL Update Block Source
@@ -16479,7 +16479,7 @@ module Encoder__in_nbits_2__out_nbits_1
   //   for i in range( s.in_nbits ):
   //     if s.in_[i]:
   //       s.out @= i
-
+  
   always_comb begin : encode
     out = 1'd0;
     for ( int unsigned i = 1'd0; i < 2'd2; i += 1'd1 )
@@ -16504,7 +16504,7 @@ module SwitchUnitGrantHoldRTL__Type_Bits64__num_inports_2
   input logic [63:0] get__ret [0:1] ,
   input logic [0:0] give__en  ,
   output logic [0:0] give__rdy  ,
-  output logic [63:0] give__ret
+  output logic [63:0] give__ret  
 );
   localparam logic [1:0] __const__num_inports_at_up_granted_get_rdy  = 2'd2;
   localparam logic [0:0] __const__i_at__lambda__s_mem_net_req_net_switch_units_0__get_0__en  = 1'd0;
@@ -16583,7 +16583,7 @@ module SwitchUnitGrantHoldRTL__Type_Bits64__num_inports_2
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_net/router/SwitchUnitGrantHoldRTL.py:37
   // s.arbiter.en   //= lambda: ~s.any_hold & s.give.en
-
+  
   always_comb begin : _lambda__s_mem_net_req_net_switch_units_0__arbiter_en
     arbiter__en = ( ~any_hold ) & give__en;
   end
@@ -16591,7 +16591,7 @@ module SwitchUnitGrantHoldRTL__Type_Bits64__num_inports_2
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_net/router/SwitchUnitGrantHoldRTL.py:63
   // s.get[i].en //= lambda: s.give.en & ( s.mux.sel == i )
-
+  
   always_comb begin : _lambda__s_mem_net_req_net_switch_units_0__get_0__en
     get__en[1'd0] = give__en & ( mux__sel == 1'( __const__i_at__lambda__s_mem_net_req_net_switch_units_0__get_0__en ) );
   end
@@ -16599,7 +16599,7 @@ module SwitchUnitGrantHoldRTL__Type_Bits64__num_inports_2
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_net/router/SwitchUnitGrantHoldRTL.py:63
   // s.get[i].en //= lambda: s.give.en & ( s.mux.sel == i )
-
+  
   always_comb begin : _lambda__s_mem_net_req_net_switch_units_0__get_1__en
     get__en[1'd1] = give__en & ( mux__sel == 1'( __const__i_at__lambda__s_mem_net_req_net_switch_units_0__get_1__en ) );
   end
@@ -16609,7 +16609,7 @@ module SwitchUnitGrantHoldRTL__Type_Bits64__num_inports_2
   // @update
   // def up_any_hold():
   //   s.any_hold @= s.hold > 0
-
+  
   always_comb begin : up_any_hold
     any_hold = hold > 2'd0;
   end
@@ -16622,7 +16622,7 @@ module SwitchUnitGrantHoldRTL__Type_Bits64__num_inports_2
   //   for i in range( num_inports ):
   //     if s.arbiter.grants[i]:
   //       s.granted_get_rdy @= s.get[i].rdy
-
+  
   always_comb begin : up_granted_get_rdy
     granted_get_rdy = 1'd0;
     for ( int unsigned i = 1'd0; i < 2'( __const__num_inports_at_up_granted_get_rdy ); i += 1'd1 )
@@ -16663,7 +16663,7 @@ module XbarMflitRTL__3af220abc55696b9
   output logic [0:0] recv__rdy [0:1] ,
   output logic [0:0] send__en [0:0] ,
   output logic [63:0] send__msg [0:0] ,
-  input logic [0:0] send__rdy [0:0]
+  input logic [0:0] send__rdy [0:0] 
 );
   //-------------------------------------------------------------
   // Component input_units[0:1]
@@ -16866,7 +16866,7 @@ module XbarRouteUnitMflitRTL__486dbe57746d06b3
   input logic [63:0] get__ret  ,
   input logic [0:0] give__en [0:1] ,
   output logic [0:0] give__rdy [0:1] ,
-  output logic [63:0] give__ret [0:1]
+  output logic [63:0] give__ret [0:1] 
 );
   localparam logic [0:0] __const__dir_nbits_at_up_out_dir  = 1'd1;
   logic [0:0] any_give_en;
@@ -16910,7 +16910,7 @@ module XbarRouteUnitMflitRTL__486dbe57746d06b3
   //   for i in range( s.num_outports ):
   //     if s.give[i].en:
   //       s.any_give_en @= 1
-
+  
   always_comb begin : up_any_give_en
     any_give_en = 1'd0;
     for ( int unsigned i = 1'd0; i < 2'd2; i += 1'd1 )
@@ -16927,7 +16927,7 @@ module XbarRouteUnitMflitRTL__486dbe57746d06b3
   //     s.counter.decr @= 0
   //   else:
   //     s.counter.decr @= s.any_give_en
-
+  
   always_comb begin : up_counter_decr
     if ( state == 1'd0 ) begin
       counter__decr = 1'd0;
@@ -16944,7 +16944,7 @@ module XbarRouteUnitMflitRTL__486dbe57746d06b3
   //     s.counter.load @= ( s.state_next == s.STATE_BODY )
   //   else:
   //     s.counter.load @= 0
-
+  
   always_comb begin : up_counter_load
     if ( state == 1'd0 ) begin
       counter__load = state_next == 1'd1;
@@ -16960,7 +16960,7 @@ module XbarRouteUnitMflitRTL__486dbe57746d06b3
   //   for i in range( s.num_outports ):
   //     s.give[i].rdy @= ( i == s.out_dir ) & s.get.rdy
   //     s.hold[i]     @= ( i == s.out_dir ) & ( s.state == s.STATE_BODY )
-
+  
   always_comb begin : up_give_rdy_hold
     for ( int unsigned i = 1'd0; i < 2'd2; i += 1'd1 ) begin
       give__rdy[1'(i)] = ( 1'(i) == out_dir ) & get__rdy;
@@ -16973,7 +16973,7 @@ module XbarRouteUnitMflitRTL__486dbe57746d06b3
   // @update
   // def up_header():
   //   s.header @= s.get.ret
-
+  
   always_comb begin : up_header
     header = get__ret;
   end
@@ -16986,7 +16986,7 @@ module XbarRouteUnitMflitRTL__486dbe57746d06b3
   //     s.out_dir @= s.header.dst[0:dir_nbits]
   //   else:
   //     s.out_dir @= s.out_dir_r
-
+  
   always_comb begin : up_out_dir
     if ( ( state == 1'd0 ) & get__rdy ) begin
       out_dir = header.dst[2'd0:2'd0];
@@ -17004,11 +17004,11 @@ module XbarRouteUnitMflitRTL__486dbe57746d06b3
   //     # If the packet has body flits
   //     if s.any_give_en & ( s.header.plen > 0 ):
   //       s.state_next @= s.STATE_BODY
-  //
+  // 
   //   else: # STATE_BODY
   //     if ( s.counter.count == 1 ) & s.any_give_en:
   //       s.state_next @= s.STATE_HEADER
-
+  
   always_comb begin : up_state_next
     state_next = state;
     if ( state == 1'd0 ) begin
@@ -17026,7 +17026,7 @@ module XbarRouteUnitMflitRTL__486dbe57746d06b3
   // @update_ff
   // def up_out_dir_r():
   //   s.out_dir_r <<= s.out_dir
-
+  
   always_ff @(posedge clk) begin : up_out_dir_r
     out_dir_r <= out_dir;
   end
@@ -17039,7 +17039,7 @@ module XbarRouteUnitMflitRTL__486dbe57746d06b3
   //     s.state <<= s.STATE_HEADER
   //   else:
   //     s.state <<= s.state_next
-
+  
   always_ff @(posedge clk) begin : up_state_r
     if ( reset ) begin
       state <= 1'd0;
@@ -17072,7 +17072,7 @@ module SwitchUnitNullRTL__Type_Bits64__num_inports_1
   input logic [63:0] get__ret [0:0] ,
   input logic [0:0] give__en  ,
   output logic [0:0] give__rdy  ,
-  output logic [63:0] give__ret
+  output logic [63:0] give__ret  
 );
 
   assign get__en[0] = give__en;
@@ -17095,7 +17095,7 @@ module XbarMflitRTL__d06fa4a1b21a6061
   output logic [0:0] recv__rdy [0:0] ,
   output logic [0:0] send__en [0:1] ,
   output logic [63:0] send__msg [0:1] ,
-  input logic [0:0] send__rdy [0:1]
+  input logic [0:0] send__rdy [0:1] 
 );
   //-------------------------------------------------------------
   // Component input_units[0:0]
@@ -17297,7 +17297,7 @@ module SerializerRTL__out_nbits_64__max_nblocks_3
   output logic [0:0] recv__rdy  ,
   output logic [0:0] send__en  ,
   output logic [63:0] send__msg  ,
-  input logic [0:0] send__rdy
+  input logic [0:0] send__rdy  
 );
   localparam logic [6:0] __const__out_nbits_at_up_send_msg  = 7'd64;
   logic [191:0] in_r;
@@ -17357,7 +17357,7 @@ module SerializerRTL__out_nbits_64__max_nblocks_3
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_net/ocnlib/rtl/SerializerRTL.py:73
   // s.counter.incr //= lambda: s.send.en & ( s.state_next != s.STATE_IDLE )
-
+  
   always_comb begin : _lambda__s_mem_net_ser_0__counter_incr
     counter__incr = send__en & ( state_next != 1'd0 );
   end
@@ -17365,7 +17365,7 @@ module SerializerRTL__out_nbits_64__max_nblocks_3
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_net/ocnlib/rtl/SerializerRTL.py:72
   // s.counter.load //= lambda: s.recv.en | ( s.state_next == s.STATE_IDLE )
-
+  
   always_comb begin : _lambda__s_mem_net_ser_0__counter_load
     counter__load = recv__en | ( state_next == 1'd0 );
   end
@@ -17373,7 +17373,7 @@ module SerializerRTL__out_nbits_64__max_nblocks_3
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_net/ocnlib/rtl/SerializerRTL.py:84
   // s.recv.rdy //= lambda: s.state == s.STATE_IDLE
-
+  
   always_comb begin : _lambda__s_mem_net_ser_0__recv_rdy
     recv__rdy = state == 1'd0;
   end
@@ -17386,7 +17386,7 @@ module SerializerRTL__out_nbits_64__max_nblocks_3
   //     s.counter.load_value @= 1
   //   else:
   //     s.counter.load_value @= 0
-
+  
   always_comb begin : up_counter_load_value
     if ( ( ( state == 1'd0 ) & send__rdy ) & ( state_next != 1'd0 ) ) begin
       counter__load_value = 2'd1;
@@ -17404,7 +17404,7 @@ module SerializerRTL__out_nbits_64__max_nblocks_3
   //     s.send.en @= 1
   //   else:
   //     s.send.en @= 0
-
+  
   always_comb begin : up_send_en
     if ( ( ( ( state == 1'd0 ) & recv__en ) & send__rdy ) | ( ( state == 1'd1 ) & send__rdy ) ) begin
       send__en = 1'd1;
@@ -17421,7 +17421,7 @@ module SerializerRTL__out_nbits_64__max_nblocks_3
   //     s.send.msg @= s.recv.msg[0:out_nbits]
   //   else:
   //     s.send.msg @= s.mux.out
-
+  
   always_comb begin : up_send_msg
     if ( ( ( state == 1'd0 ) & recv__en ) & send__rdy ) begin
       send__msg = recv__msg[8'd63:8'd0];
@@ -17438,19 +17438,19 @@ module SerializerRTL__out_nbits_64__max_nblocks_3
   //     # If length is 1, bypass to IDLE
   //     if ( s.len == 1 ) & s.send.en:
   //       s.state_next @= s.STATE_IDLE
-  //
+  // 
   //     elif s.recv.en:
   //       s.state_next @= s.STATE_SEND
-  //
+  // 
   //     else:
   //       s.state_next @= s.STATE_IDLE
-  //
+  // 
   //   else: # STATE_SEND
   //     if ( s.counter.count == s.len_r - 1 ) & s.send.rdy:
   //       s.state_next @= s.STATE_IDLE
   //     else:
   //       s.state_next @= s.STATE_SEND
-
+  
   always_comb begin : up_state_next
     if ( state == 1'd0 ) begin
       if ( ( len == 2'd1 ) & send__en ) begin
@@ -17480,7 +17480,7 @@ module SerializerRTL__out_nbits_64__max_nblocks_3
   //   else:
   //     s.in_r  <<= s.in_r
   //     s.len_r <<= 0 if s.state_next == s.STATE_IDLE else s.len_r
-
+  
   always_ff @(posedge clk) begin : up_in_r
     if ( recv__en & ( state_next != 1'd0 ) ) begin
       in_r <= recv__msg;
@@ -17500,7 +17500,7 @@ module SerializerRTL__out_nbits_64__max_nblocks_3
   //     s.state <<= s.STATE_IDLE
   //   else:
   //     s.state <<= s.state_next
-
+  
   always_ff @(posedge clk) begin : up_state
     if ( reset ) begin
       state <= 1'd0;
@@ -17540,7 +17540,7 @@ module MasterMinionXbar__ncaches_2
   input logic [0:0] mem_ifc__req__rdy ,
   input logic [0:0] mem_ifc__resp__en ,
   input MemRespMsg_8_128_m1__c72937e2b7853c90 mem_ifc__resp__msg ,
-  output logic [0:0] mem_ifc__resp__rdy
+  output logic [0:0] mem_ifc__resp__rdy 
 );
   localparam logic [1:0] __const__ncaches_at_up_length  = 2'd2;
   logic [1:0] des_len [0:2];
@@ -17864,10 +17864,10 @@ module MasterMinionXbar__ncaches_2
   //   for i in range( ncaches ):
   //     s.ser_len[i] @= s.c2net[i].send.msg[18:20] + 1
   //     s.des_len[i] @= s.resp_net.send[i].msg[18:20] + 1
-  //
+  // 
   //   s.ser_len[ncaches] @= s.m2net.send.msg[18:20] + 1
   //   s.des_len[ncaches] @= s.req_net.send[0].msg[18:20] + 1
-
+  
   always_comb begin : up_length
     for ( int unsigned i = 1'd0; i < 2'( __const__ncaches_at_up_length ); i += 1'd1 ) begin
       ser_len[2'(i)] = c2net__send__msg[1'(i)][8'd19:8'd18] + 2'd1;
@@ -17982,7 +17982,7 @@ module AluRTL__nbits_32
   output logic [0:0] ops_ltu ,
   output logic [0:0] ops_ne ,
   output logic [31:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [3:0] __const__alu_add  = 4'd1;
   localparam logic [3:0] __const__alu_sub  = 4'd2;
@@ -18009,7 +18009,7 @@ module AluRTL__nbits_32
   //   s.out   @= 0
   //   s.tmp_a @= 0
   //   s.tmp_b @= 0
-  //
+  // 
   //   if   s.fn == alu_add: s.out @= s.in0 + s.in1                      # ADD
   //   elif s.fn == alu_sub: s.out @= s.in0 - s.in1                      # SUB
   //   elif s.fn == alu_sll: s.out @= s.in0 << zext( s.in1[0:5], dtype ) # SLL
@@ -18032,11 +18032,11 @@ module AluRTL__nbits_32
   //     s.tmp_b     @= zext( s.in0, 64 ) + zext( s.in1, 64 )
   //     s.out[0]    @= 0
   //     s.out[1:32] @= s.tmp_b[1:32]
-  //
+  // 
   //   s.ops_ne  @= s.in0 != s.in1
   //   s.ops_lt  @= s.tmp_a[ 32 ]
   //   s.ops_ltu @= s.in0 < s.in1
-
+  
   always_comb begin : comb_logic
     out = 32'd0;
     tmp_a = 33'd0;
@@ -18103,7 +18103,7 @@ module Incrementer__Type_Bits32__amount_4
   input  logic [0:0] clk ,
   input  logic [31:0] in_ ,
   output logic [31:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [2:0] __const__amount_at_up_incrementer  = 3'd4;
 
@@ -18112,7 +18112,7 @@ module Incrementer__Type_Bits32__amount_4
   // @update
   // def up_incrementer():
   //   s.out @= s.in_ + amount
-
+  
   always_comb begin : up_incrementer
     out = in_ + 32'( __const__amount_at_up_incrementer );
   end
@@ -18135,7 +18135,7 @@ module TaggedPipeQueue1EntryRTL__bc00a7d41594514f
   output I_InstStruct__c61c86abe6488854 deq__ret  ,
   input logic [0:0] enq__en  ,
   input I_InstStruct__c61c86abe6488854 enq__msg  ,
-  output logic [0:0] enq__rdy
+  output logic [0:0] enq__rdy  
 );
   I_InstStruct__c61c86abe6488854 entry;
   logic [0:0] full;
@@ -18145,23 +18145,23 @@ module TaggedPipeQueue1EntryRTL__bc00a7d41594514f
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/structures/TaggedPipeQueue1EntryRTL.py:81
   // @update
   // def up_comb():
-  //
+  // 
   //   s.enq.rdy @= ~s.full | s.deq.en
   //   s.deq.rdy @= s.full
-  //
+  // 
   //   #s.updated_entry @= deepcopy( s.entry )
   //   s.updated_entry @= s.entry
-  //
+  // 
   //   if  s.clear_br.en & \
   //       ( ( s.entry.br_tag & s.clear_br.msg.br_mask ) != 0 ):
-  //
+  // 
   //     if  s.clear_br.msg.kill:
   //       s.updated_entry.killed @= 1
   //     else:
   //       s.updated_entry.br_tag @= s.entry.br_tag & ~s.clear_br.msg.br_mask
-  //
+  // 
   //   s.deq.ret @= s.updated_entry
-
+  
   always_comb begin : up_comb
     enq__rdy = ( ~full ) | deq__en;
     deq__rdy = full;
@@ -18180,29 +18180,29 @@ module TaggedPipeQueue1EntryRTL__bc00a7d41594514f
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/structures/TaggedPipeQueue1EntryRTL.py:56
   // @update_ff
   // def up_states():
-  //
+  // 
   //   # reset
   //   if    s.reset:
   //     s.full <<= 0
-  //
+  // 
   //   # enq and deq
   //   elif  s.enq.en & s.deq.en:
   //     s.full  <<= 1
   //     s.entry <<= s.enq.msg
-  //
+  // 
   //   # not enq and deq
   //   elif  ~s.enq.en & s.deq.en:
   //     s.full <<= 0
-  //
+  // 
   //   # enq and not deq
   //   elif  s.enq.en & ~s.deq.en:
   //     s.full  <<= 1
   //     s.entry <<= s.enq.msg
-  //
+  // 
   //   # not enq and not deq
   //   else:
   //     s.entry <<= s.updated_entry
-
+  
   always_ff @(posedge clk) begin : up_states
     if ( reset ) begin
       full <= 1'd0;
@@ -18243,7 +18243,7 @@ module ALUExecuteUnitRTL_noparam
   output ResolveBranchStruct__7003e9cf5478f896 resolve_br__msg  ,
   output logic [0:0] send_inst__en  ,
   output X_InstStruct__b64b8c5076edb89b send_inst__msg  ,
-  input logic [0:0] send_inst__rdy
+  input logic [0:0] send_inst__rdy  
 );
   localparam logic [1:0] __const__csr_wr  = 2'd2;
   localparam logic [3:0] __const__br_eq  = 4'd4;
@@ -18366,7 +18366,7 @@ module ALUExecuteUnitRTL_noparam
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/units/ALUExecuteUnitRTL.py:90
   // s.send_inst.msg.csr_wen     //= lambda: s.in_msg.csr_type == csr_wr
-
+  
   always_comb begin : _lambda__s_procs_0__alu_pipe_send_inst_msg_csr_wen
     send_inst__msg.csr_wen = in_msg.csr_type == 2'( __const__csr_wr );
   end
@@ -18375,7 +18375,7 @@ module ALUExecuteUnitRTL_noparam
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/units/ALUExecuteUnitRTL.py:94
   // @update
   // def execute_comb():
-  //
+  // 
   //   # default
   //   s.recv_q.deq.en               @= 0
   //   s.send_inst.en                @= 0
@@ -18384,13 +18384,13 @@ module ALUExecuteUnitRTL_noparam
   //   s.resolve_br.msg.br_target    @= 0
   //   s.bypass.en                   @= 0
   //   s.res_sel_mux.sel             @= 0
-  //
+  // 
   //   if s.recv_q.deq.rdy & s.send_inst.rdy:
   //     # dequeue in_msg
   //     s.recv_q.deq.en @= 1
-  //
+  // 
   //     if ~s.recv_q.deq.ret.killed:
-  //
+  // 
   //       # resolve branches
   //       if    s.in_msg.br_type == br_eq:
   //         s.resolve_br.en               @= 1
@@ -18420,17 +18420,17 @@ module ALUExecuteUnitRTL_noparam
   //         s.resolve_br.en               @= 1
   //         s.resolve_br.msg.mispredicted @= 1
   //         s.resolve_br.msg.br_target    @= s.alu.out
-  //
+  // 
   //       # for jal and jalr, output is from pc_plus4
   //       if  ( s.in_msg.br_type == jal ) | ( s.in_msg.br_type == jalr ):
   //         s.res_sel_mux.sel @= 1
-  //
+  // 
   //       # bypass if writing to RF
   //       s.bypass.en @= s.in_msg.rd_en
-  //
+  // 
   //       # send inst to the next unit
   //       s.send_inst.en @= 1
-
+  
   always_comb begin : execute_comb
     recv_q__deq__en = 1'd0;
     send_inst__en = 1'd0;
@@ -18542,7 +18542,7 @@ module CommitUnitRTL_noparam
   input logic [0:0] free_reg__rdy  ,
   output logic [0:0] get_head__en  ,
   input logic [0:0] get_head__rdy  ,
-  input ROBEntry__81cd62f62fe20808 get_head__ret
+  input ROBEntry__81cd62f62fe20808 get_head__ret  
 );
   localparam logic [1:0] __const__csr_wr  = 2'd2;
 
@@ -18550,40 +18550,40 @@ module CommitUnitRTL_noparam
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/units/CommitUnitRTL.py:51
   // @update
   // def commit_comb():
-  //
+  // 
   //   # default
   //   s.get_head.en     @= 0
   //   s.commit_head.en  @= 0
   //   s.free_reg.en     @= 0
   //   s.commit_csr.en   @= 0
   //   s.committed_pc    @= 0
-  //
+  // 
   //   # inspect the head instruction
   //   if  s.get_head.rdy:
   //     s.get_head.en @= 1
-  //
+  // 
   //     # ready to commit head inst
   //     if    s.commit_head.rdy:
-  //
+  // 
   //       # csr write: commit when commit_csr succeeds
   //       if    s.get_head.ret.csr_type == csr_wr:
   //         s.commit_csr.en  @= 1
   //         s.commit_head.en @= s.commit_csr.suc
-  //
+  // 
   //       # insts writing to RF: commit when free_reg is ready
   //       elif  s.get_head.ret.rf_wen:
   //         if  s.free_reg.rdy:
   //           s.free_reg.en     @= 1
   //           s.commit_head.en  @= 1
-  //
+  // 
   //       # default: just commit
   //       else:
   //         s.commit_head.en @= 1
-  //
+  // 
   //       # update committed PC
   //       if s.commit_head.en:
   //         s.committed_pc @= s.get_head.ret.pc
-
+  
   always_comb begin : commit_comb
     get_head__en = 1'd0;
     commit_head__en = 1'd0;
@@ -18628,7 +18628,7 @@ module RegEnRst__Type_Bits32__reset_value_0
   input  logic [0:0] en ,
   input  logic [31:0] in_ ,
   output logic [31:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [0:0] __const__reset_value_at_up_regenrst  = 1'd0;
 
@@ -18638,7 +18638,7 @@ module RegEnRst__Type_Bits32__reset_value_0
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 32'( __const__reset_value_at_up_regenrst );
@@ -18660,7 +18660,7 @@ module RegEnRst__Type_Bits32__reset_value_1
   input  logic [0:0] en ,
   input  logic [31:0] in_ ,
   output logic [31:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [0:0] __const__reset_value_at_up_regenrst  = 1'd1;
 
@@ -18670,7 +18670,7 @@ module RegEnRst__Type_Bits32__reset_value_1
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 32'( __const__reset_value_at_up_regenrst );
@@ -18711,7 +18711,7 @@ module CSRFlowManagerRTL__numcores_1__coreid_0
   output logic [31:0] rd_csr__ret  ,
   output logic [0:0] rd_csr__suc  ,
   input logic [0:0] wr_csr__en  ,
-  input logic [31:0] wr_csr__msg
+  input logic [31:0] wr_csr__msg  
 );
   localparam logic [11:0] __const__CSR_STATS_EN  = 12'd1985;
   localparam logic [11:0] __const__CSR_NUMCORES  = 12'd4033;
@@ -18827,112 +18827,112 @@ module CSRFlowManagerRTL__numcores_1__coreid_0
   //   # default
   //   s.rd_csr.suc            @= 0
   //   s.rd_csr.ret            @= 0
-  //
+  // 
   //   s.commit_csr.suc        @= 0
-  //
+  // 
   //   s.mngr2proc.rdy         @= 0
   //   s.proc2mngr.en          @= 0
   //   s.proc2mngr.msg         @= 0
-  //
+  // 
   //   s.csr_numcore_reg.en    @= 0
   //   s.csr_coreid_reg.en     @= 0
   //   s.csr_tmp_value_reg.en  @= 0
   //   s.csr_stats_en_reg.en   @= 0
-  //
+  // 
   //   s.csr_numcore_reg.in_   @= s.csr_numcore_reg.out
   //   s.csr_coreid_reg.in_    @= s.csr_coreid_reg.out
   //   s.csr_tmp_value_reg.in_ @= s.wr_csr.msg
   //   s.csr_stats_en_reg.in_  @= s.csr_tmp_value_reg.out
-  //
+  // 
   //   #
   //   # read CSR
   //   #
   //   if  s.rd_csr.en:
-  //
+  // 
   //     # CSR_STATS_EN
   //     if    s.rd_csr.msg == CSR_STATS_EN:
   //       s.rd_csr.ret @= s.csr_stats_en_reg.out
   //       s.rd_csr.suc @= 1
-  //
+  // 
   //     # CSR_NUMCORES
   //     elif  s.rd_csr.msg == CSR_NUMCORES:
   //       s.rd_csr.ret @= s.csr_numcore_reg.out
   //       s.rd_csr.suc @= 1
-  //
+  // 
   //     # CSR_COREID
   //     elif  s.rd_csr.msg == CSR_COREID:
   //       s.rd_csr.ret @= s.csr_coreid_reg.out
   //       s.rd_csr.suc @= 1
-  //
+  // 
   //     # CSR_NUMTILES
   //     elif  s.rd_csr.msg == CSR_NUMTILES:
   //       s.rd_csr.ret @= s.ntiles
   //       s.rd_csr.suc @= 1
-  //
+  // 
   //     # CSR_TILEID
   //     elif  s.rd_csr.msg == CSR_TILEID:
   //       s.rd_csr.ret @= s.tileid
   //       s.rd_csr.suc @= 1
-  //
+  // 
   //     # CSR_TILEX
   //     elif  s.rd_csr.msg == CSR_TILEX:
   //       s.rd_csr.ret @= s.tile_x
   //       s.rd_csr.suc @= 1
-  //
+  // 
   //     # CSR_TILEY
   //     elif  s.rd_csr.msg == CSR_TILEY:
   //       s.rd_csr.ret @= s.tile_y
   //       s.rd_csr.suc @= 1
-  //
+  // 
   //     # CSR_MNGR2PROC
   //     elif  s.rd_csr.msg == CSR_MNGR2PROC:
   //       s.mngr2proc.rdy @= 1
   //       s.rd_csr.ret    @= s.mngr2proc.msg
   //       s.rd_csr.suc    @= s.mngr2proc.en
-  //
+  // 
   //     # CSR_CYCLE
   //     elif  s.rd_csr.msg == CSR_CYCLE:
   //       s.rd_csr.ret  @= s.csr_cycle_reg[0:32]
   //       s.rd_csr.suc  @= 1
-  //
+  // 
   //     # CSR_CYCLEH
   //     elif  s.rd_csr.msg == CSR_CYCLEH:
   //       s.rd_csr.ret  @= s.csr_cycle_reg[32:64]
   //       s.rd_csr.suc  @= 1
-  //
+  // 
   //     # CSR_INSTRET
   //     elif  s.rd_csr.msg == CSR_INSTRET:
   //       s.rd_csr.ret  @= s.csr_instret_reg[0:32]
   //       s.rd_csr.suc  @= 1
-  //
+  // 
   //     # CSR_INSTRETH
   //     elif  s.rd_csr.msg == CSR_INSTRETH:
   //       s.rd_csr.ret  @= s.csr_instret_reg[32:64]
   //       s.rd_csr.suc  @= 1
-  //
+  // 
   //   #
   //   # write CSR: simply write the value into csr_tmp_value_reg
   //   #
   //   elif  s.wr_csr.en:
   //     s.csr_tmp_value_reg.en @= 1
-  //
+  // 
   //   #
   //   # commit csr: CSR_PROC2MNGR
   //   #
   //   elif  s.commit_csr.en & ( s.commit_csr.msg == CSR_PROC2MNGR ):
-  //
+  // 
   //     s.commit_csr.suc @= s.proc2mngr.rdy
   //     s.proc2mngr.en   @= s.proc2mngr.rdy
   //     s.proc2mngr.msg  @= s.csr_tmp_value_reg.out
-  //
+  // 
   //   #
   //   # commit csr: CSR_STATS_EN
   //   #
   //   elif  s.commit_csr.en & ( s.commit_csr.msg == CSR_STATS_EN ):
-  //
+  // 
   //     s.commit_csr.suc      @= 1
   //     s.csr_stats_en_reg.en @= 1
-
+  
   always_comb begin : comb_csr
     rd_csr__suc = 1'd0;
     rd_csr__ret = 32'd0;
@@ -19024,7 +19024,7 @@ module CSRFlowManagerRTL__numcores_1__coreid_0
   //     s.csr_cycle_reg <<= s.csr_cycle_reg + 1
   //     if s.committed:
   //       s.csr_instret_reg <<= s.csr_instret_reg + 1
-
+  
   always_ff @(posedge clk) begin : up_counter_csrs
     if ( reset ) begin
       csr_cycle_reg <= 64'd0;
@@ -19062,7 +19062,7 @@ module EntryAllocatorRTL__num_entries_2__EntryIdx_Bits1
   input  logic [0:0] reset ,
   input logic [0:0] allocate__en  ,
   output logic [0:0] allocate__rdy  ,
-  output logic [0:0] allocate__ret
+  output logic [0:0] allocate__ret  
 );
   localparam logic [1:0] __const__num_entries_at_up_mask  = 2'd2;
   localparam logic [1:0] __const__num_entries_at_up_comb  = 2'd2;
@@ -19077,18 +19077,18 @@ module EntryAllocatorRTL__num_entries_2__EntryIdx_Bits1
   // def up_comb():
   //   # empty output
   //   s.empty @= ( s.mask == 2**num_entries - 1 )
-  //
+  // 
   //   # start with the current mask
   //   s.next_mask @= s.mask
-  //
+  // 
   //   # free
   //   for i in range( num_entries ):
   //     if s.free[ i ]:
   //       s.next_mask[ i ] @= 1
-  //
+  // 
   //   # allocate
   //   s.allocate.rdy @= ( s.next_mask != 0 )
-  //
+  // 
   //   s.free_idx @= 0
   //   if s.allocate.en:
   //     for i in range( num_entries ):
@@ -19096,9 +19096,9 @@ module EntryAllocatorRTL__num_entries_2__EntryIdx_Bits1
   //       if s.next_mask[ idx ]:
   //         s.free_idx @= idx
   //     s.next_mask[ s.free_idx ] @= 0
-  //
+  // 
   //   s.allocate.ret @= s.free_idx
-
+  
   always_comb begin : up_comb
     empty = mask == ( ( 2'd2 ** 2'( __const__num_entries_at_up_comb ) ) - 2'd1 );
     next_mask = mask;
@@ -19128,7 +19128,7 @@ module EntryAllocatorRTL__num_entries_2__EntryIdx_Bits1
   //     s.mask <<= 2**num_entries - 1
   //   else:
   //     s.mask <<= s.next_mask
-
+  
   always_ff @(posedge clk) begin : up_mask
     if ( reset ) begin
       mask <= ( 2'd2 ** 2'( __const__num_entries_at_up_mask ) ) - 3'd1;
@@ -19160,7 +19160,7 @@ module BranchTableRTL__e19387a326f5dc3d
   input logic [0:0] kill_entries__en  ,
   input logic [1:0] kill_entries__msg  ,
   input logic [0:0] mask_entries__en  ,
-  input logic [1:0] mask_entries__msg
+  input logic [1:0] mask_entries__msg  
 );
   localparam logic [1:0] __const__num_entries_at_up_ff  = 2'd2;
   localparam logic [1:0] __const__num_entries_at_up_comb  = 2'd2;
@@ -19200,58 +19200,58 @@ module BranchTableRTL__e19387a326f5dc3d
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/structures/BranchTableRTL.py:75
   // @update
   // def up_comb():
-  //
+  // 
   //   # default
   //   s.entry_alloc.allocate.en @= 0
   //   for i in range( num_entries ):
   //     s.next_val[ i ]         @= s.val[ i ]
   //     s.next_entry[ i ]       @= s.entry[ i ]
   //     s.entry_alloc.free[ i ] @= 0
-  //
+  // 
   //   # get
   //   if s.get.en:
   //     s.get.ret @= s.entry[ s.get.msg ]
   //   else:
   //     s.get.ret @= s.entry[ 0 ]
-  //
+  // 
   //   # free
   //   if s.free.en:
   //     idx = s.free.msg
   //     s.next_val[ idx ]         @= 0
   //     s.entry_alloc.free[ idx ] @= 1
-  //
+  // 
   //   # Either kill_entries, mask_entries, or allocate can happen at a
   //   # time. They can not be called in parallel
   //   s.allocate.rdy @= ~s.kill_entries.en & \
   //                     ~s.mask_entries.en & \
   //                     s.entry_alloc.allocate.rdy
   //   s.allocate.ret @= s.entry_alloc.allocate.ret
-  //
+  // 
   //   # kill
   //   if s.kill_entries.en:
-  //
+  // 
   //     # if valid and matched, invalidate and free this entry
   //     for i in range( num_entries ):
   //       if  s.val[ i ] & ( ( s.entry[ i ].br_tag & s.kill_entries.msg ) != 0 ):
   //         s.next_val[ i ]         @= 0
   //         s.entry_alloc.free[ i ] @= 1
-  //
+  // 
   //   # clear_br
   //   elif s.mask_entries.en:
-  //
+  // 
   //     # if valid and matched, clear the masked bit
   //     for i in range( num_entries ):
   //       if  s.val[ i ] & ( ( s.entry[ i ].br_tag & s.mask_entries.msg ) != 0 ):
   //         s.next_entry[ i ].br_tag @= s.entry[ i ].br_tag & ~s.mask_entries.msg
-  //
+  // 
   //   # allocate
   //   elif s.allocate.en:
   //     s.entry_alloc.allocate.en @= 1
-  //
+  // 
   //     idx = s.entry_alloc.allocate.ret
   //     s.next_val[ idx ]   @= 1
   //     s.next_entry[ idx ] @= s.allocate.msg
-
+  
   always_comb begin : up_comb
     entry_alloc__allocate__en = 1'd0;
     for ( int unsigned i = 1'd0; i < 2'( __const__num_entries_at_up_comb ); i += 1'd1 ) begin
@@ -19296,7 +19296,7 @@ module BranchTableRTL__e19387a326f5dc3d
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/structures/BranchTableRTL.py:63
   // @update_ff
   // def up_ff():
-  //
+  // 
   //   if s.reset:
   //     for i in range( num_entries ):
   //       s.val[ i ]    <<= 0
@@ -19305,7 +19305,7 @@ module BranchTableRTL__e19387a326f5dc3d
   //     for i in range( num_entries ):
   //       s.val[ i ]    <<= s.next_val[ i ]
   //       s.entry[ i ]  <<= s.next_entry[ i ]
-
+  
   always_ff @(posedge clk) begin : up_ff
     if ( reset ) begin
       for ( int unsigned i = 1'd0; i < 2'( __const__num_entries_at_up_ff ); i += 1'd1 ) begin
@@ -19339,7 +19339,7 @@ module PipeQueue1EntryRTL__EntryType_ClearBrStruct__ac353fa5f603c6f1
   output ClearBrStruct__ac353fa5f603c6f1 deq__ret  ,
   input logic [0:0] enq__en  ,
   input ClearBrStruct__ac353fa5f603c6f1 enq__msg  ,
-  output logic [0:0] enq__rdy
+  output logic [0:0] enq__rdy  
 );
   ClearBrStruct__ac353fa5f603c6f1 entry;
   logic [0:0] full;
@@ -19347,7 +19347,7 @@ module PipeQueue1EntryRTL__EntryType_ClearBrStruct__ac353fa5f603c6f1
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/pymtl3/pymtl3/stdlib/queues/queues.py:490
   // s.deq.rdy //= lambda: s.full & ~s.reset
-
+  
   always_comb begin : _lambda__s_procs_0__ctrl_flow_clear_back_end_q_q_deq_rdy
     deq__rdy = full & ( ~reset );
   end
@@ -19355,7 +19355,7 @@ module PipeQueue1EntryRTL__EntryType_ClearBrStruct__ac353fa5f603c6f1
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/pymtl3/pymtl3/stdlib/queues/queues.py:489
   // s.enq.rdy //= lambda: ~s.reset & ( ~s.full | s.deq.en )
-
+  
   always_comb begin : _lambda__s_procs_0__ctrl_flow_clear_back_end_q_q_enq_rdy
     enq__rdy = ( ~reset ) & ( ( ~full ) | deq__en );
   end
@@ -19365,10 +19365,10 @@ module PipeQueue1EntryRTL__EntryType_ClearBrStruct__ac353fa5f603c6f1
   // @update_ff
   // def ff_pipe1():
   //   s.full <<= ~s.reset & ( s.enq.en | s.full & ~s.deq.en )
-  //
+  // 
   //   if s.enq.en:
   //     s.entry <<= s.enq.msg
-
+  
   always_ff @(posedge clk) begin : ff_pipe1
     full <= ( ~reset ) & ( enq__en | ( full & ( ~deq__en ) ) );
     if ( enq__en ) begin
@@ -19396,7 +19396,7 @@ module PipeQueueRTL__cf3ca53535e70b70
   output ClearBrStruct__ac353fa5f603c6f1 deq__ret  ,
   input logic [0:0] enq__en  ,
   input ClearBrStruct__ac353fa5f603c6f1 enq__msg  ,
-  output logic [0:0] enq__rdy
+  output logic [0:0] enq__rdy  
 );
   //-------------------------------------------------------------
   // Component q
@@ -19457,7 +19457,7 @@ module TaggedNormalQueue1EntryRTL__12efd344bc568fc2
   output CSRBrTagEntry__br_tag_2__killed_1 deq__ret  ,
   input logic [0:0] enq__en  ,
   input CSRBrTagEntry__br_tag_2__killed_1 enq__msg  ,
-  output logic [0:0] enq__rdy
+  output logic [0:0] enq__rdy  
 );
   CSRBrTagEntry__br_tag_2__killed_1 entry;
   logic [0:0] full;
@@ -19467,22 +19467,22 @@ module TaggedNormalQueue1EntryRTL__12efd344bc568fc2
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/structures/TaggedNormalQueue1EntryRTL.py:69
   // @update
   // def up_comb():
-  //
+  // 
   //   s.enq.rdy @= ~s.full
   //   s.deq.rdy @= s.full
-  //
+  // 
   //   s.updated_entry @= s.entry
-  //
+  // 
   //   if  s.clear_br.en & \
   //       ( ( s.entry.br_tag & s.clear_br.msg.br_mask ) != 0 ):
-  //
+  // 
   //     if  s.clear_br.msg.kill:
   //       s.updated_entry.killed @= 1
   //     else:
   //       s.updated_entry.br_tag @= s.entry.br_tag & ~s.clear_br.msg.br_mask
-  //
+  // 
   //   s.deq.ret @= s.updated_entry
-
+  
   always_comb begin : up_comb
     enq__rdy = ~full;
     deq__rdy = full;
@@ -19501,7 +19501,7 @@ module TaggedNormalQueue1EntryRTL__12efd344bc568fc2
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/structures/TaggedNormalQueue1EntryRTL.py:56
   // @update_ff
   // def up_states():
-  //
+  // 
   //   if  s.reset:
   //     s.full  <<= 0
   //   elif  s.enq.en:
@@ -19511,7 +19511,7 @@ module TaggedNormalQueue1EntryRTL__12efd344bc568fc2
   //     s.full  <<= 0
   //   else:
   //     s.entry <<= s.updated_entry
-
+  
   always_ff @(posedge clk) begin : up_states
     if ( reset ) begin
       full <= 1'd0;
@@ -19539,7 +19539,7 @@ module RegEn__Type_ROBEntry__81cd62f62fe20808
   input  logic [0:0] en ,
   input  ROBEntry__81cd62f62fe20808 in_ ,
   output ROBEntry__81cd62f62fe20808 out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
 
   // PyMTL Update Block Source
@@ -19548,7 +19548,7 @@ module RegEn__Type_ROBEntry__81cd62f62fe20808
   // def up_regen():
   //   if s.en:
   //     s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regen
     if ( en ) begin
       out <= in_;
@@ -19567,7 +19567,7 @@ module RegEnRst__Type_Bits3__reset_value_0
   input  logic [0:0] en ,
   input  logic [2:0] in_ ,
   output logic [2:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [0:0] __const__reset_value_at_up_regenrst  = 1'd0;
 
@@ -19577,7 +19577,7 @@ module RegEnRst__Type_Bits3__reset_value_0
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 3'( __const__reset_value_at_up_regenrst );
@@ -19599,7 +19599,7 @@ module RegEnRst__Type_Bits1__reset_value_0
   input  logic [0:0] en ,
   input  logic [0:0] in_ ,
   output logic [0:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [0:0] __const__reset_value_at_up_regenrst  = 1'd0;
 
@@ -19609,7 +19609,7 @@ module RegEnRst__Type_Bits1__reset_value_0
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 1'( __const__reset_value_at_up_regenrst );
@@ -19631,7 +19631,7 @@ module RegEnRst__Type_Bits4__reset_value_0
   input  logic [0:0] en ,
   input  logic [3:0] in_ ,
   output logic [3:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [0:0] __const__reset_value_at_up_regenrst  = 1'd0;
 
@@ -19641,7 +19641,7 @@ module RegEnRst__Type_Bits4__reset_value_0
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 4'( __const__reset_value_at_up_regenrst );
@@ -19674,7 +19674,7 @@ module ReorderBufferRTL__5a014318295b2d50
   output logic [0:0] get_head__rdy  ,
   output ROBEntry__81cd62f62fe20808 get_head__ret  ,
   input logic [0:0] rollback__en  ,
-  input logic [2:0] rollback__msg
+  input logic [2:0] rollback__msg  
 );
   localparam logic [3:0] __const__num_entries_at_comb  = 4'd8;
   logic [2:0] new_head;
@@ -19932,15 +19932,15 @@ module ReorderBufferRTL__5a014318295b2d50
   //   s.tail_reg.in_  @= s.tail_reg.out
   //   s.size_reg.en   @= 0
   //   s.size_reg.in_  @= s.size_reg.out
-  //
+  // 
   //   s.get_head.ret  @= s.data[ 0 ].out
-  //
+  // 
   //   for i in range( num_entries ):
   //     s.data[ i ].en      @= 0
   //     s.data[ i ].in_     @= s.data[ i ].out
   //     s.pending[ i ].en   @= 0
   //     s.pending[ i ].in_  @= s.pending[ i ].out
-  //
+  // 
   //   # set if allocate should be ready
   //   # NOTE: if the current buffer is full, we don't allow any
   //   # new allocation to take place even if we're committing the head
@@ -19950,99 +19950,99 @@ module ReorderBufferRTL__5a014318295b2d50
   //     s.allocate.rdy @= 0
   //   else:
   //     s.allocate.rdy @= 1
-  //
+  // 
   //   # set if commit should be ready
   //   if  ( s.size_reg.out > 0 ) & \
   //       ( s.pending[ s.head_reg.out ].out == 0 ):
   //     s.commit.rdy @= 1
   //   else:
   //     s.commit.rdy @= 0
-  //
+  // 
   //   # set if get_head should be ready
   //   if  s.size_reg.out > 0:
   //     s.get_head.rdy @= 1
   //   else:
   //     s.get_head.rdy @= 0
-  //
+  // 
   //   # new values for head, tail, size
   //   s.new_head @= s.head_reg.out
   //   s.new_tail @= s.tail_reg.out
   //   s.new_size @= s.size_reg.out
-  //
+  // 
   //   #
   //   # complete
   //   #
   //   if  s.complete.en:
   //     s.pending[ s.complete.msg ].en  @= 1
   //     s.pending[ s.complete.msg ].in_ @= 0
-  //
+  // 
   //   #
   //   # get_head
   //   #
   //   if  s.get_head.en:
   //     s.get_head.ret @= s.data[ s.head_reg.out ].out
-  //
+  // 
   //   #
   //   # commit
   //   #
   //   if  s.commit.en:
-  //
+  // 
   //     # update head
   //     s.head_reg.en @= 1
   //     if s.new_head == num_entries - 1:
   //       s.new_head @= 0
   //     else:
   //       s.new_head @= s.new_head + 1
-  //
+  // 
   //     # update size
   //     s.size_reg.en @= b1( 1 )
   //     s.new_size    @= s.new_size - 1
-  //
+  // 
   //   #
   //   # rollback
   //   #
   //   if  s.rollback.en:
-  //
+  // 
   //     # update tail to the rollback idx + 1
   //     s.tail_reg.en @= 1
   //     s.new_tail    @= s.rollback.msg + 1
-  //
+  // 
   //     # update size
   //     s.size_reg.en @= 1
   //     if s.new_head < s.new_tail:
   //       s.new_size @= zext( s.new_tail - s.new_head, SizeT )
   //     else:
   //       s.new_size @= num_entries - zext( s.new_head - s.new_tail, SizeT )
-  //
+  // 
   //   #
   //   # allocate (can't happen concurrently with rollback)
   //   #
   //   elif  s.allocate.en:
-  //
+  // 
   //     # update tail
   //     s.tail_reg.en @= 1
   //     if  s.new_tail == num_entries - 1:
   //       s.new_tail @= 0
   //     else:
   //       s.new_tail @= s.new_tail + 1
-  //
+  // 
   //     # update size
   //     s.size_reg.en @= 1
   //     s.new_size    @= s.new_size + 1
-  //
+  // 
   //     # init the newly allocated entry
   //     s.data[ s.tail_reg.out ].en  @= 1
   //     s.data[ s.tail_reg.out ].in_ @= s.allocate.msg
-  //
+  // 
   //     # set the pending bit
   //     s.pending[ s.tail_reg.out ].en  @= 1
   //     s.pending[ s.tail_reg.out ].in_ @= 1
-  //
+  // 
   //   # update head_reg, tail_reg, size_reg
   //   s.head_reg.in_ @= s.new_head
   //   s.tail_reg.in_ @= s.new_tail
   //   s.size_reg.in_ @= s.new_size
-
+  
   always_comb begin : comb
     head_reg__en = 1'd0;
     head_reg__in_ = head_reg__out;
@@ -20195,7 +20195,7 @@ module CtrlFlowManagerRTL__c13a272fbad281f0
   input logic [0:0] resolve_br_X__en  ,
   input ResolveBranchStruct__7003e9cf5478f896 resolve_br_X__msg  ,
   output logic [0:0] rollback__en  ,
-  output RollbackStruct__br_idx_1__ckpt_head_3 rollback__msg
+  output RollbackStruct__br_idx_1__ckpt_head_3 rollback__msg  
 );
   localparam logic [1:0] __const__csr_x  = 2'd0;
   localparam logic [3:0] __const__br_x  = 4'd0;
@@ -20389,61 +20389,61 @@ module CtrlFlowManagerRTL__c13a272fbad281f0
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/proc_i2ol/CtrlFlowManagerRTL.py:141
   // @update
   // def clear_br():
-  //
+  // 
   //   # Braodcast clear_br signal rightaway (if any)
   //   s.clear_front_end.en        @= s.clear_front_end_q.deq.rdy
   //   s.clear_front_end_q.deq.en  @= s.clear_front_end_q.deq.rdy
   //   s.clear_front_end.msg       @= s.clear_front_end_q.deq.ret
-  //
+  // 
   //   s.clear_back_end.en         @= s.clear_back_end_q.deq.rdy
   //   s.clear_back_end_q.deq.en   @= s.clear_back_end_q.deq.rdy
   //   s.clear_back_end.msg        @= s.clear_back_end_q.deq.ret
-  //
+  // 
   //   s.br_table.free.en          @= 0
   //   s.br_table.free.msg         @= 0
   //   s.br_table.kill_entries.en  @= 0
   //   s.br_table.kill_entries.msg @= 0
   //   s.br_table.mask_entries.en  @= 0
   //   s.br_table.mask_entries.msg @= 0
-  //
+  // 
   //   s.rollback.en               @= 0
   //   s.rollback.msg.br_idx       @= 0
   //   s.rollback.msg.ckpt_head    @= 0
   //   s.rob.rollback.en           @= 0
   //   s.rob.rollback.msg          @= 0
-  //
+  // 
   //   s.csr_br_tag_q.clear_br.en  @= 0
   //   s.csr_br_tag_q.clear_br.msg @= ClearBrStruct()
-  //
+  // 
   //   # If we're clearing the back-end, we need to (1) clear the
   //   # csr_br_tag_q, clear the br_table, rollback dataflow manager and
   //   # ROB (if kill) and update curr_br_tag
   //   if  s.clear_back_end.en:
-  //
+  // 
   //     # update csr_br_tag_q
   //     s.csr_br_tag_q.clear_br.en  @= 1
   //     s.csr_br_tag_q.clear_br.msg @= s.clear_back_end_q.deq.ret
-  //
+  // 
   //     # free the entry of this branch in br_table
   //     s.br_table.free.en  @= 1
   //     s.br_table.free.msg @= s.clear_back_end_q.deq.ret.br_idx
-  //
+  // 
   //     # kill or clear other branches in the br_table depending on
   //     # whether this branch has been mispredicted
   //     s.br_table.kill_entries.en  @= s.clear_back_end_q.deq.ret.kill
   //     s.br_table.kill_entries.msg @= s.clear_back_end_q.deq.ret.br_mask
   //     s.br_table.mask_entries.en  @= ~s.clear_back_end_q.deq.ret.kill
   //     s.br_table.mask_entries.msg @= s.clear_back_end_q.deq.ret.br_mask
-  //
+  // 
   //     # if this is a kill, need to rollback dataflow manager
   //     if s.clear_back_end_q.deq.ret.kill:
-  //
+  // 
   //       s.rollback.en             @= 1
   //       s.rollback.msg.br_idx     @= s.clear_back_end_q.deq.ret.br_idx
   //       s.rollback.msg.ckpt_head  @= s.clear_back_end_q.deq.ret.ckpt_head
   //       s.rob.rollback.en         @= 1
   //       s.rob.rollback.msg        @= s.clear_back_end_q.deq.ret.rob_idx
-
+  
   always_comb begin : clear_br
     clear_front_end__en = clear_front_end_q__deq__rdy;
     clear_front_end_q__deq__en = clear_front_end_q__deq__rdy;
@@ -20487,12 +20487,12 @@ module CtrlFlowManagerRTL__c13a272fbad281f0
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/proc_i2ol/CtrlFlowManagerRTL.py:333
   // @update
   // def commit_inst():
-  //
+  // 
   //   s.rob.commit.en     @= s.commit_head.en
   //   s.rob.complete.en   @= s.complete_inst.en
   //   s.rob.complete.msg  @= s.complete_inst.msg
   //   s.commit_head.rdy   @= s.rob.commit.rdy
-  //
+  // 
   //   # process csr_br_tag dequeue
   //   if    s.csr_br_tag_q.deq.rdy & s.csr_br_tag_q.deq.ret.killed:
   //     s.csr_br_tag_q.deq.en @= 1
@@ -20500,7 +20500,7 @@ module CtrlFlowManagerRTL__c13a272fbad281f0
   //     s.csr_br_tag_q.deq.en @= 1
   //   else:
   //     s.csr_br_tag_q.deq.en @= 0
-
+  
   always_comb begin : commit_inst
     rob__commit__en = commit_head__en;
     rob__complete__en = complete_inst__en;
@@ -20520,14 +20520,14 @@ module CtrlFlowManagerRTL__c13a272fbad281f0
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/proc_i2ol/CtrlFlowManagerRTL.py:269
   // @update
   // def register_inst():
-  //
+  // 
   //   s.checkpoint.en               @= 0
   //   s.br_table.allocate.en        @= 0
   //   s.rob.allocate.en             @= 0
   //   s.register_inst.suc           @= 0
   //   s.csr_br_tag_q.enq.en         @= 0
   //   s.csr_br_tag_q.enq.msg.killed @= 0
-  //
+  // 
   //   # If there is a clear_br on going, we need to use the up-to-date
   //   # branch tag for any newly registered instruction. Otherwise, we
   //   # should use the current branch tag to avoid a new branch
@@ -20541,41 +20541,41 @@ module CtrlFlowManagerRTL__c13a272fbad281f0
   //     s.br_table.allocate.msg.br_tag @= s.curr_br_tag
   //     s.register_inst.ret.br_tag     @= s.curr_br_tag
   //     s.csr_br_tag_q.enq.msg.br_tag  @= s.curr_br_tag
-  //
+  // 
   //   # register new insts
   //   if  s.register_inst.en & s.rob.allocate.rdy:
-  //
+  // 
   //     # csr instruction
   //     if  s.register_inst.msg.csr_type != csr_x:
-  //
+  // 
   //       # since there's no renaming for CSRs, we can only allow
   //       # at most one CSR instruction in the back-end at any time
   //       if  s.csr_br_tag_q.enq.rdy:
   //         s.register_inst.suc   @= 1
   //         s.rob.allocate.en     @= 1
-  //
+  // 
   //         # enqueue the branch tag of this CSR inst into csr_br_tag_q
   //         s.csr_br_tag_q.enq.en @= 1
-  //
+  // 
   //     # all branches except jal need to allocate an entry in br_table
   //     elif  ( s.register_inst.msg.br_type != br_x ) & \
   //           ( s.register_inst.msg.br_type != jal ):
-  //
+  // 
   //       if s.br_table.allocate.rdy:
   //         s.register_inst.suc @= 1
   //         s.rob.allocate.en   @= 1
-  //
+  // 
   //         # add this branch to br_table
   //         s.br_table.allocate.en @= 1
-  //
+  // 
   //         # checkpoint rename table and free list
   //         s.checkpoint.en @= 1
-  //
+  // 
   //     # all other instructions
   //     else:
   //       s.register_inst.suc @= 1
   //       s.rob.allocate.en   @= 1
-
+  
   always_comb begin : register_inst
     checkpoint__en = 1'd0;
     br_table__allocate__en = 1'd0;
@@ -20620,32 +20620,32 @@ module CtrlFlowManagerRTL__c13a272fbad281f0
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/proc_i2ol/CtrlFlowManagerRTL.py:204
   // @update
   // def resolve_br():
-  //
+  // 
   //   s.br_table.get.en           @= 0
   //   s.br_table.get.msg          @= 0
-  //
+  // 
   //   s.clear_front_end_q.enq.en  @= 0
   //   s.clear_front_end_q.enq.msg @= ClearBrStruct()
-  //
+  // 
   //   s.clear_back_end_q.enq.en   @= 0
   //   s.clear_back_end_q.enq.msg  @= ClearBrStruct()
-  //
+  // 
   //   #
   //   # resolve a branch in X
   //   #
   //   if  s.resolve_br_X.en:
-  //
+  // 
   //     # read br_table
   //     s.br_table.get.en  @= 1
   //     s.br_table.get.msg @= s.resolve_br_X.msg.br_idx
-  //
+  // 
   //     # if this is a mispredicted branch, we need to kill both front-end
   //     # and back-end
   //     if s.resolve_br_X.msg.mispredicted:
   //       s.clear_front_end_q.enq.en              @= 1
   //       s.clear_front_end_q.enq.msg.kill        @= 1
   //       s.clear_front_end_q.enq.msg.pc_redirect @= s.resolve_br_X.msg.br_target
-  //
+  // 
   //     # clear back-end
   //     s.clear_back_end_q.enq.en               @= 1
   //     s.clear_back_end_q.enq.msg.kill         @= s.resolve_br_X.msg.mispredicted
@@ -20655,7 +20655,7 @@ module CtrlFlowManagerRTL__c13a272fbad281f0
   //     s.clear_back_end_q.enq.msg.ckpt_head    @= s.br_table.get.ret.ckpt_head
   //     s.clear_back_end_q.enq.msg.rob_idx      @= s.resolve_br_X.msg.rob_idx
   //     s.clear_back_end_q.enq.msg.prev_br_tag  @= s.resolve_br_X.msg.br_tag
-  //
+  // 
   //   #
   //   # resolve a branch in D only if resolve_br_X has not killed D yet
   //   #
@@ -20665,7 +20665,7 @@ module CtrlFlowManagerRTL__c13a272fbad281f0
   //     s.clear_front_end_q.enq.en               @= 1
   //     s.clear_front_end_q.enq.msg.kill         @= 1
   //     s.clear_front_end_q.enq.msg.pc_redirect  @= s.resolve_br_D.msg.br_target
-
+  
   always_comb begin : resolve_br
     br_table__get__en = 1'd0;
     br_table__get__msg = 1'd0;
@@ -20703,20 +20703,20 @@ module CtrlFlowManagerRTL__c13a272fbad281f0
   // def up_next_br_tag():
   //   # default
   //   s.next_br_tag @= s.curr_br_tag
-  //
+  // 
   //   if  s.clear_back_end.en:
-  //
+  // 
   //     # if this is a kill, we need to rollback the previous branch
   //     # otherwise, just mask off the curr tag with  branch mask
   //     if    s.clear_back_end.msg.kill:
   //       s.next_br_tag @= s.clear_back_end_q.deq.ret.prev_br_tag
   //     else:
   //       s.next_br_tag @= s.curr_br_tag & ( ~s.clear_back_end_q.deq.ret.br_mask )
-  //
+  // 
   //   # a new branch is registered into the br_table
   //   elif  s.br_table.allocate.en:
   //     s.next_br_tag @= ( s.curr_br_tag | s.br_masks[ s.br_table.allocate.ret ] )
-
+  
   always_comb begin : up_next_br_tag
     next_br_tag = curr_br_tag;
     if ( clear_back_end__en ) begin
@@ -20739,7 +20739,7 @@ module CtrlFlowManagerRTL__c13a272fbad281f0
   //     s.curr_br_tag <<= 0
   //   else:
   //     s.curr_br_tag <<= s.next_br_tag
-
+  
   always_ff @(posedge clk) begin : up_curr_br_tag
     if ( reset ) begin
       curr_br_tag <= 2'd0;
@@ -20786,7 +20786,7 @@ module RegEnRst__Type_Bits7__reset_value_64
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [6:0] __const__reset_value_at_up_regenrst  = 7'd64;
 
@@ -20796,7 +20796,7 @@ module RegEnRst__Type_Bits7__reset_value_64
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -20818,7 +20818,7 @@ module RegEnRst__Type_Bits7__reset_value_65
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [6:0] __const__reset_value_at_up_regenrst  = 7'd65;
 
@@ -20828,7 +20828,7 @@ module RegEnRst__Type_Bits7__reset_value_65
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -20850,7 +20850,7 @@ module RegEnRst__Type_Bits7__reset_value_66
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [6:0] __const__reset_value_at_up_regenrst  = 7'd66;
 
@@ -20860,7 +20860,7 @@ module RegEnRst__Type_Bits7__reset_value_66
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -20882,7 +20882,7 @@ module RegEnRst__Type_Bits7__reset_value_67
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [6:0] __const__reset_value_at_up_regenrst  = 7'd67;
 
@@ -20892,7 +20892,7 @@ module RegEnRst__Type_Bits7__reset_value_67
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -20914,7 +20914,7 @@ module RegEnRst__Type_Bits7__reset_value_68
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [6:0] __const__reset_value_at_up_regenrst  = 7'd68;
 
@@ -20924,7 +20924,7 @@ module RegEnRst__Type_Bits7__reset_value_68
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -20946,7 +20946,7 @@ module RegEnRst__Type_Bits7__reset_value_69
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [6:0] __const__reset_value_at_up_regenrst  = 7'd69;
 
@@ -20956,7 +20956,7 @@ module RegEnRst__Type_Bits7__reset_value_69
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -20978,7 +20978,7 @@ module RegEnRst__Type_Bits7__reset_value_70
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [6:0] __const__reset_value_at_up_regenrst  = 7'd70;
 
@@ -20988,7 +20988,7 @@ module RegEnRst__Type_Bits7__reset_value_70
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -21010,7 +21010,7 @@ module RegEnRst__Type_Bits7__reset_value_71
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [6:0] __const__reset_value_at_up_regenrst  = 7'd71;
 
@@ -21020,7 +21020,7 @@ module RegEnRst__Type_Bits7__reset_value_71
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -21042,7 +21042,7 @@ module RegEnRst__Type_Bits4__reset_value_8
   input  logic [0:0] en ,
   input  logic [3:0] in_ ,
   output logic [3:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [3:0] __const__reset_value_at_up_regenrst  = 4'd8;
 
@@ -21052,7 +21052,7 @@ module RegEnRst__Type_Bits4__reset_value_8
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 4'( __const__reset_value_at_up_regenrst );
@@ -21080,7 +21080,7 @@ module FreeListRTL__4463e5d7cec61762
   input logic [0:0] free__en  ,
   input logic [6:0] free__msg  ,
   input logic [0:0] rollback__en  ,
-  input logic [2:0] rollback__msg
+  input logic [2:0] rollback__msg  
 );
   localparam logic [3:0] __const__num_entries_at_up  = 4'd8;
   //-------------------------------------------------------------
@@ -21243,7 +21243,7 @@ module FreeListRTL__4463e5d7cec61762
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/structures/FreeListRTL.py:59
   // @update
   // def up():
-  //
+  // 
   //   # default
   //   s.head_idx      @= s.head_reg.out
   //   s.head_reg.en   @= 0
@@ -21252,66 +21252,66 @@ module FreeListRTL__4463e5d7cec61762
   //   s.tail_reg.in_  @= s.tail_reg.out
   //   s.size_reg.en   @= 0
   //   s.size_reg.in_  @= s.size_reg.out
-  //
+  // 
   //   for i in range( num_entries ):
   //     s.regs[ i ].en  @= 0
   //     s.regs[ i ].in_ @= s.regs[ i ].out
-  //
+  // 
   //   s.alloc.rdy @= ~s.rollback.en & ( s.size_reg.out > 0 )
   //   s.alloc.ret @= s.regs[ s.head_reg.out ].out
-  //
+  // 
   //   #
   //   # rollback
   //   #
   //   if  s.rollback.en:
   //     new_head = s.rollback.msg
-  //
+  // 
   //     # update head_reg
   //     s.head_reg.en  @= 1
   //     s.head_reg.in_ @= new_head
-  //
+  // 
   //     # update size_reg
   //     s.size_reg.en @= 1
   //     if s.tail_reg.out <= new_head:
   //       s.size_reg.in_ @= num_entries - zext( new_head - s.tail_reg.out, ListSize )
   //     else:
   //       s.size_reg.in_ @= zext( s.tail_reg.out - new_head, ListSize )
-  //
+  // 
   //     # update head_idx
   //     s.head_idx @= new_head
-  //
+  // 
   //   #
   //   # no rollback
   //   #
   //   else:
-  //
+  // 
   //     # alloc
   //     if  s.alloc.en:
-  //
+  // 
   //       # update head
   //       s.head_reg.en @= 1
   //       if s.head_reg.out == ( num_entries - 1 ):
   //         s.head_reg.in_ @= 0
   //       else:
   //         s.head_reg.in_ @= s.head_reg.out + 1
-  //
+  // 
   //       # update head_idx
   //       s.head_idx @= s.head_reg.in_
-  //
+  // 
   //     # free
   //     if  s.free.en:
-  //
+  // 
   //       # add preg back to the list
   //       s.regs[ s.tail_reg.out ].en  @= 1
   //       s.regs[ s.tail_reg.out ].in_ @= s.free.msg
-  //
+  // 
   //       # update tail
   //       s.tail_reg.en @= 1
   //       if s.tail_reg.out == num_entries - 1:
   //         s.tail_reg.in_ @= 0
   //       else:
   //         s.tail_reg.in_ @= s.tail_reg.out + 1
-  //
+  // 
   //     # update size
   //     if    s.alloc.en & ~s.free.en:
   //       s.size_reg.en   @= 1
@@ -21319,7 +21319,7 @@ module FreeListRTL__4463e5d7cec61762
   //     elif  s.free.en & ~s.alloc.en:
   //       s.size_reg.en   @= 1
   //       s.size_reg.in_  @= s.size_reg.out + 1
-
+  
   always_comb begin : up
     head_idx = head_reg__out;
     head_reg__en = 1'd0;
@@ -21412,7 +21412,7 @@ module RegEnRst__Type_Bits7__reset_value_0
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [0:0] __const__reset_value_at_up_regenrst  = 1'd0;
 
@@ -21422,7 +21422,7 @@ module RegEnRst__Type_Bits7__reset_value_0
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -21444,7 +21444,7 @@ module RegEnRst__Type_Bits7__reset_value_10
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [3:0] __const__reset_value_at_up_regenrst  = 4'd10;
 
@@ -21454,7 +21454,7 @@ module RegEnRst__Type_Bits7__reset_value_10
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -21476,7 +21476,7 @@ module RegEnRst__Type_Bits7__reset_value_11
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [3:0] __const__reset_value_at_up_regenrst  = 4'd11;
 
@@ -21486,7 +21486,7 @@ module RegEnRst__Type_Bits7__reset_value_11
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -21508,7 +21508,7 @@ module RegEnRst__Type_Bits7__reset_value_12
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [3:0] __const__reset_value_at_up_regenrst  = 4'd12;
 
@@ -21518,7 +21518,7 @@ module RegEnRst__Type_Bits7__reset_value_12
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -21540,7 +21540,7 @@ module RegEnRst__Type_Bits7__reset_value_13
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [3:0] __const__reset_value_at_up_regenrst  = 4'd13;
 
@@ -21550,7 +21550,7 @@ module RegEnRst__Type_Bits7__reset_value_13
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -21572,7 +21572,7 @@ module RegEnRst__Type_Bits7__reset_value_14
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [3:0] __const__reset_value_at_up_regenrst  = 4'd14;
 
@@ -21582,7 +21582,7 @@ module RegEnRst__Type_Bits7__reset_value_14
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -21604,7 +21604,7 @@ module RegEnRst__Type_Bits7__reset_value_15
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [3:0] __const__reset_value_at_up_regenrst  = 4'd15;
 
@@ -21614,7 +21614,7 @@ module RegEnRst__Type_Bits7__reset_value_15
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -21636,7 +21636,7 @@ module RegEnRst__Type_Bits7__reset_value_16
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [4:0] __const__reset_value_at_up_regenrst  = 5'd16;
 
@@ -21646,7 +21646,7 @@ module RegEnRst__Type_Bits7__reset_value_16
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -21668,7 +21668,7 @@ module RegEnRst__Type_Bits7__reset_value_17
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [4:0] __const__reset_value_at_up_regenrst  = 5'd17;
 
@@ -21678,7 +21678,7 @@ module RegEnRst__Type_Bits7__reset_value_17
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -21700,7 +21700,7 @@ module RegEnRst__Type_Bits7__reset_value_18
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [4:0] __const__reset_value_at_up_regenrst  = 5'd18;
 
@@ -21710,7 +21710,7 @@ module RegEnRst__Type_Bits7__reset_value_18
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -21732,7 +21732,7 @@ module RegEnRst__Type_Bits7__reset_value_19
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [4:0] __const__reset_value_at_up_regenrst  = 5'd19;
 
@@ -21742,7 +21742,7 @@ module RegEnRst__Type_Bits7__reset_value_19
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -21764,7 +21764,7 @@ module RegEnRst__Type_Bits7__reset_value_1
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [0:0] __const__reset_value_at_up_regenrst  = 1'd1;
 
@@ -21774,7 +21774,7 @@ module RegEnRst__Type_Bits7__reset_value_1
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -21796,7 +21796,7 @@ module RegEnRst__Type_Bits7__reset_value_20
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [4:0] __const__reset_value_at_up_regenrst  = 5'd20;
 
@@ -21806,7 +21806,7 @@ module RegEnRst__Type_Bits7__reset_value_20
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -21828,7 +21828,7 @@ module RegEnRst__Type_Bits7__reset_value_21
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [4:0] __const__reset_value_at_up_regenrst  = 5'd21;
 
@@ -21838,7 +21838,7 @@ module RegEnRst__Type_Bits7__reset_value_21
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -21860,7 +21860,7 @@ module RegEnRst__Type_Bits7__reset_value_22
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [4:0] __const__reset_value_at_up_regenrst  = 5'd22;
 
@@ -21870,7 +21870,7 @@ module RegEnRst__Type_Bits7__reset_value_22
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -21892,7 +21892,7 @@ module RegEnRst__Type_Bits7__reset_value_23
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [4:0] __const__reset_value_at_up_regenrst  = 5'd23;
 
@@ -21902,7 +21902,7 @@ module RegEnRst__Type_Bits7__reset_value_23
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -21924,7 +21924,7 @@ module RegEnRst__Type_Bits7__reset_value_24
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [4:0] __const__reset_value_at_up_regenrst  = 5'd24;
 
@@ -21934,7 +21934,7 @@ module RegEnRst__Type_Bits7__reset_value_24
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -21956,7 +21956,7 @@ module RegEnRst__Type_Bits7__reset_value_25
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [4:0] __const__reset_value_at_up_regenrst  = 5'd25;
 
@@ -21966,7 +21966,7 @@ module RegEnRst__Type_Bits7__reset_value_25
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -21988,7 +21988,7 @@ module RegEnRst__Type_Bits7__reset_value_26
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [4:0] __const__reset_value_at_up_regenrst  = 5'd26;
 
@@ -21998,7 +21998,7 @@ module RegEnRst__Type_Bits7__reset_value_26
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -22020,7 +22020,7 @@ module RegEnRst__Type_Bits7__reset_value_27
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [4:0] __const__reset_value_at_up_regenrst  = 5'd27;
 
@@ -22030,7 +22030,7 @@ module RegEnRst__Type_Bits7__reset_value_27
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -22052,7 +22052,7 @@ module RegEnRst__Type_Bits7__reset_value_28
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [4:0] __const__reset_value_at_up_regenrst  = 5'd28;
 
@@ -22062,7 +22062,7 @@ module RegEnRst__Type_Bits7__reset_value_28
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -22084,7 +22084,7 @@ module RegEnRst__Type_Bits7__reset_value_29
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [4:0] __const__reset_value_at_up_regenrst  = 5'd29;
 
@@ -22094,7 +22094,7 @@ module RegEnRst__Type_Bits7__reset_value_29
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -22116,7 +22116,7 @@ module RegEnRst__Type_Bits7__reset_value_2
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [1:0] __const__reset_value_at_up_regenrst  = 2'd2;
 
@@ -22126,7 +22126,7 @@ module RegEnRst__Type_Bits7__reset_value_2
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -22148,7 +22148,7 @@ module RegEnRst__Type_Bits7__reset_value_30
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [4:0] __const__reset_value_at_up_regenrst  = 5'd30;
 
@@ -22158,7 +22158,7 @@ module RegEnRst__Type_Bits7__reset_value_30
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -22180,7 +22180,7 @@ module RegEnRst__Type_Bits7__reset_value_31
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [4:0] __const__reset_value_at_up_regenrst  = 5'd31;
 
@@ -22190,7 +22190,7 @@ module RegEnRst__Type_Bits7__reset_value_31
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -22212,7 +22212,7 @@ module RegEnRst__Type_Bits7__reset_value_32
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [5:0] __const__reset_value_at_up_regenrst  = 6'd32;
 
@@ -22222,7 +22222,7 @@ module RegEnRst__Type_Bits7__reset_value_32
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -22244,7 +22244,7 @@ module RegEnRst__Type_Bits7__reset_value_33
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [5:0] __const__reset_value_at_up_regenrst  = 6'd33;
 
@@ -22254,7 +22254,7 @@ module RegEnRst__Type_Bits7__reset_value_33
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -22276,7 +22276,7 @@ module RegEnRst__Type_Bits7__reset_value_34
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [5:0] __const__reset_value_at_up_regenrst  = 6'd34;
 
@@ -22286,7 +22286,7 @@ module RegEnRst__Type_Bits7__reset_value_34
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -22308,7 +22308,7 @@ module RegEnRst__Type_Bits7__reset_value_35
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [5:0] __const__reset_value_at_up_regenrst  = 6'd35;
 
@@ -22318,7 +22318,7 @@ module RegEnRst__Type_Bits7__reset_value_35
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -22340,7 +22340,7 @@ module RegEnRst__Type_Bits7__reset_value_36
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [5:0] __const__reset_value_at_up_regenrst  = 6'd36;
 
@@ -22350,7 +22350,7 @@ module RegEnRst__Type_Bits7__reset_value_36
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -22372,7 +22372,7 @@ module RegEnRst__Type_Bits7__reset_value_37
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [5:0] __const__reset_value_at_up_regenrst  = 6'd37;
 
@@ -22382,7 +22382,7 @@ module RegEnRst__Type_Bits7__reset_value_37
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -22404,7 +22404,7 @@ module RegEnRst__Type_Bits7__reset_value_38
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [5:0] __const__reset_value_at_up_regenrst  = 6'd38;
 
@@ -22414,7 +22414,7 @@ module RegEnRst__Type_Bits7__reset_value_38
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -22436,7 +22436,7 @@ module RegEnRst__Type_Bits7__reset_value_39
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [5:0] __const__reset_value_at_up_regenrst  = 6'd39;
 
@@ -22446,7 +22446,7 @@ module RegEnRst__Type_Bits7__reset_value_39
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -22468,7 +22468,7 @@ module RegEnRst__Type_Bits7__reset_value_3
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [1:0] __const__reset_value_at_up_regenrst  = 2'd3;
 
@@ -22478,7 +22478,7 @@ module RegEnRst__Type_Bits7__reset_value_3
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -22500,7 +22500,7 @@ module RegEnRst__Type_Bits7__reset_value_40
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [5:0] __const__reset_value_at_up_regenrst  = 6'd40;
 
@@ -22510,7 +22510,7 @@ module RegEnRst__Type_Bits7__reset_value_40
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -22532,7 +22532,7 @@ module RegEnRst__Type_Bits7__reset_value_41
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [5:0] __const__reset_value_at_up_regenrst  = 6'd41;
 
@@ -22542,7 +22542,7 @@ module RegEnRst__Type_Bits7__reset_value_41
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -22564,7 +22564,7 @@ module RegEnRst__Type_Bits7__reset_value_42
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [5:0] __const__reset_value_at_up_regenrst  = 6'd42;
 
@@ -22574,7 +22574,7 @@ module RegEnRst__Type_Bits7__reset_value_42
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -22596,7 +22596,7 @@ module RegEnRst__Type_Bits7__reset_value_43
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [5:0] __const__reset_value_at_up_regenrst  = 6'd43;
 
@@ -22606,7 +22606,7 @@ module RegEnRst__Type_Bits7__reset_value_43
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -22628,7 +22628,7 @@ module RegEnRst__Type_Bits7__reset_value_44
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [5:0] __const__reset_value_at_up_regenrst  = 6'd44;
 
@@ -22638,7 +22638,7 @@ module RegEnRst__Type_Bits7__reset_value_44
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -22660,7 +22660,7 @@ module RegEnRst__Type_Bits7__reset_value_45
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [5:0] __const__reset_value_at_up_regenrst  = 6'd45;
 
@@ -22670,7 +22670,7 @@ module RegEnRst__Type_Bits7__reset_value_45
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -22692,7 +22692,7 @@ module RegEnRst__Type_Bits7__reset_value_46
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [5:0] __const__reset_value_at_up_regenrst  = 6'd46;
 
@@ -22702,7 +22702,7 @@ module RegEnRst__Type_Bits7__reset_value_46
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -22724,7 +22724,7 @@ module RegEnRst__Type_Bits7__reset_value_47
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [5:0] __const__reset_value_at_up_regenrst  = 6'd47;
 
@@ -22734,7 +22734,7 @@ module RegEnRst__Type_Bits7__reset_value_47
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -22756,7 +22756,7 @@ module RegEnRst__Type_Bits7__reset_value_48
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [5:0] __const__reset_value_at_up_regenrst  = 6'd48;
 
@@ -22766,7 +22766,7 @@ module RegEnRst__Type_Bits7__reset_value_48
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -22788,7 +22788,7 @@ module RegEnRst__Type_Bits7__reset_value_49
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [5:0] __const__reset_value_at_up_regenrst  = 6'd49;
 
@@ -22798,7 +22798,7 @@ module RegEnRst__Type_Bits7__reset_value_49
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -22820,7 +22820,7 @@ module RegEnRst__Type_Bits7__reset_value_4
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [2:0] __const__reset_value_at_up_regenrst  = 3'd4;
 
@@ -22830,7 +22830,7 @@ module RegEnRst__Type_Bits7__reset_value_4
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -22852,7 +22852,7 @@ module RegEnRst__Type_Bits7__reset_value_50
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [5:0] __const__reset_value_at_up_regenrst  = 6'd50;
 
@@ -22862,7 +22862,7 @@ module RegEnRst__Type_Bits7__reset_value_50
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -22884,7 +22884,7 @@ module RegEnRst__Type_Bits7__reset_value_51
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [5:0] __const__reset_value_at_up_regenrst  = 6'd51;
 
@@ -22894,7 +22894,7 @@ module RegEnRst__Type_Bits7__reset_value_51
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -22916,7 +22916,7 @@ module RegEnRst__Type_Bits7__reset_value_52
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [5:0] __const__reset_value_at_up_regenrst  = 6'd52;
 
@@ -22926,7 +22926,7 @@ module RegEnRst__Type_Bits7__reset_value_52
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -22948,7 +22948,7 @@ module RegEnRst__Type_Bits7__reset_value_53
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [5:0] __const__reset_value_at_up_regenrst  = 6'd53;
 
@@ -22958,7 +22958,7 @@ module RegEnRst__Type_Bits7__reset_value_53
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -22980,7 +22980,7 @@ module RegEnRst__Type_Bits7__reset_value_54
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [5:0] __const__reset_value_at_up_regenrst  = 6'd54;
 
@@ -22990,7 +22990,7 @@ module RegEnRst__Type_Bits7__reset_value_54
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -23012,7 +23012,7 @@ module RegEnRst__Type_Bits7__reset_value_55
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [5:0] __const__reset_value_at_up_regenrst  = 6'd55;
 
@@ -23022,7 +23022,7 @@ module RegEnRst__Type_Bits7__reset_value_55
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -23044,7 +23044,7 @@ module RegEnRst__Type_Bits7__reset_value_56
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [5:0] __const__reset_value_at_up_regenrst  = 6'd56;
 
@@ -23054,7 +23054,7 @@ module RegEnRst__Type_Bits7__reset_value_56
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -23076,7 +23076,7 @@ module RegEnRst__Type_Bits7__reset_value_57
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [5:0] __const__reset_value_at_up_regenrst  = 6'd57;
 
@@ -23086,7 +23086,7 @@ module RegEnRst__Type_Bits7__reset_value_57
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -23108,7 +23108,7 @@ module RegEnRst__Type_Bits7__reset_value_58
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [5:0] __const__reset_value_at_up_regenrst  = 6'd58;
 
@@ -23118,7 +23118,7 @@ module RegEnRst__Type_Bits7__reset_value_58
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -23140,7 +23140,7 @@ module RegEnRst__Type_Bits7__reset_value_59
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [5:0] __const__reset_value_at_up_regenrst  = 6'd59;
 
@@ -23150,7 +23150,7 @@ module RegEnRst__Type_Bits7__reset_value_59
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -23172,7 +23172,7 @@ module RegEnRst__Type_Bits7__reset_value_5
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [2:0] __const__reset_value_at_up_regenrst  = 3'd5;
 
@@ -23182,7 +23182,7 @@ module RegEnRst__Type_Bits7__reset_value_5
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -23204,7 +23204,7 @@ module RegEnRst__Type_Bits7__reset_value_60
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [5:0] __const__reset_value_at_up_regenrst  = 6'd60;
 
@@ -23214,7 +23214,7 @@ module RegEnRst__Type_Bits7__reset_value_60
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -23236,7 +23236,7 @@ module RegEnRst__Type_Bits7__reset_value_61
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [5:0] __const__reset_value_at_up_regenrst  = 6'd61;
 
@@ -23246,7 +23246,7 @@ module RegEnRst__Type_Bits7__reset_value_61
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -23268,7 +23268,7 @@ module RegEnRst__Type_Bits7__reset_value_62
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [5:0] __const__reset_value_at_up_regenrst  = 6'd62;
 
@@ -23278,7 +23278,7 @@ module RegEnRst__Type_Bits7__reset_value_62
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -23300,7 +23300,7 @@ module RegEnRst__Type_Bits7__reset_value_63
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [5:0] __const__reset_value_at_up_regenrst  = 6'd63;
 
@@ -23310,7 +23310,7 @@ module RegEnRst__Type_Bits7__reset_value_63
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -23332,7 +23332,7 @@ module RegEnRst__Type_Bits7__reset_value_6
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [2:0] __const__reset_value_at_up_regenrst  = 3'd6;
 
@@ -23342,7 +23342,7 @@ module RegEnRst__Type_Bits7__reset_value_6
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -23364,7 +23364,7 @@ module RegEnRst__Type_Bits7__reset_value_7
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [2:0] __const__reset_value_at_up_regenrst  = 3'd7;
 
@@ -23374,7 +23374,7 @@ module RegEnRst__Type_Bits7__reset_value_7
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -23396,7 +23396,7 @@ module RegEnRst__Type_Bits7__reset_value_8
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [3:0] __const__reset_value_at_up_regenrst  = 4'd8;
 
@@ -23406,7 +23406,7 @@ module RegEnRst__Type_Bits7__reset_value_8
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -23428,7 +23428,7 @@ module RegEnRst__Type_Bits7__reset_value_9
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [3:0] __const__reset_value_at_up_regenrst  = 4'd9;
 
@@ -23438,7 +23438,7 @@ module RegEnRst__Type_Bits7__reset_value_9
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 7'( __const__reset_value_at_up_regenrst );
@@ -23460,7 +23460,7 @@ module Mux__Type_Bits7__ninputs_4
   input  logic [6:0] in_ [0:3],
   output logic [6:0] out ,
   input  logic [0:0] reset ,
-  input  logic [1:0] sel
+  input  logic [1:0] sel 
 );
 
   // PyMTL Update Block Source
@@ -23468,7 +23468,7 @@ module Mux__Type_Bits7__ninputs_4
   // @update
   // def up_mux():
   //   s.out @= s.in_[ s.sel ]
-
+  
   always_comb begin : up_mux
     out = in_[sel];
   end
@@ -23485,7 +23485,7 @@ module Mux__Type_Bits7__ninputs_2
   input  logic [6:0] in_ [0:1],
   output logic [6:0] out ,
   input  logic [0:0] reset ,
-  input  logic [0:0] sel
+  input  logic [0:0] sel 
 );
 
   // PyMTL Update Block Source
@@ -23493,7 +23493,7 @@ module Mux__Type_Bits7__ninputs_2
   // @update
   // def up_mux():
   //   s.out @= s.in_[ s.sel ]
-
+  
   always_comb begin : up_mux
     out = in_[sel];
   end
@@ -23510,7 +23510,7 @@ module RegEn__Type_Bits7
   input  logic [0:0] en ,
   input  logic [6:0] in_ ,
   output logic [6:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
 
   // PyMTL Update Block Source
@@ -23519,7 +23519,7 @@ module RegEn__Type_Bits7
   // def up_regen():
   //   if s.en:
   //     s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regen
     if ( en ) begin
       out <= in_;
@@ -23545,7 +23545,7 @@ module RenameTableRTL__26107974cb1ca85b
   input logic [0:0] rename__en  ,
   input RegIdxPair__areg_idx_6__preg_idx_7 rename__msg  ,
   input logic [0:0] rollback__en  ,
-  input logic [0:0] rollback__msg
+  input logic [0:0] rollback__msg  
 );
   localparam logic [1:0] __const__num_sec_tables_at_comb  = 2'd2;
   localparam logic [1:0] __const__num_rd_ports_at_comb  = 2'd3;
@@ -27072,23 +27072,23 @@ module RenameTableRTL__26107974cb1ca85b
   // def comb():
   //   # default
   //   s.pri_table_en @= 0
-  //
+  // 
   //   for tid in range( num_sec_tables ):
   //     s.sec_table_en[ tid ] @= 0
-  //
+  // 
   //   for i in range( num_rd_ports ):
   //     s.lookup[ i ].ret @= 0
-  //
+  // 
   //   for eid in range( num_aregs ):
   //     s.pri_table_muxes[ eid ].sel @= 0
-  //
+  // 
   //   for tid in range( num_sec_tables ):
   //     for eid in range( num_aregs ):
   //       s.sec_table_muxes[ tid ][ eid ].sel @= 0
-  //
+  // 
   //   # NOTE: @Tuan: rollback is assumed not to happen in the same cycle
   //   # with other calls including lookup, rename, checkpoint
-  //
+  // 
   //   #
   //   # rollback
   //   #
@@ -27096,7 +27096,7 @@ module RenameTableRTL__26107974cb1ca85b
   //     s.pri_table_en @= 1
   //     for eid in range( num_aregs ):
   //       s.pri_table_muxes[ eid ].sel @= zext( s.rollback.msg, PriTableMuxSelT )
-  //
+  // 
   //   #
   //   # not in rollback
   //   #
@@ -27108,14 +27108,14 @@ module RenameTableRTL__26107974cb1ca85b
   //       if s.lookup[ i ].en:
   //         lookup_idx = s.lookup[ i ].msg
   //         s.lookup[ i ].ret @= s.pri_table[ lookup_idx ].out
-  //
+  // 
   //     #
   //     # rename
   //     #
   //     if s.rename.en:
   //       # Update primary table
   //       s.pri_table_en @= 1
-  //
+  // 
   //       for eid in range( num_aregs ):
   //         if s.rename.msg.areg_idx == eid:
   //           # choose s.rename.msg.preg_idx
@@ -27123,17 +27123,17 @@ module RenameTableRTL__26107974cb1ca85b
   //         else:
   //           # choose s.pri_table[ eid ].out
   //           s.pri_table_muxes[ eid ].sel @= num_sec_tables + 1
-  //
+  // 
   //     #
   //     # checkpoint
   //     #
   //     if s.checkpoint.en:
   //       # idx of the branch is checkpointing the rename table
   //       branch_idx = s.checkpoint.msg
-  //
+  // 
   //       # enable writing to s.sec_tables[ s.free_sec_table_idx ]
   //       s.sec_table_en[ branch_idx ] @= 1
-  //
+  // 
   //       # if any rename is happening, we need to copy the new rename value
   //       # to the sec_table as well
   //       for eid in range( num_aregs ):
@@ -27144,7 +27144,7 @@ module RenameTableRTL__26107974cb1ca85b
   //         else:
   //           # choose s.pri_table[ eid ].out
   //           s.sec_table_muxes[ branch_idx ][ eid ].sel @= 0
-
+  
   always_comb begin : comb
     pri_table_en = 1'd0;
     for ( int unsigned tid = 1'd0; tid < 2'( __const__num_sec_tables_at_comb ); tid += 1'd1 )
@@ -28881,7 +28881,7 @@ module RegisterFile__4a0e65843341fb09
   // def up_rf_read():
   //   for i in range( rd_ports ):
   //     s.rdata[i] @= s.regs[ s.raddr[i] ]
-
+  
   always_comb begin : up_rf_read
     for ( int unsigned i = 1'd0; i < 2'( __const__rd_ports_at_up_rf_read ); i += 1'd1 )
       rdata[1'(i)] = regs[raddr[1'(i)]];
@@ -28894,7 +28894,7 @@ module RegisterFile__4a0e65843341fb09
   //   for i in range( wr_ports ):
   //     if s.wen[i] & (s.waddr[i] != 0):
   //       s.regs[ s.waddr[i] ] <<= s.wdata[i]
-
+  
   always_ff @(posedge clk) begin : up_rf_write_constzero
     for ( int unsigned i = 1'd0; i < 1'( __const__wr_ports_at_up_rf_write_constzero ); i += 1'd1 )
       if ( wen[1'(i)] & ( waddr[1'(i)] != 7'd0 ) ) begin
@@ -28939,7 +28939,7 @@ module DataFlowManagerRTL__849fb2bb88e036ca
   input logic [0:0] set_reg__en  ,
   input logic [6:0] set_reg__msg  ,
   input logic [0:0] wr_reg__en [0:0] ,
-  input RegWrStruct__preg_idx_7__data_32 wr_reg__msg [0:0]
+  input RegWrStruct__preg_idx_7__data_32 wr_reg__msg [0:0] 
 );
   localparam logic [6:0] __const__num_pregs_at_up_scoreboard  = 7'd72;
   localparam logic [0:0] __const__num_reg_wr_ports_at_up_scoreboard  = 1'd1;
@@ -29046,13 +29046,13 @@ module DataFlowManagerRTL__849fb2bb88e036ca
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/proc_i2ol/DataFlowManagerRTL.py:178
   // @update
   // def comb_rd_wr_reg():
-  //
+  // 
   //   # read regs
   //   for i in range( num_reg_rd_ports ):
   //     # default
   //     s.rd_reg[ i ].suc @= 0
   //     s.rd_reg[ i ].ret @= 0
-  //
+  // 
   //     if s.rd_reg[ i ].en:
   //       #
   //       # reading const_zero reg
@@ -29060,7 +29060,7 @@ module DataFlowManagerRTL__849fb2bb88e036ca
   //       if  s.rd_reg[ i ].msg == 0:
   //         s.rd_reg[ i ].suc @= 1
   //         s.rd_reg[ i ].ret @= 0
-  //
+  // 
   //       #
   //       # preg is pending -> check bypass signals
   //       #
@@ -29070,29 +29070,29 @@ module DataFlowManagerRTL__849fb2bb88e036ca
   //               ( s.bypass_W[ fu_id ].msg.preg_idx == s.rd_reg[ i ].msg ):
   //             s.rd_reg[ i ].suc @= 1
   //             s.rd_reg[ i ].ret @= s.bypass_W[ fu_id ].msg.data
-  //
+  // 
   //         for fu_id in range( num_FUs ):
   //           if  s.bypass_X[ fu_id ].en & \
   //               ( s.bypass_X[ fu_id ].msg.preg_idx == s.rd_reg[ i ].msg ):
   //             s.rd_reg[ i ].suc @= 1
   //             s.rd_reg[ i ].ret @= s.bypass_X[ fu_id ].msg.data
-  //
+  // 
   //       #
   //       # preg is not pending -> read from RF
   //       #
   //       else:
   //         s.rd_reg[ i ].suc @= 1
   //         s.rd_reg[ i ].ret @= s.rf.rdata[ i ]
-  //
+  // 
   //   # write regs
   //   for i in range( num_reg_wr_ports ):
   //     # default
   //     s.rf.wen[ i ] @= 0
-  //
+  // 
   //     # don't write to const_zero reg
   //     if  s.wr_reg[ i ].en & ( s.wr_reg[ i ].msg.preg_idx != 0 ):
   //       s.rf.wen[ i ] @= 1
-
+  
   always_comb begin : comb_rd_wr_reg
     for ( int unsigned i = 1'd0; i < 2'( __const__num_reg_rd_ports_at_comb_rd_wr_reg ); i += 1'd1 ) begin
       rd_reg__suc[1'(i)] = 1'd0;
@@ -29132,7 +29132,7 @@ module DataFlowManagerRTL__849fb2bb88e036ca
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/proc_i2ol/DataFlowManagerRTL.py:135
   // @update
   // def comb_rename():
-  //
+  // 
   //   # default
   //   s.rename.rdy                  @= 0
   //   s.rename.ret                  @= 0
@@ -29143,19 +29143,19 @@ module DataFlowManagerRTL__849fb2bb88e036ca
   //   s.rename_table.checkpoint.en  @= 0
   //   s.rename_table.rollback.en    @= 0
   //   s.free_reg.rdy                @= 0
-  //
+  // 
   //   # rollback
   //   if s.rollback.en:
   //     s.rename_table.rollback.en  @= 1
   //     s.free_reg_list.rollback.en @= 1
-  //
+  // 
   //   # no rollback
   //   else:
   //     # checkpoint
   //     s.rename_table.checkpoint.en @= s.checkpoint.en
-  //
+  // 
   //     s.rename.rdy @= s.free_reg_list.alloc.rdy
-  //
+  // 
   //     # rename: areg 0 is always mapped to preg 0
   //     if s.rename.en & ( s.rename.msg == 0 ):
   //       s.rename.ret @= 0
@@ -29163,12 +29163,12 @@ module DataFlowManagerRTL__849fb2bb88e036ca
   //       s.free_reg_list.alloc.en  @= 1
   //       s.rename_table.rename.en  @= 1
   //       s.rename.ret              @= s.free_reg_list.alloc.ret
-  //
+  // 
   //     # free reg: preg 0 is never freed
   //     s.free_reg.rdy @= 1
   //     if s.free_reg.en & ( s.free_reg.msg != 0 ):
   //       s.free_reg_list.free.en @= s.free_reg.en
-
+  
   always_comb begin : comb_rename
     rename__rdy = 1'd0;
     rename__ret = 7'd0;
@@ -29209,18 +29209,18 @@ module DataFlowManagerRTL__849fb2bb88e036ca
   //   if    s.reset:
   //     for i in range( num_pregs ):
   //       s.scoreboard[ i ] <<= 0
-  //
+  // 
   //   # no reset
   //   else:
   //     # set reg
   //     if s.set_reg.en:
   //       s.scoreboard[ s.set_reg.msg ] <<= 1
-  //
+  // 
   //     # unset reg
   //     for i in range( num_reg_wr_ports ):
   //       if s.wr_reg[ i ].en:
   //         s.scoreboard[ s.wr_reg[ i ].msg.preg_idx ] <<= 0
-
+  
   always_ff @(posedge clk) begin : up_scoreboard
     if ( reset ) begin
       for ( int unsigned i = 1'd0; i < 7'( __const__num_pregs_at_up_scoreboard ); i += 1'd1 )
@@ -29281,7 +29281,7 @@ module RiscvDecoder__xlen_64
   output logic [5:0] rd ,
   input  logic [0:0] reset ,
   output logic [5:0] rs1 ,
-  output logic [5:0] rs2
+  output logic [5:0] rs2 
 );
   localparam logic [7:0] __const__ZERO  = 8'd72;
   localparam logic [7:0] __const__NOP  = 8'd0;
@@ -29469,9 +29469,9 @@ module RiscvDecoder__xlen_64
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/isa/RiscvDecode.py:85
   // @update
   // def up_inst_type():
-  //
+  // 
   //   s.inst_type @= ZERO
-  //
+  // 
   //   if   s.in_ == 0b10011:                 s.inst_type @= NOP
   //   elif s.in_[OPCODE] == 0b0110011:
   //     if   s.in_[FUNCT7] == 0b0000000:
@@ -29495,7 +29495,7 @@ module RiscvDecoder__xlen_64
   //       elif s.in_[FUNCT3] == 0b101:       s.inst_type @= DIVU
   //       elif s.in_[FUNCT3] == 0b110:       s.inst_type @= REM
   //       elif s.in_[FUNCT3] == 0b111:       s.inst_type @= REMU
-  //
+  // 
   //   elif s.in_[OPCODE] == 0b0010011:
   //     if   s.in_[FUNCT3] == 0b000:         s.inst_type @= ADDI
   //     elif s.in_[FUNCT3] == 0b010:         s.inst_type @= SLTI
@@ -29507,13 +29507,13 @@ module RiscvDecoder__xlen_64
   //     elif s.in_[FUNCT3] == 0b101:
   //       if   s.in_[FUNCT7] == 0b0000000:   s.inst_type @= SRLI
   //       elif s.in_[FUNCT7] == 0b0100000:   s.inst_type @= SRAI
-  //
+  // 
   //   elif s.in_[OPCODE] == 0b0100011:
   //     if                   s.in_[FUNCT3] == 0b000:  s.inst_type @= SB
   //     elif                 s.in_[FUNCT3] == 0b001:  s.inst_type @= SH
   //     elif                 s.in_[FUNCT3] == 0b010:  s.inst_type @= SW
   //     elif (xlen == 64) & (s.in_[FUNCT3] == 0b011): s.inst_type @= SD
-  //
+  // 
   //   elif s.in_[OPCODE] == 0b0000011:
   //     if                   s.in_[FUNCT3] == 0b000:  s.inst_type @= LB
   //     elif                 s.in_[FUNCT3] == 0b001:  s.inst_type @= LH
@@ -29522,11 +29522,11 @@ module RiscvDecoder__xlen_64
   //     elif                 s.in_[FUNCT3] == 0b101:  s.inst_type @= LHU
   //     elif (xlen == 64) & (s.in_[FUNCT3] == 0b110): s.inst_type @= LWU
   //     elif (xlen == 64) & (s.in_[FUNCT3] == 0b011): s.inst_type @= LD
-  //
+  // 
   //   elif s.in_[OPCODE] == 0b0001111:
   //     if   s.in_[FUNCT3] == 0b000:         s.inst_type @= FENCE
   //     elif s.in_[FUNCT3] == 0b001:         s.inst_type @= FENCEI
-  //
+  // 
   //   elif s.in_[OPCODE] == 0b1100011:
   //     if   s.in_[FUNCT3] == 0b000:         s.inst_type @= BEQ
   //     elif s.in_[FUNCT3] == 0b001:         s.inst_type @= BNE
@@ -29534,21 +29534,21 @@ module RiscvDecoder__xlen_64
   //     elif s.in_[FUNCT3] == 0b101:         s.inst_type @= BGE
   //     elif s.in_[FUNCT3] == 0b110:         s.inst_type @= BLTU
   //     elif s.in_[FUNCT3] == 0b111:         s.inst_type @= BGEU
-  //
+  // 
   //   elif s.in_[OPCODE] == 0b0110111:       s.inst_type @= LUI
-  //
+  // 
   //   elif s.in_[OPCODE] == 0b0010111:       s.inst_type @= AUIPC
-  //
+  // 
   //   elif s.in_[OPCODE] == 0b1101111:       s.inst_type @= JAL
-  //
+  // 
   //   elif s.in_[OPCODE] == 0b1100111:       s.inst_type @= JALR
-  //
+  // 
   //   elif s.in_[OPCODE] == 0b1110011:
   //     if   s.in_[FUNCT3] == 0b001:         s.inst_type @= CSRW
   //     elif s.in_[FUNCT3] == 0b010:
   //       if s.in_[FUNCT7] == 0b0111111:     s.inst_type @= CSRRX
   //       else:                              s.inst_type @= CSRR
-  //
+  // 
   //   elif s.in_[OPCODE] == 0b0101111:
   //     if   s.in_[FUNCT3] == 0b010:
   //       if   s.in_[FUNCT5] == 0b00001:     s.inst_type @= AMOSWAP
@@ -29560,13 +29560,13 @@ module RiscvDecoder__xlen_64
   //       elif s.in_[FUNCT5] == 0b10100:     s.inst_type @= AMOMAX
   //       elif s.in_[FUNCT5] == 0b11000:     s.inst_type @= AMOMINU
   //       elif s.in_[FUNCT5] == 0b11100:     s.inst_type @= AMOMAXU
-  //
+  // 
   //   elif s.in_[OPCODE] == 0b0000111:
   //     if   s.in_[FUNCT3] == 0b010:         s.inst_type @= FLW
-  //
+  // 
   //   elif s.in_[OPCODE] == 0b0100111:
   //     if   s.in_[FUNCT3] == 0b010:         s.inst_type @= FSW
-  //
+  // 
   //   elif s.in_[OPCODE] == 0b1010011:
   //     if   s.in_[FUNCT7] == 0b0000000:     s.inst_type @= FADDS
   //     elif s.in_[FUNCT7] == 0b0000100:     s.inst_type @= FSUBS
@@ -29589,14 +29589,14 @@ module RiscvDecoder__xlen_64
   //     elif s.in_[FUNCT7] == 0b1111000:
   //       if   s.in_[RS2] == 0b00000:
   //         if   s.in_[FUNCT3] == 0b000:     s.inst_type @= FMVWX
-  //
+  // 
   //   elif (xlen == 64) & (s.in_[OPCODE] == 0b0011011):
   //     if    s.in_[FUNCT3] == 0b000:         s.inst_type @= ADDIW
   //     elif  s.in_[FUNCT3] == 0b001:         s.inst_type @= SLLIW
   //     elif  s.in_[FUNCT3] == 0b101:
   //       if    s.in_[FUNCT7] == 0b0000000:   s.inst_type @= SRLIW
   //       elif  s.in_[FUNCT7] == 0b0100000:   s.inst_type @= SRLIW
-  //
+  // 
   //   elif (xlen == 64) & (s.in_[OPCODE] == 0b0111011):
   //     if    s.in_[FUNCT3] == 0b000:
   //       if    s.in_[FUNCT7] == 0b0000000:   s.inst_type @= ADDW
@@ -29614,7 +29614,7 @@ module RiscvDecoder__xlen_64
   //       if    s.in_[FUNCT7] == 0b0000001:   s.inst_type @= REMW
   //     elif  s.in_[FUNCT3] == 0b111:
   //       if    s.in_[FUNCT7] == 0b0000001:   s.inst_type @= REMUW
-
+  
   always_comb begin : up_inst_type
     inst_type = 8'( __const__ZERO );
     if ( in_ == 32'd19 ) begin
@@ -29967,12 +29967,12 @@ module RiscvDecoder__xlen_64
   // @update
   // def up_outputs():
   //   inst = s.inst_type
-  //
+  // 
   //   # NOTE: This instruction decoding table contains both RV32 and RV64
   //   # instructions. However, due to the 32-bit pipeline and registers
   //   # RV64 instructions are implemented to operate on 32-bit data, so this
   //   # is not a complete implementation of RV64 ISA.
-  //
+  // 
   //   #                                      inst    imm   br       alu       mdu         mem       mem    mem    csr  fpu    rs1  rs2  rd   op1    op2    frs1 frs2 frd
   //   #                                       val    type  type    type      type        type       len    ext   type  type    en   en  en   sel    sel
   //   if   inst == NOP      : s.cs @= concat(  y,  imm_x,  br_x,  alu_x,     md_x,     mem_x,    mlen_x,   xe, csr_x,  fp_x,   n,   n,   n, am_x,  bm_x,     n,    n,  n )
@@ -30025,10 +30025,10 @@ module RiscvDecoder__xlen_64
   //   # jump
   //   elif inst == JAL      : s.cs @= concat(  y,  imm_j,  jal,   alu_x,     md_x,     mem_x,    mlen_x,   xe, csr_x,  fp_x,   n,   n,   y, am_x,  bm_x,     n,    n,  n )
   //   elif inst == JALR     : s.cs @= concat(  y,  imm_i,  jalr,  alu_adz,   md_x,     mem_x,    mlen_x,   xe, csr_x,  fp_x,   y,   n,   y, am_rf, bm_imm,   n,    n,  n )
-  //
+  // 
   //   #                                      inst    imm   br       alu       mdu         mem       mem    mem    csr  fpu    rs1  rs2  rd   op1    op2    frs1 frs2 frd
   //   #                                       val    type  type    type      type        type       len    ext   type  type    en   en  en   sel    sel
-  //
+  // 
   //   # *** RV32/64M ***
   //   elif inst == MUL      : s.cs @= concat(  y,  imm_x,  br_x,  alu_x,     md_mul,   mem_x,    mlen_x,   xe, csr_x,   fp_x,  y,   y,   y, am_rf, bm_rf,    n,    n,  n )
   //   elif inst == MULH     : s.cs @= concat(  y,  imm_x,  br_x,  alu_x,     md_mh,    mem_x,    mlen_x,   xe, csr_x,   fp_x,  y,   y,   y, am_rf, bm_rf,    n,    n,  n )
@@ -30064,11 +30064,11 @@ module RiscvDecoder__xlen_64
   //   elif inst == FLES     : s.cs @= concat(  y,  imm_x,  br_x,  alu_x,     md_x,     mem_x,    mlen_x,   xe, csr_x, fp_cle,  y,   y,   y, am_rf, bm_rf,    y,    y,  n )
   //   elif inst == FCVTWS   : s.cs @= concat(  y,  imm_x,  br_x,  alu_x,     md_x,     mem_x,    mlen_x,   xe, csr_x, fp_f2i,  y,   n,   y, am_rf, bm_rf,    y,    n,  n ) # cvt fp -> int
   //   elif inst == FCVTSW   : s.cs @= concat(  y,  imm_x,  br_x,  alu_x,     md_x,     mem_x,    mlen_x,   xe, csr_x, fp_i2f,  y,   n,   y, am_rf, bm_rf,    n,    n,  y ) # cvt int -> fp
-  //
+  // 
   //   elif xlen == 64:
   //     #                                    inst    imm   br       alu       mdu         mem       mem    mem    csr  fpu    rs1  rs2  rd   op1    op2    frs1 frs2 frd
   //     #                                     val    type  type    type      type        type       len    ext   type  type    en   en  en   sel    sel
-  //
+  // 
   //     # *** RV64I ***
   //     if   inst == LWU    : s.cs @= concat(  y,  imm_i,  br_x,  alu_x,     md_x,     mem_ld,   mlen_w,   xe, csr_x,  fp_x,   y,   n,   y, am_rf, bm_imm,   n,    n,  n )  # same as LW
   //     elif inst == LD     : s.cs @= concat(  y,  imm_i,  br_x,  alu_x,     md_x,     mem_ld,   mlen_w,   xe, csr_x,  fp_x,   y,   n,   y, am_rf, bm_imm,   n,    n,  n )  # same as LW
@@ -30082,69 +30082,69 @@ module RiscvDecoder__xlen_64
   //     elif inst == SLLW   : s.cs @= concat(  y,  imm_x,  br_x,  alu_sll,   md_x,     mem_x,    mlen_x,   xe, csr_x,  fp_x,   y,   y,   y, am_rf, bm_rf,    n,    n,  n )  # same as SLL
   //     elif inst == SRLW   : s.cs @= concat(  y,  imm_x,  br_x,  alu_srl,   md_x,     mem_x,    mlen_x,   xe, csr_x,  fp_x,   y,   y,   y, am_rf, bm_rf,    n,    n,  n )  # same as SRL
   //     elif inst == SRAW   : s.cs @= concat(  y,  imm_x,  br_x,  alu_sra,   md_x,     mem_x,    mlen_x,   xe, csr_x,  fp_x,   y,   y,   y, am_rf, bm_rf,    n,    n,  n )  # same as SRA
-  //
+  // 
   //     # *** RV64M ***
   //     elif inst == MULW   : s.cs @= concat(  y,  imm_x,  br_x,  alu_x,     md_mul,   mem_x,    mlen_x,   xe, csr_x,   fp_x,  y,   y,   y, am_rf, bm_rf,    n,    n,  n )  # same as MUL
   //     elif inst == DIVW   : s.cs @= concat(  y,  imm_x,  br_x,  alu_x,     md_div,   mem_x,    mlen_x,   xe, csr_x,   fp_x,  y,   y,   y, am_rf, bm_rf,    n,    n,  n )  # same as DIV
   //     elif inst == DIVUW  : s.cs @= concat(  y,  imm_x,  br_x,  alu_x,     md_divu,  mem_x,    mlen_x,   xe, csr_x,   fp_x,  y,   y,   y, am_rf, bm_rf,    n,    n,  n )  # same as DIVU
   //     elif inst == REMW   : s.cs @= concat(  y,  imm_x,  br_x,  alu_x,     md_rem,   mem_x,    mlen_x,   xe, csr_x,   fp_x,  y,   y,   y, am_rf, bm_rf,    n,    n,  n )  # same as REM
   //     elif inst == REMUW  : s.cs @= concat(  y,  imm_x,  br_x,  alu_x,     md_remu,  mem_x,    mlen_x,   xe, csr_x,   fp_x,  y,   y,   y, am_rf, bm_rf,    n,    n,  n )  # same as REMU
-  //
+  // 
   //     # *** INVALID RV64 ***
   //     else                : s.cs @= concat(  n,  imm_x,  br_x,  alu_x,     md_x,     mem_x,    mlen_x,   xe, csr_x,  fp_x,   n,   n,   n, am_x,  bm_x,     n,    n,  n )
-  //
+  // 
   //   # *** INVALID RV32 ***
   //   else                  : s.cs @= concat(  n,  imm_x,  br_x,  alu_x,     md_x,     mem_x,    mlen_x,   xe, csr_x,  fp_x,   n,   n,   n, am_x,  bm_x,     n,    n,  n )
-  //
+  // 
   //   # rs1, rs2, rd
   //   s.rs1 @= 0
   //   s.rs2 @= 0
   //   s.rd  @= 0
-  //
+  // 
   //   if  s.out.rs1_en:
   //     if s.out.fp_rs1:
   //       s.rs1 @= zext( s.in_[ RS1 ], areg_idx_nbits ) + ARegIdx( 32 )
   //     else:
   //       s.rs1 @= zext( s.in_[ RS1 ], areg_idx_nbits )
-  //
+  // 
   //   if  s.out.rs2_en:
   //     if s.out.fp_rs2:
   //       s.rs2 @= zext( s.in_[ RS2 ], areg_idx_nbits ) + ARegIdx( 32 )
   //     else:
   //       s.rs2 @= zext( s.in_[ RS2 ], areg_idx_nbits )
-  //
+  // 
   //   if  s.out.rd_en:
   //     if s.out.fp_rd:
   //       s.rd @= zext( s.in_[ RD0 ], areg_idx_nbits ) + ARegIdx( 32 )
   //     else:
   //       s.rd @= zext( s.in_[ RD0 ], areg_idx_nbits )
-  //
+  // 
   //   # CSR
   //   s.csr @= 0
-  //
+  // 
   //   if  s.out.csr_type != csr_x:
   //     s.csr @= s.in_[ CSRNUM ]
-  //
+  // 
   //   # fence
   //   s.fls @= 0
   //   s.inv @= 0
-  //
+  // 
   //   if inst == FENCE:
   //     # Flush if PRED = XXRW, SUC = XXXW
   //     if  ( ( s.in_[ PRED ] & 0b0011 ) == 0b0011 ) & \
   //         ( ( s.in_[ SUCC ] & 0b0001 ) == 0b0001 ):
   //       s.fls @= 1
-  //
+  // 
   //     # Invalidate if PRED = XXRX, SUC = XXRW
   //     if  ( ( s.in_[ PRED ] & 0b0010 ) == 0b0010 ) & \
   //         ( ( s.in_[ SUCC ] & 0b0011 ) == 0b0011 ):
   //       s.inv @= 1
-  //
+  // 
   //     # if neither fls nor inv is set, set both
   //     if  ~s.fls | ~s.inv:
   //       s.inv @= 1
   //       s.fls @= 1
-
+  
   always_comb begin : up_outputs
     __tmpvar__up_outputs_inst = inst_type;
     if ( __tmpvar__up_outputs_inst == 8'( __const__NOP ) ) begin
@@ -30501,7 +30501,7 @@ module ImmGenRTL_noparam
   output logic [31:0] imm ,
   input  logic [2:0] imm_type ,
   input  logic [31:0] inst ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [2:0] __const__imm_i  = 3'd0;
   localparam logic [2:0] __const__imm_b  = 3'd2;
@@ -30514,31 +30514,31 @@ module ImmGenRTL_noparam
   // @update
   // def up_immgen():
   //   s.imm @= 0
-  //
+  // 
   //   # Always sext!
   //   if   s.imm_type == imm_i: # I-type
   //     s.imm @= concat( sext( s.inst[ I_IMM ], 32 ) )
-  //
+  // 
   //   elif s.imm_type == imm_b: # B-type
   //     s.imm @= concat( sext( s.inst[ B_IMM3 ], 20 ),
   //                      s.inst[ B_IMM2 ],
   //                      s.inst[ B_IMM1 ],
   //                      s.inst[ B_IMM0 ],
   //                      b1( 0 ) )
-  //
+  // 
   //   elif s.imm_type == imm_s: # S-type
   //     s.imm @= concat( sext( s.inst[ S_IMM1 ], 27 ), s.inst[ S_IMM0 ] )
-  //
+  // 
   //   elif s.imm_type == imm_u: # U-type
   //     s.imm @= concat( s.inst[ U_IMM ], b12( 0 ) )
-  //
+  // 
   //   elif s.imm_type == imm_j: # J-type
   //     s.imm @= concat( sext( s.inst[ J_IMM3 ], 12 ),
   //                      s.inst[ J_IMM2 ],
   //                      s.inst[ J_IMM1 ],
   //                      s.inst[ J_IMM0 ],
   //                      b1( 0 ) )
-
+  
   always_comb begin : up_immgen
     imm = 32'd0;
     if ( imm_type == 3'( __const__imm_i ) ) begin
@@ -30570,7 +30570,7 @@ module Adder__Type_Bits32
   input  logic [31:0] in0 ,
   input  logic [31:0] in1 ,
   output logic [31:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
 
   // PyMTL Update Block Source
@@ -30578,7 +30578,7 @@ module Adder__Type_Bits32
   // @update
   // def up_adder():
   //   s.out @= s.in0 + s.in1
-
+  
   always_comb begin : up_adder
     out = in0 + in1;
   end
@@ -30599,7 +30599,7 @@ module PipeQueue1EntryRTL__EntryType_F_InstStruct__pc_32__inst_32
   output F_InstStruct__pc_32__inst_32 deq__ret  ,
   input logic [0:0] enq__en  ,
   input F_InstStruct__pc_32__inst_32 enq__msg  ,
-  output logic [0:0] enq__rdy
+  output logic [0:0] enq__rdy  
 );
   F_InstStruct__pc_32__inst_32 entry;
   logic [0:0] full;
@@ -30607,7 +30607,7 @@ module PipeQueue1EntryRTL__EntryType_F_InstStruct__pc_32__inst_32
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/pymtl3/pymtl3/stdlib/queues/queues.py:490
   // s.deq.rdy //= lambda: s.full & ~s.reset
-
+  
   always_comb begin : _lambda__s_procs_0__decode_recv_q_q_deq_rdy
     deq__rdy = full & ( ~reset );
   end
@@ -30615,7 +30615,7 @@ module PipeQueue1EntryRTL__EntryType_F_InstStruct__pc_32__inst_32
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/pymtl3/pymtl3/stdlib/queues/queues.py:489
   // s.enq.rdy //= lambda: ~s.reset & ( ~s.full | s.deq.en )
-
+  
   always_comb begin : _lambda__s_procs_0__decode_recv_q_q_enq_rdy
     enq__rdy = ( ~reset ) & ( ( ~full ) | deq__en );
   end
@@ -30625,10 +30625,10 @@ module PipeQueue1EntryRTL__EntryType_F_InstStruct__pc_32__inst_32
   // @update_ff
   // def ff_pipe1():
   //   s.full <<= ~s.reset & ( s.enq.en | s.full & ~s.deq.en )
-  //
+  // 
   //   if s.enq.en:
   //     s.entry <<= s.enq.msg
-
+  
   always_ff @(posedge clk) begin : ff_pipe1
     full <= ( ~reset ) & ( enq__en | ( full & ( ~deq__en ) ) );
     if ( enq__en ) begin
@@ -30656,7 +30656,7 @@ module PipeQueueRTL__2f87cea22eb5431d
   output F_InstStruct__pc_32__inst_32 deq__ret  ,
   input logic [0:0] enq__en  ,
   input F_InstStruct__pc_32__inst_32 enq__msg  ,
-  output logic [0:0] enq__rdy
+  output logic [0:0] enq__rdy  
 );
   //-------------------------------------------------------------
   // Component q
@@ -30736,7 +30736,7 @@ module DecodeUnitRTL__bee45fa5195f09f5
   output ResolveBranchStruct__7003e9cf5478f896 resolve_br__msg  ,
   output logic [0:0] send_inst__en  ,
   output D_InstStruct__e597a7f7aebd8fbc send_inst__msg  ,
-  input logic [0:0] send_inst__rdy
+  input logic [0:0] send_inst__rdy  
 );
   localparam logic [3:0] __const__jal  = 4'd8;
   F_InstStruct__pc_32__inst_32 in_msg;
@@ -30863,26 +30863,26 @@ module DecodeUnitRTL__bee45fa5195f09f5
   //   s.rename_rd.en      @= 0
   //   s.register_inst.en  @= 0
   //   s.resolve_br.en     @= 0
-  //
+  // 
   //   #
   //   # being killed
   //   #
   //   if s.clear_br.en & s.clear_br.msg.kill:
-  //
+  // 
   //     # simply drop the input inst if any
   //     s.recv_q.deq.en @= s.recv_q.deq.rdy
-  //
+  // 
   //   #
   //   # no kill
   //   #
   //   elif s.recv_q.deq.rdy & s.send_inst.rdy:
-  //
+  // 
   //     # proceed only if rd (if enabled) can be renamed
   //     if  ~s.decoder.out.rd_en | s.rename_rd.rdy:
-  //
+  // 
   //       # proceed only if inst can be registered
   //       s.register_inst.en @= 1
-  //
+  // 
   //       if s.register_inst.suc:
   //         # rename rd
   //         s.rename_rd.en  @= s.decoder.out.rd_en
@@ -30896,7 +30896,7 @@ module DecodeUnitRTL__bee45fa5195f09f5
   //         s.send_inst.en  @= 1
   //         # resolve JAL
   //         s.resolve_br.en @= ( s.decoder.out.br_type == jal )
-
+  
   always_comb begin : decode_comb
     recv_q__deq__en = 1'd0;
     send_inst__en = 1'd0;
@@ -31003,7 +31003,7 @@ module PipeQueue1EntryRTL__EntryType_Bits32
   output logic [31:0] deq__ret  ,
   input logic [0:0] enq__en  ,
   input logic [31:0] enq__msg  ,
-  output logic [0:0] enq__rdy
+  output logic [0:0] enq__rdy  
 );
   logic [31:0] entry;
   logic [0:0] full;
@@ -31011,7 +31011,7 @@ module PipeQueue1EntryRTL__EntryType_Bits32
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/pymtl3/pymtl3/stdlib/queues/queues.py:490
   // s.deq.rdy //= lambda: s.full & ~s.reset
-
+  
   always_comb begin : _lambda__s_procs_0__fetch_pc_redirect_q_q_deq_rdy
     deq__rdy = full & ( ~reset );
   end
@@ -31019,7 +31019,7 @@ module PipeQueue1EntryRTL__EntryType_Bits32
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/pymtl3/pymtl3/stdlib/queues/queues.py:489
   // s.enq.rdy //= lambda: ~s.reset & ( ~s.full | s.deq.en )
-
+  
   always_comb begin : _lambda__s_procs_0__fetch_pc_redirect_q_q_enq_rdy
     enq__rdy = ( ~reset ) & ( ( ~full ) | deq__en );
   end
@@ -31029,10 +31029,10 @@ module PipeQueue1EntryRTL__EntryType_Bits32
   // @update_ff
   // def ff_pipe1():
   //   s.full <<= ~s.reset & ( s.enq.en | s.full & ~s.deq.en )
-  //
+  // 
   //   if s.enq.en:
   //     s.entry <<= s.enq.msg
-
+  
   always_ff @(posedge clk) begin : ff_pipe1
     full <= ( ~reset ) & ( enq__en | ( full & ( ~deq__en ) ) );
     if ( enq__en ) begin
@@ -31059,7 +31059,7 @@ module PipeQueueRTL__EntryType_Bits32__num_entries_1
   output logic [31:0] deq__ret  ,
   input logic [0:0] enq__en  ,
   input logic [31:0] enq__msg  ,
-  output logic [0:0] enq__rdy
+  output logic [0:0] enq__rdy  
 );
   //-------------------------------------------------------------
   // Component q
@@ -31121,7 +31121,7 @@ module IFetchQueueRTL__21b809c101ecf043
   input logic [0:0] complete__en  ,
   input logic [0:0] complete__msg  ,
   output logic [0:0] complete__rdy  ,
-  output IFetchReq__val_1__pc_32 complete__ret
+  output IFetchReq__val_1__pc_32 complete__ret  
 );
   localparam logic [1:0] __const__num_entries_at_up_ff  = 2'd2;
   localparam logic [1:0] __const__num_entries_at_up_comb  = 2'd2;
@@ -31158,7 +31158,7 @@ module IFetchQueueRTL__21b809c101ecf043
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/structures/IFetchQueueRTL.py:57
   // s.complete.rdy //= lambda: ~s.kill_all & ~s.entry_alloc.empty
-
+  
   always_comb begin : _lambda__s_procs_0__fetch_req_q_complete_rdy
     complete__rdy = ( ~kill_all ) & ( ~entry_alloc__empty );
   end
@@ -31167,30 +31167,30 @@ module IFetchQueueRTL__21b809c101ecf043
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/structures/IFetchQueueRTL.py:69
   // @update
   // def up_comb():
-  //
+  // 
   //   # default
   //   s.complete.ret @= s.entry[ 0 ]
-  //
+  // 
   //   for i in range( num_entries ):
   //     s.next_entry[ i ]       @= s.entry[ i ]
   //     s.entry_alloc.free[ i ] @= 0
-  //
+  // 
   //   # kill_all
   //   if    s.kill_all:
   //     for i in range( num_entries ):
   //       s.next_entry[ i ].val @= 0
-  //
+  // 
   //   # complete
   //   elif  s.complete.en:
   //     idx = s.complete.msg
   //     s.complete.ret            @= s.entry[ idx ]
   //     s.entry_alloc.free[ idx ] @= 1
   //     s.next_entry[ idx ].val   @= 0
-  //
+  // 
   //   # allocate
   //   if s.allocate.en:
   //     s.next_entry[ s.entry_alloc.allocate.ret ] @= s.allocate.msg
-
+  
   always_comb begin : up_comb
     complete__ret = entry[1'd0];
     for ( int unsigned i = 1'd0; i < 2'( __const__num_entries_at_up_comb ); i += 1'd1 ) begin
@@ -31216,14 +31216,14 @@ module IFetchQueueRTL__21b809c101ecf043
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/structures/IFetchQueueRTL.py:59
   // @update_ff
   // def up_ff():
-  //
+  // 
   //   if s.reset:
   //     for i in range( num_entries ):
   //       s.entry[ i ] <<= EntryType()
   //   else:
   //     for i in range( num_entries ):
   //       s.entry[ i ] <<= s.next_entry[ i ]
-
+  
   always_ff @(posedge clk) begin : up_ff
     if ( reset ) begin
       for ( int unsigned i = 1'd0; i < 2'( __const__num_entries_at_up_ff ); i += 1'd1 )
@@ -31258,7 +31258,7 @@ module BypassQueueCtrlRTL__num_entries_2
   output logic [0:0] raddr ,
   input  logic [0:0] reset ,
   output logic [0:0] waddr ,
-  output logic [0:0] wen
+  output logic [0:0] wen 
 );
   logic [0:0] deq_xfer;
   logic [0:0] enq_xfer;
@@ -31268,7 +31268,7 @@ module BypassQueueCtrlRTL__num_entries_2
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/pymtl3/pymtl3/stdlib/queues/queues.py:351
   // s.deq_rdy //= lambda: ~s.reset & ( (s.count > CountType(0) ) | s.enq_en )
-
+  
   always_comb begin : _lambda__s_procs_0__fetch_resp_q_ctrl_deq_rdy
     deq_rdy = ( ~reset ) & ( ( count > 2'd0 ) | enq_en );
   end
@@ -31276,7 +31276,7 @@ module BypassQueueCtrlRTL__num_entries_2
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/pymtl3/pymtl3/stdlib/queues/queues.py:356
   // s.deq_xfer //= lambda: s.deq_en & s.deq_rdy
-
+  
   always_comb begin : _lambda__s_procs_0__fetch_resp_q_ctrl_deq_xfer
     deq_xfer = deq_en & deq_rdy;
   end
@@ -31284,7 +31284,7 @@ module BypassQueueCtrlRTL__num_entries_2
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/pymtl3/pymtl3/stdlib/queues/queues.py:350
   // s.enq_rdy //= lambda: ~s.reset & ( s.count < s.num_entries )
-
+  
   always_comb begin : _lambda__s_procs_0__fetch_resp_q_ctrl_enq_rdy
     enq_rdy = ( ~reset ) & ( count < 2'd2 );
   end
@@ -31292,7 +31292,7 @@ module BypassQueueCtrlRTL__num_entries_2
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/pymtl3/pymtl3/stdlib/queues/queues.py:355
   // s.enq_xfer //= lambda: s.enq_en & s.enq_rdy
-
+  
   always_comb begin : _lambda__s_procs_0__fetch_resp_q_ctrl_enq_xfer
     enq_xfer = enq_en & enq_rdy;
   end
@@ -31300,7 +31300,7 @@ module BypassQueueCtrlRTL__num_entries_2
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/pymtl3/pymtl3/stdlib/queues/queues.py:353
   // s.mux_sel //= lambda: s.count == CountType(0)
-
+  
   always_comb begin : _lambda__s_procs_0__fetch_resp_q_ctrl_mux_sel
     mux_sel = count == 2'd0;
   end
@@ -31309,24 +31309,24 @@ module BypassQueueCtrlRTL__num_entries_2
   // At /work/global/mw828/cifer/pymtl3/pymtl3/stdlib/queues/queues.py:358
   // @update_ff
   // def up_reg():
-  //
+  // 
   //   if s.reset:
   //     s.head  <<= PtrType(0)
   //     s.tail  <<= PtrType(0)
   //     s.count <<= CountType(0)
-  //
+  // 
   //   else:
   //     if s.deq_xfer:
   //       s.head <<= s.head + PtrType(1) if s.head < s.last_idx else PtrType(0)
-  //
+  // 
   //     if s.enq_xfer:
   //       s.tail <<= s.tail + PtrType(1) if s.tail < s.last_idx else PtrType(0)
-  //
+  // 
   //     if s.enq_xfer & ~s.deq_xfer:
   //       s.count <<= s.count + CountType(1)
   //     if ~s.enq_xfer & s.deq_xfer:
   //       s.count <<= s.count - CountType(1)
-
+  
   always_ff @(posedge clk) begin : up_reg
     if ( reset ) begin
       head <= 1'd0;
@@ -31366,7 +31366,7 @@ module Mux__e8e959655ba0e64d
   input  MemRespMsg__type__4__opaque_8__test_2__len_2__data_32 in_ [0:1],
   output MemRespMsg__type__4__opaque_8__test_2__len_2__data_32 out ,
   input  logic [0:0] reset ,
-  input  logic [0:0] sel
+  input  logic [0:0] sel 
 );
 
   // PyMTL Update Block Source
@@ -31374,7 +31374,7 @@ module Mux__e8e959655ba0e64d
   // @update
   // def up_mux():
   //   s.out @= s.in_[ s.sel ]
-
+  
   always_comb begin : up_mux
     out = in_[sel];
   end
@@ -31406,7 +31406,7 @@ module RegisterFile__94567e9de21bf649
   // def up_rf_read():
   //   for i in range( rd_ports ):
   //     s.rdata[i] @= s.regs[ s.raddr[i] ]
-
+  
   always_comb begin : up_rf_read
     for ( int unsigned i = 1'd0; i < 1'( __const__rd_ports_at_up_rf_read ); i += 1'd1 )
       rdata[1'(i)] = regs[raddr[1'(i)]];
@@ -31419,7 +31419,7 @@ module RegisterFile__94567e9de21bf649
   //   for i in range( wr_ports ):
   //     if s.wen[i]:
   //       s.regs[ s.waddr[i] ] <<= s.wdata[i]
-
+  
   always_ff @(posedge clk) begin : up_rf_write
     for ( int unsigned i = 1'd0; i < 1'( __const__wr_ports_at_up_rf_write ); i += 1'd1 )
       if ( wen[1'(i)] ) begin
@@ -31443,7 +31443,7 @@ module BypassQueueDpathRTL__54f525100615e9d4
   input  logic [0:0] raddr ,
   input  logic [0:0] reset ,
   input  logic [0:0] waddr ,
-  input  logic [0:0] wen
+  input  logic [0:0] wen 
 );
   //-------------------------------------------------------------
   // Component mux
@@ -31525,7 +31525,7 @@ module BypassQueueRTL__54f525100615e9d4
   output MemRespMsg__type__4__opaque_8__test_2__len_2__data_32 deq__ret  ,
   input logic [0:0] enq__en  ,
   input MemRespMsg__type__4__opaque_8__test_2__len_2__data_32 enq__msg  ,
-  output logic [0:0] enq__rdy
+  output logic [0:0] enq__rdy  
 );
   //-------------------------------------------------------------
   // Component ctrl
@@ -31629,7 +31629,7 @@ module FetchUnitRTL__max_pending_reqs_2
   output logic [0:0] imem__resp__rdy ,
   output logic [0:0] send_inst__en  ,
   output F_InstStruct__pc_32__inst_32 send_inst__msg  ,
-  input logic [0:0] send_inst__rdy
+  input logic [0:0] send_inst__rdy  
 );
   localparam logic [0:0] __const__req_q_idx_nbits_at_up_resp_path  = 1'd1;
   logic [31:0] next_pc;
@@ -31756,7 +31756,7 @@ module FetchUnitRTL__max_pending_reqs_2
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/units/FetchUnitRTL.py:87
   // s.req_q.kill_all          //= lambda: s.clear_br.en & s.clear_br.msg.kill
-
+  
   always_comb begin : _lambda__s_procs_0__fetch_req_q_kill_all
     req_q__kill_all = clear_br__en & clear_br__msg.kill;
   end
@@ -31765,14 +31765,14 @@ module FetchUnitRTL__max_pending_reqs_2
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/units/FetchUnitRTL.py:94
   // @update
   // def up_next_pc():
-  //
+  // 
   //   if    s.clear_br.en & s.clear_br.msg.kill:
   //     s.next_pc @= s.clear_br.msg.pc_redirect
   //   elif  s.pc_redirect_q.deq.rdy:
   //     s.next_pc @= s.pc_redirect_q.deq.ret
   //   else:
   //     s.next_pc @= s.pc_incr.out
-
+  
   always_comb begin : up_next_pc
     if ( clear_br__en & clear_br__msg.kill ) begin
       next_pc = clear_br__msg.pc_redirect;
@@ -31788,32 +31788,32 @@ module FetchUnitRTL__max_pending_reqs_2
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/units/FetchUnitRTL.py:104
   // @update
   // def up_req_path():
-  //
+  // 
   //   # default
   //   s.pc_reg_en             @= 0
   //   s.pc_redirect_q.deq.en  @= 0
   //   s.pc_redirect_q.enq.en  @= 0
-  //
+  // 
   //   s.req_q.allocate.en     @= 0
-  //
+  // 
   //   s.imem.req.en           @= 0
   //   s.imem.req.msg.type_    @= 0
   //   s.imem.req.msg.opaque   @= 0
   //   s.imem.req.msg.addr     @= 0
   //   s.imem.req.msg.len      @= 0
   //   s.imem.req.msg.data     @= 0
-  //
+  // 
   //   # only send fetch request if go_bit is high
   //   if s.go_bit:
-  //
+  // 
   //     # Fetch next_pc if both imem req and req_q are ready
   //     if s.imem.req.rdy & s.req_q.allocate.rdy:
   //       # dequeue any PC in pc_redirect_q
   //       s.pc_redirect_q.deq.en @= s.pc_redirect_q.deq.rdy
-  //
+  // 
   //       # update pc_reg
   //       s.pc_reg_en @= 1
-  //
+  // 
   //       # make a new imem req
   //       s.req_q.allocate.en   @= 1
   //       s.imem.req.en         @= 1
@@ -31822,15 +31822,15 @@ module FetchUnitRTL__max_pending_reqs_2
   //       s.imem.req.msg.addr   @= s.next_pc
   //       s.imem.req.msg.len    @= 0                                # fetch 4-byte words
   //       s.imem.req.msg.data   @= 0                                # no data
-  //
+  // 
   //     # otherwise, if killed, save the PC into pc_redirect_q
   //     elif  s.clear_br.en & s.clear_br.msg.kill:
   //       # dequeue any PC in pc_redirect_q
   //       s.pc_redirect_q.deq.en @= s.pc_redirect_q.deq.rdy
-  //
+  // 
   //       # save the new PC
   //       s.pc_redirect_q.enq.en @= 1
-
+  
   always_comb begin : up_req_path
     pc_reg_en = 1'd0;
     pc_redirect_q__deq__en = 1'd0;
@@ -31865,34 +31865,34 @@ module FetchUnitRTL__max_pending_reqs_2
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/units/FetchUnitRTL.py:149
   // @update
   // def up_resp_path():
-  //
+  // 
   //   # imem response ready
   //   s.imem.resp.rdy @= ~s.reset & \
   //                      ~( s.clear_br.en & s.clear_br.msg.kill ) & \
   //                      s.resp_q.enq.rdy
-  //
+  // 
   //   # resp_q.enq
   //   s.resp_q.enq.en  @= s.imem.resp.en
   //   s.resp_q.enq.msg @= s.imem.resp.msg
-  //
+  // 
   //   # default
   //   s.send_inst.en        @= 0
   //   s.send_inst.msg.pc    @= s.req_q.complete.ret.pc
   //   s.send_inst.msg.inst  @= s.resp_q.deq.ret.data
-  //
+  // 
   //   s.req_q.complete.en   @= 0
   //   s.resp_q.deq.en       @= 0
-  //
+  // 
   //   for i in range( req_q_idx_nbits ):
   //     s.req_q.complete.msg[ i ] @= s.resp_q.deq.ret.opaque[ i ]
-  //
+  // 
   //   #
   //   # there is a response and this unit is not stalled
   //   #
   //   if  s.resp_q.deq.rdy & \
   //       s.req_q.complete.rdy & \
   //       s.send_inst.rdy:
-  //
+  // 
   //     # dequeue resp_q
   //     s.resp_q.deq.en @= 1
   //     # complete the corresponding request
@@ -31900,7 +31900,7 @@ module FetchUnitRTL__max_pending_reqs_2
   //     # if the request has not been killed, send it to the next stage
   //     if s.req_q.complete.ret.val:
   //       s.send_inst.en @= 1
-
+  
   always_comb begin : up_resp_path
     imem__resp__rdy = ( ( ~reset ) & ( ~( clear_br__en & clear_br__msg.kill ) ) ) & resp_q__enq__rdy;
     resp_q__enq__en = imem__resp__en;
@@ -31927,7 +31927,7 @@ module FetchUnitRTL__max_pending_reqs_2
   // def up_pc_reg():
   //   if s.reset:        s.pc_reg <<= s.reset_pc - 4
   //   elif s.pc_reg_en:  s.pc_reg <<= s.next_pc
-
+  
   always_ff @(posedge clk) begin : up_pc_reg
     if ( reset ) begin
       pc_reg <= reset_pc - 32'd4;
@@ -31970,7 +31970,7 @@ module TaggedTableRTL__23ad185b24fb03a4
   input logic [0:0] complete__en  ,
   input logic [0:0] complete__msg  ,
   output logic [0:0] complete__rdy  ,
-  output MulDivReqStruct__b78922f82ad9e943 complete__ret
+  output MulDivReqStruct__b78922f82ad9e943 complete__ret  
 );
   localparam logic [1:0] __const__num_entries_at_up_ff  = 2'd2;
   localparam logic [1:0] __const__num_entries_at_up_comb  = 2'd2;
@@ -32007,7 +32007,7 @@ module TaggedTableRTL__23ad185b24fb03a4
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/structures/TaggedTableRTL.py:63
   // s.complete.rdy  //= lambda: ~s.entry_alloc.empty
-
+  
   always_comb begin : _lambda__s_procs_0__fpu_pipe_req_table_complete_rdy
     complete__rdy = ~entry_alloc__empty;
   end
@@ -32016,39 +32016,39 @@ module TaggedTableRTL__23ad185b24fb03a4
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/structures/TaggedTableRTL.py:74
   // @update
   // def up_comb():
-  //
+  // 
   //   # default
   //   s.complete.ret @= s.entry[ 0 ]
   //   for i in range( num_entries ):
   //     s.next_entry[ i ]       @= s.entry[ i ]
   //     s.entry_alloc.free[ i ] @= 0
-  //
+  // 
   //   # clear_br
   //   if s.clear_br.en:
-  //
+  // 
   //     if s.clear_br.msg.kill:
   //       # if matched with the kill mask, mark this entry as "killed"
   //       for i in range( num_entries ):
   //         if ( s.entry[ i ].br_tag & s.clear_br.msg.br_mask ) != 0:
   //           s.next_entry[ i ].killed @= 1
-  //
+  // 
   //     else:
   //       # if matched, clear the masked bit
   //       for i in range( num_entries ):
   //         if ( s.entry[ i ].br_tag & s.clear_br.msg.br_mask ) != 0:
   //           s.next_entry[ i ].br_tag @= s.entry[ i ].br_tag & ~s.clear_br.msg.br_mask
-  //
+  // 
   //   # complete
   //   if  s.complete.en:
   //     idx = s.complete.msg
   //     s.complete.ret            @= s.next_entry[ idx ]
   //     s.entry_alloc.free[ idx ] @= 1
-  //
+  // 
   //   # allocate
   //   if  s.allocate.en:
   //     idx = s.entry_alloc.allocate.ret
   //     s.next_entry[ idx ] @= s.allocate.msg
-
+  
   always_comb begin : up_comb
     complete__ret = entry[1'd0];
     for ( int unsigned i = 1'd0; i < 2'( __const__num_entries_at_up_comb ); i += 1'd1 ) begin
@@ -32089,7 +32089,7 @@ module TaggedTableRTL__23ad185b24fb03a4
   //   else:
   //     for i in range( num_entries ):
   //       s.entry[ i ]  <<= s.next_entry[ i ]
-
+  
   always_ff @(posedge clk) begin : up_ff
     if ( reset ) begin
       for ( int unsigned i = 1'd0; i < 2'( __const__num_entries_at_up_ff ); i += 1'd1 )
@@ -32132,7 +32132,7 @@ module FloatingPointPipeRTL__d492e0cc77198375
   input logic [0:0] send_fpu_req__rdy  ,
   output logic [0:0] send_inst__en  ,
   output X_InstStruct__b64b8c5076edb89b send_inst__msg  ,
-  input logic [0:0] send_inst__rdy
+  input logic [0:0] send_inst__rdy  
 );
   localparam logic [0:0] __const__req_table_idx_nbits_at_up_resp  = 1'd1;
   I_InstStruct__c61c86abe6488854 in_msg;
@@ -32212,31 +32212,31 @@ module FloatingPointPipeRTL__d492e0cc77198375
   // def up_req():
   //   # NOTE: for now, we don't support different rounding mode other than
   //   # FRND_NE (rounding to the nearest)
-  //
+  // 
   //   # multiplier request
   //   s.send_fpu_req.msg.opaque @= zext( s.req_table.allocate.ret, opq_nbits )
   //   s.send_fpu_req.msg.op_a   @= s.in_msg.op1_val
   //   s.send_fpu_req.msg.op_b   @= s.in_msg.op2_val
-  //
+  // 
   //   # default
   //   s.recv_q.deq.en           @= 0
   //   s.send_fpu_req.en         @= 0
   //   s.req_table.allocate.en   @= 0
   //   s.send_fpu_req.msg.type_  @= FpuReqType.NUM_TYPES # invalid type
   //   s.send_fpu_req.msg.frnd   @= FpuReqType.FRND_NE   # default round to nearest
-  //
+  // 
   //   if s.recv_q.deq.rdy:
-  //
+  // 
   //     # just drop if killed
   //     if    s.in_msg.killed:
   //       s.recv_q.deq.en @= 1
-  //
+  // 
   //     elif  s.send_fpu_req.rdy & s.req_table.allocate.rdy:
   //       s.recv_q.deq.en           @= 1
   //       s.send_fpu_req.en         @= 1
   //       s.req_table.allocate.en   @= 1
   //       s.send_fpu_req.msg.type_  @= s.in_msg.fpu_type
-
+  
   always_comb begin : up_req
     send_fpu_req__msg.opaque = { { 7 { 1'b0 } }, req_table__allocate__ret };
     send_fpu_req__msg.op_a = in_msg.op1_val;
@@ -32264,26 +32264,26 @@ module FloatingPointPipeRTL__d492e0cc77198375
   // @update
   // def up_resp():
   //   # NOTE: for now, we ignore exception bits FEXC from the FPU
-  //
+  // 
   //   # req_table.complete
   //   for i in range( req_table_idx_nbits ):
   //     s.req_table.complete.msg[ i ] @= s.recv_fpu_resp.msg.opaque[ i ]
-  //
+  // 
   //   # default
   //   s.req_table.complete.en @= 0
   //   s.send_inst.en          @= 0
   //   s.bypass.en             @= 0
-  //
+  // 
   //   s.recv_fpu_resp.rdy @= s.req_table.complete.rdy & s.send_inst.rdy
-  //
+  // 
   //   if s.recv_fpu_resp.en:
   //     s.req_table.complete.en @= 1
-  //
+  // 
   //     # only send inst to the next stage if it's not killed
   //     if ~s.req_table.complete.ret.killed:
   //       s.send_inst.en  @= 1
   //       s.bypass.en     @= 1
-
+  
   always_comb begin : up_resp
     for ( int unsigned i = 1'd0; i < 1'( __const__req_table_idx_nbits_at_up_resp ); i += 1'd1 )
       req_table__complete__msg[1'(i)] = recv_fpu_resp__msg.opaque[3'(i)];
@@ -32341,7 +32341,7 @@ module Mux__Type_Bits32__ninputs_3
   input  logic [31:0] in_ [0:2],
   output logic [31:0] out ,
   input  logic [0:0] reset ,
-  input  logic [1:0] sel
+  input  logic [1:0] sel 
 );
 
   // PyMTL Update Block Source
@@ -32349,7 +32349,7 @@ module Mux__Type_Bits32__ninputs_3
   // @update
   // def up_mux():
   //   s.out @= s.in_[ s.sel ]
-
+  
   always_comb begin : up_mux
     out = in_[sel];
   end
@@ -32372,7 +32372,7 @@ module TaggedNormalQueue2EntryRTL__ca4fef781f541716
   output D_InstStruct__e597a7f7aebd8fbc deq__ret  ,
   input logic [0:0] enq__en  ,
   input D_InstStruct__e597a7f7aebd8fbc enq__msg  ,
-  output logic [0:0] enq__rdy
+  output logic [0:0] enq__rdy  
 );
   D_InstStruct__e597a7f7aebd8fbc pri_entry;
   D_InstStruct__e597a7f7aebd8fbc sec_entry;
@@ -32384,29 +32384,29 @@ module TaggedNormalQueue2EntryRTL__ca4fef781f541716
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/structures/TaggedNormalQueue2EntryRTL.py:104
   // @update
   // def up_comb():
-  //
+  // 
   //   s.enq.rdy @= ( s.size < 2 )
   //   s.deq.rdy @= ( s.size > 0 )
-  //
+  // 
   //   s.updated_pri_entry @= s.pri_entry
   //   s.updated_sec_entry @= s.sec_entry
-  //
+  // 
   //   if s.clear_br.en:
-  //
+  // 
   //     if s.pri_entry.br_tag & s.clear_br.msg.br_mask:
   //       if s.clear_br.msg.kill:
   //         s.updated_pri_entry.killed @= 1
   //       else:
   //         s.updated_pri_entry.br_tag @= s.pri_entry.br_tag & ~s.clear_br.msg.br_mask
-  //
+  // 
   //     if s.sec_entry.br_tag & s.clear_br.msg.br_mask:
   //       if s.clear_br.msg.kill:
   //         s.updated_sec_entry.killed @= 1
   //       else:
   //         s.updated_sec_entry.br_tag @= s.sec_entry.br_tag & ~s.clear_br.msg.br_mask
-  //
+  // 
   //   s.deq.ret @= s.updated_pri_entry
-
+  
   always_comb begin : up_comb
     enq__rdy = size < 2'd2;
     deq__rdy = size > 2'd0;
@@ -32435,54 +32435,54 @@ module TaggedNormalQueue2EntryRTL__ca4fef781f541716
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/structures/TaggedNormalQueue2EntryRTL.py:54
   // @update_ff
   // def up_states():
-  //
+  // 
   //   # reset
   //   if    s.reset:
   //     s.size <<= 0
-  //
+  // 
   //   # enq and deq
   //   elif  s.enq.en & s.deq.en:
-  //
+  // 
   //     # enq -> pri_entry
   //     if    s.size == 1:
   //       s.pri_entry <<= s.enq.msg
-  //
+  // 
   //     # enq -> sec_entry -> pri_entry
   //     elif  s.size == 2:
   //       s.pri_entry <<= s.updated_sec_entry
   //       s.sec_entry <<= s.enq.msg
-  //
+  // 
   //   # not enq and deq
   //   elif  ~s.enq.en & s.deq.en:
-  //
+  // 
   //     # pri_entry -> deq
   //     if    s.size == 1:
   //       s.size <<= 0
-  //
+  // 
   //     # sec_entry -> pri_entry -> deq
   //     elif  s.size == 2:
   //       s.size      <<= 1
   //       s.pri_entry <<= s.updated_sec_entry
-  //
+  // 
   //   # enq and not deq
   //   elif  s.enq.en & ~s.deq.en:
-  //
+  // 
   //     # enq -> pri_entry
   //     if    s.size == 0:
   //       s.size      <<= 1
   //       s.pri_entry <<= s.enq.msg
-  //
+  // 
   //     # enq -> sec_entry
   //     elif  s.size == 1:
   //       s.size      <<= 2
   //       s.pri_entry <<= s.updated_pri_entry
   //       s.sec_entry <<= s.enq.msg
-  //
+  // 
   //   # not enq and not deq
   //   else:
   //     s.pri_entry <<= s.updated_pri_entry
   //     s.sec_entry <<= s.updated_sec_entry
-
+  
   always_ff @(posedge clk) begin : up_states
     if ( reset ) begin
       size <= 2'd0;
@@ -32549,7 +32549,7 @@ module IssueUnitRTL__num_rd_ports_2__num_FUs_4
   output I_InstStruct__c61c86abe6488854 send_inst__msg [0:3] ,
   input logic [0:0] send_inst__rdy [0:3] ,
   output logic [0:0] set_reg__en  ,
-  output logic [6:0] set_reg__msg
+  output logic [6:0] set_reg__msg  
 );
   localparam logic [1:0] __const__num_rd_ports_at_issue_comb  = 2'd2;
   localparam logic [2:0] __const__num_FUs_at_issue_comb  = 3'd4;
@@ -32657,7 +32657,7 @@ module IssueUnitRTL__num_rd_ports_2__num_FUs_4
   //     s.rd_reg[ i ].en @= 0
   //   for i in range( num_FUs ):
   //     s.send_inst[ i ].en @= 0
-  //
+  // 
   //   # check if we have inst to process
   //   if s.recv_q.deq.rdy:
   //     if    s.in_msg.fpu_type != fp_x:
@@ -32668,10 +32668,10 @@ module IssueUnitRTL__num_rd_ports_2__num_FUs_4
   //       fu_id = MEM_PIPE
   //     else:
   //       fu_id = ALU_PIPE
-  //
+  // 
   //     # check if target FU is ready
   //     if s.send_inst[ fu_id ].rdy:
-  //
+  // 
   //       if  s.recv_q.deq.ret.killed:
   //         # drop killed inst
   //         s.recv_q.deq.en @= 1
@@ -32680,17 +32680,17 @@ module IssueUnitRTL__num_rd_ports_2__num_FUs_4
   //         s.rd_reg[ 0 ].en  @= s.in_msg.rs1_en
   //         s.rd_reg[ 1 ].en  @= s.in_msg.rs2_en
   //         s.rd_csr.en       @= ( s.in_msg.csr_type == csr_rd )
-  //
+  // 
   //         # stall if we fail to read any register
   //         stall = ( s.in_msg.rs1_en & ~s.rd_reg[ 0 ].suc ) | \
   //                 ( s.in_msg.rs2_en & ~s.rd_reg[ 1 ].suc ) | \
   //                 ( s.rd_csr.en     & ~s.rd_csr.suc      )
-  //
+  // 
   //         # process if not stalled
   //         s.recv_q.deq.en         @= ~stall
   //         s.send_inst[ fu_id ].en @= ~stall
   //         s.set_reg.en            @= ~stall
-
+  
   always_comb begin : issue_comb
     recv_q__deq__en = 1'd0;
     set_reg__en = 1'd0;
@@ -32868,7 +32868,7 @@ module MulDivPipeRTL__109d9cf22badb0b4
   input logic [0:0] send_inst__rdy  ,
   output logic [0:0] send_mdu_req__en  ,
   output MduReqMsg_8_32__type__3__opaque_8__op_a_32__op_b_32 send_mdu_req__msg  ,
-  input logic [0:0] send_mdu_req__rdy
+  input logic [0:0] send_mdu_req__rdy  
 );
   localparam logic [3:0] __const__md_mul  = 4'd1;
   localparam logic [3:0] __const__md_mh  = 4'd2;
@@ -32954,29 +32954,29 @@ module MulDivPipeRTL__109d9cf22badb0b4
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/units/MulDivPipeRTL.py:102
   // @update
   // def up_req():
-  //
+  // 
   //   # multiplier request
   //   s.send_mdu_req.msg.opaque @= zext( s.req_table.allocate.ret, opq_nbits )
   //   s.send_mdu_req.msg.op_a   @= s.in_msg.op1_val
   //   s.send_mdu_req.msg.op_b   @= s.in_msg.op2_val
-  //
+  // 
   //   # default
   //   s.recv_q.deq.en           @= 0
   //   s.send_mdu_req.en         @= 0
   //   s.req_table.allocate.en   @= 0
   //   s.send_mdu_req.msg.type_  @= MduMsgType.TYPE_MUL
-  //
+  // 
   //   if s.recv_q.deq.rdy:
-  //
+  // 
   //     # just drop if killed
   //     if    s.in_msg.killed:
   //       s.recv_q.deq.en @= 1
-  //
+  // 
   //     elif  s.send_mdu_req.rdy & s.req_table.allocate.rdy:
   //       s.recv_q.deq.en         @= 1
   //       s.send_mdu_req.en       @= 1
   //       s.req_table.allocate.en @= 1
-  //
+  // 
   //       if    s.in_msg.mdu_type == md_mul:  s.send_mdu_req.msg.type_ @= MduMsgType.TYPE_MUL
   //       elif  s.in_msg.mdu_type == md_mh:   s.send_mdu_req.msg.type_ @= MduMsgType.TYPE_MULH
   //       elif  s.in_msg.mdu_type == md_mhsu: s.send_mdu_req.msg.type_ @= MduMsgType.TYPE_MULHSU
@@ -32985,7 +32985,7 @@ module MulDivPipeRTL__109d9cf22badb0b4
   //       elif  s.in_msg.mdu_type == md_divu: s.send_mdu_req.msg.type_ @= MduMsgType.TYPE_DIVU
   //       elif  s.in_msg.mdu_type == md_rem:  s.send_mdu_req.msg.type_ @= MduMsgType.TYPE_REM
   //       elif  s.in_msg.mdu_type == md_remu: s.send_mdu_req.msg.type_ @= MduMsgType.TYPE_REMU
-
+  
   always_comb begin : up_req
     send_mdu_req__msg.opaque = { { 7 { 1'b0 } }, req_table__allocate__ret };
     send_mdu_req__msg.op_a = in_msg.op1_val;
@@ -33034,26 +33034,26 @@ module MulDivPipeRTL__109d9cf22badb0b4
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/units/MulDivPipeRTL.py:136
   // @update
   // def up_resp():
-  //
+  // 
   //   # req_table.complete
   //   for i in range( req_table_idx_nbits ):
   //     s.req_table.complete.msg[ i ] @= s.recv_mdu_resp.msg.opaque[ i ]
-  //
+  // 
   //   # default
   //   s.req_table.complete.en   @= 0
   //   s.send_inst.en            @= 0
   //   s.bypass.en               @= 0
-  //
+  // 
   //   s.recv_mdu_resp.rdy @= s.req_table.complete.rdy & s.send_inst.rdy
-  //
+  // 
   //   if s.recv_mdu_resp.en:
   //     s.req_table.complete.en @= 1
-  //
+  // 
   //     # only send inst to the next stage if it's not killed
   //     if ~s.req_table.complete.ret.killed:
   //       s.send_inst.en  @= 1
   //       s.bypass.en     @= 1
-
+  
   always_comb begin : up_resp
     for ( int unsigned i = 1'd0; i < 1'( __const__req_table_idx_nbits_at_up_resp ); i += 1'd1 )
       req_table__complete__msg[1'(i)] = recv_mdu_resp__msg.opaque[3'(i)];
@@ -33119,7 +33119,7 @@ module TaggedTableRTL__a82100b5ae07ef48
   input logic [0:0] complete__en  ,
   input logic [0:0] complete__msg  ,
   output logic [0:0] complete__rdy  ,
-  output MemCompleteStruct__c5bd3cabb5deb86b complete__ret
+  output MemCompleteStruct__c5bd3cabb5deb86b complete__ret  
 );
   localparam logic [1:0] __const__num_entries_at_up_ff  = 2'd2;
   localparam logic [1:0] __const__num_entries_at_up_comb  = 2'd2;
@@ -33156,7 +33156,7 @@ module TaggedTableRTL__a82100b5ae07ef48
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/structures/TaggedTableRTL.py:63
   // s.complete.rdy  //= lambda: ~s.entry_alloc.empty
-
+  
   always_comb begin : _lambda__s_procs_0__mem_flow_amo_q_complete_rdy
     complete__rdy = ~entry_alloc__empty;
   end
@@ -33165,39 +33165,39 @@ module TaggedTableRTL__a82100b5ae07ef48
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/structures/TaggedTableRTL.py:74
   // @update
   // def up_comb():
-  //
+  // 
   //   # default
   //   s.complete.ret @= s.entry[ 0 ]
   //   for i in range( num_entries ):
   //     s.next_entry[ i ]       @= s.entry[ i ]
   //     s.entry_alloc.free[ i ] @= 0
-  //
+  // 
   //   # clear_br
   //   if s.clear_br.en:
-  //
+  // 
   //     if s.clear_br.msg.kill:
   //       # if matched with the kill mask, mark this entry as "killed"
   //       for i in range( num_entries ):
   //         if ( s.entry[ i ].br_tag & s.clear_br.msg.br_mask ) != 0:
   //           s.next_entry[ i ].killed @= 1
-  //
+  // 
   //     else:
   //       # if matched, clear the masked bit
   //       for i in range( num_entries ):
   //         if ( s.entry[ i ].br_tag & s.clear_br.msg.br_mask ) != 0:
   //           s.next_entry[ i ].br_tag @= s.entry[ i ].br_tag & ~s.clear_br.msg.br_mask
-  //
+  // 
   //   # complete
   //   if  s.complete.en:
   //     idx = s.complete.msg
   //     s.complete.ret            @= s.next_entry[ idx ]
   //     s.entry_alloc.free[ idx ] @= 1
-  //
+  // 
   //   # allocate
   //   if  s.allocate.en:
   //     idx = s.entry_alloc.allocate.ret
   //     s.next_entry[ idx ] @= s.allocate.msg
-
+  
   always_comb begin : up_comb
     complete__ret = entry[1'd0];
     for ( int unsigned i = 1'd0; i < 2'( __const__num_entries_at_up_comb ); i += 1'd1 ) begin
@@ -33238,7 +33238,7 @@ module TaggedTableRTL__a82100b5ae07ef48
   //   else:
   //     for i in range( num_entries ):
   //       s.entry[ i ]  <<= s.next_entry[ i ]
-
+  
   always_ff @(posedge clk) begin : up_ff
     if ( reset ) begin
       for ( int unsigned i = 1'd0; i < 2'( __const__num_entries_at_up_ff ); i += 1'd1 )
@@ -33272,7 +33272,7 @@ module NormalQueue1EntryRTL__a7c5051a6a3819e6
   output MemExecuteStruct__af5802ecac25c83f deq__ret  ,
   input logic [0:0] enq__en  ,
   input MemExecuteStruct__af5802ecac25c83f enq__msg  ,
-  output logic [0:0] enq__rdy
+  output logic [0:0] enq__rdy  
 );
   MemExecuteStruct__af5802ecac25c83f entry;
   logic [0:0] full;
@@ -33280,7 +33280,7 @@ module NormalQueue1EntryRTL__a7c5051a6a3819e6
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/pymtl3/pymtl3/stdlib/queues/queues.py:453
   // s.deq.rdy //= lambda: ~s.reset & s.full
-
+  
   always_comb begin : _lambda__s_procs_0__mem_flow_fence_q_q_deq_rdy
     deq__rdy = ( ~reset ) & full;
   end
@@ -33288,7 +33288,7 @@ module NormalQueue1EntryRTL__a7c5051a6a3819e6
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/pymtl3/pymtl3/stdlib/queues/queues.py:452
   // s.enq.rdy //= lambda: ~s.reset & ~s.full
-
+  
   always_comb begin : _lambda__s_procs_0__mem_flow_fence_q_q_enq_rdy
     enq__rdy = ( ~reset ) & ( ~full );
   end
@@ -33300,7 +33300,7 @@ module NormalQueue1EntryRTL__a7c5051a6a3819e6
   //   s.full <<= ~s.reset & ( ~s.deq.en & (s.enq.en | s.full) )
   //   if s.enq.en:
   //     s.entry <<= s.enq.msg
-
+  
   always_ff @(posedge clk) begin : ff_normal1
     full <= ( ~reset ) & ( ( ~deq__en ) & ( enq__en | full ) );
     if ( enq__en ) begin
@@ -33328,7 +33328,7 @@ module NormalQueueRTL__070347defe7eba11
   output MemExecuteStruct__af5802ecac25c83f deq__ret  ,
   input logic [0:0] enq__en  ,
   input MemExecuteStruct__af5802ecac25c83f enq__msg  ,
-  output logic [0:0] enq__rdy
+  output logic [0:0] enq__rdy  
 );
   //-------------------------------------------------------------
   // Component q
@@ -33395,7 +33395,7 @@ module MemFlowManagerRTL__a29f503bbf1fc2da
   output logic [0:0] dmem__resp__rdy ,
   input logic [0:0] execute_mem__en  ,
   input MemExecuteStruct__af5802ecac25c83f execute_mem__msg  ,
-  output logic [0:0] execute_mem__suc
+  output logic [0:0] execute_mem__suc  
 );
   localparam logic [3:0] __const__mem_f  = 4'd12;
   localparam logic [3:0] __const__mem_ld  = 4'd1;
@@ -33571,7 +33571,7 @@ module MemFlowManagerRTL__a29f503bbf1fc2da
   //   s.st_q.clear_br.msg   @= ClearBrStruct()
   //   s.amo_q.clear_br.en   @= 0
   //   s.amo_q.clear_br.msg  @= ClearBrStruct()
-
+  
   always_comb begin : up_clear_br
     ld_q__clear_br__en = clear_br__en;
     ld_q__clear_br__msg = clear_br__msg;
@@ -33585,38 +33585,38 @@ module MemFlowManagerRTL__a29f503bbf1fc2da
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/proc_i2ol/MemFlowManagerRTL.py:259
   // @update
   // def up_complete():
-  //
+  // 
   //   # dmem resp ready
   //   s.dmem.resp.rdy @=  ~s.reset & s.complete_mem.rdy & \
   //                       ( s.ld_q.complete.rdy | s.st_q.complete.rdy | \
   //                         s.amo_q.complete.rdy | s.fence_q.deq.rdy )
-  //
+  // 
   //   # default
   //   s.fence_q.deq.en @= 0
-  //
+  // 
   //   s.ld_q.complete.en @= 0
   //   for i in range( ld_idx_nbits ):
   //     s.ld_q.complete.msg[ i ] @= s.dmem.resp.msg.opaque[ i ]
-  //
+  // 
   //   s.st_q.complete.en @= 0
   //   for i in range( st_idx_nbits ):
   //     s.st_q.complete.msg[ i ] @= s.dmem.resp.msg.opaque[ i ]
-  //
+  // 
   //   s.amo_q.complete.en @= 0
   //   for i in range( amo_idx_nbits ):
   //     s.amo_q.complete.msg[ i ] @= s.dmem.resp.msg.opaque[ i ]
-  //
+  // 
   //   s.complete_mem.en  @= 0
   //   s.complete_mem.msg @= MemCompleteStruct()
-  //
+  // 
   //   # complete a mem from dmem resp
   //   if  s.dmem.resp.en:
-  //
+  // 
   //     # load resp
   //     if s.dmem.resp.msg.type_ == MemMsgType.READ:
-  //
+  // 
   //       s.ld_q.complete.en @= 1
-  //
+  // 
   //       # if not killed, complete this inst
   //       if ~s.ld_q.complete.ret.killed:
   //         s.complete_mem.en           @= 1
@@ -33627,25 +33627,25 @@ module MemFlowManagerRTL__a29f503bbf1fc2da
   //         s.complete_mem.msg.rd_en    @= s.ld_q.complete.ret.rd_en
   //         s.complete_mem.msg.rd_preg  @= s.ld_q.complete.ret.rd_preg
   //         s.complete_mem.msg.killed   @= 0
-  //
+  // 
   //         if  s.dmem.resp.msg.len == mlen_b:
   //           if s.ld_q.complete.ret.mem_ext == se:
   //             s.complete_mem.msg.data @= sext( s.dmem.resp.msg.data[ 0:8 ], 32 )
   //           else:
   //             s.complete_mem.msg.data @= zext( s.dmem.resp.msg.data[ 0:8 ], 32 )
-  //
+  // 
   //         elif  s.dmem.resp.msg.len == mlen_h:
   //           if s.ld_q.complete.ret.mem_ext == se:
   //             s.complete_mem.msg.data @= sext( s.dmem.resp.msg.data[ 0:16 ], 32 )
   //           else:
   //             s.complete_mem.msg.data @= zext( s.dmem.resp.msg.data[ 0:16 ], 32 )
-  //
+  // 
   //         else:
   //           s.complete_mem.msg.data @= s.dmem.resp.msg.data
-  //
+  // 
   //     # store resp
   //     elif s.dmem.resp.msg.type_ == MemMsgType.WRITE:
-  //
+  // 
   //       s.st_q.complete.en          @= 1
   //       s.complete_mem.en           @= 1
   //       s.complete_mem.msg.pc       @= s.st_q.complete.ret.pc
@@ -33656,7 +33656,7 @@ module MemFlowManagerRTL__a29f503bbf1fc2da
   //       s.complete_mem.msg.rd_preg  @= s.st_q.complete.ret.rd_preg
   //       s.complete_mem.msg.data     @= 0
   //       s.complete_mem.msg.killed   @= 0
-  //
+  // 
   //     # amo resp
   //     elif  ( s.dmem.resp.msg.type_ == MemMsgType.AMO_ADD   ) | \
   //           ( s.dmem.resp.msg.type_ == MemMsgType.AMO_AND   ) | \
@@ -33667,7 +33667,7 @@ module MemFlowManagerRTL__a29f503bbf1fc2da
   //           ( s.dmem.resp.msg.type_ == MemMsgType.AMO_OR    ) | \
   //           ( s.dmem.resp.msg.type_ == MemMsgType.AMO_SWAP  ) | \
   //           ( s.dmem.resp.msg.type_ == MemMsgType.AMO_XOR   ):
-  //
+  // 
   //       s.amo_q.complete.en         @= 1
   //       s.complete_mem.en           @= 1
   //       s.complete_mem.msg.pc       @= s.amo_q.complete.ret.pc
@@ -33678,10 +33678,10 @@ module MemFlowManagerRTL__a29f503bbf1fc2da
   //       s.complete_mem.msg.rd_preg  @= s.amo_q.complete.ret.rd_preg
   //       s.complete_mem.msg.data     @= s.dmem.resp.msg.data
   //       s.complete_mem.msg.killed   @= 0
-  //
+  // 
   //     # flush resp
   //     elif  s.dmem.resp.msg.type_ == MemMsgType.FLUSH:
-  //
+  // 
   //       # if there is no following INV, complete this fence
   //       if ~s.fence_q.deq.ret.inv:
   //         s.fence_q.deq.en            @= 1
@@ -33694,10 +33694,10 @@ module MemFlowManagerRTL__a29f503bbf1fc2da
   //         s.complete_mem.msg.rd_preg  @= s.fence_q.deq.ret.rd_preg
   //         s.complete_mem.msg.data     @= 0
   //         s.complete_mem.msg.killed   @= 0
-  //
+  // 
   //     # inv resp
   //     elif  s.dmem.resp.msg.type_ == MemMsgType.INV:
-  //
+  // 
   //       s.fence_q.deq.en            @= 1
   //       s.complete_mem.en           @= 1
   //       s.complete_mem.msg.pc       @= s.fence_q.deq.ret.pc
@@ -33708,7 +33708,7 @@ module MemFlowManagerRTL__a29f503bbf1fc2da
   //       s.complete_mem.msg.rd_preg  @= s.fence_q.deq.ret.rd_preg
   //       s.complete_mem.msg.data     @= 0
   //       s.complete_mem.msg.killed   @= 0
-
+  
   always_comb begin : up_complete
     dmem__resp__rdy = ( ( ~reset ) & complete_mem__rdy ) & ( ( ( ld_q__complete__rdy | st_q__complete__rdy ) | amo_q__complete__rdy ) | fence_q__deq__rdy );
     fence_q__deq__en = 1'd0;
@@ -33810,20 +33810,20 @@ module MemFlowManagerRTL__a29f503bbf1fc2da
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/proc_i2ol/MemFlowManagerRTL.py:97
   // @update
   // def up_execute():
-  //
+  // 
   //   # default
   //   s.execute_mem.suc     @= 0
-  //
+  // 
   //   s.dmem.req.en         @= 0
   //   s.dmem.req.msg.type_  @= 0
   //   s.dmem.req.msg.opaque @= 0
   //   s.dmem.req.msg.addr   @= 0
   //   s.dmem.req.msg.len    @= 0
   //   s.dmem.req.msg.data   @= 0
-  //
+  // 
   //   s.fence_q.enq.en      @= 0
   //   s.fence_q.enq.msg     @= s.execute_mem.msg
-  //
+  // 
   //   s.ld_q.allocate.en            @= 0
   //   s.ld_q.allocate.msg.pc        @= s.execute_mem.msg.pc
   //   s.ld_q.allocate.msg.inst_val  @= s.execute_mem.msg.inst_val
@@ -33834,7 +33834,7 @@ module MemFlowManagerRTL__a29f503bbf1fc2da
   //   s.ld_q.allocate.msg.mem_ext   @= s.execute_mem.msg.mem_ext
   //   s.ld_q.allocate.msg.data      @= 0
   //   s.ld_q.allocate.msg.killed    @= 0
-  //
+  // 
   //   s.st_q.allocate.en            @= 0
   //   s.st_q.allocate.msg.pc        @= s.execute_mem.msg.pc
   //   s.st_q.allocate.msg.inst_val  @= s.execute_mem.msg.inst_val
@@ -33845,7 +33845,7 @@ module MemFlowManagerRTL__a29f503bbf1fc2da
   //   s.st_q.allocate.msg.mem_ext   @= 0     # don't care
   //   s.st_q.allocate.msg.data      @= 0
   //   s.st_q.allocate.msg.killed    @= 0
-  //
+  // 
   //   s.amo_q.allocate.en           @= 0
   //   s.amo_q.allocate.msg.pc       @= s.execute_mem.msg.pc
   //   s.amo_q.allocate.msg.inst_val @= s.execute_mem.msg.inst_val
@@ -33856,24 +33856,24 @@ module MemFlowManagerRTL__a29f503bbf1fc2da
   //   s.amo_q.allocate.msg.mem_ext  @= 0
   //   s.amo_q.allocate.msg.data     @= 0
   //   s.amo_q.allocate.msg.killed   @= 0
-  //
+  // 
   //   #
   //   # pending fence, wait and send INV if necessary
   //   #
   //   if s.fence_q.deq.rdy:
-  //
+  // 
   //     if s.send_inv_reg & s.dmem.req.rdy:
   //       s.dmem.req.en         @= 1
   //       s.dmem.req.msg.type_  @= MemMsgType.INV
   //       s.dmem.req.msg.opaque @= 0
   //       s.dmem.req.msg.addr   @= 0
   //       s.dmem.req.msg.len    @= 0
-  //
+  // 
   //   #
   //   # No pending fence, try to issue a request to dmem
   //   #
   //   elif s.execute_mem.en:
-  //
+  // 
   //     # A fence must wait for all pending LD, ST, AMO and fence to
   //     # complete before it can be executed.
   //     # Also fences are non-speculatively executed (i.e., its branch tag
@@ -33884,27 +33884,27 @@ module MemFlowManagerRTL__a29f503bbf1fc2da
   //           ~s.amo_q.complete.rdy                   & \
   //           s.fence_q.enq.rdy                       & \
   //           ( s.execute_mem.msg.br_tag == 0 ):
-  //
+  // 
   //       if    s.execute_mem.msg.fls & s.dmem.req.rdy:
   //         s.execute_mem.suc     @= 1
   //         s.fence_q.enq.en      @= 1
-  //
+  // 
   //         s.dmem.req.en         @= 1
   //         s.dmem.req.msg.type_  @= MemMsgType.FLUSH
   //         s.dmem.req.msg.opaque @= 0
   //         s.dmem.req.msg.addr   @= 0
   //         s.dmem.req.msg.len    @= 0
-  //
+  // 
   //       elif  s.execute_mem.msg.inv & s.dmem.req.rdy:
   //         s.execute_mem.suc     @= 1
   //         s.fence_q.enq.en      @= 1
-  //
+  // 
   //         s.dmem.req.en         @= 1
   //         s.dmem.req.msg.type_  @= MemMsgType.INV
   //         s.dmem.req.msg.opaque @= 0
   //         s.dmem.req.msg.addr   @= 0
   //         s.dmem.req.msg.len    @= 0
-  //
+  // 
   //     # Load req: no need to check for memory conflict since we execute
   //     # memory instructions in order
   //     elif  ( s.execute_mem.msg.mem_type == mem_ld )  & \
@@ -33912,13 +33912,13 @@ module MemFlowManagerRTL__a29f503bbf1fc2da
   //           s.dmem.req.rdy:
   //       s.execute_mem.suc     @= 1
   //       s.ld_q.allocate.en    @= 1
-  //
+  // 
   //       s.dmem.req.en         @= 1
   //       s.dmem.req.msg.type_  @= MemMsgType.READ
   //       s.dmem.req.msg.opaque @= zext( s.ld_q.allocate.ret, 8 )
   //       s.dmem.req.msg.addr   @= s.execute_mem.msg.mem_addr
   //       s.dmem.req.msg.len    @= s.execute_mem.msg.mem_len
-  //
+  // 
   //     # Store req: stores are non-speculatively executed
   //     elif  ( s.execute_mem.msg.mem_type == mem_st )  & \
   //           s.st_q.allocate.rdy                       & \
@@ -33926,14 +33926,14 @@ module MemFlowManagerRTL__a29f503bbf1fc2da
   //           ( s.execute_mem.msg.br_tag == 0 ):
   //       s.execute_mem.suc     @= 1
   //       s.st_q.allocate.en    @= 1
-  //
+  // 
   //       s.dmem.req.en         @= 1
   //       s.dmem.req.msg.type_  @= MemMsgType.WRITE
   //       s.dmem.req.msg.opaque @= zext( s.st_q.allocate.ret, 8 )
   //       s.dmem.req.msg.addr   @= s.execute_mem.msg.mem_addr
   //       s.dmem.req.msg.len    @= s.execute_mem.msg.mem_len
   //       s.dmem.req.msg.data   @= s.execute_mem.msg.st_data
-  //
+  // 
   //     # AMO req: AMOs are non-speculatively executed
   //     elif  ( s.execute_mem.msg.mem_type == mem_add  ) | \
   //           ( s.execute_mem.msg.mem_type == mem_and  ) | \
@@ -33944,13 +33944,13 @@ module MemFlowManagerRTL__a29f503bbf1fc2da
   //           ( s.execute_mem.msg.mem_type == mem_or   ) | \
   //           ( s.execute_mem.msg.mem_type == mem_swp  ) | \
   //           ( s.execute_mem.msg.mem_type == mem_xor  ):
-  //
+  // 
   //       if  s.amo_q.allocate.rdy  & \
   //           s.dmem.req.rdy        & \
   //           ( s.execute_mem.msg.br_tag == 0 ):
   //         s.execute_mem.suc   @= 1
   //         s.amo_q.allocate.en @= 1
-  //
+  // 
   //         s.dmem.req.en       @= 1
   //         if   ( s.execute_mem.msg.mem_type == mem_add  ): s.dmem.req.msg.type_ @= MemMsgType.AMO_ADD
   //         elif ( s.execute_mem.msg.mem_type == mem_and  ): s.dmem.req.msg.type_ @= MemMsgType.AMO_AND
@@ -33965,7 +33965,7 @@ module MemFlowManagerRTL__a29f503bbf1fc2da
   //         s.dmem.req.msg.addr   @= s.execute_mem.msg.mem_addr
   //         s.dmem.req.msg.len    @= s.execute_mem.msg.mem_len
   //         s.dmem.req.msg.data   @= s.execute_mem.msg.st_data
-
+  
   always_comb begin : up_execute
     execute_mem__suc = 1'd0;
     dmem__req__en = 1'd0;
@@ -34102,12 +34102,12 @@ module MemFlowManagerRTL__a29f503bbf1fc2da
   // def up_send_inv():
   //   if    s.reset:
   //     s.send_inv_reg <<= 0
-  //
+  // 
   //   # clear send_inv_reg when we send an INV request to dmem
   //   elif  s.dmem.req.en & \
   //         ( s.dmem.req.msg.type_ == MemMsgType.INV ):
   //     s.send_inv_reg <<= 0
-  //
+  // 
   //   # set send_inv_reg when we receive a FLUSH response and the
   //   # pending fence needs to send an INV request to dmem
   //   elif  s.dmem.resp.en & \
@@ -34115,7 +34115,7 @@ module MemFlowManagerRTL__a29f503bbf1fc2da
   //         s.fence_q.deq.rdy & \
   //         s.fence_q.deq.ret.inv:
   //     s.send_inv_reg <<= 1
-
+  
   always_ff @(posedge clk) begin : up_send_inv
     if ( reset ) begin
       send_inv_reg <= 1'd0;
@@ -34162,7 +34162,7 @@ module MemUnitRTL_noparam
   output logic [0:0] recv_inst__rdy  ,
   output logic [0:0] send_inst__en  ,
   output X_InstStruct__b64b8c5076edb89b send_inst__msg  ,
-  input logic [0:0] send_inst__rdy
+  input logic [0:0] send_inst__rdy  
 );
   localparam logic [3:0] __const__mem_ld  = 4'd1;
   localparam logic [3:0] __const__mem_st  = 4'd2;
@@ -34213,17 +34213,17 @@ module MemUnitRTL_noparam
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/units/MemUnitRTL.py:84
   // @update
   // def req_comb():
-  //
+  // 
   //   # default
   //   s.recv_q.deq.en             @= 0
   //   s.execute_mem.en            @= 0
   //   s.execute_mem.msg.mem_addr  @= 0
-  //
+  // 
   //   # ld & st
   //   if    ( s.recv_q.deq.ret.mem_type == mem_ld ) | \
   //         ( s.recv_q.deq.ret.mem_type == mem_st ):
   //     s.execute_mem.msg.mem_addr @= s.in_msg.op1_val + s.in_msg.op2_val
-  //
+  // 
   //   # amo
   //   elif  ( s.recv_q.deq.ret.mem_type == mem_add  ) | \
   //         ( s.recv_q.deq.ret.mem_type == mem_and  ) | \
@@ -34235,16 +34235,16 @@ module MemUnitRTL_noparam
   //         ( s.recv_q.deq.ret.mem_type == mem_swp  ) | \
   //         ( s.recv_q.deq.ret.mem_type == mem_xor  ):
   //     s.execute_mem.msg.mem_addr @= s.in_msg.op1_val
-  //
+  // 
   //   if s.recv_q.deq.rdy:
-  //
+  // 
   //     # simply drop already killed inst
   //     if    s.in_msg.killed:
   //       s.recv_q.deq.en   @= 1
   //     else:
   //       s.execute_mem.en  @= 1
   //       s.recv_q.deq.en   @= s.execute_mem.suc
-
+  
   always_comb begin : req_comb
     recv_q__deq__en = 1'd0;
     execute_mem__en = 1'd0;
@@ -34270,21 +34270,21 @@ module MemUnitRTL_noparam
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/units/MemUnitRTL.py:118
   // @update
   // def resp_comb():
-  //
+  // 
   //   # default
   //   s.send_inst.en  @= 0
   //   s.send_inst.msg @= X_InstStruct()
   //   s.bypass.en     @= 0
-  //
+  // 
   //   if  s.complete_mem.en:
-  //
+  // 
   //     # if the inst has been killed, drop it
   //     # otherwise, try to send it to the next stage
   //     if ~s.complete_mem.msg.killed:
-  //
+  // 
   //       # bypass if this inst is writiting to RF
   //       s.bypass.en @= s.complete_mem.msg.rd_en
-  //
+  // 
   //       # send inst to the next unit
   //       s.send_inst.en            @= 1
   //       s.send_inst.msg.pc        @= s.complete_mem.msg.pc
@@ -34296,7 +34296,7 @@ module MemUnitRTL_noparam
   //       s.send_inst.msg.csr_wen   @= 0
   //       s.send_inst.msg.result    @= s.complete_mem.msg.data
   //       s.send_inst.msg.killed    @= s.complete_mem.msg.killed
-
+  
   always_comb begin : resp_comb
     send_inst__en = 1'd0;
     send_inst__msg = { 32'd0, 1'd0, 2'd0, 3'd0, 1'd0, 7'd0, 1'd0, 32'd0, 1'd0 };
@@ -34354,7 +34354,7 @@ module RegEnRst__Type_Bits4__reset_value_1
   input  logic [0:0] en ,
   input  logic [3:0] in_ ,
   output logic [3:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [0:0] __const__reset_value_at_up_regenrst  = 1'd1;
 
@@ -34364,7 +34364,7 @@ module RegEnRst__Type_Bits4__reset_value_1
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
   //   elif s.en:  s.out <<= s.in_
-
+  
   always_ff @(posedge clk) begin : up_regenrst
     if ( reset ) begin
       out <= 4'( __const__reset_value_at_up_regenrst );
@@ -34386,7 +34386,7 @@ module RoundRobinArbiterEn__nreqs_4
   input  logic [0:0] en ,
   output logic [3:0] grants ,
   input  logic [3:0] reqs ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [2:0] __const__nreqs_at_comb_reqs_int  = 3'd4;
   localparam logic [3:0] __const__nreqsX2_at_comb_reqs_int  = 4'd8;
@@ -34429,7 +34429,7 @@ module RoundRobinArbiterEn__nreqs_4
   // def comb_grants():
   //   for i in range( nreqs ):
   //     s.grants[i] @= s.grants_int[i] | s.grants_int[nreqs+i]
-
+  
   always_comb begin : comb_grants
     for ( int unsigned i = 1'd0; i < 3'( __const__nreqs_at_comb_grants ); i += 1'd1 )
       grants[2'(i)] = grants_int[3'(i)] | grants_int[3'( __const__nreqs_at_comb_grants ) + 3'(i)];
@@ -34444,7 +34444,7 @@ module RoundRobinArbiterEn__nreqs_4
   //       s.grants_int[i] @= s.reqs_int[i]
   //     else:
   //       s.grants_int[i] @= ~s.kills[i] & s.reqs_int[i]
-
+  
   always_comb begin : comb_grants_int
     for ( int unsigned i = 1'd0; i < 4'( __const__nreqsX2_at_comb_grants_int ); i += 1'd1 )
       if ( priority_int[3'(i)] ) begin
@@ -34464,7 +34464,7 @@ module RoundRobinArbiterEn__nreqs_4
   //       s.kills[i+1] @= s.reqs_int[i]
   //     else:
   //       s.kills[i+1] @= s.kills[i] | ( ~s.kills[i] & s.reqs_int[i] )
-
+  
   always_comb begin : comb_kills
     kills[4'd0] = 1'd1;
     for ( int unsigned i = 1'd0; i < 4'( __const__nreqsX2_at_comb_kills ); i += 1'd1 )
@@ -34480,7 +34480,7 @@ module RoundRobinArbiterEn__nreqs_4
   // @update
   // def comb_priority_en():
   //   s.priority_en @= ( s.grants != 0 ) & s.en
-
+  
   always_comb begin : comb_priority_en
     priority_en = ( grants != 4'd0 ) & en;
   end
@@ -34491,7 +34491,7 @@ module RoundRobinArbiterEn__nreqs_4
   // def comb_priority_int():
   //   s.priority_int[    0:nreqs  ] @= s.priority_reg.out
   //   s.priority_int[nreqs:nreqsX2] @= 0
-
+  
   always_comb begin : comb_priority_int
     priority_int[3'd3:3'd0] = priority_reg__out;
     priority_int[3'd7:3'( __const__nreqs_at_comb_priority_int )] = 4'd0;
@@ -34503,7 +34503,7 @@ module RoundRobinArbiterEn__nreqs_4
   // def comb_reqs_int():
   //   s.reqs_int [    0:nreqs  ] @= s.reqs
   //   s.reqs_int [nreqs:nreqsX2] @= s.reqs
-
+  
   always_comb begin : comb_reqs_int
     reqs_int[3'd3:3'd0] = reqs;
     reqs_int[3'd7:3'( __const__nreqs_at_comb_reqs_int )] = reqs;
@@ -34526,7 +34526,7 @@ module Encoder__in_nbits_4__out_nbits_2
   input  logic [0:0] clk ,
   input  logic [3:0] in_ ,
   output logic [1:0] out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
 
   // PyMTL Update Block Source
@@ -34537,7 +34537,7 @@ module Encoder__in_nbits_4__out_nbits_2
   //   for i in range( s.in_nbits ):
   //     if s.in_[i]:
   //       s.out @= i
-
+  
   always_comb begin : encode
     out = 2'd0;
     for ( int unsigned i = 1'd0; i < 3'd4; i += 1'd1 )
@@ -34558,7 +34558,7 @@ module Mux__Type_X_InstStruct__b64b8c5076edb89b__ninputs_4
   input  X_InstStruct__b64b8c5076edb89b in_ [0:3],
   output X_InstStruct__b64b8c5076edb89b out ,
   input  logic [0:0] reset ,
-  input  logic [1:0] sel
+  input  logic [1:0] sel 
 );
 
   // PyMTL Update Block Source
@@ -34566,7 +34566,7 @@ module Mux__Type_X_InstStruct__b64b8c5076edb89b__ninputs_4
   // @update
   // def up_mux():
   //   s.out @= s.in_[ s.sel ]
-
+  
   always_comb begin : up_mux
     out = in_[sel];
   end
@@ -34589,7 +34589,7 @@ module TaggedPipeQueue1EntryRTL__e07b2d49c3bc181e
   output X_InstStruct__b64b8c5076edb89b deq__ret  ,
   input logic [0:0] enq__en  ,
   input X_InstStruct__b64b8c5076edb89b enq__msg  ,
-  output logic [0:0] enq__rdy
+  output logic [0:0] enq__rdy  
 );
   X_InstStruct__b64b8c5076edb89b entry;
   logic [0:0] full;
@@ -34599,23 +34599,23 @@ module TaggedPipeQueue1EntryRTL__e07b2d49c3bc181e
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/structures/TaggedPipeQueue1EntryRTL.py:81
   // @update
   // def up_comb():
-  //
+  // 
   //   s.enq.rdy @= ~s.full | s.deq.en
   //   s.deq.rdy @= s.full
-  //
+  // 
   //   #s.updated_entry @= deepcopy( s.entry )
   //   s.updated_entry @= s.entry
-  //
+  // 
   //   if  s.clear_br.en & \
   //       ( ( s.entry.br_tag & s.clear_br.msg.br_mask ) != 0 ):
-  //
+  // 
   //     if  s.clear_br.msg.kill:
   //       s.updated_entry.killed @= 1
   //     else:
   //       s.updated_entry.br_tag @= s.entry.br_tag & ~s.clear_br.msg.br_mask
-  //
+  // 
   //   s.deq.ret @= s.updated_entry
-
+  
   always_comb begin : up_comb
     enq__rdy = ( ~full ) | deq__en;
     deq__rdy = full;
@@ -34634,29 +34634,29 @@ module TaggedPipeQueue1EntryRTL__e07b2d49c3bc181e
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/structures/TaggedPipeQueue1EntryRTL.py:56
   // @update_ff
   // def up_states():
-  //
+  // 
   //   # reset
   //   if    s.reset:
   //     s.full <<= 0
-  //
+  // 
   //   # enq and deq
   //   elif  s.enq.en & s.deq.en:
   //     s.full  <<= 1
   //     s.entry <<= s.enq.msg
-  //
+  // 
   //   # not enq and deq
   //   elif  ~s.enq.en & s.deq.en:
   //     s.full <<= 0
-  //
+  // 
   //   # enq and not deq
   //   elif  s.enq.en & ~s.deq.en:
   //     s.full  <<= 1
   //     s.entry <<= s.enq.msg
-  //
+  // 
   //   # not enq and not deq
   //   else:
   //     s.entry <<= s.updated_entry
-
+  
   always_ff @(posedge clk) begin : up_states
     if ( reset ) begin
       full <= 1'd0;
@@ -34698,7 +34698,7 @@ module WritebackUnitRTL__num_FUs_4
   output logic [0:0] wr_csr__en  ,
   output logic [31:0] wr_csr__msg  ,
   output logic [0:0] wr_reg__en  ,
-  output RegWrStruct__preg_idx_7__data_32 wr_reg__msg
+  output RegWrStruct__preg_idx_7__data_32 wr_reg__msg  
 );
   localparam logic [2:0] __const__num_FUs_at_writeback_comb  = 3'd4;
   localparam logic [2:0] __const__num_FUs_at_bypass_comb  = 3'd4;
@@ -34850,7 +34850,7 @@ module WritebackUnitRTL__num_FUs_4
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/units/WritebackUnitRTL.py:100
   // s.in_rdy //= lambda: s.arbiter.grants > GrantType( 0 )
-
+  
   always_comb begin : _lambda__s_procs_0__writeback_in_rdy
     in_rdy = arbiter__grants > 4'd0;
   end
@@ -34859,19 +34859,19 @@ module WritebackUnitRTL__num_FUs_4
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/units/WritebackUnitRTL.py:134
   // @update
   // def bypass_comb():
-  //
+  // 
   //   for fu_id in range( num_FUs ):
   //     # default
   //     s.bypass[ fu_id ].en  @= 0
   //     s.bypass[ fu_id ].msg @= RegWrStruct()
-  //
+  // 
   //     if  s.recv_q[ fu_id ].deq.rdy & \
   //         ~s.recv_q[ fu_id ].deq.ret.killed & \
   //         s.recv_q[ fu_id ].deq.ret.rd_en:
   //       s.bypass[ fu_id ].en            @= 1
   //       s.bypass[ fu_id ].msg.preg_idx  @= s.recv_q[ fu_id ].deq.ret.rd_preg
   //       s.bypass[ fu_id ].msg.data      @= s.recv_q[ fu_id ].deq.ret.result
-
+  
   always_comb begin : bypass_comb
     for ( int unsigned fu_id = 1'd0; fu_id < 3'( __const__num_FUs_at_bypass_comb ); fu_id += 1'd1 ) begin
       bypass__en[2'(fu_id)] = 1'd0;
@@ -34888,25 +34888,25 @@ module WritebackUnitRTL__num_FUs_4
   // At /work/global/mw828/cifer/cifer-chip/pymtl3_proc/units/WritebackUnitRTL.py:113
   // @update
   // def writeback_comb():
-  //
+  // 
   //   # default
   //   s.wr_reg.en         @= 0
   //   s.wr_csr.en         @= 0
   //   s.complete_inst.en  @= 0
   //   for fu_id in range( num_FUs ):
   //     s.recv_q[ fu_id ].deq.en @= 0
-  //
+  // 
   //   # there is a granted request
   //   if s.in_rdy:
-  //
+  // 
   //     # dequeue the inst from recv_q
   //     s.recv_q[ s.sel_fu_id ].deq.en @= 1
-  //
+  // 
   //     # complete the selected inst and write to RF/CSR only if it's still alive
   //     s.complete_inst.en @= ~s.recv_q[ s.sel_fu_id ].deq.ret.killed
   //     s.wr_reg.en        @= ~s.recv_q[ s.sel_fu_id ].deq.ret.killed & s.in_msg.rd_en
   //     s.wr_csr.en        @= ~s.recv_q[ s.sel_fu_id ].deq.ret.killed & s.in_msg.csr_wen
-
+  
   always_comb begin : writeback_comb
     wr_reg__en = 1'd0;
     wr_csr__en = 1'd0;
@@ -35021,7 +35021,7 @@ module ProcI2OL_Pipeline__numcores_1__coreid_0
   output logic [0:0] mngr2proc__rdy  ,
   output logic [0:0] proc2mngr__en  ,
   output logic [31:0] proc2mngr__msg  ,
-  input logic [0:0] proc2mngr__rdy
+  input logic [0:0] proc2mngr__rdy  
 );
   //-------------------------------------------------------------
   // Component alu_pipe
@@ -35927,7 +35927,7 @@ module TileManager__d4f13492c2055a3b
   output logic [0:0] test_src__rdy  ,
   output logic [0:0] to_proc__en  ,
   output TileCtrlMsg_1__coreid_1__data_32 to_proc__msg  ,
-  input logic [0:0] to_proc__rdy
+  input logic [0:0] to_proc__rdy  
 );
   localparam logic [0:0] __const__numcores_at_up_state  = 1'd1;
   localparam logic [0:0] __const__numcores_at_up_comb  = 1'd1;
@@ -35938,63 +35938,63 @@ module TileManager__d4f13492c2055a3b
   // At /work/global/mw828/cifer/cifer-chip/brg_tile/tmu/TileManager.py:129
   // @update
   // def up_comb():
-  //
+  // 
   //   # default
   //   s.to_proc.en    @= 0
   //   s.to_proc.msg   @= TileCtrlMsg()
-  //
+  // 
   //   s.done_ifc.en   @= 0
   //   s.done_ifc.msg  @= 0
-  //
+  // 
   //   s.test_src.rdy  @= 0
   //   s.test_sink.en  @= 0
   //   s.test_sink.msg @= TileCtrlMsg()
-  //
+  // 
   //   s.from_proc.rdy @= 0
-  //
+  // 
   //   # send wakeup msg to all cores
   //   if    ( s.state_reg == s.STATE_INIT ) & \
   //         ( s.count_reg < numcores )      & \
   //         ( s.to_proc.rdy == 1 ):
-  //
+  // 
   //     s.to_proc.en          @= 1
   //     s.to_proc.msg.coreid  @= s.count_reg
   //     s.to_proc.msg.data    @= 0
-  //
+  // 
   //   # send done msg to core 0
   //   elif  ( s.state_reg == s.STATE_DONE ) & \
   //         ( s.to_proc.rdy == 1 ):
-  //
+  // 
   //     s.to_proc.en          @= 1
   //     s.to_proc.msg.coreid  @= 0
   //     s.to_proc.msg.data    @= 0
-  //
+  // 
   //   # STATE_CHECK
   //   elif  s.state_reg == s.STATE_CHECK:
-  //
+  // 
   //     # always ready to receive check signal from proc
   //     s.from_proc.rdy @= 1
-  //
+  // 
   //     # receive exit status from proc
   //     if s.from_proc.en == 1:
   //       s.done_ifc.en   @= 1
   //       s.done_ifc.msg  @= s.from_proc.msg.data
-  //
+  // 
   //   # debug mode: simply pass through messages
   //   elif  s.state_reg == s.STATE_DEBUG:
-  //
+  // 
   //     s.to_proc.en    @= s.test_src.en
   //     s.test_src.rdy  @= s.to_proc.rdy
   //     s.to_proc.msg   @= s.test_src.msg
-  //
+  // 
   //     s.test_sink.en  @= s.from_proc.en
   //     s.from_proc.rdy @= s.test_sink.rdy
   //     s.test_sink.msg @= s.from_proc.msg
-  //
+  // 
   //   # in CHECK state, from_proc is always ready
   //   elif  s.state_reg == s.STATE_WORK:
   //     s.from_proc.rdy @= 1
-
+  
   always_comb begin : up_comb
     to_proc__en = 1'd0;
     to_proc__msg = { 1'd0, 32'd0 };
@@ -36038,30 +36038,30 @@ module TileManager__d4f13492c2055a3b
   // At /work/global/mw828/cifer/cifer-chip/brg_tile/tmu/TileManager.py:61
   // @update_ff
   // def up_state():
-  //
+  // 
   //   # reset
   //   if    s.reset:
   //     s.state_reg <<= s.STATE_RESET
   //     s.count_reg <<= 0
-  //
+  // 
   //   # RESET -> IDLE
   //   #   out of reset
   //   elif  s.state_reg == s.STATE_RESET:
   //     s.state_reg <<= s.STATE_IDLE
-  //
+  // 
   //   # IDLE -> INIT
   //   #   received start signal & in normal mode (s.go_ifc.msg == 0)
   //   elif  ( s.state_reg == s.STATE_IDLE ) & \
   //         s.go_ifc.en                     & \
   //         ( s.go_ifc.msg == 0 ):
   //     s.state_reg <<= s.STATE_INIT
-  //
+  // 
   //   # IDLE -> DEBUG
   //   elif  ( s.state_reg == s.STATE_IDLE ) & \
   //         s.go_ifc.en                     & \
   //         ( s.go_ifc.msg == 1 ):
   //     s.state_reg <<= s.STATE_DEBUG
-  //
+  // 
   //   # INIT -> INIT
   //   #   sent wakeup signal to one proc
   //   elif  ( s.state_reg == s.STATE_INIT ) & \
@@ -36069,14 +36069,14 @@ module TileManager__d4f13492c2055a3b
   //         ( s.to_proc.en == 1 ):
   //     s.state_reg <<= s.STATE_INIT
   //     s.count_reg <<= s.count_reg + 1
-  //
+  // 
   //   # INIT -> WORK
   //   #   all cores have been waken up/init-ed
   //   elif  ( s.state_reg == s.STATE_INIT ) & \
   //         ( s.count_reg == numcores ):
   //     s.state_reg <<= s.STATE_WORK
   //     s.count_reg <<= 0
-  //
+  // 
   //   # WORK -> WORK
   //   #   received done signal from proc
   //   elif  ( s.state_reg == s.STATE_WORK ) & \
@@ -36084,26 +36084,26 @@ module TileManager__d4f13492c2055a3b
   //         ( s.from_proc.en == 1 ):
   //     s.state_reg <<= s.STATE_WORK
   //     s.count_reg <<= s.count_reg + 1
-  //
+  // 
   //   # WORK -> DONE
   //   #   all cores have finished working
   //   elif  ( s.state_reg == s.STATE_WORK ) & \
   //         ( s.count_reg == numcores ):
   //     s.state_reg <<= s.STATE_DONE
   //     s.count_reg <<= 0
-  //
+  // 
   //   # DONE -> CHECK
   //   #   TMU sent core 0 done signal so that it can start checking status
   //   elif  ( s.state_reg == s.STATE_DONE ) & \
   //         ( s.to_proc.en == 1 ):
   //     s.state_reg <<= s.STATE_CHECK
-  //
+  // 
   //   # CHECK -> IDLE
   //   #   TMU received a status code from core 0
   //   elif  ( s.state_reg == s.STATE_CHECK ) & \
   //         ( s.from_proc.en == 1 ):
   //     s.state_reg <<= s.STATE_IDLE
-
+  
   always_ff @(posedge clk) begin : up_state
     if ( reset ) begin
       state_reg <= 3'd0;
@@ -36146,15 +36146,15 @@ endmodule
 
 
 // PyMTL Component HBResp2MshrEntry Definition
-// Full name: HBResp2MshrEntry__hb_params_<brg_tile.hb_transducer.hb_params.HBParams object at 0x7f64d3cb66d0>
+// Full name: HBResp2MshrEntry__hb_params_<brg_tile.hb_transducer.hb_params.HBParams object at 0x7fe4bc8f4690>
 // At /work/global/mw828/cifer/cifer-chip/brg_tile/hb_transducer/mshr_entry_encoders.py
 
-module HBResp2MshrEntry__a07ba8fe0184a32e
+module HBResp2MshrEntry__1c65c0aa7c4c765d
 (
   input  logic [0:0] clk ,
   output TransducerMshrMsg__e1bbe4e01acd977d out ,
   input  logic [0:0] reset ,
-  input  logic [31:0] returned_data_r
+  input  logic [31:0] returned_data_r 
 );
 
   // PyMTL Update Block Source
@@ -36167,7 +36167,7 @@ module HBResp2MshrEntry__a07ba8fe0184a32e
   //   s.out.threadid   @= 0
   //   s.out.type_      @= 0   # ignored
   //   s.out.data       @= zext( s.returned_data_r, 128 )
-
+  
   always_comb begin : up_encode_type
     out.cacheid = 8'd0;
     out.addr = 32'd0;
@@ -36198,7 +36198,7 @@ module TransducerMshr_noparam
   output TransducerMshrMsg__e1bbe4e01acd977d issue__ret  ,
   input logic [0:0] update___en  ,
   input TransducerMshrMsg__e1bbe4e01acd977d update___msg  ,
-  output logic [0:0] update___rdy
+  output logic [0:0] update___rdy  
 );
   localparam logic [3:0] __const__MemMsgType_READ  = 4'd0;
   localparam logic [3:0] __const__MemMsgType_AMO  = 4'd3;
@@ -36207,6 +36207,7 @@ module TransducerMshr_noparam
   logic [31:0] entry_r_base_addr;
   logic [7:0] entry_r_cacheid;
   logic [127:0] entry_r_data;
+  logic [127:0] entry_r_data_next;
   logic [0:0] entry_r_issued;
   logic [3:0] entry_r_pending;
   logic [0:0] entry_r_threadid;
@@ -36216,39 +36217,39 @@ module TransducerMshr_noparam
   logic [3:0] pending_next;
 
   // PyMTL Lambda Block Source
-  // At /work/global/mw828/cifer/cifer-chip/brg_tile/hb_transducer/TransducerMshr.py:101
+  // At /work/global/mw828/cifer/cifer-chip/brg_tile/hb_transducer/TransducerMshr.py:102
   // s.alloc.rdy   //= lambda: ~s.entry_r_valid # | s.next_empty
-
+  
   always_comb begin : _lambda__s_trans_mshr_alloc_rdy
     alloc__rdy = ~entry_r_valid;
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/mw828/cifer/cifer-chip/brg_tile/hb_transducer/TransducerMshr.py:102
+  // At /work/global/mw828/cifer/cifer-chip/brg_tile/hb_transducer/TransducerMshr.py:103
   // s.dealloc.rdy //= lambda: s.entry_r_valid & ~reduce_or( s.entry_r_pending )
-
+  
   always_comb begin : _lambda__s_trans_mshr_dealloc_rdy
     dealloc__rdy = entry_r_valid & ( ~( | entry_r_pending ) );
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/mw828/cifer/cifer-chip/brg_tile/hb_transducer/TransducerMshr.py:103
+  // At /work/global/mw828/cifer/cifer-chip/brg_tile/hb_transducer/TransducerMshr.py:104
   // s.issue.rdy   //= lambda: s.entry_r_valid & ~s.entry_r_issued & reduce_or( s.entry_r_pending )
-
+  
   always_comb begin : _lambda__s_trans_mshr_issue_rdy
     issue__rdy = ( entry_r_valid & ( ~entry_r_issued ) ) & ( | entry_r_pending );
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/mw828/cifer/cifer-chip/brg_tile/hb_transducer/TransducerMshr.py:104
+  // At /work/global/mw828/cifer/cifer-chip/brg_tile/hb_transducer/TransducerMshr.py:105
   // s.update_.rdy //= lambda: s.entry_r_valid # & s.entry_r_issued
-
+  
   always_comb begin : _lambda__s_trans_mshr_update__rdy
     update___rdy = entry_r_valid;
   end
 
   // PyMTL Update Block Source
-  // At /work/global/mw828/cifer/cifer-chip/brg_tile/hb_transducer/TransducerMshr.py:190
+  // At /work/global/mw828/cifer/cifer-chip/brg_tile/hb_transducer/TransducerMshr.py:204
   // @update
   // def up_dealloc_ret():
   //   s.dealloc.ret.threadid   @= s.entry_r_threadid
@@ -36257,7 +36258,7 @@ module TransducerMshr_noparam
   //   s.dealloc.ret.write_mask @= 0
   //   s.dealloc.ret.addr       @= s.entry_r_base_addr # Might not be used
   //   s.dealloc.ret.data       @= s.entry_r_data
-
+  
   always_comb begin : up_dealloc_ret
     dealloc__ret.threadid = entry_r_threadid;
     dealloc__ret.cacheid = entry_r_cacheid;
@@ -36268,34 +36269,66 @@ module TransducerMshr_noparam
   end
 
   // PyMTL Update Block Source
-  // At /work/global/mw828/cifer/cifer-chip/brg_tile/hb_transducer/TransducerMshr.py:199
+  // At /work/global/mw828/cifer/cifer-chip/brg_tile/hb_transducer/TransducerMshr.py:120
+  // @update
+  // def up_entry_r_data():
+  //   s.entry_r_data_next @= s.entry_r_data
+  //   if (s.update_.en & ( s.entry_r_type == MemMsgType_READ )):
+  //     if   s.entry_r_pending[0]:
+  //       s.entry_r_data_next[0:32]   @= s.update_.msg.data[0:32]
+  //     elif s.entry_r_pending[1]:
+  //       s.entry_r_data_next[32:64]  @= s.update_.msg.data[0:32]
+  //     elif s.entry_r_pending[2]:
+  //       s.entry_r_data_next[64:96]  @= s.update_.msg.data[0:32]
+  //     else:
+  //       s.entry_r_data_next[96:128] @= s.update_.msg.data[0:32]
+  
+  always_comb begin : up_entry_r_data
+    entry_r_data_next = entry_r_data;
+    if ( update___en & ( entry_r_type == 4'( __const__MemMsgType_READ ) ) ) begin
+      if ( entry_r_pending[2'd0] ) begin
+        entry_r_data_next[7'd31:7'd0] = update___msg.data[7'd31:7'd0];
+      end
+      else if ( entry_r_pending[2'd1] ) begin
+        entry_r_data_next[7'd63:7'd32] = update___msg.data[7'd31:7'd0];
+      end
+      else if ( entry_r_pending[2'd2] ) begin
+        entry_r_data_next[7'd95:7'd64] = update___msg.data[7'd31:7'd0];
+      end
+      else
+        entry_r_data_next[7'd127:7'd96] = update___msg.data[7'd31:7'd0];
+    end
+  end
+
+  // PyMTL Update Block Source
+  // At /work/global/mw828/cifer/cifer-chip/brg_tile/hb_transducer/TransducerMshr.py:213
   // @update
   // def up_issue_ret():
   //   s.issue.ret.threadid @= s.entry_r_threadid
   //   s.issue.ret.cacheid  @= s.entry_r_cacheid
   //   s.issue.ret.type_    @= s.entry_r_type
-  //
+  // 
   //   if s.entry_r_type == MemMsgType_READ:
   //     s.issue.ret.write_mask @= 0
   //   else:
   //     s.issue.ret.write_mask @= 1
-  //
+  // 
   //   if   s.entry_r_pending[0]:
   //     s.issue.ret.addr @= s.entry_r_base_addr
   //     s.issue.ret.data @= zext( s.entry_r_data[0:32], 128 )
-  //
+  // 
   //   elif s.entry_r_pending[1]:
   //     s.issue.ret.addr @= s.entry_r_base_addr + b32(4)
   //     s.issue.ret.data @= zext( s.entry_r_data[32:64], 128 )
-  //
+  // 
   //   elif s.entry_r_pending[2]:
   //     s.issue.ret.addr @= s.entry_r_base_addr + b32(8)
   //     s.issue.ret.data @= zext( s.entry_r_data[64:96], 128 )
-  //
+  // 
   //   else:
   //     s.issue.ret.addr @= s.entry_r_base_addr + b32(12)
   //     s.issue.ret.data @= zext( s.entry_r_data[96:128], 128 )
-
+  
   always_comb begin : up_issue_ret
     issue__ret.threadid = entry_r_threadid;
     issue__ret.cacheid = entry_r_cacheid;
@@ -36324,7 +36357,7 @@ module TransducerMshr_noparam
   end
 
   // PyMTL Update Block Source
-  // At /work/global/mw828/cifer/cifer-chip/brg_tile/hb_transducer/TransducerMshr.py:106
+  // At /work/global/mw828/cifer/cifer-chip/brg_tile/hb_transducer/TransducerMshr.py:107
   // @update
   // def up_pending_next():
   //   if s.entry_r_pending[0]:
@@ -36335,7 +36368,7 @@ module TransducerMshr_noparam
   //     s.pending_next @= concat( s.entry_r_pending[3],   b3(0) )
   //   else:
   //     s.pending_next @= 0
-
+  
   always_comb begin : up_pending_next
     if ( entry_r_pending[2'd0] ) begin
       pending_next = { entry_r_pending[2'd3:2'd1], 1'd0 };
@@ -36351,20 +36384,20 @@ module TransducerMshr_noparam
   end
 
   // PyMTL Update Block Source
-  // At /work/global/mw828/cifer/cifer-chip/brg_tile/hb_transducer/TransducerMshr.py:119
+  // At /work/global/mw828/cifer/cifer-chip/brg_tile/hb_transducer/TransducerMshr.py:133
   // @update_ff
   // def up_data_reg():
-  //
+  // 
   //   if s.alloc.en:
   //     s.entry_r_type      <<= s.alloc.msg.type_
   //     s.entry_r_cacheid   <<= s.alloc.msg.cacheid
   //     s.entry_r_threadid  <<= s.alloc.msg.threadid
   //     s.entry_r_base_addr <<= s.alloc.msg.addr
   //     s.entry_r_data      <<= s.alloc.msg.data
-  //
+  // 
   //   elif s.update_.en & ( s.entry_r_type == MemMsgType_READ ):
-  //     s.entry_r_data <<= s.update_.msg.data
-  //
+  //     s.entry_r_data <<= s.entry_r_data_next
+  // 
   //   elif s.update_.en & ( s.entry_r_type >= MemMsgType_AMO ):
   //     if s.update_.msg.type_ == MemMsgType_AMO:
   //       # For AMO, we need to select the data based on the offset within a
@@ -36379,7 +36412,7 @@ module TransducerMshr_noparam
   //         s.entry_r_data <<= zext( s.update_.msg.data[96:128], 128 )
   //       else:
   //         s.entry_r_data <<= s.update_.msg.data # shoud never happen
-
+  
   always_ff @(posedge clk) begin : up_data_reg
     if ( alloc__en ) begin
       entry_r_type <= alloc__msg.type_;
@@ -36389,7 +36422,7 @@ module TransducerMshr_noparam
       entry_r_data <= alloc__msg.data;
     end
     else if ( update___en & ( entry_r_type == 4'( __const__MemMsgType_READ ) ) ) begin
-      entry_r_data <= update___msg.data;
+      entry_r_data <= entry_r_data_next;
     end
     else if ( update___en & ( entry_r_type >= 4'( __const__MemMsgType_AMO ) ) ) begin
       if ( update___msg.type_ == 4'( __const__MemMsgType_AMO ) ) begin
@@ -36412,44 +36445,44 @@ module TransducerMshr_noparam
   end
 
   // PyMTL Update Block Source
-  // At /work/global/mw828/cifer/cifer-chip/brg_tile/hb_transducer/TransducerMshr.py:151
+  // At /work/global/mw828/cifer/cifer-chip/brg_tile/hb_transducer/TransducerMshr.py:165
   // @update_ff
   // def up_state():
-  //
+  // 
   //   # Reset
-  //
+  // 
   //   if s.reset:
   //     s.entry_r_valid   <<= 0
   //     s.entry_r_issued  <<= 0
   //     s.entry_r_pending <<= 0
-  //
+  // 
   //   # Alloc
-  //
+  // 
   //   elif s.alloc.en:
   //     s.entry_r_valid  <<= 1
   //     s.entry_r_issued <<= 0
-  //
+  // 
   //     if s.alloc.msg.type_ == MemMsgType_WRITE:
   //       s.entry_r_pending <<= s.alloc.msg.write_mask
   //     else:
   //       s.entry_r_pending <<= Bits4( 0b1111 ) # always read four-word cache line
-  //
+  // 
   //   # Issue
-  //
+  // 
   //   elif s.issue.en:
   //     s.entry_r_issued <<= 1
-  //
+  // 
   //   # Update
-  //
+  // 
   //   elif s.update_.en:
   //     s.entry_r_pending <<= s.pending_next
   //     s.entry_r_issued  <<= s.issue.en
-  //
+  // 
   //   elif s.dealloc.en:
   //     s.entry_r_valid   <<= 0
   //     s.entry_r_issued  <<= 0
   //     s.entry_r_pending <<= 0
-
+  
   always_ff @(posedge clk) begin : up_state
     if ( reset ) begin
       entry_r_valid <= 1'd0;
@@ -36504,7 +36537,7 @@ module Eva2Npa__4e5b9d642d2a57ca
   input  logic [1:0] tgo_x_i ,
   input  logic [2:0] tgo_y_i ,
   output logic [1:0] x_cord_o ,
-  output logic [2:0] y_cord_o
+  output logic [2:0] y_cord_o 
 );
   localparam logic [1:0] __const__vcache_word_offset_width_at__lambda__s_trans_mshr2hb_eva2npa_hash_bank_input  = 2'd3;
   localparam logic [4:0] __const__hash_bank_input_width_at__lambda__s_trans_mshr2hb_eva2npa_hash_bank_input  = 5'd26;
@@ -36521,7 +36554,7 @@ module Eva2Npa__4e5b9d642d2a57ca
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/brg_tile/hb_transducer/Eva2Npa.py:51
   // s.hash_bank_input //= lambda: s.eva_i[2+vcache_word_offset_width:2+vcache_word_offset_width+hash_bank_input_width]
-
+  
   always_comb begin : _lambda__s_trans_mshr2hb_eva2npa_hash_bank_input
     hash_bank_input = eva_i[5'd30:5'd2 + 5'( __const__vcache_word_offset_width_at__lambda__s_trans_mshr2hb_eva2npa_hash_bank_input )];
   end
@@ -36540,7 +36573,7 @@ module Eva2Npa__4e5b9d642d2a57ca
   //                      s.hash_bank_index_lo,
   //                      s.eva_i[2:2+vcache_word_offset_width]
   //                    )
-
+  
   always_comb begin : comb_logic
     y_cord_o = 3'd0;
     if ( hash_bank_lo[2'( __const__x_cord_width_at_comb_logic )] == 1'd1 ) begin
@@ -36557,7 +36590,7 @@ module Eva2Npa__4e5b9d642d2a57ca
   // def hash_function():
   //   s.hash_bank_lo       @= s.hash_bank_input[0:lg_banks]
   //   s.hash_bank_index_lo @= s.hash_bank_input[lg_banks:lg_banks+hash_bank_index_width]
-
+  
   always_comb begin : hash_function
     hash_bank_lo = hash_bank_input[5'd2:5'd0];
     hash_bank_index_lo = hash_bank_input[5'd25:5'( __const__lg_banks_at_hash_function )];
@@ -36567,17 +36600,17 @@ endmodule
 
 
 // PyMTL Component MshrEntry2HBReq Definition
-// Full name: MshrEntry2HBReq__num_tiles_x_4__num_tiles_y_5__vcache_block_size_in_words_8__vcache_size_8192__vcache_sets_128__hb_params_<brg_tile.hb_transducer.hb_params.HBParams object at 0x7f64d3cb66d0>
+// Full name: MshrEntry2HBReq__num_tiles_x_4__num_tiles_y_5__vcache_block_size_in_words_8__vcache_size_8192__vcache_sets_128__hb_params_<brg_tile.hb_transducer.hb_params.HBParams object at 0x7fe4bc8f4690>
 // At /work/global/mw828/cifer/cifer-chip/brg_tile/hb_transducer/mshr_entry_encoders.py
 
-module MshrEntry2HBReq__fea6a10eb9604856
+module MshrEntry2HBReq__7636178515c4b01b
 (
   input  logic [0:0] clk ,
   input  TransducerMshrMsg__e1bbe4e01acd977d in_ ,
   input  logic [1:0] my_x ,
   input  logic [2:0] my_y ,
   output HBEndpointPacket__29ee445108156f7d out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
   localparam logic [3:0] __const__MemMsgType_WRITE  = 4'd1;
   localparam logic [3:0] __const__MemMsgType_READ  = 4'd0;
@@ -36633,7 +36666,7 @@ module MshrEntry2HBReq__fea6a10eb9604856
   //   s.out.src_y_cord @= s.my_y
   //   s.out.reg_id     @= 0
   //   s.out.payload    @= 0
-  //
+  // 
   //   if   s.in_.type_ == MemMsgType_WRITE:
   //     s.out.op      @= hb_params.packet_op.e_remote_store
   //     s.out.payload @= s.in_.data[0:hb_params_data.data_width]
@@ -36642,7 +36675,7 @@ module MshrEntry2HBReq__fea6a10eb9604856
   //   elif ( s.in_.type_ >= MemMsgType_AMO_ADD ) & \
   //        ( s.in_.type_ <= MemMsgType_SC ):
   //     s.out.op      @= hb_params.packet_op.e_remote_amo
-  //
+  // 
   //     if   s.in_.type_ == MemMsgType_AMO_ADD:  s.out.op_ex @= hb_params.amo_type.e_amo_add
   //     elif s.in_.type_ == MemMsgType_AMO_AND:  s.out.op_ex @= hb_params.amo_type.e_amo_and
   //     elif s.in_.type_ == MemMsgType_AMO_OR:   s.out.op_ex @= hb_params.amo_type.e_amo_or
@@ -36652,7 +36685,7 @@ module MshrEntry2HBReq__fea6a10eb9604856
   //     elif s.in_.type_ == MemMsgType_AMO_MAX:  s.out.op_ex @= hb_params.amo_type.e_amo_max
   //     elif s.in_.type_ == MemMsgType_AMO_MAXU: s.out.op_ex @= hb_params.amo_type.e_amo_maxu
   //     elif s.in_.type_ == MemMsgType_AMO_XOR:  s.out.op_ex @= hb_params.amo_type.e_amo_xor
-
+  
   always_comb begin : up_encoder
     out.addr = eva2npa__epa_o;
     out.op = 2'd0;
@@ -36718,7 +36751,7 @@ module MshrEntry2MemResp__e64c643bebbca125
   input  logic [0:0] clk ,
   input  TransducerMshrMsg__e1bbe4e01acd977d in_ ,
   output MemRespMsg_8_128_m1__c72937e2b7853c90 out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
 
   assign out.type_ = in_.type_;
@@ -36738,7 +36771,7 @@ module MemReq2MshrEntry__167d6b06a2f46c32
   input  logic [0:0] clk ,
   input  MemReqMsg_8_32_128_m1__35a1cc23a1d2d863 in_ ,
   output TransducerMshrMsg__e1bbe4e01acd977d out ,
-  input  logic [0:0] reset
+  input  logic [0:0] reset 
 );
 
   assign out.threadid = 1'd0;
@@ -36752,10 +36785,10 @@ endmodule
 
 
 // PyMTL Component HBTransducer Definition
-// Full name: HBTransducer__MemReqType_MemReqMsg_8_32_128_m1__35a1cc23a1d2d863__MemRespType_MemRespMsg_8_128_m1__c72937e2b7853c90__num_tiles_x_4__num_tiles_y_5__vcache_block_size_in_words_8__vcache_size_8192__vcache_sets_128__hb_params_<brg_tile.hb_transducer.hb_params.HBParams object at 0x7f64d3cb66d0>
+// Full name: HBTransducer__MemReqType_MemReqMsg_8_32_128_m1__35a1cc23a1d2d863__MemRespType_MemRespMsg_8_128_m1__c72937e2b7853c90__num_tiles_x_4__num_tiles_y_5__vcache_block_size_in_words_8__vcache_size_8192__vcache_sets_128__hb_params_<brg_tile.hb_transducer.hb_params.HBParams object at 0x7fe4bc8f4690>
 // At /work/global/mw828/cifer/cifer-chip/brg_tile/hb_transducer/HBTransducer.py
 
-module HBTransducer__bb9bfe3e0a18c1ee
+module HBTransducer__789323c469943ea8
 (
   input  logic [0:0] clk ,
   input  logic [27:0] in_addr ,
@@ -36787,7 +36820,7 @@ module HBTransducer__bb9bfe3e0a18c1ee
   output logic [0:0] mem_minion_ifc__req__rdy ,
   output logic [0:0] mem_minion_ifc__resp__en ,
   output MemRespMsg_8_128_m1__c72937e2b7853c90 mem_minion_ifc__resp__msg ,
-  input logic [0:0] mem_minion_ifc__resp__rdy
+  input logic [0:0] mem_minion_ifc__resp__rdy 
 );
   //-------------------------------------------------------------
   // Component hb2mshr
@@ -36798,7 +36831,7 @@ module HBTransducer__bb9bfe3e0a18c1ee
   logic [0:0] hb2mshr__reset;
   logic [31:0] hb2mshr__returned_data_r;
 
-  HBResp2MshrEntry__a07ba8fe0184a32e hb2mshr
+  HBResp2MshrEntry__1c65c0aa7c4c765d hb2mshr
   (
     .clk( hb2mshr__clk ),
     .out( hb2mshr__out ),
@@ -36862,7 +36895,7 @@ module HBTransducer__bb9bfe3e0a18c1ee
   HBEndpointPacket__29ee445108156f7d mshr2hb__out;
   logic [0:0] mshr2hb__reset;
 
-  MshrEntry2HBReq__fea6a10eb9604856 mshr2hb
+  MshrEntry2HBReq__7636178515c4b01b mshr2hb
   (
     .clk( mshr2hb__clk ),
     .in_( mshr2hb__in_ ),
@@ -36921,7 +36954,7 @@ module HBTransducer__bb9bfe3e0a18c1ee
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/brg_tile/hb_transducer/HBTransducer.py:94
   // s.mem_minion_ifc.resp.en  //= lambda: s.mshr.dealloc.rdy & s.mem_minion_ifc.resp.rdy
-
+  
   always_comb begin : _lambda__s_trans_mem_minion_ifc_resp_en
     mem_minion_ifc__resp__en = mshr__dealloc__rdy & mem_minion_ifc__resp__rdy;
   end
@@ -36929,7 +36962,7 @@ module HBTransducer__bb9bfe3e0a18c1ee
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/brg_tile/hb_transducer/HBTransducer.py:96
   // s.mshr.dealloc.en         //= lambda: s.mshr.dealloc.rdy & s.mem_minion_ifc.resp.rdy
-
+  
   always_comb begin : _lambda__s_trans_mshr_dealloc_en
     mshr__dealloc__en = mshr__dealloc__rdy & mem_minion_ifc__resp__rdy;
   end
@@ -36937,7 +36970,7 @@ module HBTransducer__bb9bfe3e0a18c1ee
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/brg_tile/hb_transducer/HBTransducer.py:107
   // s.mshr.issue.en //= lambda: s.mshr.issue.rdy & s.out_ready
-
+  
   always_comb begin : _lambda__s_trans_mshr_issue_en
     mshr__issue__en = mshr__issue__rdy & out_ready;
   end
@@ -36975,7 +37008,7 @@ endmodule
 
 
 // PyMTL Component HBTile Definition
-// Full name: HBTile__reset_pc_2147483648__num_tiles_x_4__num_tiles_y_5__vcache_block_size_in_words_8__vcache_size_8192__vcache_sets_128__hb_params_<brg_tile.hb_transducer.hb_params.HBParams object at 0x7f64d3cb66d0>
+// Full name: HBTile__reset_pc_2147483648__num_tiles_x_4__num_tiles_y_5__vcache_block_size_in_words_8__vcache_size_8192__vcache_sets_128__hb_params_<brg_tile.hb_transducer.hb_params.HBParams object at 0x7fe4bc8f4690>
 // At /work/global/mw828/cifer/cifer-chip/brg_tile/HBTile.py
 
 module BrgHBTile
@@ -37018,7 +37051,7 @@ module BrgHBTile
   input logic [0:0] test_sink__rdy  ,
   input logic [0:0] test_src__en  ,
   input TileCtrlMsg_1__coreid_1__data_32 test_src__msg  ,
-  output logic [0:0] test_src__rdy
+  output logic [0:0] test_src__rdy  
 );
   //-------------------------------------------------------------
   // Component dcaches[0:0]
@@ -37422,7 +37455,7 @@ module BrgHBTile
   MemRespMsg_8_128_m1__c72937e2b7853c90 trans__mem_minion_ifc__resp__msg;
   logic [0:0] trans__mem_minion_ifc__resp__rdy;
 
-  HBTransducer__bb9bfe3e0a18c1ee trans
+  HBTransducer__789323c469943ea8 trans
   (
     .clk( trans__clk ),
     .in_addr( trans__in_addr ),
@@ -37464,7 +37497,7 @@ module BrgHBTile
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/brg_tile/HBTile.py:180
   // s.procs[ i ].tile_x //= lambda: zext(s.my_x, 32)
-
+  
   always_comb begin : _lambda__s_procs_0__tile_x
     procs__tile_x[1'd0] = { { 30 { 1'b0 } }, my_x };
   end
@@ -37472,7 +37505,7 @@ module BrgHBTile
   // PyMTL Lambda Block Source
   // At /work/global/mw828/cifer/cifer-chip/brg_tile/HBTile.py:181
   // s.procs[ i ].tile_y //= lambda: zext(s.my_y, 32)
-
+  
   always_comb begin : _lambda__s_procs_0__tile_y
     procs__tile_y[1'd0] = { { 29 { 1'b0 } }, my_y };
   end

@@ -1,23 +1,24 @@
-#include "bsg_manycore.h"
-#include "bsg_set_tile_x_y.h"
+#include "brg_hcc_utils.h"
 
 int main()
 {
-   int i;
-
-  /************************************************************************
-   Basic IO outputs bsg_remote_ptr_io_store(IO_X_INDEX, Address, Value)
-   Every core will outputs once.
-  *************************************************************************/
-  bsg_remote_ptr_io_store(IO_X_INDEX,0x1260,__bsg_x);
+  brg_hcc_set_tile_x_y();
+  // int i = 0;
+  // char stderr_msg[] = "Hello world from BRG-HCC tile!\n";
+  // while(stderr_msg[i]) {
+  //   bsg_putchar_err(stderr_msg[i]);
+  //   cache_flush();
+  //   i++;
+  // }
 
   /************************************************************************
     Terminates the Simulation
   *************************************************************************/
-  bsg_finish();
 
+  brg_hcc_finish(); // similar to bsg_finish() but with appropriate cache flush()
+
+  // should not be reachable
   bsg_wait_while(1);
-
   return 0;
 }
 

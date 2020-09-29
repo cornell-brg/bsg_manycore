@@ -171,3 +171,4 @@ VSOURCES += $(BSG_MANYCORE_DIR)/v/bsg_manycore_gather_scatter.v
 
 VSOURCES += $(BSG_MANYCORE_DIR)/v/brg_hcc_tile/brg_hcc_tile.v
 VSOURCES += $(BSG_MANYCORE_DIR)/v/brg_hcc_tile/BrgHBTile.v
+VSOURCES += $(BSG_MANYCORE_DIR)/v/brg_hcc_tile/BrgHBFreezeUnit.v

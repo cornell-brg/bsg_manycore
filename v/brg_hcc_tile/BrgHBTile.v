@@ -36146,10 +36146,10 @@ endmodule
 
 
 // PyMTL Component HBResp2MshrEntry Definition
-// Full name: HBResp2MshrEntry__hb_params_<brg_tile.hb_transducer.hb_params.HBParams object at 0x7fe4bc8f4690>
+// Full name: HBResp2MshrEntry__hb_params_<brg_tile.hb_transducer.hb_params.HBParams object at 0x7fd51d9ea790>
 // At /work/global/mw828/cifer/cifer-chip/brg_tile/hb_transducer/mshr_entry_encoders.py
 
-module HBResp2MshrEntry__1c65c0aa7c4c765d
+module HBResp2MshrEntry__d801bbc4812dddbf
 (
   input  logic [0:0] clk ,
   output TransducerMshrMsg__e1bbe4e01acd977d out ,
@@ -36546,46 +36546,95 @@ module Eva2Npa__4e5b9d642d2a57ca
   localparam logic [1:0] __const__x_cord_width_at_comb_logic  = 2'd2;
   localparam logic [2:0] __const__num_tiles_y_at_comb_logic  = 3'd5;
   localparam logic [1:0] __const__vcache_word_offset_width_at_comb_logic  = 2'd3;
+  localparam logic [1:0] __const__y_cord_width_at_comb_logic  = 2'd3;
   logic [22:0] hash_bank_index_lo;
   logic [25:0] hash_bank_input;
   logic [2:0] hash_bank_lo;
+  logic [0:0] is_dram_addr;
+  logic [0:0] is_global_addr;
+  logic [0:0] is_tile_group_addr;
   logic [0:0] tmp_wire;
 
   // PyMTL Lambda Block Source
-  // At /work/global/mw828/cifer/cifer-chip/brg_tile/hb_transducer/Eva2Npa.py:51
+  // At /work/global/mw828/cifer/cifer-chip/brg_tile/hb_transducer/Eva2Npa.py:63
   // s.hash_bank_input //= lambda: s.eva_i[2+vcache_word_offset_width:2+vcache_word_offset_width+hash_bank_input_width]
   
   always_comb begin : _lambda__s_trans_mshr2hb_eva2npa_hash_bank_input
     hash_bank_input = eva_i[5'd30:5'd2 + 5'( __const__vcache_word_offset_width_at__lambda__s_trans_mshr2hb_eva2npa_hash_bank_input )];
   end
 
-  // PyMTL Update Block Source
-  // At /work/global/mw828/cifer/cifer-chip/brg_tile/hb_transducer/Eva2Npa.py:60
-  // @update
-  // def comb_logic():
-  //   s.y_cord_o @= 0
-  //   if (s.hash_bank_lo[x_cord_width] == Bits1(1)):
-  //     s.y_cord_o @= num_tiles_y + 1
-  //   s.x_cord_o @= s.hash_bank_lo[0:x_cord_width]
-  //   s.tmp_wire @= 0
-  //   s.epa_o @= concat( Bits1(0),
-  //                      s.tmp_wire,
-  //                      s.hash_bank_index_lo,
-  //                      s.eva_i[2:2+vcache_word_offset_width]
-  //                    )
+  // PyMTL Lambda Block Source
+  // At /work/global/mw828/cifer/cifer-chip/brg_tile/hb_transducer/Eva2Npa.py:45
+  // s.is_global_addr     //= lambda: s.eva_i[30:32] == b2(0b01)
   
-  always_comb begin : comb_logic
-    y_cord_o = 3'd0;
-    if ( hash_bank_lo[2'( __const__x_cord_width_at_comb_logic )] == 1'd1 ) begin
-      y_cord_o = 3'( __const__num_tiles_y_at_comb_logic ) + 3'd1;
-    end
-    x_cord_o = hash_bank_lo[2'd1:2'd0];
-    tmp_wire = 1'd0;
-    epa_o = { 1'd0, tmp_wire, hash_bank_index_lo, eva_i[3'd4:5'd2] };
+  always_comb begin : _lambda__s_trans_mshr2hb_eva2npa_is_global_addr
+    is_global_addr = eva_i[5'd31:5'd30] == 2'd1;
+  end
+
+  // PyMTL Lambda Block Source
+  // At /work/global/mw828/cifer/cifer-chip/brg_tile/hb_transducer/Eva2Npa.py:46
+  // s.is_tile_group_addr //= lambda: s.eva_i[29:32] == b3(0b001)
+  
+  always_comb begin : _lambda__s_trans_mshr2hb_eva2npa_is_tile_group_addr
+    is_tile_group_addr = eva_i[5'd31:5'd29] == 3'd1;
   end
 
   // PyMTL Update Block Source
-  // At /work/global/mw828/cifer/cifer-chip/brg_tile/hb_transducer/Eva2Npa.py:53
+  // At /work/global/mw828/cifer/cifer-chip/brg_tile/hb_transducer/Eva2Npa.py:73
+  // @update
+  // def comb_logic():
+  //   s.y_cord_o @= 0
+  //   s.x_cord_o @= 0
+  //   s.epa_o    @= 0
+  // 
+  //   if s.is_dram_addr:
+  //     s.y_cord_o @= 0
+  //     if (s.hash_bank_lo[x_cord_width] == Bits1(1)):
+  //       s.y_cord_o @= num_tiles_y + 1
+  //     s.x_cord_o @= s.hash_bank_lo[0:x_cord_width]
+  //     s.epa_o @= concat( Bits1(0),
+  //                        s.tmp_wire,
+  //                        s.hash_bank_index_lo,
+  //                        s.eva_i[2:2+vcache_word_offset_width]
+  //                      )
+  //   elif s.is_global_addr:
+  //     # global addr: x,y-cord and EPA is directly encoded in EVA
+  //     s.y_cord_o @= s.eva_i[24:24+y_cord_width]
+  //     s.x_cord_o @= s.eva_i[18:18+x_cord_width]
+  //     s.epa_o    @= zext(s.eva_i[2:18], addr_width)
+  //   elif s.is_tile_group_addr:
+  //     # tile-group addr: tile-coordinate in the EVA is added to the
+  //     # tile-group origin register
+  //     s.y_cord_o @= s.eva_i[24:24+y_cord_width] + s.tgo_y_i
+  //     s.x_cord_o @= s.eva_i[18:18+x_cord_width] + s.tgo_x_i
+  //     s.epa_o    @= zext(s.eva_i[2:18], addr_width)
+  
+  always_comb begin : comb_logic
+    y_cord_o = 3'd0;
+    x_cord_o = 2'd0;
+    epa_o = 28'd0;
+    if ( is_dram_addr ) begin
+      y_cord_o = 3'd0;
+      if ( hash_bank_lo[2'( __const__x_cord_width_at_comb_logic )] == 1'd1 ) begin
+        y_cord_o = 3'( __const__num_tiles_y_at_comb_logic ) + 3'd1;
+      end
+      x_cord_o = hash_bank_lo[2'd1:2'd0];
+      epa_o = { 1'd0, tmp_wire, hash_bank_index_lo, eva_i[3'd4:5'd2] };
+    end
+    else if ( is_global_addr ) begin
+      y_cord_o = eva_i[5'd26:5'd24];
+      x_cord_o = eva_i[5'd19:5'd18];
+      epa_o = { { 12 { 1'b0 } }, eva_i[5'd17:5'd2] };
+    end
+    else if ( is_tile_group_addr ) begin
+      y_cord_o = eva_i[5'd26:5'd24] + tgo_y_i;
+      x_cord_o = eva_i[5'd19:5'd18] + tgo_x_i;
+      epa_o = { { 12 { 1'b0 } }, eva_i[5'd17:5'd2] };
+    end
+  end
+
+  // PyMTL Update Block Source
+  // At /work/global/mw828/cifer/cifer-chip/brg_tile/hb_transducer/Eva2Npa.py:65
   // @update
   // def hash_function():
   //   s.hash_bank_lo       @= s.hash_bank_input[0:lg_banks]
@@ -36596,14 +36645,17 @@ module Eva2Npa__4e5b9d642d2a57ca
     hash_bank_index_lo = hash_bank_input[5'd25:5'( __const__lg_banks_at_hash_function )];
   end
 
+  assign is_dram_addr = eva_i[31:31];
+  assign tmp_wire = 1'd0;
+
 endmodule
 
 
 // PyMTL Component MshrEntry2HBReq Definition
-// Full name: MshrEntry2HBReq__num_tiles_x_4__num_tiles_y_5__vcache_block_size_in_words_8__vcache_size_8192__vcache_sets_128__hb_params_<brg_tile.hb_transducer.hb_params.HBParams object at 0x7fe4bc8f4690>
+// Full name: MshrEntry2HBReq__num_tiles_x_4__num_tiles_y_5__vcache_block_size_in_words_8__vcache_size_8192__vcache_sets_128__hb_params_<brg_tile.hb_transducer.hb_params.HBParams object at 0x7fd51d9ea790>
 // At /work/global/mw828/cifer/cifer-chip/brg_tile/hb_transducer/mshr_entry_encoders.py
 
-module MshrEntry2HBReq__7636178515c4b01b
+module MshrEntry2HBReq__df026b0421e65f8c
 (
   input  logic [0:0] clk ,
   input  TransducerMshrMsg__e1bbe4e01acd977d in_ ,
@@ -36785,10 +36837,10 @@ endmodule
 
 
 // PyMTL Component HBTransducer Definition
-// Full name: HBTransducer__MemReqType_MemReqMsg_8_32_128_m1__35a1cc23a1d2d863__MemRespType_MemRespMsg_8_128_m1__c72937e2b7853c90__num_tiles_x_4__num_tiles_y_5__vcache_block_size_in_words_8__vcache_size_8192__vcache_sets_128__hb_params_<brg_tile.hb_transducer.hb_params.HBParams object at 0x7fe4bc8f4690>
+// Full name: HBTransducer__MemReqType_MemReqMsg_8_32_128_m1__35a1cc23a1d2d863__MemRespType_MemRespMsg_8_128_m1__c72937e2b7853c90__num_tiles_x_4__num_tiles_y_5__vcache_block_size_in_words_8__vcache_size_8192__vcache_sets_128__hb_params_<brg_tile.hb_transducer.hb_params.HBParams object at 0x7fd51d9ea790>
 // At /work/global/mw828/cifer/cifer-chip/brg_tile/hb_transducer/HBTransducer.py
 
-module HBTransducer__789323c469943ea8
+module HBTransducer__0f78080ad6c36d18
 (
   input  logic [0:0] clk ,
   input  logic [27:0] in_addr ,
@@ -36831,7 +36883,7 @@ module HBTransducer__789323c469943ea8
   logic [0:0] hb2mshr__reset;
   logic [31:0] hb2mshr__returned_data_r;
 
-  HBResp2MshrEntry__1c65c0aa7c4c765d hb2mshr
+  HBResp2MshrEntry__d801bbc4812dddbf hb2mshr
   (
     .clk( hb2mshr__clk ),
     .out( hb2mshr__out ),
@@ -36895,7 +36947,7 @@ module HBTransducer__789323c469943ea8
   HBEndpointPacket__29ee445108156f7d mshr2hb__out;
   logic [0:0] mshr2hb__reset;
 
-  MshrEntry2HBReq__7636178515c4b01b mshr2hb
+  MshrEntry2HBReq__df026b0421e65f8c mshr2hb
   (
     .clk( mshr2hb__clk ),
     .in_( mshr2hb__in_ ),
@@ -37008,7 +37060,7 @@ endmodule
 
 
 // PyMTL Component HBTile Definition
-// Full name: HBTile__reset_pc_2147483648__num_tiles_x_4__num_tiles_y_5__vcache_block_size_in_words_8__vcache_size_8192__vcache_sets_128__hb_params_<brg_tile.hb_transducer.hb_params.HBParams object at 0x7fe4bc8f4690>
+// Full name: HBTile__reset_pc_2147483648__num_tiles_x_4__num_tiles_y_5__vcache_block_size_in_words_8__vcache_size_8192__vcache_sets_128__hb_params_<brg_tile.hb_transducer.hb_params.HBParams object at 0x7fd51d9ea790>
 // At /work/global/mw828/cifer/cifer-chip/brg_tile/HBTile.py
 
 module BrgHBTile
@@ -37455,7 +37507,7 @@ module BrgHBTile
   MemRespMsg_8_128_m1__c72937e2b7853c90 trans__mem_minion_ifc__resp__msg;
   logic [0:0] trans__mem_minion_ifc__resp__rdy;
 
-  HBTransducer__789323c469943ea8 trans
+  HBTransducer__0f78080ad6c36d18 trans
   (
     .clk( trans__clk ),
     .in_addr( trans__in_addr ),

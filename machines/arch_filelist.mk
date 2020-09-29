@@ -9,6 +9,7 @@ VINCLUDES += $(BSG_MANYCORE_DIR)/v
 VINCLUDES += $(BSG_MANYCORE_DIR)/v/vanilla_bean
 VINCLUDES += $(BSG_MANYCORE_DIR)/imports/HardFloat/source
 VINCLUDES += $(BSG_MANYCORE_DIR)/imports/HardFloat/source/RISCV
+VINCLUDES += $(BSG_MANYCORE_DIR)/v/brg_hcc_tile
 
 VHEADERS += $(BASEJUMP_STL_DIR)/bsg_misc/bsg_defines.v
 VHEADERS += $(BASEJUMP_STL_DIR)/bsg_noc/bsg_noc_pkg.v
@@ -167,3 +168,6 @@ VSOURCES += $(BSG_MANYCORE_DIR)/v/bsg_1hold.v
 VSOURCES += $(BSG_MANYCORE_DIR)/v/bsg_manycore_eva_to_npa.v
 VSOURCES += $(BSG_MANYCORE_DIR)/v/bsg_manycore_link_sif_tieoff.v
 VSOURCES += $(BSG_MANYCORE_DIR)/v/bsg_manycore_gather_scatter.v
+
+VSOURCES += $(BSG_MANYCORE_DIR)/v/brg_hcc_tile/brg_hcc_tile.v
+VSOURCES += $(BSG_MANYCORE_DIR)/v/brg_hcc_tile/BrgHBTile.v

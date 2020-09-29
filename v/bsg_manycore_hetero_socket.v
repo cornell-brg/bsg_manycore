@@ -84,7 +84,7 @@ module bsg_manycore_hetero_socket
   `HETERO_TYPE_MACRO(5,bsg_manycore_accel_default) else
   `HETERO_TYPE_MACRO(6,bsg_manycore_accel_default) else
   `HETERO_TYPE_MACRO(7,bsg_manycore_accel_default) else
-  `HETERO_TYPE_MACRO(8,bsg_manycore_accel_default) else
+  `HETERO_TYPE_MACRO(8,brg_hcc_tile) else
   begin : nh
   // synopsys translate_off
     initial begin

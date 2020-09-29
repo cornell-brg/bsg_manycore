@@ -163,9 +163,9 @@ bsg_manycore_endpoint_standard
   ,.in_addr_o (in_addr_li)
   ,.in_data_o (in_data_li)
 
-  // slave response (out_response), tied-down
+  // slave response (out_response)
   ,.returning_data_i ('d0)
-  ,.returning_v_i    (1'd0)
+  ,.returning_v_i    (returning_v_lo)
 );
 
 endmodule

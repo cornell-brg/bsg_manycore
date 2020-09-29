@@ -83,6 +83,8 @@ static inline int tile_y()
 // SPMD utils
 //------------------------------------------------------------------------
 
+// Terminates the simulation by writing to a special global address. It is
+// similar to bsg_finish() but with appropriate cache_flush()
 static inline void brg_hcc_finish()
 {
   bsg_remote_int_ptr ptr = bsg_remote_ptr_io(IO_X_INDEX,0xEAD0);
@@ -91,15 +93,22 @@ static inline void brg_hcc_finish()
   while (1);
 }
 
+// Set __bsg_x, __bsg_y, and some more varialbes. It is similar to
+// bsg_set_tile_x_y(), but use CSR register instead of reading dmem (which
+// BRG HCC tile lacks).
 static inline void brg_hcc_set_tile_x_y()
 {
   __bsg_x = tile_x();
-  __bsg_y = tile_y();
+  __bsg_y = tile_y() - 2;   // tiles start at y = 2, (y=0: VCACHE, y=1: IO)
+  __bsg_id = tile_id();
   __bsg_grid_dim_x = 1;
   __bsg_grid_dim_y = 1;
   __bsg_tile_group_id_x = 0;
   __bsg_tile_group_id_y = 0;
   __bsg_tile_group_id = 0;
+  // TODO: does not support TGO (origin of each tile group) yet, default to x=0, y=2
+  __bsg_grp_org_x = 0;
+  __bsg_grp_org_y = 2;
 }
 
 #endif

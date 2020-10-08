@@ -13,18 +13,16 @@ module bsg_manycore_tile
     , parameter x_cord_width_p = "inv"
     , parameter y_cord_width_p = "inv"
     , parameter num_tiles_x_p="inv"
+    , parameter num_tiles_y_p="inv"
     
     , parameter data_width_p = "inv"
     , parameter addr_width_p = "inv"
-    , parameter epa_byte_addr_width_p = "inv"
-    , parameter dram_ch_addr_width_p = "inv"
 
     , parameter vcache_block_size_in_words_p="inv"
     , parameter vcache_sets_p="inv"
 
     , localparam dirs_lp = 4
 
-    , parameter dram_ch_start_col_p  = 0
     , parameter stub_p = {dirs_lp{1'b0}}           // {s,n,e,w}
     , parameter repeater_output_p = {dirs_lp{1'b0}} // {s,n,e,w}
     , parameter hetero_type_p = 0
@@ -58,6 +56,18 @@ module bsg_manycore_tile
     reset_r <= reset_i;
   end
 
+  // For vanilla core (hetero type = 0), it uses credit interface for the P ports,
+  // which has three-element fifo because the credit returns with one extra cycle delay.
+  localparam fwd_use_credits_lp = (hetero_type_p == 0)
+    ? 5'b00001
+    : 5'b00000;
+  localparam int fwd_fifo_els_lp[dirs_lp:0] = (hetero_type_p == 0)
+    ? '{2,2,2,2,3}
+    : '{2,2,2,2,2};
+  localparam rev_use_credits_lp = 5'b00000;
+  localparam int rev_fifo_els_lp[dirs_lp:0] = '{2,2,2,2,2};
+    
+
   bsg_manycore_mesh_node #(
     .stub_p(stub_p)
     ,.x_cord_width_p(x_cord_width_p)
@@ -66,6 +76,10 @@ module bsg_manycore_tile
     ,.addr_width_p(addr_width_p)
     ,.debug_p(debug_p)
     ,.repeater_output_p(repeater_output_p) // select buffer for this particular node
+    ,.fwd_use_credits_p(fwd_use_credits_lp)
+    ,.fwd_fifo_els_p(fwd_fifo_els_lp)
+    ,.rev_use_credits_p(rev_use_credits_lp)
+    ,.rev_fifo_els_p(rev_fifo_els_lp)
   ) rtr (
     .clk_i(clk_i)
     ,.reset_i(reset_r)
@@ -87,11 +101,9 @@ module bsg_manycore_tile
     ,.vcache_size_p(vcache_size_p)
     ,.icache_entries_p(icache_entries_p)
     ,.icache_tag_width_p(icache_tag_width_p)
-    ,.epa_byte_addr_width_p(epa_byte_addr_width_p)
-    ,.dram_ch_addr_width_p(dram_ch_addr_width_p)
-    ,.dram_ch_start_col_p(dram_ch_start_col_p)
     ,.hetero_type_p(hetero_type_p)
     ,.num_tiles_x_p(num_tiles_x_p)
+    ,.num_tiles_y_p(num_tiles_y_p)
     ,.vcache_block_size_in_words_p(vcache_block_size_in_words_p)
     ,.vcache_sets_p(vcache_sets_p)
 

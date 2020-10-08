@@ -7,10 +7,14 @@ include ./Makefile.regress.list
 
 # list of subdirectories that we don't recurse into
 NO-RECURSE = \
-	specint2000 berkeley_bug bsg_dram_cache_byte bsg_dram_cache_evict bsg_hetero_nodes \
-  bsg_dram_loopback bsg_dram_scatter bsg_loader_suite bsg_outbuf_full \
-	bsg_X4Y4_loopback rocket_manycore_2tile_loopback simple_accel go_viral \
-	bsg_remote_congestion bsg_hetero_nodes memtest1 bsg_cache_miss
+	specint2000 bsg_hetero_nodes \
+  bsg_loader_suite \
+	go_viral \
+	bsg_remote_congestion memtest1 deprecated \
+	c++ fft memtest16 fhello_malloc striped_vector_sum striped_hello \
+	coremark coremark-top \
+	deprecated \
+	beebs
 
 # Define this variable on cmd line to run coverage analysis. Currently
 # supports VCS coverage: run "make COVERAGE=VCS"
@@ -23,7 +27,9 @@ endif
 
 ENABLE_VCACHE=1
 
-export LLVM_DIR=/mnt/bsg/diskbits/neilryan/llvm/llvm-install
+ifdef CLANG
+  export CLANG=1
+endif
 
 ###############################################
 # VCS Unified Coverage Report Generator options
@@ -40,7 +46,7 @@ all:
 	@echo "Usage:"
 	@echo "  make -j <numthreads> recurse-clean # clean up after regression"
 	@echo "  make -j <numthreads> recurse-all   # run tests in all subdirs"
-	@echo "  make summarize                     # summarize results of tests"
+	@echo "  make watch-summary                 # summarize results of tests"
 	@echo ""
 	@echo -n " Hyperthreads detected: "; cat /proc/cpuinfo | grep processor | wc -l
 	@echo " Run 'top' to see what else is running to decided how many threads to run"
@@ -92,8 +98,9 @@ all:
 coverage-debug:
 	$(VCS_BIN)/dve -full64 -dir *.vdb &
 
-clean:
+clean: recurse-clean
 	rm -rf run.log cov.log coverage* DVEfiles/ common/crt.o
+	rm -rf recurse-results
 
 
 #
@@ -108,7 +115,7 @@ pre-recurse-all:
 	$(MAKE) common/crt.o
 
 pre-recurse-clean:
-	-rm -rf recurse-results
+	rm -rf recurse-results
 	mkdir -p recurse-results
 
 SUBDIRS-WITH-MAKE = $(patsubst %/Makefile,%,$(wildcard */Makefile))

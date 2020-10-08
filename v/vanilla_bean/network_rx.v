@@ -15,14 +15,13 @@ module network_rx
     , parameter icache_entries_p="inv"
     , parameter x_cord_width_p="inv"
     , parameter y_cord_width_p="inv"
-    , parameter epa_byte_addr_width_p="inv"
 
     , parameter tgo_x_init_val_p = 0
     , parameter tgo_y_init_val_p = 1
     , parameter freeze_init_val_p = 1
     , parameter default_pc_init_val_p = 0
 
-    , localparam epa_word_addr_width_lp=(epa_byte_addr_width_p-2)
+    , localparam epa_word_addr_width_lp=epa_word_addr_width_gp
     , localparam data_mask_width_lp=(data_width_p>>3)
     , localparam dmem_addr_width_lp=`BSG_SAFE_CLOG2(dmem_size_p)
     , localparam icache_addr_width_lp=`BSG_SAFE_CLOG2(icache_entries_p)
@@ -85,7 +84,6 @@ module network_rx
   assign is_dmem_addr = addr_i[dmem_addr_width_lp] & (addr_i[addr_width_p-1:dmem_addr_width_lp+1] == '0);
   assign is_icache_addr = addr_i[pc_width_lp] & (addr_i[addr_width_p-1:pc_width_lp+1] == '0);
 
-  //assign is_csr_addr = addr_i[addr_width_p-1:epa_word_addr_width_lp-1] == '1;
   assign is_csr_addr = addr_i[epa_word_addr_width_lp-1]
     & (addr_i[addr_width_p-1:epa_word_addr_width_lp] == '0);
   assign is_freeze_addr = is_csr_addr & (addr_i[epa_word_addr_width_lp-2:0] == 'd0);
@@ -345,8 +343,7 @@ module network_rx
   assign is_invalid_addr = ~(is_dmem_addr | is_icache_addr | is_valid_csr_addr);
 
   always_ff @ (negedge clk_i) begin
-
-    if (v_i & is_invalid_addr) begin
+    if (~reset_i & v_i & is_invalid_addr) begin
       $display("[ERROR][RX] Invalid EPA Access. t=%0t, x=%d, y=%d, we=%d, addr=%h, data=%h",
         $time, my_x_i, my_y_i, w_i, addr_i, data_i);
     end

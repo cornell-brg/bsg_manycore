@@ -29,23 +29,18 @@
 
 TARGET_ARCH       := rv32imaf
 TARGET_ABI        := ilp32f
-TARGET_CFLAGS     := '-fno-common -ffp-contract=off -mno-fdiv' # Turn off fma, fdiv and fexp instructions
-                                                               # as manycore's FPU doesn't support them.
+TARGET_CFLAGS     := '-fno-common'
 
 TOOLCHAIN_REPO    := riscv-gnu-toolchain
-TOOLCHAIN_URL     := https://github.com/riscv/$(TOOLCHAIN_REPO)
-TOOLCHAIN_VERSION := a03290eab661e2aa58288ad164f908bbbcc2169c
+TOOLCHAIN_URL     := https://github.com/bespoke-silicon-group/$(TOOLCHAIN_REPO)
+TOOLCHAIN_VERSION := 656708846d723936eb5ba2648f6f919608a8ccaf
 
 DEPENDS_DIR       := $(CURDIR)/depends
-
-NEWLIB_URL        := https://github.com/bespoke-silicon-group/bsg_newlib_dramfs.git
-NEWLIB_BRANCH     := dramfs
-NEWLIB_VERSION    := 7f0037ac3ac5068524d8e34c9b0fb5553bc55be1
-NEWLIB_PATCH      := newlib.patch
 
 SPIKE_REPO        := riscv-isa-sim
 SPIKE_URL         := https://github.com/riscv/riscv-isa-sim.git
 SPIKE_PATCH       := spike.patch
+SPIKE_GCC_PATCH   := spike-gcc.patch
 SPIKE_TAG         := v1.0.0
 
 LLVM_DIR          := $(CURDIR)/llvm
@@ -95,17 +90,13 @@ ifeq ($(shell [ $(call git-version,1) -gt 1 ] && \
 else
 	cd $(TOOLCHAIN_REPO) && git submodule update --init --recursive;
 endif
-
+	# **** This patch is no longer necessary. Its changes have
+	#      been applied in the bsg_manycore_gcc branch of
+	#      riscv-gcc.
 	# This patch is necessary if target abi is ilp32f because of the issue
 	# https://github.com/riscv/riscv-gnu-toolchain/issues/530
-	cd $(TOOLCHAIN_REPO)/riscv-gcc && git apply $(CURDIR)/riscv-gcc.patch
+	# cd $(TOOLCHAIN_REPO)/riscv-gcc && git apply $(CURDIR)/riscv-gcc.patch
 
-replace-newlib:
-	cd $(TOOLCHAIN_REPO) && git apply $(CURDIR)/$(NEWLIB_PATCH)
-	cd $(TOOLCHAIN_REPO) && git submodule sync
-	cd $(TOOLCHAIN_REPO) && git submodule update --remote riscv-newlib
-	cd $(TOOLCHAIN_REPO)/riscv-newlib && git checkout $(NEWLIB_BRANCH)
-	cd $(TOOLCHAIN_REPO)/riscv-newlib && git checkout $(NEWLIB_VERSION)
 
 checkout-spike:
 	@echo "====================================="
@@ -114,11 +105,10 @@ checkout-spike:
 	@rm -rf $(SPIKE_REPO);
 	git clone --recursive $(SPIKE_URL);
 	cd $(SPIKE_REPO) && git checkout tags/$(SPIKE_TAG)
-	cd $(SPIKE_REPO) && git apply ../$(SPIKE_PATCH)
+	cd $(SPIKE_REPO) && git apply ../$(SPIKE_PATCH) && git apply ../$(SPIKE_GCC_PATCH)
 
 checkout-all: 
 	$(MAKE) checkout-repos 
-	$(MAKE) replace-newlib 
 	$(MAKE) checkout-spike
 
 build-deps:
@@ -179,7 +169,11 @@ install-clean:
 	$(MAKE) clean-builds
 
 clean-builds:
-	rm -rf $(DEPENDS_DIR) $(TOOLCHAIN_REPO) $(SPIKE_REPO)
+	rm -rf $(DEPENDS_DIR) $(TOOLCHAIN_REPO) $(SPIKE_REPO) && \
+	$(MAKE) clean-llvm
+
+clean-llvm:
+	rm -rf $(LLVM_DIR)/llvm-src $(LLVM_DIR)/llvm-build
 
 clean-install:
 	rm -rf riscv-install

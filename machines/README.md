@@ -6,6 +6,7 @@ Machine.machine.include parameters
 - BSG_MACHINE_VCACHE_SET                =   number of sets in each vcache
 - BSG_MACHINE_VCACHE_WAY                =   number of ways in each vcache
 - BSG_MACHINE_VCACHE_BLOCK_SIZE_WORDS   =   number of words in each vcache block.
+- BSG_MACHINE_VCACHE_DMA_DATA_WIDTH     =   vcache dma interface data width.
 - BSG_MACHINE_VCACHE_MISS_FIFO_ELS      =   number of entries in miss fifo (non-blocking vcache only).
 - BSG_MACHINE_DRAM_SIZE_WORDS           =   the total size of main memory. 2GB max, but it can be set to lower.
 - BSG_MACHINE_DRAM_BANK_SIZE_WORDS      =   the size of address space spanned by each bank.
@@ -16,5 +17,7 @@ Machine.machine.include parameters
 - BSG_MACHINE_MAX_EPA_WIDTH             =   Width of word address on the mesh network.
 - BSG_MACHINE_MEM_CFG                   =   e_vcache_non_blocking_axi4_nonsynth_mem
 - BSG_MACHINE_BRANCH_TRACE_EN           =   Enable branch trace.
+- BSG_MACHINE_HETERO_TYPE_VEC           =   Hetero type vector. Default configuration is 'default:0'.
+                                            Use this to instantiate custom accelerator instead of vanilla core.
 
 ```

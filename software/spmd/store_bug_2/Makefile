@@ -8,21 +8,14 @@ include ../Makefile.include
 
 all: hello.run
 
-hello.riscv:  $(OBJECT_FILES) $(SPMD_COMMON_OBJECTS) ../common/crt.o
-	$(RISCV_LINK) $(OBJECT_FILES) -o $@ $(RISCV_LINK_OPTS)
+hello.riscv: $(LINK_SCRIPT)  $(OBJECT_FILES) $(SPMD_COMMON_OBJECTS) $(BSG_MANYCORE_LIB) ../common/crt.o
+	$(RISCV_LINK) $(OBJECT_FILES) $(SPMD_COMMON_OBJECTS) -L. "-l:$(BSG_MANYCORE_LIB)" -o $@ $(RISCV_LINK_OPTS)
 
-clean:
-	-rm $(OBJECT_FILES) *.jou *.log *.pb bsg_rom_hello.v hello.riscv *.wdb hello.bin hello.hex
-	-rm -rf xsim.dir
 
 hello.o: Makefile
 
 
-
-
-
-
-
+include ../../mk/Makefile.tail_rules
 
 
 

@@ -17,7 +17,7 @@ module bsg_nonsynth_manycore_io_complex
     , parameter num_tiles_y_p="inv"
 
     , parameter io_x_cord_p=0 
-    , parameter io_y_cord_p=0
+    , parameter io_y_cord_p=1
 
     , parameter max_out_credits_p=200
     , parameter credit_counter_width_lp=`BSG_SAFE_CLOG2(max_out_credits_p+1)
@@ -102,7 +102,7 @@ module bsg_nonsynth_manycore_io_complex
     // loader
     ,.out_v_i(out_v_li)
     ,.out_packet_i(out_packet_li)
-    ,.out_ready_o(out_ready_lo)
+    ,.out_credit_or_ready_o(out_ready_lo)
 
     ,.returned_data_r_o()
     ,.returned_reg_id_r_o()
@@ -155,7 +155,7 @@ module bsg_nonsynth_manycore_io_complex
     ,.data_width_p(data_width_p)
     ,.x_cord_width_p(x_cord_width_p)
     ,.y_cord_width_p(y_cord_width_p)
-
+    ,.max_out_credits_p(max_out_credits_p)
   ) loader (
     .clk_i(clk_i)
     ,.reset_i(reset_i)
@@ -167,6 +167,8 @@ module bsg_nonsynth_manycore_io_complex
 
     ,.my_x_i((x_cord_width_p)'(io_x_cord_p))
     ,.my_y_i((y_cord_width_p)'(io_y_cord_p))
+
+    ,.out_credits_i(out_credits_lo)
   );
 
   assign out_v_li = spmd_v_lo & (out_credits_lo > 1);

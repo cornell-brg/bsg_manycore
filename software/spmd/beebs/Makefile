@@ -42,11 +42,13 @@ all: beebs.configure.touchfile
 	make -C  $*_run -f ../Makefile PROG_NAME=$* $*.run MAX_CYCLES=$(MAX_CYCLES) | tee $*_run/$*-run.log
 
 # Just copy the installed binary
-%.riscv:  $(COMMON_SRCS) $(BSG_MANYCORE_LIB) $(wildcard $(BEEBS_DIR)/src/%/*)
+%.riscv: $(LINK_SCRIPT)  $(COMMON_SRCS) $(BSG_MANYCORE_LIB) $(wildcard $(BEEBS_DIR)/src/%/*)
 	make -C $(BUILD_DIR)/src/$* clean
 	make -C $(BUILD_DIR)/src/$* install V=1
 	cp $(BUILD_DIR)/bin/$* $@
 
+%.dve:
+	make -C $*_run -f ../Makefile dve
 
 $(RUN_DIR)/lfs.c: lfs.c
 
@@ -71,7 +73,7 @@ BEEBS_LDFLAGS = "-t -T $(LINK_SCRIPT) -march=$(ARCH_OP) -nostartfiles -ffast-mat
 
 configure: beebs.configure.touchfile
 
-beebs.configure.touchfile: $(COMMON_SRCS) $(BSG_MANYCORE_LIB)
+beebs.configure.touchfile: $(LINK_SCRIPT) $(COMMON_SRCS) $(BSG_MANYCORE_LIB)
 	rm -rf $(BUILD_DIR);
 	mkdir -p $(BUILD_DIR);
 
@@ -92,13 +94,24 @@ beebs.configure.touchfile: $(COMMON_SRCS) $(BSG_MANYCORE_LIB)
 	touch beebs.configure.touchfile
 
 clean-build:
-	-rm *.a *.o *.log
+	-rm -f *.a *.o *.log
 	-rm -rf $(BUILD_DIR);
-	-rm beebs.configure.touchfile
+	-rm -f beebs.configure.touchfile
 
 clean-runs:
 	-rm -rf *_run
 
 clean: clean-build clean-runs
 
+RUN_LOGS = $(addsuffix _run/run.log, $(BMARK_LIST))
 
+check_finish:
+	for log in $(RUN_LOGS); do \
+		if grep BSG_FINISH $$log; \
+		then \
+			echo $$log passed; \
+		else \
+			echo $$log failed; \
+			exit 1;	\
+		fi	\
+	done

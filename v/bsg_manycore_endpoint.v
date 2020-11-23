@@ -129,8 +129,10 @@ module bsg_manycore_endpoint
   always_ff @ (negedge clk_i) begin
 
     if (~reset_i & ~returned_fifo_ready)
-      assert(return_packet_yumi_i) else
+      assert(return_packet_yumi_i) else begin
         $error("[BSG_ERROR] return fifo has to be dequeued, when it's full.");
+        $finish();
+      end
 
   end
 

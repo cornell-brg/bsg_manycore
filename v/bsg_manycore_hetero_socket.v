@@ -24,6 +24,7 @@
                           ,.vcache_block_size_in_words_p(vcache_block_size_in_words_p) \
                           ,.vcache_sets_p(vcache_sets_p)                               \
                           ,.debug_p(debug_p)                                           \
+                          ,.mc_composition_p(mc_composition_p)                         \
                           ,.branch_trace_en_p(branch_trace_en_p)                       \
                           ,.icache_entries_p(icache_entries_p)                         \
                           ,.icache_tag_width_p (icache_tag_width_p)                    \
@@ -54,6 +55,7 @@ module bsg_manycore_hetero_socket
     , parameter branch_trace_en_p = 0
     , parameter max_out_credits_p = 32
     , parameter int hetero_type_p = 0
+    , parameter mc_composition_p = "inv"
     , parameter num_tiles_x_p="inv"
     , parameter num_tiles_y_p="inv"
     , parameter vcache_block_size_in_words_p="inv"

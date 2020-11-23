@@ -16,6 +16,16 @@ package bsg_manycore_pkg;
   //  manycore packet definition      //
   //                                  //
 
+  //*********************************************************************
+  // Manycore top level compositions
+  //*********************************************************************
+
+  typedef enum logic [1:0] {
+    e_manycore
+    , e_manycore_vec_xcel
+    , e_manycore_single_cgra
+    , e_manycore_quad_cgra
+  } bsg_manycore_composition_e;
 
   localparam bsg_manycore_reg_id_width_gp = 5;
 

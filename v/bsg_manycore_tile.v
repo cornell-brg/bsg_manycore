@@ -26,6 +26,7 @@ module bsg_manycore_tile
     , parameter stub_p = {dirs_lp{1'b0}}           // {s,n,e,w}
     , parameter repeater_output_p = {dirs_lp{1'b0}} // {s,n,e,w}
     , parameter hetero_type_p = 0
+    , parameter mc_composition_p = "inv"
     , parameter debug_p = 0
 
     , parameter branch_trace_en_p = 0
@@ -102,6 +103,7 @@ module bsg_manycore_tile
     ,.icache_entries_p(icache_entries_p)
     ,.icache_tag_width_p(icache_tag_width_p)
     ,.hetero_type_p(hetero_type_p)
+    ,.mc_composition_p(mc_composition_p)
     ,.num_tiles_x_p(num_tiles_x_p)
     ,.num_tiles_y_p(num_tiles_y_p)
     ,.vcache_block_size_in_words_p(vcache_block_size_in_words_p)

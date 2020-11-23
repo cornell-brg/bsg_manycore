@@ -9,19 +9,33 @@ module brg_vvadd_xcel
   import bsg_manycore_pkg::*;
   import brg_vvadd_xcel_pkg::*;
   #( 
-     x_cord_width_p         = "inv"
-    ,y_cord_width_p         = "inv"
-    ,dmem_size_p            = "inv"
-    ,data_width_p           = 32
-    ,addr_width_p           = 32
-    ,max_out_credits_p      = 200
+     x_cord_width_p               = "inv"
+    ,y_cord_width_p               = "inv"
+    ,data_width_p                 = "inv"
+    ,addr_width_p                 = "inv"
+    ,dmem_size_p                  = "inv"
+    ,vcache_size_p                = "inv"
+    ,vcache_block_size_in_words_p = "inv"
+    ,vcache_sets_p                = "inv"
+
+    ,mc_composition_p             = "inv"
+
+    ,icache_entries_p             = "inv"
+    ,icache_tag_width_p           = "inv"
+
+    ,max_out_credits_p            = 32
+
+    ,num_tiles_x_p                = "inv"
+    ,num_tiles_y_p                = "inv"
+
+    /* Dummy parameter for compatability with socket*/
+    ,debug_p                      = 1
+    ,branch_trace_en_p            = 0
+
+    // Derived local parameters
     ,packet_width_lp                = `bsg_manycore_packet_width(addr_width_p,data_width_p,x_cord_width_p,y_cord_width_p)
     ,return_packet_width_lp         = `bsg_manycore_return_packet_width(x_cord_width_p,y_cord_width_p,data_width_p)
     ,bsg_manycore_link_sif_width_lp = `bsg_manycore_link_sif_width(addr_width_p,data_width_p,x_cord_width_p,y_cord_width_p)
-    ,debug_p                = 1
-    /* Dummy parameter for compatability with socket*/
-    ,hetero_type_p          = 1
-    ,epa_byte_addr_width_p  = "inv"
   )
   (   input clk_i
     , input reset_i
@@ -34,7 +48,7 @@ module brg_vvadd_xcel
     , input   [y_cord_width_p-1:0]                my_y_i
 
     // Dummy outputs to be compatilbe with the socket
-    , output                                      freeze_o
+    // , output                                      freeze_o
     );
 
     //--------------------------------------------------------------
@@ -108,7 +122,7 @@ module brg_vvadd_xcel
       // master request
       ,.out_v_i               ( out_v_li             )
       ,.out_packet_i          ( out_packet_li        )
-      ,.out_ready_o           ( out_ready_lo         )
+      ,.out_credit_or_ready_o ( out_ready_lo         )
       ,.out_credits_o         ( out_credits_lo       )
 
       // local returned data interface
@@ -142,7 +156,6 @@ module brg_vvadd_xcel
       ,.dmem_size_p           ( dmem_size_p           )
       ,.data_width_p          ( data_width_p          )
       ,.addr_width_p          ( addr_width_p          )
-      ,.epa_byte_addr_width_p ( epa_byte_addr_width_p )
     ) rx
     (
        .clk_i
@@ -192,7 +205,7 @@ module brg_vvadd_xcel
       ,.y_cord_width_p        ( y_cord_width_p        )
       ,.data_width_p          ( data_width_p          )
       ,.addr_width_p          ( addr_width_p          )
-      ,.epa_byte_addr_width_p ( epa_byte_addr_width_p )
+      ,.mc_composition_p      ( mc_composition_p      )
     ) tx
     (
        .clk_i
@@ -463,7 +476,7 @@ module brg_vvadd_xcel
 
     assign xcel_signal_sent = (xcel_state_r == xcel_signal) & xcel_master_sent;
 
-    assign xcel_signal_acked = (xcel_state_r == xcel_signal_acked) & tx_returned_v_lo;
+    assign xcel_signal_acked = (xcel_state_r == xcel_wait) & tx_returned_v_lo;
 
     // load_a/b_reg_id_r
 

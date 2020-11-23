@@ -1,18 +1,18 @@
 #########################################################
 # Network Configutaion
 # If not configured, Will use default Values
-BSG_MACHINE_GLOBAL_X                  = 16
-BSG_MACHINE_GLOBAL_Y                  = 9
+BSG_MACHINE_GLOBAL_X = 18
+BSG_MACHINE_GLOBAL_Y = 9
 
 #########################################################
-#Tile group configuration
+# Tile group configuration
 # If not configured, Will use default Values
 bsg_tiles_org_X = 1
 bsg_tiles_org_Y = 1
 
 # If not configured, Will use default Values
-	# bsg_tiles_X ?= 2
-	# bsg_tiles_Y ?= 2
+# bsg_tiles_X ?= 2
+# bsg_tiles_Y ?= 2
 bsg_tiles_X = 1
 bsg_tiles_Y = 1
 
@@ -25,9 +25,9 @@ IGNORE_CADENV = 1
 all: main.run
 
 
-KERNEL_NAME ?=kernel_vec_add_xcel
+KERNEL_NAME ?=kernel_vec_add_toplevel_xcel
 
-OBJECT_FILES=main.o kernel_vec_add_xcel.o
+OBJECT_FILES=main.o kernel_vec_add_toplevel_xcel.o
 
 include ../../Makefile.include
 

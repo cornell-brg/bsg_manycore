@@ -1,16 +1,20 @@
-//This kernel adds 2 vectors by invoking the accelerator
+// This kernel adds 2 vectors by invoking the accelerators
 
 #include "bsg_manycore.h"
 #include "bsg_set_tile_x_y.h"
 #include "bsg_mutex.h"
 
-// TODO: is there a way to malloc in the scratchpad?
-#define MAX_ARRAY_SIZE 8*16
+/* #define ELEMS_PER_XCEL 4 */
+#define ELEMS_PER_XCEL 16
 
-/* #define NUM_VEC_ADD_XCEL bsg_global_X */
+/* #define NUM_VEC_ADD_XCEL 16 */
 #define NUM_VEC_ADD_XCEL 1
 
-#define XCEL_Y_CORD (bsg_global_Y)
+// TODO: is there a way to malloc in the scratchpad?
+#define MAX_ARRAY_SIZE (ELEMS_PER_XCEL*NUM_VEC_ADD_XCEL)
+
+#define XCEL_X_CORD_FIRST_COL 0
+#define XCEL_X_CORD_LAST_COL  (bsg_global_X-1)
 
 int scratchpad_A[MAX_ARRAY_SIZE];
 int scratchpad_B[MAX_ARRAY_SIZE];
@@ -47,8 +51,22 @@ typedef union{
 
 Norm_NPA_s addr_A, addr_B, addr_signal;
 
+int __attribute__ ((noinline)) xcel_load_result( int i, int* local_addr ) {
+  int y = i % (bsg_global_Y-1);
+  int x = i >= (bsg_global_Y-1) ? XCEL_X_CORD_LAST_COL : XCEL_X_CORD_FIRST_COL;
+  int val = -1;
+  bsg_printf("[kernel] loading %p @ (%d, %d)\n", local_addr, y, x);
+  /* bsg_global_load(x, y, local_addr, val); */
+  bsg_global_load(0, 2, local_addr, val);
+  return val;
+}
+
 void __attribute__ ((noinline)) xcel_launch( int i ) {
-  bsg_remote_int_ptr xcel_CSR_base_ptr = bsg_global_ptr(i, XCEL_Y_CORD, 0);
+  int y = i % (bsg_global_Y-1);
+  int x = i >= (bsg_global_Y-1) ? XCEL_X_CORD_LAST_COL : XCEL_X_CORD_FIRST_COL;
+  bsg_printf("[kernel] launching (%d, %d)\n", y, x);
+  /* bsg_remote_int_ptr xcel_CSR_base_ptr = bsg_global_ptr(x, y, 0); */
+  bsg_remote_int_ptr xcel_CSR_base_ptr = bsg_global_ptr(0, 2, 0);
   *(xcel_CSR_base_ptr + CSR_CMD_IDX) = 1;
 }
 
@@ -57,7 +75,11 @@ void __attribute__ ((noinline)) xcel_configure(
     int* remote_addr_A, int* remote_addr_B,
     int* local_addr_C, int* remote_addr_signal ) {
 
-  bsg_remote_int_ptr xcel_CSR_base_ptr = bsg_global_ptr(i, XCEL_Y_CORD, 0);
+  int y = i % (bsg_global_Y-1);
+  int x = i >= (bsg_global_Y-1) ? XCEL_X_CORD_LAST_COL : XCEL_X_CORD_FIRST_COL;
+  bsg_printf("[kernel] configuring (%d, %d)\n", y, x);
+  /* bsg_remote_int_ptr xcel_CSR_base_ptr = bsg_global_ptr(x, y, 0); */
+  bsg_remote_int_ptr xcel_CSR_base_ptr = bsg_global_ptr(0, 2, 0);
   Norm_NPA_s addr_A, addr_B, addr_signal;
 
   // Setup the configs
@@ -97,7 +119,7 @@ void __attribute__ ((noinline)) xcel_configure(
   *(xcel_CSR_base_ptr + CSR_DST_ADDR_IDX) = (unsigned int) local_addr_C;
 }
 
-int __attribute__ ((noinline)) kernel_vec_add_xcel(int *A, int *B, int *C, int N, int ELEM_PER_XCEL) {
+int __attribute__ ((noinline)) kernel_vec_add_toplevel_xcel(int *A, int *B, int *C, int N, int ELEM_PER_XCEL) {
   int i, j;
 
   /* const int NUM_VEC_ADD_XCEL = N / ELEM_PER_XCEL; */
@@ -108,7 +130,8 @@ int __attribute__ ((noinline)) kernel_vec_add_xcel(int *A, int *B, int *C, int N
 
   if((__bsg_x == 0) && (__bsg_y == 0) && (N <= MAX_ARRAY_SIZE)) {
 
-    /* bsg_printf("[INFO] vvadd-xcel starts!\n"); */
+    bsg_printf("[INFO] vvadd-xcel is alive!\n");
+    bsg_printf("[INFO] Y = %d, X = %d\n", __bsg_grp_org_y, __bsg_grp_org_x);
 
     // Copy data from DRAM into scratchpad of vcore 1,1
 
@@ -116,6 +139,12 @@ int __attribute__ ((noinline)) kernel_vec_add_xcel(int *A, int *B, int *C, int N
       scratchpad_A[i] = A[i];
       scratchpad_B[i] = B[i];
     }
+
+    /* for(i = 0; i < N; i++) */
+    /*   bsg_printf("[INFO] A[%d]=%d\n", i, scratchpad_A[i]); */
+
+    /* for(i = 0; i < N; i++) */
+    /*   bsg_printf("[INFO] B[%d]=%d\n", i, scratchpad_B[i]); */
 
     // Clear done signals
 
@@ -125,9 +154,16 @@ int __attribute__ ((noinline)) kernel_vec_add_xcel(int *A, int *B, int *C, int N
     // Configure all accelerators
 
     for(i = 0; i < NUM_VEC_ADD_XCEL; i++) {
-      int input_vec_offset = i * ELEM_PER_XCEL;
+      /* int input_vec_offset = i * ELEM_PER_XCEL; */
+      /* xcel_configure( i, */
+      /*                 ELEM_PER_XCEL, */
+      /*                 scratchpad_A + input_vec_offset, */
+      /*                 scratchpad_B + input_vec_offset, */
+      /*                 vec_xcel_dmem_addr, */
+      /*                 done + i ); */
+      int input_vec_offset = i * ELEMS_PER_XCEL;
       xcel_configure( i,
-                      ELEM_PER_XCEL,
+                      ELEMS_PER_XCEL,
                       scratchpad_A + input_vec_offset,
                       scratchpad_B + input_vec_offset,
                       vec_xcel_dmem_addr,
@@ -149,10 +185,11 @@ int __attribute__ ((noinline)) kernel_vec_add_xcel(int *A, int *B, int *C, int N
     // Copy results from xcel scratchpads to DRAM
 
     for(i = 0; i < NUM_VEC_ADD_XCEL; i++)
-      for(j = 0; j < ELEM_PER_XCEL; j++) {
-        int val = -1;
-        bsg_global_load(i, XCEL_Y_CORD, vec_xcel_dmem_addr+j, val);
-        C[j] = val;
+      /* for(j = 0; j < ELEM_PER_XCEL; j++) { */
+      /*   C[j] = xcel_load_result(i, vec_xcel_dmem_addr+j); */
+      /* } */
+      for(j = 0; j < ELEMS_PER_XCEL; j++) {
+        C[j] = xcel_load_result(i, vec_xcel_dmem_addr+j);
       }
 
     bsg_fence();

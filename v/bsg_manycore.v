@@ -28,6 +28,8 @@ module bsg_manycore
    // default. See bsg_manycore_hetero_socket.v for more types.
    , parameter int hetero_type_vec_p [0:((num_tiles_y_p-1)*num_tiles_x_p) - 1]  = '{default:0}
 
+   , parameter mc_composition_p = "inv"
+
    // this is the addr width on the manycore network packet (word addr).
    // also known as endpoint physical address (EPA).
    , parameter addr_width_p = "inv"
@@ -76,6 +78,12 @@ module bsg_manycore
         int i,j;
         assert ((num_tiles_x_p > 0) && (num_tiles_y_p > 0))
            else $error("num_tiles_x_p and num_tiles_y_p must be positive constants");
+
+        $display("## ----------------------------------------------------------------");
+        $display("## MANYCORE TOPLEVEL COMPOSITION");
+        $display("## ----------------------------------------------------------------");
+        $write("## Manycore composition %d\n", mc_composition_p);
+
         $display("## ----------------------------------------------------------------");
         $display("## MANYCORE HETERO TYPE CONFIGUREATIONS");
         $display("## ----------------------------------------------------------------");
@@ -95,7 +103,6 @@ module bsg_manycore
 
    bsg_manycore_link_sif_s [num_tiles_y_p-1:0][num_tiles_x_p-1:0][S:W] link_in;
    bsg_manycore_link_sif_s [num_tiles_y_p-1:0][num_tiles_x_p-1:0][S:W] link_out;
-
 
   // Pipeline the reset. The bsg_manycore_tile has a single pipeline register
   // on reset already, so we only want to pipeline reset_depth_p-1 times.
@@ -120,10 +127,20 @@ module bsg_manycore
     ,.data_o(io_reset_r)
   );
 
+  localparam mc_start_col = ( mc_composition_p == e_manycore )          ? 0 :
+                            ( mc_composition_p == e_manycore_vec_xcel ) ? 1 :
+                                                                       "inv";
+
+  localparam mc_end_col   = ( mc_composition_p == e_manycore )          ? num_tiles_x_p   :
+                            ( mc_composition_p == e_manycore_vec_xcel ) ? num_tiles_x_p-1 :
+                                                                          "inv";
+
+  // instantiate manycore array
+
   genvar r,c;
 
   for (r = 1; r < num_tiles_y_p; r = r+1) begin: y
-    for (c = 0; c < num_tiles_x_p; c=c+1) begin: x
+    for (c = mc_start_col; c < mc_end_col; c=c+1) begin: x
       bsg_manycore_tile #(
         .dmem_size_p     (dmem_size_p)
         ,.vcache_size_p (vcache_size_p)
@@ -134,6 +151,7 @@ module bsg_manycore
         ,.data_width_p(data_width_p)
         ,.addr_width_p(addr_width_p)
         ,.hetero_type_p( hetero_type_vec_p[(r-1) * num_tiles_x_p + c] )
+        ,.mc_composition_p(mc_composition_p)
         ,.debug_p(debug_p)
         ,.branch_trace_en_p(branch_trace_en_p)
         ,.num_tiles_x_p(num_tiles_x_p)
@@ -152,6 +170,8 @@ module bsg_manycore
       );
     end
   end
+
+  // top row I/O routers
 
   for (c = 0; c < num_tiles_x_p; c=c+1) begin: io
     bsg_manycore_mesh_node #(
@@ -173,6 +193,51 @@ module bsg_manycore
       ,.my_x_i   ( x_cord_width_lp'(c))
       ,.my_y_i   ( y_cord_width_lp'(1))
    );
+  end
+
+  if ( mc_composition_p == e_manycore_vec_xcel ) begin: vxcel
+
+    // connect link_in/out[r][0] and link_in/out[r][n_x-1] to the correct
+    // modules (endpoints connected to vvadd xcels)
+
+    genvar r;
+
+    for (r = 1; r < num_tiles_y_p; r = r+1) begin: y
+      for (c = 0; c < num_tiles_x_p; c += num_tiles_x_p-1) begin: x
+
+        // instantiate tiles that includes a vvadd xcel
+
+        bsg_manycore_tile #(
+          .dmem_size_p     (dmem_size_p)
+          ,.vcache_size_p (vcache_size_p)
+          ,.icache_entries_p(icache_entries_p)
+          ,.icache_tag_width_p(icache_tag_width_p)
+          ,.x_cord_width_p(x_cord_width_lp)
+          ,.y_cord_width_p(y_cord_width_lp)
+          ,.data_width_p(data_width_p)
+          ,.addr_width_p(addr_width_p)
+          ,.hetero_type_p( 2 ) // should match vvadd xcel value in hetero_socket
+          ,.mc_composition_p(mc_composition_p)
+          ,.debug_p(debug_p)
+          ,.branch_trace_en_p(branch_trace_en_p)
+          ,.num_tiles_x_p(num_tiles_x_p)
+          ,.num_tiles_y_p(num_tiles_y_p)
+          ,.vcache_block_size_in_words_p(vcache_block_size_in_words_p)
+          ,.vcache_sets_p(vcache_sets_p)
+        ) tile (
+          .clk_i(clk_i)
+          ,.reset_i(tile_reset_r[r-1][c])
+
+          ,.link_in(link_in[r][c])
+          ,.link_out(link_out[r][c])
+
+          ,.my_x_i(x_cord_width_lp'(c))
+          ,.my_y_i(y_cord_width_lp'(r+1))
+        );
+
+      end
+    end
+
   end
 
   // stitch together all of the tiles into a mesh

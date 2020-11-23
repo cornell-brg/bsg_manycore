@@ -27,6 +27,8 @@ module bsg_manycore_proc_vanilla
     , parameter proc_fifo_els_p = 4
     , parameter debug_p = 1
 
+    , parameter mc_composition_p = "inv"
+
     
     , parameter branch_trace_en_p = 0
 
@@ -231,6 +233,8 @@ module bsg_manycore_proc_vanilla
     ,.vcache_size_p(vcache_size_p)
     ,.vcache_block_size_in_words_p(vcache_block_size_in_words_p)
     ,.vcache_sets_p(vcache_sets_p)
+
+    ,.mc_composition_p(mc_composition_p)
 
     ,.icache_entries_p(icache_entries_p)
     ,.icache_tag_width_p(icache_tag_width_p)

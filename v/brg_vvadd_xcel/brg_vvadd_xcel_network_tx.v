@@ -17,6 +17,8 @@ module brg_vvadd_xcel_network_tx
     , parameter x_cord_width_p="inv"
     , parameter y_cord_width_p="inv"
 
+    , parameter mc_composition_p="inv"
+
     , parameter max_out_credits_p="inv"
 
     , localparam credit_counter_width_lp=$clog2(max_out_credits_p+1)
@@ -58,6 +60,9 @@ module brg_vvadd_xcel_network_tx
     , output tx_returned_v_o
   );
 
+  localparam [x_cord_width_p-1:0] dst_x_cord = (mc_composition_p == e_manycore_vec_xcel) ? 1 : 0;
+  localparam [y_cord_width_p-1:0] dst_y_cord = 2;
+
   `declare_bsg_manycore_packet_s(addr_width_p, data_width_p, x_cord_width_p, y_cord_width_p);
   bsg_manycore_packet_payload_u payload_empty;
   wire bsg_manycore_packet_s packet_s;
@@ -83,8 +88,8 @@ module brg_vvadd_xcel_network_tx
     ,payload    : tx_fetching_i ? payload_empty : data_width_p'(1)
     ,src_x_cord : my_x_i
     ,src_y_cord : my_y_i
-    ,x_cord     : x_cord_width_p'(0)
-    ,y_cord     : y_cord_width_p'(1)
+    ,x_cord     : x_cord_width_p'(dst_x_cord)
+    ,y_cord     : y_cord_width_p'(dst_y_cord)
   };
   assign packet_o = packet_s;
 
@@ -100,12 +105,12 @@ module brg_vvadd_xcel_network_tx
   always_ff@(negedge clk_i) begin
     if( v_o & ready_i ) begin
       if( tx_fetching_i )
-        $display("[INFO][VVADD-XCEL-TX] Load request sent to %h at (1, 0)", tx_addr_i);
+        $display("[INFO][VVADD-XCEL-TX] Load request sent to %h at (%d, %d) from (%d, %d)", tx_addr_i, dst_y_cord, dst_x_cord, my_y_i, my_x_i);
       else
         $display("[INFO][VVADD-XCEL-TX] Signaling the processor that vvadd-xcel has finished...");
     end
     if( returned_v_i & returned_yumi_o ) begin
-      $display("[INFO][VVADD-XCEL-TX] Received data = %h, reg_id = %h", returned_data_i, returned_reg_id_i);
+      $display("[INFO][VVADD-XCEL-TX] Received data = %h, reg_id = %h at (%d, %d)", returned_data_i, returned_reg_id_i, my_y_i, my_x_i);
     end
   end
   // synopsys translate_on

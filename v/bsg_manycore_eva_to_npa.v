@@ -26,6 +26,8 @@ module bsg_manycore_eva_to_npa
     , parameter vcache_size_p="inv" // vcache capacity in words
     , parameter vcache_sets_p="inv" // number of sets in vcache
 
+    , parameter mc_composition_p="inv"
+
   )
   (
     // EVA 32-bit virtual address used by vanilla core
@@ -69,17 +71,21 @@ module bsg_manycore_eva_to_npa
 
   assign is_invalid_addr_o = ~(is_dram_addr | is_global_addr | is_tile_group_addr);
 
+  // PP: DRAM address translation with custom top level
+  localparam num_tiles_x_lp = (mc_composition_p == e_manycore_vec_xcel) ? num_tiles_x_p-2
+                                                                        : num_tiles_x_p;
+  localparam x_cord_width_lp = $clog2(num_tiles_x_lp);
   
   // DRAM hash function
   localparam hash_bank_input_width_lp = data_width_p-1-2-vcache_word_offset_width_lp;
-  localparam hash_bank_index_width_lp = $clog2(((2**hash_bank_input_width_lp)+(2*num_tiles_x_p)-1)/(num_tiles_x_p*2));
+  localparam hash_bank_index_width_lp = $clog2(((2**hash_bank_input_width_lp)+(2*num_tiles_x_lp)-1)/(num_tiles_x_lp*2));
 
   logic [hash_bank_input_width_lp-1:0] hash_bank_input;
-  logic [x_cord_width_p:0] hash_bank_lo;  // {bot_not_top, x_cord}
+  logic [x_cord_width_lp:0] hash_bank_lo;  // {bot_not_top, x_cord}
   logic [hash_bank_index_width_lp-1:0] hash_bank_index_lo;
 
   hash_function #(
-    .banks_p(num_tiles_x_p*2)
+    .banks_p(num_tiles_x_lp*2)
     ,.width_p(hash_bank_input_width_lp)
     ,.vcache_sets_p(vcache_sets_p)
   ) hashb (
@@ -95,10 +101,11 @@ module bsg_manycore_eva_to_npa
   always_comb begin
     if (is_dram_addr) begin
       if (dram_enable_i) begin
-        y_cord_o = hash_bank_lo[x_cord_width_p]
+        y_cord_o = hash_bank_lo[x_cord_width_lp]
           ? (y_cord_width_p)'(num_tiles_y_p+1) // DRAM ports are directly below the manycore tiles.
           : {y_cord_width_p{1'b0}};
-        x_cord_o = hash_bank_lo[0+:x_cord_width_p];
+        x_cord_o = (mc_composition_p == e_manycore_vec_xcel) ? x_cord_width_p'(hash_bank_lo[0+:x_cord_width_lp]) + 1
+                                                             : hash_bank_lo[0+:x_cord_width_lp];
         epa_o = {
           1'b0,
           {(addr_width_p-1-vcache_word_offset_width_lp-hash_bank_index_width_lp){1'b0}},
@@ -115,10 +122,10 @@ module bsg_manycore_eva_to_npa
           epa_o = {1'b1, eva_i[2+:addr_width_p-1]}; // HOST DRAM address
         end
         else begin
-          y_cord_o = eva_i[2+lg_vcache_size_lp+x_cord_width_p]
+          y_cord_o = eva_i[2+lg_vcache_size_lp+x_cord_width_lp]
             ? (y_cord_width_p)'(num_tiles_y_p+1)  // DRAM ports are directly below the manycore tiles.
             : {y_cord_width_p{1'b0}};
-          x_cord_o = eva_i[2+lg_vcache_size_lp+:x_cord_width_p];
+          x_cord_o = eva_i[2+lg_vcache_size_lp+:x_cord_width_lp];
           epa_o = {
             1'b0,
             {(addr_width_p-1-lg_vcache_size_lp){1'b0}},

@@ -17,9 +17,6 @@ module brg_vvadd_xcel_network_rx
     , parameter x_cord_width_p="inv"
     , parameter y_cord_width_p="inv"
     , parameter dmem_size_p="inv"
-    , parameter epa_byte_addr_width_p="inv"
-
-    , localparam epa_word_addr_width_lp=(epa_byte_addr_width_p-2)
   )
   (
       input clk_i
@@ -73,10 +70,10 @@ module brg_vvadd_xcel_network_rx
   
   // this is how vanilla core detects CSR addresses
 
-  assign is_tile_csr_addr = addr_i[epa_word_addr_width_lp-1]
-    & (addr_i[addr_width_p-1:epa_word_addr_width_lp] == '0);
+  assign is_tile_csr_addr = addr_i[epa_word_addr_width_gp-1]
+    & (addr_i[addr_width_p-1:epa_word_addr_width_gp] == '0);
   assign is_dram_enable_addr = is_tile_csr_addr
-    & (addr_i[epa_word_addr_width_lp-2:0] == 'd4);
+    & (addr_i[epa_word_addr_width_gp-2:0] == 'd4);
   assign is_xcel_CSR_addr = (~is_tile_csr_addr) & (addr_i < CSR_NUM_lp);
 
   assign xcel_local_addr = is_dram_enable_addr ? (addr_width_p)'(CSR_DRAM_ENABLE_IDX)
@@ -106,18 +103,30 @@ module brg_vvadd_xcel_network_rx
       $finish();
     end
 
-    if (v_i & we_i & is_dram_enable_addr) begin
-      if (data_i[0])
-        $display("[INFO][VVADD-XCEL-RX] Enabling DRAM ctrl at (%d, %d)", my_y_i, my_x_i);
-      else
-        $display("[INFO][VVADD-XCEL-RX] Disabling DRAM ctrl at (%d, %d)", my_y_i, my_x_i);
+    if (v_i & we_i) begin
+      if (is_dram_enable_addr) begin
+        if (data_i[0])
+          $display("[INFO][VVADD-XCEL-RX] Enabling DRAM ctrl at (%d, %d)", my_y_i, my_x_i);
+        else
+          $display("[INFO][VVADD-XCEL-RX] Disabling DRAM ctrl at (%d, %d)", my_y_i, my_x_i);
+      end else begin
+        $display("[INFO][VVADD-XCEL-RX] Writing vvadd-xcel addr %h with %h at (%d, %d)", rx_addr_o, rx_wdata_o, my_y_i, my_x_i);
+      end
+    end
+
+    if (v_i & ~we_i) begin
+      $display("[INFO][VVADD-XCEL-RX] Reading vvadd-xcel addr %h at (%d, %d)", rx_addr_o, my_y_i, my_x_i);
     end
 
     if (v_i & is_xcel_CSR_addr) begin
       if (we_i)
-        $display("[INFO][VVADD-XCEL-RX] Writing vvadd-xcel CSR of index %h with %h", rx_addr_o, rx_wdata_o);
+        $display("[INFO][VVADD-XCEL-RX] Writing vvadd-xcel CSR of index %h with %h at (%d, %d)", rx_addr_o, rx_wdata_o, my_y_i, my_x_i);
       else
-        $display("[INFO][VVADD-XCEL-RX] Reading vvadd-xcel CSR of index %h", rx_addr_o);
+        $display("[INFO][VVADD-XCEL-RX] Reading vvadd-xcel CSR of index %h at (%d, %d)", rx_addr_o, my_y_i, my_x_i);
+    end
+
+    if (returning_v_o) begin
+      $display("[INFO][VVADD-XCEL-RX] Responding prev request with data %h at (%d, %d)", returning_data_o, my_y_i, my_x_i);
     end
   end
   // synopsys translate_on

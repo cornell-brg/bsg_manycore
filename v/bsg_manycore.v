@@ -129,17 +129,29 @@ module bsg_manycore
 
   localparam mc_start_col = ( mc_composition_p == e_manycore )          ? 0 :
                             ( mc_composition_p == e_manycore_vec_xcel ) ? 1 :
+                            ( mc_composition_p == e_manycore_load_smu ) ? 1 :
                                                                        "inv";
 
   localparam mc_end_col   = ( mc_composition_p == e_manycore )          ? num_tiles_x_p   :
                             ( mc_composition_p == e_manycore_vec_xcel ) ? num_tiles_x_p-1 :
+                            ( mc_composition_p == e_manycore_load_smu ) ? num_tiles_x_p-1 :
+                                                                          "inv";
+
+  localparam mc_start_row = ( mc_composition_p == e_manycore )          ? 1 : // 1 row of IO routers
+                            ( mc_composition_p == e_manycore_vec_xcel ) ? 1 :
+                            ( mc_composition_p == e_manycore_load_smu ) ? 2 : // IO router + SMU
+                                                                       "inv";
+
+  localparam mc_end_row   = ( mc_composition_p == e_manycore )          ? num_tiles_y_p   :
+                            ( mc_composition_p == e_manycore_vec_xcel ) ? num_tiles_y_p   :
+                            ( mc_composition_p == e_manycore_load_smu ) ? num_tiles_y_p+2 : // 2 extra rows
                                                                           "inv";
 
   // instantiate manycore array
 
   genvar r,c;
 
-  for (r = 1; r < num_tiles_y_p; r = r+1) begin: y
+  for (r = mc_start_row; r < mc_end_row; r = r+1) begin: y
     for (c = mc_start_col; c < mc_end_col; c=c+1) begin: x
       bsg_manycore_tile #(
         .dmem_size_p     (dmem_size_p)
@@ -217,6 +229,82 @@ module bsg_manycore
           ,.data_width_p(data_width_p)
           ,.addr_width_p(addr_width_p)
           ,.hetero_type_p( 2 ) // should match vvadd xcel value in hetero_socket
+          ,.mc_composition_p(mc_composition_p)
+          ,.debug_p(debug_p)
+          ,.branch_trace_en_p(branch_trace_en_p)
+          ,.num_tiles_x_p(num_tiles_x_p)
+          ,.num_tiles_y_p(num_tiles_y_p)
+          ,.vcache_block_size_in_words_p(vcache_block_size_in_words_p)
+          ,.vcache_sets_p(vcache_sets_p)
+        ) tile (
+          .clk_i(clk_i)
+          ,.reset_i(tile_reset_r[r-1][c])
+
+          ,.link_in(link_in[r][c])
+          ,.link_out(link_out[r][c])
+
+          ,.my_x_i(x_cord_width_lp'(c))
+          ,.my_y_i(y_cord_width_lp'(r+1))
+        );
+
+      end
+    end
+
+  end else if ( mc_composition_p == e_manycore_load_smu ) begin: smu
+
+    genvar r, c;
+
+    // Instantiate two columns of SMU on north and south sides
+
+    for (r = 1; r < num_tiles_y_p+1; r = r+num_tiles_y_p-1) begin: y
+      for (c = 0; c < num_tiles_x_p; c = c+1) begin: x
+
+        bsg_manycore_tile #(
+          .dmem_size_p     (dmem_size_p)
+          ,.vcache_size_p (vcache_size_p)
+          ,.icache_entries_p(icache_entries_p)
+          ,.icache_tag_width_p(icache_tag_width_p)
+          ,.x_cord_width_p(x_cord_width_lp)
+          ,.y_cord_width_p(y_cord_width_lp)
+          ,.data_width_p(data_width_p)
+          ,.addr_width_p(addr_width_p)
+          ,.hetero_type_p( 4 ) // should match SMU value in hetero_socket
+          ,.mc_composition_p(mc_composition_p)
+          ,.debug_p(debug_p)
+          ,.branch_trace_en_p(branch_trace_en_p)
+          ,.num_tiles_x_p(num_tiles_x_p)
+          ,.num_tiles_y_p(num_tiles_y_p)
+          ,.vcache_block_size_in_words_p(vcache_block_size_in_words_p)
+          ,.vcache_sets_p(vcache_sets_p)
+        ) tile (
+          .clk_i(clk_i)
+          ,.reset_i(tile_reset_r[r-1][c])
+
+          ,.link_in(link_in[r][c])
+          ,.link_out(link_out[r][c])
+
+          ,.my_x_i(x_cord_width_lp'(c))
+          ,.my_y_i(y_cord_width_lp'(r+1))
+        );
+
+      end
+    end
+
+    // Instantiate two columns of SMU on west and east sides
+
+    for (r = 2; r < num_tiles_y_p-1; r = r+1) begin: y
+      for (c = 0; c < num_tiles_x_p; c = c+num_tiles_x_p-1) begin: x
+
+        bsg_manycore_tile #(
+          .dmem_size_p     (dmem_size_p)
+          ,.vcache_size_p (vcache_size_p)
+          ,.icache_entries_p(icache_entries_p)
+          ,.icache_tag_width_p(icache_tag_width_p)
+          ,.x_cord_width_p(x_cord_width_lp)
+          ,.y_cord_width_p(y_cord_width_lp)
+          ,.data_width_p(data_width_p)
+          ,.addr_width_p(addr_width_p)
+          ,.hetero_type_p( 4 ) // should match SMU value in hetero_socket
           ,.mc_composition_p(mc_composition_p)
           ,.debug_p(debug_p)
           ,.branch_trace_en_p(branch_trace_en_p)

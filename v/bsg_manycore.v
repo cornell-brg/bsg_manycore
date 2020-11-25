@@ -254,10 +254,10 @@ module bsg_manycore
 
     genvar r, c;
 
-    // Instantiate two columns of SMU on north and south sides
+    // Instantiate two rows of SMU on north and south sides
 
-    for (r = 1; r < num_tiles_y_p+1; r = r+num_tiles_y_p-1) begin: y
-      for (c = 0; c < num_tiles_x_p; c = c+1) begin: x
+    for (r = 1; r < num_tiles_y_p+1; r = r+num_tiles_y_p-1) begin: cy
+      for (c = 0; c < num_tiles_x_p; c = c+1) begin: cx
 
         bsg_manycore_tile #(
           .dmem_size_p     (dmem_size_p)
@@ -292,8 +292,8 @@ module bsg_manycore
 
     // Instantiate two columns of SMU on west and east sides
 
-    for (r = 2; r < num_tiles_y_p-1; r = r+1) begin: y
-      for (c = 0; c < num_tiles_x_p; c = c+num_tiles_x_p-1) begin: x
+    for (r = 2; r < num_tiles_y_p-1; r = r+1) begin: ry
+      for (c = 0; c < num_tiles_x_p; c = c+num_tiles_x_p-1) begin: rx
 
         bsg_manycore_tile #(
           .dmem_size_p     (dmem_size_p)

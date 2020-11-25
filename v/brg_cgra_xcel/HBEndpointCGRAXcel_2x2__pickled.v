@@ -664,33 +664,34 @@ endmodule
 // PyMTL Component RegEnRst Definition
 // At /work/global/pp482/clean/pymtl-v3/pymtl3/stdlib/rtl/registers.py
 
-module RegEnRst__Type_Bits32__reset_value_0
-(
-  input  logic [0:0] clk ,
-  input  logic [0:0] en ,
-  input  logic [31:0] in_ ,
-  output logic [31:0] out ,
-  input  logic [0:0] reset 
-);
-  localparam logic [0:0] __const__reset_value_at_up_regenrst  = 1'd0;
+// PP: this causes a redefinition in Verilog source of new xcels...
+/* module RegEnRst__Type_Bits32__reset_value_0 */
+/* ( */
+/*   input  logic [0:0] clk , */
+/*   input  logic [0:0] en , */
+/*   input  logic [31:0] in_ , */
+/*   output logic [31:0] out , */
+/*   input  logic [0:0] reset */ 
+/* ); */
+/*   localparam logic [0:0] __const__reset_value_at_up_regenrst  = 1'd0; */
 
-  // PyMTL Update Block Source
-  // At /work/global/pp482/clean/pymtl-v3/pymtl3/stdlib/rtl/registers.py:55
-  // @update_ff
-  // def up_regenrst():
-  //   if s.reset: s.out <<= reset_value
-  //   elif s.en:  s.out <<= s.in_
+/*   // PyMTL Update Block Source */
+/*   // At /work/global/pp482/clean/pymtl-v3/pymtl3/stdlib/rtl/registers.py:55 */
+/*   // @update_ff */
+/*   // def up_regenrst(): */
+/*   //   if s.reset: s.out <<= reset_value */
+/*   //   elif s.en:  s.out <<= s.in_ */
   
-  always_ff @(posedge clk) begin : up_regenrst
-    if ( reset ) begin
-      out <= 32'( __const__reset_value_at_up_regenrst );
-    end
-    else if ( en ) begin
-      out <= in_;
-    end
-  end
+/*   always_ff @(posedge clk) begin : up_regenrst */
+/*     if ( reset ) begin */
+/*       out <= 32'( __const__reset_value_at_up_regenrst ); */
+/*     end */
+/*     else if ( en ) begin */
+/*       out <= in_; */
+/*     end */
+/*   end */
 
-endmodule
+/* endmodule */
 
 
 // PyMTL Component ConfigEngineDpath Definition

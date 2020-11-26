@@ -11,6 +11,9 @@ VINCLUDES += $(BSG_MANYCORE_DIR)/v/vanilla_bean
 VINCLUDES += $(BSG_MANYCORE_DIR)/v/brg_vvadd_xcel
 # PP: cgra-xcel
 VINCLUDES += $(BSG_MANYCORE_DIR)/v/brg_cgra_xcel
+# PP: smu-xcel
+# VINCLUDES += $(BSG_MANYCORE_DIR)/v/brg_smu_9x16
+VINCLUDES += $(BSG_MANYCORE_DIR)/v/brg_smu_11x18
 VINCLUDES += $(BSG_MANYCORE_DIR)/imports/HardFloat/source
 VINCLUDES += $(BSG_MANYCORE_DIR)/imports/HardFloat/source/RISCV
 
@@ -188,3 +191,9 @@ VSOURCES += $(BSG_MANYCORE_DIR)/v/brg_vvadd_xcel/brg_vvadd_xcel_network_tx.v
 # PP: cgra-xcel
 VSOURCES += $(BSG_MANYCORE_DIR)/v/brg_cgra_xcel/brg_cgra_xcel.v
 VSOURCES += $(BSG_MANYCORE_DIR)/v/brg_cgra_xcel/HBEndpointCGRAXcel_2x2__pickled.v
+
+# PP: smu-xcel
+# VSOURCES += $(BSG_MANYCORE_DIR)/v/brg_smu_9x16/brg_smu.v
+# VSOURCES += $(BSG_MANYCORE_DIR)/v/brg_smu_9x16/HBEndpointSMU_9x16__pickled.v
+VSOURCES += $(BSG_MANYCORE_DIR)/v/brg_smu_11x18/brg_smu.v
+VSOURCES += $(BSG_MANYCORE_DIR)/v/brg_smu_11x18/HBEndpointSMU_11x18__pickled.v

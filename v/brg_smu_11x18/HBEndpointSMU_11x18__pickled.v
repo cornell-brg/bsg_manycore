@@ -47,10 +47,10 @@ typedef struct packed {
 } HBEndpointPacket__890e8baa82bc2d18;
 
 // PyMTL Component HBEndpointSMURXAdapter Definition
-// Full name: HBEndpointSMURXAdapter__hb_params_<hammerblade.params.HBParams object at 0x7f09d6cc8290>
+// Full name: HBEndpointSMURXAdapter__hb_params_<hammerblade.params.HBParams object at 0x7fe4a6e6c4d0>
 // At /work/global/pp482/cgra/src/smu/HBEndpointSMURXAdapter.py
 
-module HBEndpointSMURXAdapter__75139bc5c73411ee
+module HBEndpointSMURXAdapter__a2fcce5840d3ec14
 (
   input  logic [0:0] clk ,
   output logic [4:0] dst_x_cord ,
@@ -2962,11 +2962,341 @@ module SendIfcRTLArbiter__c3d841a71d618a81
 endmodule
 
 
+// PyMTL Component NormalQueueRTLCtrl Definition
+// At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/queues/valrdy_queues.py
+
+module NormalQueueRTLCtrl__num_entries_32
+(
+  input  logic [0:0] clk ,
+  input  logic [0:0] deq_rdy ,
+  output logic [0:0] deq_val ,
+  output logic [0:0] enq_rdy ,
+  input  logic [0:0] enq_val ,
+  output logic [5:0] num_free_entries ,
+  output logic [4:0] raddr ,
+  input  logic [0:0] reset ,
+  output logic [4:0] waddr ,
+  output logic [0:0] wen 
+);
+  logic [4:0] deq_ptr;
+  logic [4:0] deq_ptr_inc;
+  logic [4:0] deq_ptr_next;
+  logic [0:0] do_deq;
+  logic [0:0] do_enq;
+  logic [0:0] empty;
+  logic [4:0] enq_ptr;
+  logic [4:0] enq_ptr_inc;
+  logic [4:0] enq_ptr_next;
+  logic [0:0] full;
+  logic [0:0] full_next_cycle;
+
+  // PyMTL Update Block Source
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/queues/valrdy_queues.py:221
+  // @update
+  // def comb():
+  // 
+  //   # only enqueue/dequeue if valid and ready
+  // 
+  //   s.do_enq @= s.enq_rdy & s.enq_val
+  //   s.do_deq @= s.deq_rdy & s.deq_val
+  // 
+  //   # write enable
+  // 
+  //   s.wen @= s.do_enq
+  // 
+  //   # enq ptr incrementer
+  // 
+  //   if s.enq_ptr == s.last_idx: s.enq_ptr_inc @= 0
+  //   else:                       s.enq_ptr_inc @= s.enq_ptr + 1
+  // 
+  //   # deq ptr incrementer
+  // 
+  //   if s.deq_ptr == s.last_idx: s.deq_ptr_inc @= 0
+  //   else:                       s.deq_ptr_inc @= s.deq_ptr + 1
+  // 
+  //   # set the next ptr value
+  // 
+  //   if s.do_enq: s.enq_ptr_next @= s.enq_ptr_inc
+  //   else:        s.enq_ptr_next @= s.enq_ptr
+  // 
+  //   if s.do_deq: s.deq_ptr_next @= s.deq_ptr_inc
+  //   else:        s.deq_ptr_next @= s.deq_ptr
+  // 
+  //   # number of free entries calculation
+  // 
+  //   if   s.reset:
+  //     s.num_free_entries @= s.num_entries
+  //   elif s.full:
+  //     s.num_free_entries @= 0
+  //   elif s.empty:
+  //     s.num_free_entries @= s.num_entries
+  //   elif s.enq_ptr > s.deq_ptr:
+  //     s.num_free_entries @= s.num_entries - zext( s.enq_ptr - s.deq_ptr, SizeType)
+  //   elif s.deq_ptr > s.enq_ptr:
+  //     s.num_free_entries @= zext( s.deq_ptr - s.enq_ptr, SizeType )
+  // 
+  //   s.full_next_cycle @= s.do_enq & ~s.do_deq & (s.enq_ptr_next == s.deq_ptr)
+  
+  always_comb begin : comb
+    do_enq = enq_rdy & enq_val;
+    do_deq = deq_rdy & deq_val;
+    wen = do_enq;
+    if ( enq_ptr == 5'd31 ) begin
+      enq_ptr_inc = 5'd0;
+    end
+    else
+      enq_ptr_inc = enq_ptr + 5'd1;
+    if ( deq_ptr == 5'd31 ) begin
+      deq_ptr_inc = 5'd0;
+    end
+    else
+      deq_ptr_inc = deq_ptr + 5'd1;
+    if ( do_enq ) begin
+      enq_ptr_next = enq_ptr_inc;
+    end
+    else
+      enq_ptr_next = enq_ptr;
+    if ( do_deq ) begin
+      deq_ptr_next = deq_ptr_inc;
+    end
+    else
+      deq_ptr_next = deq_ptr;
+    if ( reset ) begin
+      num_free_entries = 6'd32;
+    end
+    else if ( full ) begin
+      num_free_entries = 6'd0;
+    end
+    else if ( empty ) begin
+      num_free_entries = 6'd32;
+    end
+    else if ( enq_ptr > deq_ptr ) begin
+      num_free_entries = 6'd32 - { { 1 { 1'b0 } }, enq_ptr - deq_ptr };
+    end
+    else if ( deq_ptr > enq_ptr ) begin
+      num_free_entries = { { 1 { 1'b0 } }, deq_ptr - enq_ptr };
+    end
+    full_next_cycle = ( do_enq & ( ~do_deq ) ) & ( enq_ptr_next == deq_ptr );
+  end
+
+  // PyMTL Update Block Source
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/queues/valrdy_queues.py:266
+  // @update
+  // def up_ctrl_signals():
+  // 
+  //   # set output signals
+  // 
+  //   s.empty   @= ~s.full & (s.enq_ptr == s.deq_ptr)
+  // 
+  //   s.enq_rdy @= ~s.full
+  //   s.deq_val @= ~s.empty
+  // 
+  //   # set control signals
+  // 
+  //   s.waddr   @= s.enq_ptr
+  //   s.raddr   @= s.deq_ptr
+  
+  always_comb begin : up_ctrl_signals
+    empty = ( ~full ) & ( enq_ptr == deq_ptr );
+    enq_rdy = ~full;
+    deq_val = ~empty;
+    waddr = enq_ptr;
+    raddr = deq_ptr;
+  end
+
+  // PyMTL Update Block Source
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/queues/valrdy_queues.py:281
+  // @update_ff
+  // def seq():
+  // 
+  //   if s.reset:
+  //     s.deq_ptr <<= AddrType( 0 )
+  //     s.enq_ptr <<= AddrType( 0 )
+  //   else:
+  //     s.deq_ptr <<= s.deq_ptr_next
+  //     s.enq_ptr <<= s.enq_ptr_next
+  // 
+  //   if   s.reset:             s.full <<= Bits1(0)
+  //   elif s.full_next_cycle:   s.full <<= Bits1(1)
+  //   elif (s.do_deq & s.full): s.full <<= Bits1(0)
+  //   else:                     s.full <<= s.full
+  
+  always_ff @(posedge clk) begin : seq
+    if ( reset ) begin
+      deq_ptr <= 5'd0;
+      enq_ptr <= 5'd0;
+    end
+    else begin
+      deq_ptr <= deq_ptr_next;
+      enq_ptr <= enq_ptr_next;
+    end
+    if ( reset ) begin
+      full <= 1'd0;
+    end
+    else if ( full_next_cycle ) begin
+      full <= 1'd1;
+    end
+    else if ( do_deq & full ) begin
+      full <= 1'd0;
+    end
+    else
+      full <= full;
+  end
+
+endmodule
+
+
+// PyMTL Component NormalQueueRTLDpath Definition
+// Full name: NormalQueueRTLDpath__num_entries_32__Type_SMURespMsg__wen_1__reg_id_5__opaque_6__data_32
+// At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/queues/valrdy_queues.py
+
+module NormalQueueRTLDpath__ad89d4fad53825fa
+(
+  input  logic [0:0] clk ,
+  output SMURespMsg__wen_1__reg_id_5__opaque_6__data_32 deq_bits ,
+  input  SMURespMsg__wen_1__reg_id_5__opaque_6__data_32 enq_bits ,
+  input  logic [4:0] raddr ,
+  input  logic [0:0] reset ,
+  input  logic [4:0] waddr ,
+  input  logic [0:0] wen 
+);
+  //-------------------------------------------------------------
+  // Component queue
+  //-------------------------------------------------------------
+
+  logic [0:0] queue__clk;
+  logic [4:0] queue__raddr [0:0];
+  SMURespMsg__wen_1__reg_id_5__opaque_6__data_32 queue__rdata [0:0];
+  logic [0:0] queue__reset;
+  logic [4:0] queue__waddr [0:0];
+  SMURespMsg__wen_1__reg_id_5__opaque_6__data_32 queue__wdata [0:0];
+  logic [0:0] queue__wen [0:0];
+
+  RegisterFile__ed0999d91ed51853 queue
+  (
+    .clk( queue__clk ),
+    .raddr( queue__raddr ),
+    .rdata( queue__rdata ),
+    .reset( queue__reset ),
+    .waddr( queue__waddr ),
+    .wdata( queue__wdata ),
+    .wen( queue__wen )
+  );
+
+  //-------------------------------------------------------------
+  // End of component queue
+  //-------------------------------------------------------------
+
+  assign queue__clk = clk;
+  assign queue__reset = reset;
+  assign queue__raddr[0] = raddr;
+  assign deq_bits = queue__rdata[0];
+  assign queue__wen[0] = wen;
+  assign queue__waddr[0] = waddr;
+  assign queue__wdata[0] = enq_bits;
+
+endmodule
+
+
+// PyMTL Component NormalQueueRTL Definition
+// Full name: NormalQueueRTL__num_entries_32__Type_SMURespMsg__wen_1__reg_id_5__opaque_6__data_32
+// At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/queues/valrdy_queues.py
+
+module NormalQueueRTL__ad89d4fad53825fa
+(
+  input  logic [0:0] clk ,
+  output logic [5:0] num_free_entries ,
+  input  logic [0:0] reset ,
+  output SMURespMsg__wen_1__reg_id_5__opaque_6__data_32 deq__msg  ,
+  input logic [0:0] deq__rdy  ,
+  output logic [0:0] deq__val  ,
+  input SMURespMsg__wen_1__reg_id_5__opaque_6__data_32 enq__msg  ,
+  output logic [0:0] enq__rdy  ,
+  input logic [0:0] enq__val  
+);
+  //-------------------------------------------------------------
+  // Component ctrl
+  //-------------------------------------------------------------
+
+  logic [0:0] ctrl__clk;
+  logic [0:0] ctrl__deq_rdy;
+  logic [0:0] ctrl__deq_val;
+  logic [0:0] ctrl__enq_rdy;
+  logic [0:0] ctrl__enq_val;
+  logic [5:0] ctrl__num_free_entries;
+  logic [4:0] ctrl__raddr;
+  logic [0:0] ctrl__reset;
+  logic [4:0] ctrl__waddr;
+  logic [0:0] ctrl__wen;
+
+  NormalQueueRTLCtrl__num_entries_32 ctrl
+  (
+    .clk( ctrl__clk ),
+    .deq_rdy( ctrl__deq_rdy ),
+    .deq_val( ctrl__deq_val ),
+    .enq_rdy( ctrl__enq_rdy ),
+    .enq_val( ctrl__enq_val ),
+    .num_free_entries( ctrl__num_free_entries ),
+    .raddr( ctrl__raddr ),
+    .reset( ctrl__reset ),
+    .waddr( ctrl__waddr ),
+    .wen( ctrl__wen )
+  );
+
+  //-------------------------------------------------------------
+  // End of component ctrl
+  //-------------------------------------------------------------
+
+  //-------------------------------------------------------------
+  // Component dpath
+  //-------------------------------------------------------------
+
+  logic [0:0] dpath__clk;
+  SMURespMsg__wen_1__reg_id_5__opaque_6__data_32 dpath__deq_bits;
+  SMURespMsg__wen_1__reg_id_5__opaque_6__data_32 dpath__enq_bits;
+  logic [4:0] dpath__raddr;
+  logic [0:0] dpath__reset;
+  logic [4:0] dpath__waddr;
+  logic [0:0] dpath__wen;
+
+  NormalQueueRTLDpath__ad89d4fad53825fa dpath
+  (
+    .clk( dpath__clk ),
+    .deq_bits( dpath__deq_bits ),
+    .enq_bits( dpath__enq_bits ),
+    .raddr( dpath__raddr ),
+    .reset( dpath__reset ),
+    .waddr( dpath__waddr ),
+    .wen( dpath__wen )
+  );
+
+  //-------------------------------------------------------------
+  // End of component dpath
+  //-------------------------------------------------------------
+
+  assign ctrl__clk = clk;
+  assign ctrl__reset = reset;
+  assign dpath__clk = clk;
+  assign dpath__reset = reset;
+  assign ctrl__enq_val = enq__val;
+  assign enq__rdy = ctrl__enq_rdy;
+  assign deq__val = ctrl__deq_val;
+  assign ctrl__deq_rdy = deq__rdy;
+  assign num_free_entries = ctrl__num_free_entries;
+  assign dpath__enq_bits = enq__msg;
+  assign deq__msg = dpath__deq_bits;
+  assign dpath__wen = ctrl__wen;
+  assign dpath__waddr = ctrl__waddr;
+  assign dpath__raddr = ctrl__raddr;
+
+endmodule
+
+
 // PyMTL Component HBEndpointSMUTXAdapter Definition
-// Full name: HBEndpointSMUTXAdapter__hb_params_<hammerblade.params.HBParams object at 0x7f09d6cc8290>
+// Full name: HBEndpointSMUTXAdapter__hb_params_<hammerblade.params.HBParams object at 0x7fe4a6e6c4d0>
 // At /work/global/pp482/cgra/src/smu/HBEndpointSMUTXAdapter.py
 
-module HBEndpointSMUTXAdapter__75139bc5c73411ee
+module HBEndpointSMUTXAdapter__a2fcce5840d3ec14
 (
   input  logic [0:0] clk ,
   input  logic [4:0] dst_x_cord ,
@@ -3062,20 +3392,39 @@ module HBEndpointSMUTXAdapter__75139bc5c73411ee
   // End of component req_q
   //-------------------------------------------------------------
 
-  // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/smu/HBEndpointSMUTXAdapter.py:101
-  // @update
-  // def HB_endpoint_smu_tx_handshake():
-  //   s.resp_yumi @= s.resp_val & \
-  //                  ((s.rmt.resp.rdy & s.is_remote_load_resp) | \
-  //                   (s.loc.resp.rdy & s.is_local_store_resp))
-  
-  always_comb begin : HB_endpoint_smu_tx_handshake
-    resp_yumi = resp_val & ( ( rmt__resp__rdy & is_remote_load_resp ) | ( loc__resp__rdy & is_local_store_resp ) );
-  end
+  //-------------------------------------------------------------
+  // Component resp_q
+  //-------------------------------------------------------------
+
+  logic [0:0] resp_q__clk;
+  logic [5:0] resp_q__num_free_entries;
+  logic [0:0] resp_q__reset;
+  SMURespMsg__wen_1__reg_id_5__opaque_6__data_32 resp_q__deq__msg;
+  logic [0:0] resp_q__deq__rdy;
+  logic [0:0] resp_q__deq__val;
+  SMURespMsg__wen_1__reg_id_5__opaque_6__data_32 resp_q__enq__msg;
+  logic [0:0] resp_q__enq__rdy;
+  logic [0:0] resp_q__enq__val;
+
+  NormalQueueRTL__ad89d4fad53825fa resp_q
+  (
+    .clk( resp_q__clk ),
+    .num_free_entries( resp_q__num_free_entries ),
+    .reset( resp_q__reset ),
+    .deq__msg( resp_q__deq__msg ),
+    .deq__rdy( resp_q__deq__rdy ),
+    .deq__val( resp_q__deq__val ),
+    .enq__msg( resp_q__enq__msg ),
+    .enq__rdy( resp_q__enq__rdy ),
+    .enq__val( resp_q__enq__val )
+  );
+
+  //-------------------------------------------------------------
+  // End of component resp_q
+  //-------------------------------------------------------------
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/smu/HBEndpointSMUTXAdapter.py:125
+  // At /work/global/pp482/cgra/src/smu/HBEndpointSMUTXAdapter.py:138
   // @update
   // def HB_endpoint_smu_tx_req_resp_msg():
   //   # Request packet
@@ -3104,16 +3453,16 @@ module HBEndpointSMUTXAdapter__75139bc5c73411ee
   //   s.req_pkt_eva @= s.req_q.deq.msg.addr
   // 
   //   # Remote response packet -> remote master resp
-  //   s.rmt.resp.msg.wen    @= 0
-  //   s.rmt.resp.msg.reg_id @= s.resp_reg_id
-  //   s.rmt.resp.msg.opaque @= 0
-  //   s.rmt.resp.msg.data   @= s.resp_data
+  //   s.rmt.resp.msg.wen    @= s.resp_q.deq.msg.wen
+  //   s.rmt.resp.msg.reg_id @= s.resp_q.deq.msg.reg_id
+  //   s.rmt.resp.msg.opaque @= s.resp_q.deq.msg.opaque
+  //   s.rmt.resp.msg.data   @= s.resp_q.deq.msg.data
   // 
   //   # Local response packet -> local master resp
-  //   s.loc.resp.msg.wen    @= 1
-  //   s.loc.resp.msg.reg_id @= s.resp_reg_id
-  //   s.loc.resp.msg.opaque @= 0
-  //   s.loc.resp.msg.data   @= s.resp_data
+  //   s.loc.resp.msg.wen    @= s.resp_q.deq.msg.wen
+  //   s.loc.resp.msg.reg_id @= s.resp_q.deq.msg.reg_id
+  //   s.loc.resp.msg.opaque @= s.resp_q.deq.msg.opaque
+  //   s.loc.resp.msg.data   @= s.resp_q.deq.msg.data
   
   always_comb begin : HB_endpoint_smu_tx_req_resp_msg
     req_packet.op = is_remote_load_req ? 2'd0 : 2'd1;
@@ -3126,18 +3475,18 @@ module HBEndpointSMUTXAdapter__75139bc5c73411ee
     req_packet.y_cord = dst_y_cord;
     req_packet.x_cord = dst_x_cord;
     req_pkt_eva = req_q__deq__msg.addr;
-    rmt__resp__msg.wen = 1'd0;
-    rmt__resp__msg.reg_id = resp_reg_id;
-    rmt__resp__msg.opaque = 6'd0;
-    rmt__resp__msg.data = resp_data;
-    loc__resp__msg.wen = 1'd1;
-    loc__resp__msg.reg_id = resp_reg_id;
-    loc__resp__msg.opaque = 6'd0;
-    loc__resp__msg.data = resp_data;
+    rmt__resp__msg.wen = resp_q__deq__msg.wen;
+    rmt__resp__msg.reg_id = resp_q__deq__msg.reg_id;
+    rmt__resp__msg.opaque = resp_q__deq__msg.opaque;
+    rmt__resp__msg.data = resp_q__deq__msg.data;
+    loc__resp__msg.wen = resp_q__deq__msg.wen;
+    loc__resp__msg.reg_id = resp_q__deq__msg.reg_id;
+    loc__resp__msg.opaque = resp_q__deq__msg.opaque;
+    loc__resp__msg.data = resp_q__deq__msg.data;
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/smu/HBEndpointSMUTXAdapter.py:122
+  // At /work/global/pp482/cgra/src/smu/HBEndpointSMUTXAdapter.py:135
   // s.is_local_store_resp //= lambda: s.resp_pkt_type == \
   //                                   hp.return_packet_type_enum.e_return_credit
   
@@ -3146,7 +3495,7 @@ module HBEndpointSMUTXAdapter__75139bc5c73411ee
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/smu/HBEndpointSMUTXAdapter.py:117
+  // At /work/global/pp482/cgra/src/smu/HBEndpointSMUTXAdapter.py:130
   // s.is_remote_load_req  //= lambda: s.req_q.deq.msg.wen == 0
   
   always_comb begin : _lambda__s_dut_tx_is_remote_load_req
@@ -3154,7 +3503,7 @@ module HBEndpointSMUTXAdapter__75139bc5c73411ee
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/smu/HBEndpointSMUTXAdapter.py:119
+  // At /work/global/pp482/cgra/src/smu/HBEndpointSMUTXAdapter.py:132
   // s.is_remote_load_resp //= lambda: s.resp_pkt_type == \
   //                                   hp.return_packet_type_enum.e_return_int_wb
   
@@ -3163,15 +3512,15 @@ module HBEndpointSMUTXAdapter__75139bc5c73411ee
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/smu/HBEndpointSMUTXAdapter.py:99
-  // s.loc.resp.en //= lambda: s.resp_yumi & s.loc.resp.rdy & s.is_local_store_resp
+  // At /work/global/pp482/cgra/src/smu/HBEndpointSMUTXAdapter.py:115
+  // s.loc.resp.en //= lambda: s.resp_q.deq.val & s.loc.resp.rdy & (s.resp_q.deq.msg.wen == 1)
   
   always_comb begin : _lambda__s_dut_tx_loc_resp_en
-    loc__resp__en = ( resp_yumi & loc__resp__rdy ) & is_local_store_resp;
+    loc__resp__en = ( resp_q__deq__val & loc__resp__rdy ) & ( resp_q__deq__msg.wen == 1'd1 );
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/smu/HBEndpointSMUTXAdapter.py:97
+  // At /work/global/pp482/cgra/src/smu/HBEndpointSMUTXAdapter.py:112
   // s.req_q.deq.rdy //= lambda: s.req_rdy & (s.req_credits != 0)
   
   always_comb begin : _lambda__s_dut_tx_req_q_deq_rdy
@@ -3179,7 +3528,7 @@ module HBEndpointSMUTXAdapter__75139bc5c73411ee
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/smu/HBEndpointSMUTXAdapter.py:96
+  // At /work/global/pp482/cgra/src/smu/HBEndpointSMUTXAdapter.py:111
   // s.req_val //= lambda: s.req_q.deq.val & (s.req_credits != 0)
   
   always_comb begin : _lambda__s_dut_tx_req_val
@@ -3187,11 +3536,36 @@ module HBEndpointSMUTXAdapter__75139bc5c73411ee
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/smu/HBEndpointSMUTXAdapter.py:98
-  // s.rmt.resp.en //= lambda: s.resp_yumi & s.rmt.resp.rdy & s.is_remote_load_resp
+  // At /work/global/pp482/cgra/src/smu/HBEndpointSMUTXAdapter.py:117
+  // s.resp_q.deq.rdy //= lambda: (s.rmt.resp.rdy & (s.resp_q.deq.msg.wen == 0)) | \
+  //                              (s.loc.resp.rdy & (s.resp_q.deq.msg.wen == 1))
+  
+  always_comb begin : _lambda__s_dut_tx_resp_q_deq_rdy
+    resp_q__deq__rdy = ( rmt__resp__rdy & ( resp_q__deq__msg.wen == 1'd0 ) ) | ( loc__resp__rdy & ( resp_q__deq__msg.wen == 1'd1 ) );
+  end
+
+  // PyMTL Lambda Block Source
+  // At /work/global/pp482/cgra/src/smu/HBEndpointSMUTXAdapter.py:104
+  // s.resp_q.enq.msg.wen    //= lambda: 0 if s.is_remote_load_resp else 1
+  
+  always_comb begin : _lambda__s_dut_tx_resp_q_enq_msg_wen
+    resp_q__enq__msg.wen = is_remote_load_resp ? 1'd0 : 1'd1;
+  end
+
+  // PyMTL Lambda Block Source
+  // At /work/global/pp482/cgra/src/smu/HBEndpointSMUTXAdapter.py:103
+  // s.resp_yumi //= lambda: s.resp_val & s.resp_q.enq.rdy
+  
+  always_comb begin : _lambda__s_dut_tx_resp_yumi
+    resp_yumi = resp_val & resp_q__enq__rdy;
+  end
+
+  // PyMTL Lambda Block Source
+  // At /work/global/pp482/cgra/src/smu/HBEndpointSMUTXAdapter.py:114
+  // s.rmt.resp.en //= lambda: s.resp_q.deq.val & s.rmt.resp.rdy & (s.resp_q.deq.msg.wen == 0)
   
   always_comb begin : _lambda__s_dut_tx_rmt_resp_en
-    rmt__resp__en = ( resp_yumi & rmt__resp__rdy ) & is_remote_load_resp;
+    rmt__resp__en = ( resp_q__deq__val & rmt__resp__rdy ) & ( resp_q__deq__msg.wen == 1'd0 );
   end
 
   assign arb__clk = clk;
@@ -3204,9 +3578,15 @@ module HBEndpointSMUTXAdapter__75139bc5c73411ee
   assign loc__req__rdy = arb__recv__rdy[1];
   assign req_q__clk = clk;
   assign req_q__reset = reset;
+  assign resp_q__clk = clk;
+  assign resp_q__reset = reset;
   assign req_q__enq__val = arb__send__en;
   assign arb__send__rdy = req_q__enq__rdy;
   assign req_q__enq__msg = arb__send__msg;
+  assign resp_q__enq__val = resp_yumi;
+  assign resp_q__enq__msg.reg_id = resp_reg_id;
+  assign resp_q__enq__msg.opaque = 6'd0;
+  assign resp_q__enq__msg.data = resp_data;
   assign req_pkt[4:0] = req_packet.x_cord;
   assign req_pkt[8:5] = req_packet.y_cord;
   assign req_pkt[13:9] = req_packet.src_x_cord;
@@ -3221,7 +3601,7 @@ endmodule
 
 
 // PyMTL Component HBEndpointSMU Definition
-// Full name: HBEndpointSMU__hb_params_<hammerblade.params.HBParams object at 0x7f09d6cc8290>
+// Full name: HBEndpointSMU__hb_params_<hammerblade.params.HBParams object at 0x7fe4a6e6c4d0>
 // At /work/global/pp482/cgra/src/smu/HBEndpointSMU.py
 
 module HBEndpointSMU_11x18
@@ -3281,7 +3661,7 @@ module HBEndpointSMU_11x18
   XcelRespMsg__type__1__data_32 rx__cfg_master__resp__msg;
   logic [0:0] rx__cfg_master__resp__rdy;
 
-  HBEndpointSMURXAdapter__75139bc5c73411ee rx
+  HBEndpointSMURXAdapter__a2fcce5840d3ec14 rx
   (
     .clk( rx__clk ),
     .dst_x_cord( rx__dst_x_cord ),
@@ -3399,7 +3779,7 @@ module HBEndpointSMU_11x18
   SMURespMsg__wen_1__reg_id_5__opaque_6__data_32 tx__rmt__resp__msg;
   logic [0:0] tx__rmt__resp__rdy;
 
-  HBEndpointSMUTXAdapter__75139bc5c73411ee tx
+  HBEndpointSMUTXAdapter__a2fcce5840d3ec14 tx
   (
     .clk( tx__clk ),
     .dst_x_cord( tx__dst_x_cord ),

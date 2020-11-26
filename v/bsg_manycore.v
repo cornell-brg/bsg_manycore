@@ -139,12 +139,12 @@ module bsg_manycore
 
   localparam mc_start_row = ( mc_composition_p == e_manycore )          ? 1 : // 1 row of IO routers
                             ( mc_composition_p == e_manycore_vec_xcel ) ? 1 :
-                            ( mc_composition_p == e_manycore_load_smu ) ? 2 : // IO router + SMU
+                            ( mc_composition_p == e_manycore_load_smu ) ? 2 : // IO router + top row SMU
                                                                        "inv";
 
   localparam mc_end_row   = ( mc_composition_p == e_manycore )          ? num_tiles_y_p   :
                             ( mc_composition_p == e_manycore_vec_xcel ) ? num_tiles_y_p   :
-                            ( mc_composition_p == e_manycore_load_smu ) ? num_tiles_y_p+2 : // 2 extra rows
+                            ( mc_composition_p == e_manycore_load_smu ) ? num_tiles_y_p-1 : // bottom row
                                                                           "inv";
 
   // instantiate manycore array
@@ -256,7 +256,7 @@ module bsg_manycore
 
     // Instantiate two rows of SMU on north and south sides
 
-    for (r = 1; r < num_tiles_y_p+1; r = r+num_tiles_y_p-1) begin: cy
+    for (r = 1; r < num_tiles_y_p; r = r+num_tiles_y_p-3+1) begin: cy
       for (c = 0; c < num_tiles_x_p; c = c+1) begin: cx
 
         bsg_manycore_tile #(
@@ -293,7 +293,7 @@ module bsg_manycore
     // Instantiate two columns of SMU on west and east sides
 
     for (r = 2; r < num_tiles_y_p-1; r = r+1) begin: ry
-      for (c = 0; c < num_tiles_x_p; c = c+num_tiles_x_p-1) begin: rx
+      for (c = 0; c < num_tiles_x_p; c = c+num_tiles_x_p-2+1) begin: rx
 
         bsg_manycore_tile #(
           .dmem_size_p     (dmem_size_p)

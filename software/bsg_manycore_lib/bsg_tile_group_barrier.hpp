@@ -235,6 +235,7 @@ private:
 
     bsg_row_barrier<BARRIER_X_DIM> r_barrier;
     bsg_col_barrier<BARRIER_Y_DIM> c_barrier;
+
     static constexpr unsigned char _center_x_cord = (BARRIER_X_DIM - 1) >> 1;
     static constexpr unsigned char _center_y_cord = (BARRIER_Y_DIM - 1) >> 1;
 
@@ -255,6 +256,8 @@ public:
 
     //  The main sync funciton
     void sync() {
+        bsg_fence();
+
         // If barrier dimensions is 1x1, i.e. only a single tile is 
         // participating, there is nothing to be done
         if (BARRIER_Y_DIM == 1 && BARRIER_X_DIM == 1)

@@ -299,6 +299,7 @@ module bsg_manycore_proc_vanilla
     ,.y_cord_width_p(y_cord_width_p)
     ,.branch_trace_en_p(branch_trace_en_p)
     ,.max_out_credits_p(max_out_credits_p)
+    ,.mc_composition_p(mc_composition_p)
   ) vcore (
     .clk_i(clk_i)
     ,.reset_i(reset_i | freeze)

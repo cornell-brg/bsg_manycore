@@ -33,6 +33,8 @@ module vanilla_core
     , parameter credit_counter_width_lp=$clog2(max_out_credits_p+1)
 
     , parameter debug_p=0
+
+    , parameter mc_composition_p="inv"
   )
   (
     input clk_i

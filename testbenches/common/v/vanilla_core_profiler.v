@@ -16,6 +16,8 @@ module vanilla_core_profiler
 
     , parameter reg_els_lp = RV32_reg_els_gp
     , parameter reg_addr_width_lp = RV32_reg_addr_width_gp
+
+    , parameter mc_composition_p = "inv"
   )
   (
     input clk_i
@@ -75,6 +77,17 @@ module vanilla_core_profiler
     , input trace_en_i 
   );
 
+  localparam origin_y_cord_lp =
+    ( mc_composition_p == e_manycore )          ? origin_y_cord_p :
+    ( mc_composition_p == e_manycore_vec_xcel ) ? 2 :
+    ( mc_composition_p == e_manycore_load_smu ) ? 3 :
+                                               "inv";
+  localparam origin_x_cord_lp =
+    ( mc_composition_p == e_manycore )          ? origin_x_cord_p :
+    ( mc_composition_p == e_manycore_vec_xcel ) ? 1 :
+    ( mc_composition_p == e_manycore_load_smu ) ? 1 :
+                                               "inv";
+
   // bsg_manycore_profile_pkg for the packed print_stat_tag_i signal
   // <stat type>  -  <y cord>  -  <x cord>  -  <tile group id>  -  <tag>
   bsg_manycore_vanilla_core_stat_tag_s print_stat_tag;
@@ -82,7 +95,7 @@ module vanilla_core_profiler
 
   // task to print a line of operation trace
   task print_operation_trace(integer fd, string op);
-    $fwrite(fd, "%0d,%0d,%0d,%0h,%s\n", global_ctr_i, my_x_i - origin_x_cord_p, my_y_i - origin_y_cord_p, (exe_r.pc_plus4 - 'd4), op);
+    $fwrite(fd, "%0d,%0d,%0d,%0h,%s\n", global_ctr_i, my_x_i - origin_x_cord_lp, my_y_i - origin_y_cord_lp, (exe_r.pc_plus4 - 'd4), op);
   endtask
 
 
@@ -777,7 +790,7 @@ module vanilla_core_profiler
 
    always @(negedge reset_i) begin      
     // the origin tile opens the logfile and writes the csv header.
-    if ((my_x_i == x_cord_width_p'(origin_x_cord_p)) & (my_y_i == y_cord_width_p'(origin_y_cord_p))) begin
+    if ((my_x_i == x_cord_width_p'(origin_x_cord_lp)) & (my_y_i == y_cord_width_p'(origin_y_cord_lp))) begin
       fd = $fopen(logfile_lp, "a");
       $fwrite(fd, "time,");
       $fwrite(fd, "x,");
@@ -928,7 +941,7 @@ module vanilla_core_profiler
         $fwrite(fd2, "cycle,x,y,pc,operation\n");
         $fclose(fd2);
       end
-    end // if ((my_x_i == x_cord_width_p'(origin_x_cord_p)) & (my_y_i == y_cord_width_p'(origin_y_cord_p)))
+    end // if ((my_x_i == x_cord_width_p'(origin_x_cord_lp)) & (my_y_i == y_cord_width_p'(origin_y_cord_lp)))
    end // always @ (my_x_i)
    
 
@@ -939,8 +952,8 @@ module vanilla_core_profiler
 
           fd = $fopen(logfile_lp, "a");
           $fwrite(fd, "%0d,", $time);
-          $fwrite(fd, "%0d,", my_x_i - origin_x_cord_p);
-          $fwrite(fd, "%0d,", my_y_i - origin_y_cord_p);
+          $fwrite(fd, "%0d,", my_x_i - origin_x_cord_lp);
+          $fwrite(fd, "%0d,", my_y_i - origin_y_cord_lp);
           $fwrite(fd, "%0d,", pc_r);
           $fwrite(fd, "%0d,", pc_n);
           $fwrite(fd, "%0d,", print_stat_tag_i);

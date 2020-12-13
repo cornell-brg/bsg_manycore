@@ -201,9 +201,9 @@ module brg_smu
     ) eva2npa
     (
        .eva_i             ( out_pkt_eva_lo     )
-      ,.tgo_x_i           ( 0                  )
-      ,.tgo_y_i           ( 0                  )
-      ,.dram_enable_i     ( 1                  )
+      ,.tgo_x_i           ( x_cord_width_p'(0) )
+      ,.tgo_y_i           ( y_cord_width_p'(0) )
+      ,.dram_enable_i     ( 1'b1               )
       ,.x_cord_o          ( x_cord_lo          )
       ,.y_cord_o          ( y_cord_lo          )
       ,.epa_o             ( epa_lo             )

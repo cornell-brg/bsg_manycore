@@ -47,10 +47,10 @@ typedef struct packed {
 } HBEndpointPacket__890e8baa82bc2d18;
 
 // PyMTL Component HBEndpointSMURXAdapter Definition
-// Full name: HBEndpointSMURXAdapter__hb_params_<hammerblade.params.HBParams object at 0x7fe4a6e6c4d0>
+// Full name: HBEndpointSMURXAdapter__hb_params_<hammerblade.params.HBParams object at 0x7fd3f45b6b50>
 // At /work/global/pp482/cgra/src/smu/HBEndpointSMURXAdapter.py
 
-module HBEndpointSMURXAdapter__a2fcce5840d3ec14
+module HBEndpointSMURXAdapter__c34dc2b3909af7f3
 (
   input  logic [0:0] clk ,
   output logic [4:0] dst_x_cord ,
@@ -1287,6 +1287,7 @@ endmodule
 
 module ReorderQueueCtrl__num_elems_32
 (
+  input  logic [0:0] clear ,
   input  logic [0:0] clk ,
   input  logic [0:0] deq_en ,
   output logic [4:0] deq_ptr ,
@@ -1302,7 +1303,7 @@ module ReorderQueueCtrl__num_elems_32
   logic [31:0] buf_valid_r;
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/queues/ReorderQueue.py:75
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/queues/ReorderQueue.py:83
   // s.buf_invalid_r //= lambda: ~s.buf_valid_r
   
   always_comb begin : _lambda__s_dut_smu_dpath_reorder_q_ctrl_buf_invalid_r
@@ -1310,7 +1311,7 @@ module ReorderQueueCtrl__num_elems_32
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/queues/ReorderQueue.py:78
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/queues/ReorderQueue.py:86
   // s.deq_rdy //= lambda: s.buf_valid_r[s.deq_ptr]
   
   always_comb begin : _lambda__s_dut_smu_dpath_reorder_q_ctrl_deq_rdy
@@ -1318,7 +1319,7 @@ module ReorderQueueCtrl__num_elems_32
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/queues/ReorderQueue.py:79
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/queues/ReorderQueue.py:87
   // s.enq_go  //= lambda: s.enq_en & s.enq_rdy
   
   always_comb begin : _lambda__s_dut_smu_dpath_reorder_q_ctrl_enq_go
@@ -1326,7 +1327,7 @@ module ReorderQueueCtrl__num_elems_32
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/queues/ReorderQueue.py:77
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/queues/ReorderQueue.py:85
   // s.enq_rdy //= lambda: reduce_or( s.buf_invalid_r )
   
   always_comb begin : _lambda__s_dut_smu_dpath_reorder_q_ctrl_enq_rdy
@@ -1334,7 +1335,7 @@ module ReorderQueueCtrl__num_elems_32
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/queues/ReorderQueue.py:64
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/queues/ReorderQueue.py:72
   // @update
   // def reorder_q_buf_valid_n():
   //   s.buf_valid_n @= s.buf_valid_r
@@ -1354,16 +1355,22 @@ module ReorderQueueCtrl__num_elems_32
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/queues/ReorderQueue.py:57
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/queues/ReorderQueue.py:62
   // @update_ff
   // def reorder_q_buf_valid_r():
   //   if s.reset:
   //     s.buf_valid_r <<= 0
   //   else:
-  //     s.buf_valid_r <<= s.buf_valid_n
+  //     if s.clear:
+  //       s.buf_valid_r <<= 0
+  //     else:
+  //       s.buf_valid_r <<= s.buf_valid_n
   
   always_ff @(posedge clk) begin : reorder_q_buf_valid_r
     if ( reset ) begin
+      buf_valid_r <= 32'd0;
+    end
+    else if ( clear ) begin
       buf_valid_r <= 32'd0;
     end
     else
@@ -1371,17 +1378,23 @@ module ReorderQueueCtrl__num_elems_32
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/queues/ReorderQueue.py:44
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/queues/ReorderQueue.py:46
   // @update_ff
   // def reorder_q_deq_ptr_r():
   //   if s.reset:
   //     s.deq_ptr <<= 0
   //   else:
-  //     if s.deq_rdy & s.deq_en:
-  //       s.deq_ptr <<= s.deq_ptr + 1
+  //     if s.clear:
+  //       s.deq_ptr <<= 0
+  //     else:
+  //       if s.deq_rdy & s.deq_en:
+  //         s.deq_ptr <<= s.deq_ptr + 1
   
   always_ff @(posedge clk) begin : reorder_q_deq_ptr_r
     if ( reset ) begin
+      deq_ptr <= 5'd0;
+    end
+    else if ( clear ) begin
       deq_ptr <= 5'd0;
     end
     else if ( deq_rdy & deq_en ) begin
@@ -1483,7 +1496,7 @@ module ReorderQueueDpath__9ce2b7c8b464735d
   //-------------------------------------------------------------
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/queues/ReorderQueue.py:118
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/queues/ReorderQueue.py:126
   // @update
   // def reorder_q_dpath_reg_id():
   //   s.enq_ptr @= s.enq_msg.reg_id[0:ptr_width]
@@ -1509,6 +1522,7 @@ endmodule
 
 module ReorderQueue__9ce2b7c8b464735d
 (
+  input  logic [0:0] clear ,
   input  logic [0:0] clk ,
   input  logic [0:0] reset ,
   input logic [0:0] deq__en  ,
@@ -1522,6 +1536,7 @@ module ReorderQueue__9ce2b7c8b464735d
   // Component ctrl
   //-------------------------------------------------------------
 
+  logic [0:0] ctrl__clear;
   logic [0:0] ctrl__clk;
   logic [0:0] ctrl__deq_en;
   logic [4:0] ctrl__deq_ptr;
@@ -1534,6 +1549,7 @@ module ReorderQueue__9ce2b7c8b464735d
 
   ReorderQueueCtrl__num_elems_32 ctrl
   (
+    .clear( ctrl__clear ),
     .clk( ctrl__clk ),
     .deq_en( ctrl__deq_en ),
     .deq_ptr( ctrl__deq_ptr ),
@@ -1580,6 +1596,7 @@ module ReorderQueue__9ce2b7c8b464735d
   assign ctrl__reset = reset;
   assign dpath__clk = clk;
   assign dpath__reset = reset;
+  assign ctrl__clear = clear;
   assign ctrl__enq_en = enq__en;
   assign enq__rdy = ctrl__enq_rdy;
   assign dpath__enq_msg = enq__msg;
@@ -1664,6 +1681,7 @@ module StreamingMemUnitDpath__3c34b51d9f2758ac
   logic [31:0] remote_x_count_r;
   logic [31:0] remote_y_count_n;
   logic [31:0] remote_y_count_r;
+  logic [0:0] smu_soft_reset;
   //-------------------------------------------------------------
   // Component arb
   //-------------------------------------------------------------
@@ -1789,6 +1807,7 @@ module StreamingMemUnitDpath__3c34b51d9f2758ac
   // Component reorder_q
   //-------------------------------------------------------------
 
+  logic [0:0] reorder_q__clear;
   logic [0:0] reorder_q__clk;
   logic [0:0] reorder_q__reset;
   logic [0:0] reorder_q__deq__en;
@@ -1800,6 +1819,7 @@ module StreamingMemUnitDpath__3c34b51d9f2758ac
 
   ReorderQueue__9ce2b7c8b464735d reorder_q
   (
+    .clear( reorder_q__clear ),
     .clk( reorder_q__clk ),
     .reset( reorder_q__reset ),
     .deq__en( reorder_q__deq__en ),
@@ -1953,15 +1973,23 @@ module StreamingMemUnitDpath__3c34b51d9f2758ac
   //-------------------------------------------------------------
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/mem/StreamingMemUnit.py:595
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/mem/StreamingMemUnit.py:600
   // s.is_cfg_msg_go //= lambda: s.cfg_req_msg.addr == GO
   
   always_comb begin : _lambda__s_dut_smu_dpath_is_cfg_msg_go
     is_cfg_msg_go = cfg_req_msg.addr == 4'( __const__GO );
   end
 
+  // PyMTL Lambda Block Source
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/mem/StreamingMemUnit.py:529
+  // s.smu_soft_reset //= lambda: s.cfg_go & (s.cfg_req_msg.addr == GO)
+  
+  always_comb begin : _lambda__s_dut_smu_dpath_smu_soft_reset
+    smu_soft_reset = cfg_go & ( cfg_req_msg.addr == 4'( __const__GO ) );
+  end
+
   // PyMTL Update Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/mem/StreamingMemUnit.py:568
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/mem/StreamingMemUnit.py:573
   // @update
   // def smu_dpath_all_sent_n():
   //   s.remote_req_all_sent_n @= s.remote_req_all_sent
@@ -2024,7 +2052,7 @@ module StreamingMemUnitDpath__3c34b51d9f2758ac
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/mem/StreamingMemUnit.py:539
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/mem/StreamingMemUnit.py:544
   // @update
   // def smu_dpath_msg():
   //   s.cfg_resp_msg.type_ @= 0
@@ -2247,7 +2275,7 @@ module StreamingMemUnitDpath__3c34b51d9f2758ac
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/mem/StreamingMemUnit.py:586
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/mem/StreamingMemUnit.py:591
   // @update_ff
   // def smu_dpath_all_sent_r():
   //   if s.reset:
@@ -2414,6 +2442,7 @@ module StreamingMemUnitDpath__3c34b51d9f2758ac
   assign arb__recv__msg[1] = pad_resp_msg;
   assign reorder_q__clk = clk;
   assign reorder_q__reset = reset;
+  assign reorder_q__clear = smu_soft_reset;
   assign reorder_q__enq__en = arb__send__en;
   assign reorder_q__enq__msg = arb__send__msg;
   assign arb__send__rdy = reorder_q__enq__rdy;
@@ -3293,10 +3322,10 @@ endmodule
 
 
 // PyMTL Component HBEndpointSMUTXAdapter Definition
-// Full name: HBEndpointSMUTXAdapter__hb_params_<hammerblade.params.HBParams object at 0x7fe4a6e6c4d0>
+// Full name: HBEndpointSMUTXAdapter__hb_params_<hammerblade.params.HBParams object at 0x7fd3f45b6b50>
 // At /work/global/pp482/cgra/src/smu/HBEndpointSMUTXAdapter.py
 
-module HBEndpointSMUTXAdapter__a2fcce5840d3ec14
+module HBEndpointSMUTXAdapter__c34dc2b3909af7f3
 (
   input  logic [0:0] clk ,
   input  logic [4:0] dst_x_cord ,
@@ -3601,7 +3630,7 @@ endmodule
 
 
 // PyMTL Component HBEndpointSMU Definition
-// Full name: HBEndpointSMU__hb_params_<hammerblade.params.HBParams object at 0x7fe4a6e6c4d0>
+// Full name: HBEndpointSMU__hb_params_<hammerblade.params.HBParams object at 0x7fd3f45b6b50>
 // At /work/global/pp482/cgra/src/smu/HBEndpointSMU.py
 
 module HBEndpointSMU_11x18
@@ -3661,7 +3690,7 @@ module HBEndpointSMU_11x18
   XcelRespMsg__type__1__data_32 rx__cfg_master__resp__msg;
   logic [0:0] rx__cfg_master__resp__rdy;
 
-  HBEndpointSMURXAdapter__a2fcce5840d3ec14 rx
+  HBEndpointSMURXAdapter__c34dc2b3909af7f3 rx
   (
     .clk( rx__clk ),
     .dst_x_cord( rx__dst_x_cord ),
@@ -3779,7 +3808,7 @@ module HBEndpointSMU_11x18
   SMURespMsg__wen_1__reg_id_5__opaque_6__data_32 tx__rmt__resp__msg;
   logic [0:0] tx__rmt__resp__rdy;
 
-  HBEndpointSMUTXAdapter__a2fcce5840d3ec14 tx
+  HBEndpointSMUTXAdapter__c34dc2b3909af7f3 tx
   (
     .clk( tx__clk ),
     .dst_x_cord( tx__dst_x_cord ),

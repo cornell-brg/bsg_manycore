@@ -256,7 +256,6 @@ public:
 
     //  The main sync funciton
     void sync() {
-        bsg_fence();
 
         // If barrier dimensions is 1x1, i.e. only a single tile is 
         // participating, there is nothing to be done

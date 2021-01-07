@@ -33,6 +33,10 @@
 #include "bsg_mutex.hpp"
 #include "bsg_manycore.hpp"
 
+#if !defined(SMU_XCEL_5050) && !defined(SMU_TOPLEVEL_XCEL)
+/* #if !defined(SMU_XCEL_5050) */
+static_assert(false, "SMU_XCEL_5050/SMU_TOPLEVEL_XCEL not defined!");
+#endif
 
 
 
@@ -113,7 +117,11 @@ public:
     // all tiles in row have sent their sync signal
     // Executed by center tile in the row
     void wait_on_sync() {
+#ifdef SMU_XCEL_5050
+        poll_range_even(this->_done_list, BARRIER_X_DIM);
+#else
         poll_range(this->_done_list, BARRIER_X_DIM);
+#endif
         return;
     };
 
@@ -134,6 +142,7 @@ public:
 
 
     friend inline void poll_range(volatile const unsigned char *p, int range);
+    friend inline void poll_range_even(volatile const unsigned char *p, int range);
 };
 
 
@@ -236,8 +245,17 @@ private:
     bsg_row_barrier<BARRIER_X_DIM> r_barrier;
     bsg_col_barrier<BARRIER_Y_DIM> c_barrier;
 
+#ifdef SMU_XCEL_5050
+    static constexpr unsigned char _center_x_cord = ((BARRIER_X_DIM - 1) >> 1) - 1;
+    static constexpr unsigned char _center_y_cord = (BARRIER_Y_DIM - 1) >> 1;
+#else
     static constexpr unsigned char _center_x_cord = (BARRIER_X_DIM - 1) >> 1;
     static constexpr unsigned char _center_y_cord = (BARRIER_Y_DIM - 1) >> 1;
+#endif
+    /* static_assert(BARRIER_X_DIM == 16, "wrong BARRIER_X_DIM!"); */
+    /* static_assert(BARRIER_Y_DIM == 8, "wrong BARRIER_Y_DIM!"); */
+    /* static_assert(_center_x_cord == 6, "wrong center_x!"); */
+    /* static_assert(_center_y_cord == 3, "wrong center_y!"); */
 
 public:
 

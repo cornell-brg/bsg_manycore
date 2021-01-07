@@ -64,5 +64,23 @@ inline void poll_range(T *list, int range){
     } while (i < range);
 }
 
+/*
+ * Iterate over the even positions in a given array until all
+ * values are non-zero
+ * @param[in]  list    Pointer to arrayy of values to check
+ * @param[in]  range   Number of elements to check
+ * @return     Returns only when all values are non-zero
+ */ 
+template <typename T>
+inline void poll_range_even(T *list, int range){
+    int i;
+    do {
+        for(i = 0; i < range; i+=2) {
+            if (!list[ i ])
+                break;
+        }
+    } while (i < range);
+}
+
 
 #endif  // _BSG_MUTEX_HPP_

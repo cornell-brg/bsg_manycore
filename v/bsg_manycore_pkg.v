@@ -24,7 +24,8 @@ package bsg_manycore_pkg;
     e_manycore
     , e_manycore_vec_xcel
     , e_manycore_load_smu
-    , e_manycore_single_cgra
+    , e_manycore_single_cgra_hb_tapeout
+    , e_manycore_dual_cgra_hb_tapeout
     , e_manycore_quad_cgra
   } bsg_manycore_composition_e;
 

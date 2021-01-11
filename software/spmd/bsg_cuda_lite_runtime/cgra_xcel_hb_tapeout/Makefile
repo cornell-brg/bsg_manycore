@@ -1,0 +1,41 @@
+#########################################################
+# Network Configutaion
+# If not configured, Will use default Values
+bsg_global_X = 16
+bsg_global_Y = 9
+
+#########################################################
+#Tile group configuration
+# If not configured, Will use default Values
+bsg_tiles_org_X = 1
+bsg_tiles_org_Y = 1
+
+# If not configured, Will use default Values
+	# bsg_tiles_X ?= 2
+	# bsg_tiles_Y ?= 2
+bsg_tiles_X = 2
+bsg_tiles_Y = 2
+
+IGNORE_CADENV = 1
+# WAVE = 1
+# export VCS=vcs
+# export DVE=dve
+
+
+all: main.run
+
+
+KERNEL_NAME ?=kernel_cgra_xcel_hb_tapeout
+
+OBJECT_FILES=main.o bsg_set_tile_x_y.o bsg_printf.o kernel_cgra_xcel_hb_tapeout.o
+
+include ../../Makefile.include
+
+
+main.riscv: $(LINK_SCRIPT) $(OBJECT_FILES) $(SPMD_COMMON_OBJECTS) $(BSG_MANYCORE_LIB) ../../common/crt.o
+	$(RISCV_LINK) $(OBJECT_FILES) $(SPMD_COMMON_OBJECTS) -L. "-l:$(BSG_MANYCORE_LIB)" -o $@ $(RISCV_LINK_OPTS)
+
+
+main.o: Makefile
+
+include ../../../mk/Makefile.tail_rules

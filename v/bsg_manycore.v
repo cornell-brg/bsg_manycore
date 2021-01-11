@@ -43,7 +43,10 @@ module bsg_manycore
   // y = 1                  IO routers
   // y = num_tiles_y_p+1    bottom vcache
   , parameter y_cord_width_lp = `BSG_SAFE_CLOG2(num_tiles_y_p+2)
-  , parameter x_cord_width_lp = `BSG_SAFE_CLOG2(num_tiles_x_p)
+
+  // if using e_manycore_dual_cgra_hb_tapeout, the east side of the manycore is
+  // connected to a CGRA xcel pod
+  , parameter x_cord_width_lp = (mc_composition_p == e_manycore_dual_cgra_hb_tapeout) ? `BSG_SAFE_CLOG2(num_tiles_x_p+1) : `BSG_SAFE_CLOG2(num_tiles_x_p)
 
   , parameter link_sif_width_lp =
      `bsg_manycore_link_sif_width(addr_width_p,data_width_p,x_cord_width_lp,y_cord_width_lp)
@@ -127,24 +130,28 @@ module bsg_manycore
     ,.data_o(io_reset_r)
   );
 
-  localparam mc_start_col = ( mc_composition_p == e_manycore )          ? 0 :
-                            ( mc_composition_p == e_manycore_vec_xcel ) ? 1 :
-                            ( mc_composition_p == e_manycore_load_smu ) ? 1 :
-                                                                       "inv";
+  localparam mc_start_col = ( mc_composition_p == e_manycore )                      ? 0 :
+                            ( mc_composition_p == e_manycore_vec_xcel )             ? 1 :
+                            ( mc_composition_p == e_manycore_load_smu )             ? 1 :
+                            ( mc_composition_p == e_manycore_dual_cgra_hb_tapeout ) ? 0 :
+                                                                                   "inv";
 
-  localparam mc_end_col   = ( mc_composition_p == e_manycore )          ? num_tiles_x_p   :
-                            ( mc_composition_p == e_manycore_vec_xcel ) ? num_tiles_x_p-1 :
-                            ( mc_composition_p == e_manycore_load_smu ) ? num_tiles_x_p-1 :
-                                                                          "inv";
+  localparam mc_end_col   = ( mc_composition_p == e_manycore )                      ? num_tiles_x_p   :
+                            ( mc_composition_p == e_manycore_vec_xcel )             ? num_tiles_x_p-1 :
+                            ( mc_composition_p == e_manycore_load_smu )             ? num_tiles_x_p-1 :
+                            ( mc_composition_p == e_manycore_dual_cgra_hb_tapeout ) ? num_tiles_x_p   :
+                                                                                      "inv";
 
   localparam mc_start_row = ( mc_composition_p == e_manycore )          ? 1 : // 1 row of IO routers
                             ( mc_composition_p == e_manycore_vec_xcel ) ? 1 :
                             ( mc_composition_p == e_manycore_load_smu ) ? 2 : // IO router + top row SMU
+                            ( mc_composition_p == e_manycore_dual_cgra_hb_tapeout ) ? 1 : // 1 row of IO routers
                                                                        "inv";
 
   localparam mc_end_row   = ( mc_composition_p == e_manycore )          ? num_tiles_y_p   :
                             ( mc_composition_p == e_manycore_vec_xcel ) ? num_tiles_y_p   :
                             ( mc_composition_p == e_manycore_load_smu ) ? num_tiles_y_p-1 : // bottom row
+                            ( mc_composition_p == e_manycore_dual_cgra_hb_tapeout ) ? num_tiles_y_p :
                                                                           "inv";
 
   // instantiate manycore array

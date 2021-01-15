@@ -24,6 +24,7 @@ module spmd_testbench;
   parameter vcache_miss_fifo_els_p = `BSG_MACHINE_VCACHE_MISS_FIFO_ELS;
   parameter crossbar_network_p = `BSG_MACHINE_CROSSBAR_NETWORK;
   parameter int hetero_type_vec_p [0:((num_tiles_y_p-1)*num_tiles_x_p) - 1]  = '{`BSG_MACHINE_HETERO_TYPE_VEC};
+  parameter mc_composition_p = `BSG_MACHINE_MC_COMPOSITION;
 
   // constant params
   parameter data_width_p = 32;
@@ -80,23 +81,29 @@ module spmd_testbench;
   //
   parameter core_clk_period_p = 1000; // 1000 ps == 1 GHz
 
-  bit core_clk;
-  bit reset;
+  bit bit_clk;
+  bit bit_reset;
+  logic core_clk;
+  logic reset;
 
   bsg_nonsynth_clock_gen #(
     .cycle_time_p(core_clk_period_p)
   ) clock_gen (
-    .o(core_clk)
+    .o(bit_clk)
   );
+
+  assign core_clk = bit_clk;
 
   bsg_nonsynth_reset_gen #(
     .num_clocks_p(1)
     ,.reset_cycles_lo_p(0)
     ,.reset_cycles_hi_p(16)
   ) reset_gen (
-    .clk_i(core_clk)
-    ,.async_reset_o(reset)
+    .clk_i(bit_clk)
+    ,.async_reset_o(bit_reset)
   );
+
+  assign reset = bit_reset;
 
 
   // bsg_manycore has 3 flops that reset signal needs to go through.
@@ -159,6 +166,7 @@ module spmd_testbench;
       ,.num_tiles_y_p(num_tiles_y_p)
       ,.branch_trace_en_p(bsg_branch_trace_en_p)
       ,.hetero_type_vec_p(hetero_type_vec_p)
+      ,.mc_composition_p(mc_composition_p)
     ) DUT (
       .clk_i(core_clk)
       ,.reset_i(reset)

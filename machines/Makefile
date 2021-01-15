@@ -6,6 +6,8 @@ BASEJUMP_STL_DIR := $(BSG_MANYCORE_DIR)/../basejump_stl
 
 # Sets "VCS" variable
 # PP: hack
+VCS=vcs
+VCS_FLAGS=
 # include $(BSG_MANYCORE_DIR)/../bsg_cadenv/cadenv.mk
 
 # Include source lists
@@ -57,6 +59,7 @@ define set_machine_variables
 	$(eval VCS_DEFINES += +define+BSG_MACHINE_BRANCH_TRACE_EN=${BSG_MACHINE_BRANCH_TRACE_EN})
 	$(eval VCS_DEFINES += +define+BSG_MACHINE_HETERO_TYPE_VEC="${BSG_MACHINE_HETERO_TYPE_VEC}")
 	$(eval VCS_DEFINES += +define+BSG_MACHINE_CROSSBAR_NETWORK="${BSG_MACHINE_CROSSBAR_NETWORK}")
+	$(eval VCS_DEFINES += +define+BSG_MACHINE_MC_COMPOSITION="${BSG_MACHINE_MC_COMPOSITION}")
 	# These define are required by mobile_ddr.v.
 	# density     	= 2048 Mbit
 	# speed grade 	= 5

@@ -285,7 +285,7 @@ $(BSG_MANYCORE_LIB): $(BSG_MANYCORE_LIB_OBJS)
 	sed -i 's/@8/@0/' $@
 
 %.nbf: %.riscv
-	python $(NBF_PY) $*.riscv \
+	python2 $(NBF_PY) $*.riscv \
 		$(BSG_MACHINE_GLOBAL_X) $(BSG_MACHINE_GLOBAL_Y) \
 		$(BSG_MACHINE_VCACHE_WAY) $(BSG_MACHINE_VCACHE_SET) \
 		$(BSG_MACHINE_VCACHE_BLOCK_SIZE_WORDS) \

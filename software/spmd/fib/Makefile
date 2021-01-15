@@ -5,6 +5,10 @@ bsg_tiles_Y = 1
 all: main.run
 
 
+# CAD tool flags
+IGNORE_CADENV = 1
+WAVE = 1
+
 OBJECT_FILES=main.o
 
 include ../Makefile.include

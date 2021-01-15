@@ -22,3 +22,6 @@ BSG_MACHINE_BRANCH_TRACE_EN           = 0
 BSG_MACHINE_HETERO_TYPE_VEC           = default:0
 
 BSG_MACHINE_CROSSBAR_NETWORK 					=  0
+
+# PP: tell the TB that we are using 4x4 vanilla cores
+BSG_MACHINE_MC_COMPOSITION = 0

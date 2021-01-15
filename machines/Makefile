@@ -5,7 +5,9 @@ BSG_MANYCORE_DIR := $(shell git rev-parse --show-toplevel)
 BASEJUMP_STL_DIR := $(abspath $(BSG_MANYCORE_DIR)/../basejump_stl)
 
 # Sets "VCS" variable
-include $(BSG_MANYCORE_DIR)/../bsg_cadenv/cadenv.mk
+# include $(BSG_MANYCORE_DIR)/../bsg_cadenv/cadenv.mk
+# PP: on BRG-VIP we don't have cadenv
+VCS=vcs
 
 # Include source lists
 include arch_filelist.mk
@@ -83,10 +85,10 @@ POD_TRACE_GEN_PY = $(BSG_MANYCORE_DIR)/testbenches/py/pod_trace_gen.py
 ASCII_TO_ROM_PY = $(BASEJUMP_STL_DIR)/bsg_mem/bsg_ascii_to_rom.py 
 # build simv
 # without debug option for faster simulation.
-%/simv : %/Makefile.machine.include $(VSOURCES) $(CSOURCES) $(VINCLUDES) $(VHEADERS) 
+%/simv : %/Makefile.machine.include $(VSOURCES) $(CSOURCES) $(VINCLUDES) $(VHEADERS)
 	$(call set_machine_variables,$<)
-	python $(POD_TRACE_GEN_PY) $(BSG_MACHINE_PODS_X) $(BSG_MACHINE_PODS_Y) $(BSG_MACHINE_X_CORD_WIDTH) > $*/pod_trace.tr
-	python $(ASCII_TO_ROM_PY) $*/pod_trace.tr bsg_tag_boot_rom > $*/bsg_tag_boot_rom.v
+	python3 $(POD_TRACE_GEN_PY) $(BSG_MACHINE_PODS_X) $(BSG_MACHINE_PODS_Y) $(BSG_MACHINE_X_CORD_WIDTH) > $*/pod_trace.tr
+	python2 $(ASCII_TO_ROM_PY) $*/pod_trace.tr bsg_tag_boot_rom > $*/bsg_tag_boot_rom.v
 	$(VCS) $(VCS_FLAGS) $(VCS_CFLAGS) -o $@ \
 		$(VCS_INCLUDES) $(VCS_DEFINES) $(CSOURCES) $(VCS_SOURCES) $*/bsg_tag_boot_rom.v \
 		-l $*/build.log -Mdir=$*/csrc
@@ -95,8 +97,8 @@ ASCII_TO_ROM_PY = $(BASEJUMP_STL_DIR)/bsg_mem/bsg_ascii_to_rom.py
 # with debug option for waveform generation.
 %/simv-debug : %/Makefile.machine.include $(VSOURCES) $(CSOURCES) $(VINCLUDES) $(VHEADERS) 
 	$(call set_machine_variables,$<)
-	python $(POD_TRACE_GEN_PY) $(BSG_MACHINE_PODS_X) $(BSG_MACHINE_PODS_Y) $(BSG_MACHINE_X_CORD_WIDTH) > $*/pod_trace.tr
-	python $(ASCII_TO_ROM_PY) $*/pod_trace.tr bsg_tag_boot_rom > $*/bsg_tag_boot_rom.v
+	python3 $(POD_TRACE_GEN_PY) $(BSG_MACHINE_PODS_X) $(BSG_MACHINE_PODS_Y) $(BSG_MACHINE_X_CORD_WIDTH) > $*/pod_trace.tr
+	python2 $(ASCII_TO_ROM_PY) $*/pod_trace.tr bsg_tag_boot_rom > $*/bsg_tag_boot_rom.v
 	$(eval VCS_FLAGS += -debug_pp +vcs+vcdpluson) # Debug adds these two variables to generate waveforms
 	$(VCS) $(VCS_FLAGS) $(VCS_CFLAGS) -o $@ \
 		$(VCS_INCLUDES) $(VCS_DEFINES) $(CSOURCES) $(VCS_SOURCES) $*/bsg_tag_boot_rom.v \

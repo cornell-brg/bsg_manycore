@@ -7,6 +7,9 @@ all: main.run
 
 OBJECT_FILES=main.o
 
+IGNORE_CADENV=1
+# WAVE=1
+
 include ../Makefile.include
 
 

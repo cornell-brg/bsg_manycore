@@ -57,9 +57,12 @@ module bsg_manycore_tile_vcache_array
     , input [pod_y_cord_width_p-1:0] pod_y_i
 
     , input [y_subcord_width_lp-1:0] my_y_i
+    , input                          my_cid_i
 
     // wormhole dest cord
-    , input [wh_cord_width_p-1:0] dest_wh_cord_i
+    // left half of vcache array is controlled by [0].
+    // right half of vcache array is controlled by [1].
+    , input [1:0] wh_dest_east_not_west_i
   );
 
 
@@ -119,8 +122,8 @@ module bsg_manycore_tile_vcache_array
       ,.global_y_i({pod_y_i, my_y_i})
 
       ,.my_wh_cord_i({pod_x_i, x_subcord_width_lp'(i)})
-      ,.dest_wh_cord_i(dest_wh_cord_i)
-      ,.my_wh_cid_i(wh_cid_width_p'(i%wh_ruche_factor_p))
+      ,.wh_dest_east_not_west_i(wh_dest_east_not_west_i[i < (num_tiles_x_p/2) ? 0 : 1])
+      ,.my_wh_cid_i(wh_cid_width_p'((i%wh_ruche_factor_p)+(my_cid_i*wh_ruche_factor_p)))
     );
   end
 

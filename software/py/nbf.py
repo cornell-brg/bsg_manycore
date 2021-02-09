@@ -16,8 +16,6 @@ import subprocess
 
 ################################
 # EPA Constants
-DMEM_BASE_EPA = 0x400
-
 ICACHE_BASE_EPA = 0x400000
 
 CSR_BASE = 0x8000
@@ -70,6 +68,7 @@ class NBF:
 
     # process riscv
     self.get_data_end_addr()
+    self.get_start_addr()
     self.read_dmem()
     self.read_dram()
    
@@ -167,6 +166,22 @@ class NBF:
       if words[2] == "_bsg_data_end_addr":
         self.bsg_data_end_addr = (int(words[0]) >> 2) # make it word address
 
+
+  # grab address for _start symbol.
+  # code earlier than that contains interrupt handler.
+  # we want to set the tile pc_init val to this address.
+  # if _start is not found, which might be possible for some spmd assembly tests, just return 0
+  def get_start_addr(self):
+    proc = subprocess.Popen(["nm", "--radix=d", self.riscv_file], stdout=subprocess.PIPE)
+    lines = proc.stdout.readlines()
+    self.start_addr = 0
+    for line in lines:
+      stripped = line.strip()
+      words = stripped.split()
+      if words[2] == "_start":
+        self.start_addr = (int(words[0]) >> 2) # make it word address
+    
+
   def select_bits(self, num, start, end):
     retval = 0
 
@@ -216,7 +231,7 @@ class NBF:
         x_eff = self.tgo_x + x + pod_origin_x
         y_eff = self.tgo_y + y + pod_origin_y
           
-        for k in range(1024, self.bsg_data_end_addr):
+        for k in range(self.bsg_data_end_addr):
           if k in self.dmem_data.keys():
             self.print_nbf(x_eff, y_eff, k, self.dmem_data[k])
           else:
@@ -304,6 +319,22 @@ class NBF:
         y_eff = tgo_y + y
         self.print_nbf(x_eff, y_eff, CSR_FREEZE, 0)
 
+
+  # set pc_init_val.
+  # if _start is not 0, then set the pc_init_val.
+  def set_pc_init_val(self, pod_origin_x, pod_origin_y):
+    if self.start_addr == 0:
+      return
+    tgo_x = self.tgo_x + pod_origin_x
+    tgo_y = self.tgo_y + pod_origin_y
+
+    for y in range(self.tg_dim_y):
+      for x in range(self.tg_dim_x):
+        x_eff = tgo_x + x
+        y_eff = tgo_y + y
+        self.print_nbf(x_eff, y_eff, CSR_PC_INIT, self.start_addr)
+
+
   # print finish
   # when spmd loader sees, this it stops sending packets.
   def print_finish(self):
@@ -313,6 +344,8 @@ class NBF:
   # spmd_loader will not send another packet, until all the pending packets are completed.
   def fence(self):
     self.print_nbf(0xff, 0xff, 0x0, 0x0)
+
+
 
 
   ##### LOADER ROUTINES END  #####  
@@ -328,12 +361,14 @@ class NBF:
         self.config_tile_group(pod_origin_x, pod_origin_y)
         self.init_icache(pod_origin_x, pod_origin_y)
         self.init_dmem(pod_origin_x, pod_origin_y)
+        self.set_pc_init_val(pod_origin_x, pod_origin_y)
 
         if self.enable_dram != 1:
           self.disable_dram(pod_origin_x, pod_origin_y)
           self.init_vcache(pod_origin_x, pod_origin_y)
 
         self.init_dram(pod_origin_x, pod_origin_y, self.enable_dram)
+
 
     # wait for all store credits to return.
     self.fence()

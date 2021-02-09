@@ -50,7 +50,6 @@ module bsg_manycore_pod_ruche
   (
     // manycore 
     input clk_i
-    //, input reset_i
 
     , input  [E:W][num_tiles_y_p-1:0][manycore_link_sif_width_lp-1:0] hor_link_sif_i
     , output [E:W][num_tiles_y_p-1:0][manycore_link_sif_width_lp-1:0] hor_link_sif_o
@@ -84,7 +83,6 @@ module bsg_manycore_pod_ruche
 
 
   `declare_bsg_manycore_link_sif_s(addr_width_p,data_width_p,x_cord_width_p,y_cord_width_p);
-  `declare_bsg_manycore_pod_tag_payload_s(wh_cord_width_p);
 
 
   // bsg tag clients
@@ -93,6 +91,7 @@ module bsg_manycore_pod_ruche
 
   bsg_tag_client #(
     .width_p($bits(bsg_manycore_pod_tag_payload_s))
+    ,.default_p(0)
   ) btc_n (
     .bsg_tag_i(north_bsg_tag_i)
     ,.recv_clk_i(clk_i)
@@ -103,6 +102,7 @@ module bsg_manycore_pod_ruche
 
   bsg_tag_client #(
     .width_p($bits(bsg_manycore_pod_tag_payload_s))
+    ,.default_p(0)
   ) btc_s (
     .bsg_tag_i(south_bsg_tag_i)
     ,.recv_clk_i(clk_i)
@@ -194,8 +194,9 @@ module bsg_manycore_pod_ruche
     ,.pod_x_i(north_vcache_pod_x_i)
     ,.pod_y_i(north_vcache_pod_y_i)
     ,.my_y_i({y_subcord_width_lp{1'b1}})
+    ,.my_cid_i(1'b0) // north row local cid
 
-    ,.dest_wh_cord_i(north_tag_payload.dest_wh_cord)
+    ,.wh_dest_east_not_west_i(north_tag_payload.wh_dest_east_not_west)
   );
 
 
@@ -241,8 +242,9 @@ module bsg_manycore_pod_ruche
     ,.pod_x_i(south_vcache_pod_x_i)
     ,.pod_y_i(south_vcache_pod_y_i)
     ,.my_y_i({y_subcord_width_lp{1'b0}})
+    ,.my_cid_i(1'b1) // south row local cid
 
-    ,.dest_wh_cord_i(south_tag_payload.dest_wh_cord)
+    ,.wh_dest_east_not_west_i(south_tag_payload.wh_dest_east_not_west)
   );
 
 

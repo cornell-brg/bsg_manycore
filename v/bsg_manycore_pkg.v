@@ -19,6 +19,15 @@ package bsg_manycore_pkg;
 
   localparam bsg_manycore_reg_id_width_gp = 5;
 
+  //=========================================================================
+  //  Manycore testbench composition
+  //=========================================================================
+
+  typedef enum logic [0:0] {
+    e_manycore
+    , e_manycore_east_cgra_xcel_bay
+  } bsg_manycore_composition_e;
+
 
   //  request packet type
   //

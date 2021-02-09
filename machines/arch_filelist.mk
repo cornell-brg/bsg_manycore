@@ -189,3 +189,13 @@ VSOURCES += $(BSG_MANYCORE_DIR)/v/bsg_manycore_link_sif_tieoff.v
 VSOURCES += $(BSG_MANYCORE_DIR)/v/bsg_manycore_ruche_x_link_sif_tieoff.v
 VSOURCES += $(BSG_MANYCORE_DIR)/v/bsg_ruche_buffer.v
 VSOURCES += $(BSG_MANYCORE_DIR)/v/bsg_ruche_anti_buffer.v
+
+# PP: hor io routers
+VSOURCES += $(BSG_MANYCORE_DIR)/v/bsg_manycore_hor_io_router.v
+VSOURCES += $(BSG_MANYCORE_DIR)/v/bsg_manycore_hor_io_router_column.v
+
+# PP: CGRAXcel sources
+VSOURCES += $(BSG_MANYCORE_DIR)/v/brg_cgra_xcel/HBEndpointCGRAXcel_8x8Array_4x4KBSpads__pickled.v
+VSOURCES += $(BSG_MANYCORE_DIR)/v/brg_cgra_xcel/brg_8x8_cgra_xcel.v
+VSOURCES += $(BSG_MANYCORE_DIR)/v/brg_cgra_xcel/brg_8x8_cgra_xcel_pod.v
+VSOURCES += $(BSG_MANYCORE_DIR)/v/brg_cgra_xcel/brg_8x8_cgra_xcel_pod_w_hor_io_rtr_col.v

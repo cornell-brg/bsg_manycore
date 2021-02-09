@@ -1,0 +1,66 @@
+// This is the data file of all available CGRA test vectors.
+// Each test vector defines all the information we need for a test case, including:
+// (1) Bitstream (CGRA configuration)
+// (2) Bitstream size
+// (3) Instructions (a set of read/write operations on CGRA registers)
+// (4) arg0~arg3: arguments of each instruction
+// (5) Instruction size
+// (6) Result size
+// (7) Reference results
+//
+// Whenever a new test case is added to this file, you need to
+// (1) Do #include to bring in the new .dat file
+// (2) Increment NUM_TEST_VECTORS
+// (3) Manually append each item of the new test vector into the following arrays
+
+#include "cgra_tv_vvadd_8x8.dat"
+
+#define NUM_TEST_VECTORS 1
+
+const char* test_name[NUM_TEST_VECTORS] __attribute__ ((section (".dram"))) = {
+  vvadd_8x8_name
+};
+
+const int* bstrm_addr[NUM_TEST_VECTORS] __attribute__ ((section (".dram"))) = {
+  vvadd_8x8_bstrm
+};
+
+int bstrm_size[NUM_TEST_VECTORS] __attribute__ ((section (".dram"))) = {
+  vvadd_8x8_bstrm_size
+};
+
+const int* insts_addr[NUM_TEST_VECTORS] __attribute__ ((section (".dram"))) = {
+  vvadd_8x8_instructions
+};
+
+const int* arg0_addr[NUM_TEST_VECTORS] __attribute__ ((section (".dram"))) = {
+  vvadd_8x8_arg0
+};
+
+const int* arg1_addr[NUM_TEST_VECTORS] __attribute__ ((section (".dram"))) = {
+  vvadd_8x8_arg1
+};
+
+const int* arg2_addr[NUM_TEST_VECTORS] __attribute__ ((section (".dram"))) = {
+  vvadd_8x8_arg2
+};
+
+const int* arg3_addr[NUM_TEST_VECTORS] __attribute__ ((section (".dram"))) = {
+  vvadd_8x8_arg3
+};
+
+int inst_size[NUM_TEST_VECTORS] __attribute__ ((section (".dram"))) = {
+  vvadd_8x8_inst_size
+};
+
+int verif_base[NUM_TEST_VECTORS] __attribute__ ((section (".dram"))) = {
+  vvadd_8x8_verif_base
+};
+
+int result_size[NUM_TEST_VECTORS] __attribute__ ((section (".dram"))) = {
+  vvadd_8x8_result_size
+};
+
+const int* ref_addr[NUM_TEST_VECTORS] __attribute__ ((section (".dram"))) = {
+  vvadd_8x8_reference
+};

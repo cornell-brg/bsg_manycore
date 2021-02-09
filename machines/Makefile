@@ -69,6 +69,7 @@ define set_machine_variables
 	$(eval VCS_DEFINES += +define+BSG_MACHINE_HETERO_TYPE_VEC="${BSG_MACHINE_HETERO_TYPE_VEC}")
 	$(eval VCS_DEFINES += +define+BSG_MACHINE_NETWORK_CFG="${BSG_MACHINE_NETWORK_CFG}")
 	$(eval VCS_DEFINES += +define+BSG_MACHINE_RUCHE_FACTOR_X="${BSG_MACHINE_RUCHE_FACTOR_X}")
+	$(eval VCS_DEFINES += +define+BSG_MACHINE_COMPOSITION="${BSG_MACHINE_COMPOSITION}")
 	# specify where the host module is instantiated for profiler trigger (print_stat).
 	# relative to $root
 	$(eval VCS_DEFINES += +define+HOST_MODULE_PATH=spmd_testbench) 

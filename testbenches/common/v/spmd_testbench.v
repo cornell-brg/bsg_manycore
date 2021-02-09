@@ -40,6 +40,7 @@ module spmd_testbench();
   parameter bsg_dram_size_p = `BSG_MACHINE_DRAM_SIZE_WORDS; // in words
   parameter bsg_dram_included_p = `BSG_MACHINE_DRAM_INCLUDED;
   parameter bsg_manycore_mem_cfg_e bsg_manycore_mem_cfg_p = `BSG_MACHINE_MEM_CFG;
+  parameter bsg_manycore_composition = `BSG_MACHINE_COMPOSITION;
   parameter reset_depth_p = 3;
 
 
@@ -99,6 +100,8 @@ module spmd_testbench();
 
     ,.bsg_manycore_mem_cfg_p(bsg_manycore_mem_cfg_p)
     ,.bsg_dram_size_p(bsg_dram_size_p)
+
+    ,.bsg_manycore_composition(bsg_manycore_composition)
 
     ,.reset_depth_p(reset_depth_p)
   ) tb (

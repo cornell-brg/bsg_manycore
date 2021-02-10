@@ -641,7 +641,7 @@ module bsg_nonsynth_manycore_testbench
         );
       end
 
-      brg_8x8_cgra_xcel_pod_w_hor_io_rtr_col #(
+      brg_cgra_pod #(
         .addr_width_p(addr_width_p)
         ,.data_width_p(data_width_p)
         ,.x_cord_width_p(x_cord_width_p)
@@ -650,12 +650,14 @@ module bsg_nonsynth_manycore_testbench
         ,.num_row_p(num_tiles_y_p)
         ,.max_out_credits_p(32)
       ) cgra_bay (
-        .clk_i(clk_i)
-        ,.reset_i(reset_r)
-        ,.hor_link_sif_i(hor_link_sif_lo[E][i])
-        ,.hor_link_sif_o(hor_link_sif_li[E][i])
-        ,.ruche_link_i(cgra_pod_ruche_link_li)
-        ,.ruche_link_o(cgra_pod_ruche_link_lo)
+        .xcel_clk_i(clk_i)
+        ,.xcel_reset_i(reset_r)
+        ,.mc_clk_i(clk_i)
+        ,.mc_reset_i(reset_r)
+        ,.mc_hor_links_i(hor_link_sif_lo[E][i])
+        ,.mc_hor_links_o(hor_link_sif_li[E][i])
+        ,.mc_ruche_links_i(cgra_pod_ruche_link_li)
+        ,.mc_ruche_links_o(cgra_pod_ruche_link_lo)
         ,.global_x_i(bay_global_x[i])
         ,.global_y_i(bay_global_y[i])
       );

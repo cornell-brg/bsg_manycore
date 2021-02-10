@@ -3,6 +3,8 @@
 BSG_MANYCORE_DIR := $(shell git rev-parse --show-toplevel)
 # By convention, basejump_stl is in the same directory as $(BSG_MANYCORE_DIR)
 BASEJUMP_STL_DIR := $(abspath $(BSG_MANYCORE_DIR)/../basejump_stl)
+# PP: bsg_async_noc_link is under blackparrot source directory
+BP_TOP_DIR := $(abspath $(BSG_MANYCORE_DIR)/../black-parrot/bp_top/src)
 
 # Sets "VCS" variable
 # include $(BSG_MANYCORE_DIR)/../bsg_cadenv/cadenv.mk
@@ -33,7 +35,7 @@ VCS_CFLAGS   += -CFLAGS "-I$(BASEJUMP_STL_DIR)/bsg_test"
 VCS_CFLAGS   += -CFLAGS "-DFMT_HEADER_ONLY=1"
 VCS_CFLAGS   += -CFLAGS "-DBASEJUMP_STL_DIR=$(BASEJUMP_STL_DIR)"
 
-DEFAULT_MACHINES = pod_1x1 pod_1x1_hbm2 pod_4x4
+DEFAULT_MACHINES = pod_1x1 pod_1x1_cgra_xcel_pod pod_1x1_hbm2 pod_4x4
 
 .PHONY: all clean
 

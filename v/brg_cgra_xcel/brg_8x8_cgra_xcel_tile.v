@@ -1,12 +1,11 @@
 //====================================================================
-// brg_8x8_cgra_xcel_pod.v
+// brg_8x8_cgra_xcel_tile.v
 // Author : Peitian Pan
 // Date   : Jan 10, 2021
 //====================================================================
-// A CGRA accelerator pod to be connected to an 8x16 HB manycore pod.
-// This xcel pod instantiates two CGRA xcels.
+// A CGRA accelerator tile that exposes network link interfaces
 
-module brg_8x8_cgra_xcel_pod
+module brg_8x8_cgra_xcel_tile
   import bsg_manycore_pkg::*;
   #( 
      x_cord_width_p               = "inv"

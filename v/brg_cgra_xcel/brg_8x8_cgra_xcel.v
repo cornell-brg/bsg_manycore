@@ -33,6 +33,16 @@ module brg_8x8_cgra_xcel
     , input   [y_cord_width_p-1:0]                my_y_i
     );
 
+    // Register reset for better timing
+    logic reset_r;
+    bsg_dff #(
+      .width_p(1)
+    ) reset_reg (
+      .clk_i(clk_i)
+      ,.data_i(reset_i)
+      ,.data_o(reset_r)
+    );
+
     //--------------------------------------------------------------
     // Endpoint standard
     //--------------------------------------------------------------
@@ -66,6 +76,9 @@ module brg_8x8_cgra_xcel
     logic [num_mesh_links_per_cgra-1:0]                             returned_yumi_li     ;
     logic [num_mesh_links_per_cgra-1:0]                             returned_fifo_full_lo;
 
+    logic [num_mesh_links_per_cgra-1:0]                             unused_returned_credit_v_lo        ;
+    logic [num_mesh_links_per_cgra-1:0][4:0]                        unused_returned_credit_reg_id_lo   ;
+
     for (genvar i = 0; i < num_mesh_links_per_cgra; i++) begin
 
       bsg_manycore_endpoint_standard
@@ -77,8 +90,8 @@ module brg_8x8_cgra_xcel
         ,.addr_width_p          ( addr_width_p      )
         ,.max_out_credits_p     ( max_out_credits_p )
       ) endpoint_gs
-      (  .clk_i
-        ,.reset_i
+      (  .clk_i ( clk_i )
+        ,.reset_i ( reset_r )
 
         // mesh network
         ,.link_sif_i( link_sif_i[i] )
@@ -119,6 +132,9 @@ module brg_8x8_cgra_xcel
         ,.returned_pkt_type_r_o ( returned_pkt_type_lo[i]  ) // new field, do not use it for now
         ,.returned_yumi_i       ( returned_yumi_li[i]      )
         ,.returned_fifo_full_o  ( returned_fifo_full_lo[i] )
+
+        ,.returned_credit_v_r_o ( unused_returned_credit_v_lo[i] )
+        ,.returned_credit_reg_id_r_o ( unused_returned_credit_reg_id_lo[i] )
       );
 
     end
@@ -129,7 +145,7 @@ module brg_8x8_cgra_xcel
 
     HBEndpointCGRAXcel_8x8Array_4x4KBSpads hb_cgra_xcel (
       .clk                   ( clk_i                  ),
-      .reset                 ( reset_i                ),
+      .reset                 ( reset_r                ),
 
       .my_x_i                ( my_x_i                 ),
       .my_y_i                ( my_y_i                 ),

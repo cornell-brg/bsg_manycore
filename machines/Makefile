@@ -35,7 +35,7 @@ VCS_CFLAGS   += -CFLAGS "-I$(BASEJUMP_STL_DIR)/bsg_test"
 VCS_CFLAGS   += -CFLAGS "-DFMT_HEADER_ONLY=1"
 VCS_CFLAGS   += -CFLAGS "-DBASEJUMP_STL_DIR=$(BASEJUMP_STL_DIR)"
 
-DEFAULT_MACHINES = pod_1x1 pod_1x1_cgra_xcel_pod pod_1x1_hbm2 pod_4x4
+DEFAULT_MACHINES = pod_1x1 pod_1x1_hbm2 pod_4x4
 
 .PHONY: all clean
 

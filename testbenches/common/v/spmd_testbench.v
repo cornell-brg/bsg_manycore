@@ -46,13 +46,26 @@ module spmd_testbench();
 
   // clock and reset
   parameter core_clk_period_p = 1000; // 1000 ps == 1 GHz
+  // We should use the smallest clock period that doesn't cause violations in
+  // SDF GL sim. Currently we know 1500 ps works, but that number is far from
+  // optimal.
+  parameter cgra_xcel_clk_period_p = 1500;
+
   bit core_clk;
+  bit cgra_xcel_clk;
   bit global_reset;
+
   bsg_nonsynth_clock_gen #(
     .cycle_time_p(core_clk_period_p)
   ) clock_gen (
     .o(core_clk)
   );
+  bsg_nonsynth_clock_gen #(
+    .cycle_time_p(cgra_xcel_clk_period_p)
+  ) cgra_xcel_clock_gen (
+    .o(cgra_xcel_clk)
+  );
+
   bsg_nonsynth_reset_gen #(
     .num_clocks_p(1)
     ,.reset_cycles_lo_p(0)
@@ -106,6 +119,7 @@ module spmd_testbench();
     ,.reset_depth_p(reset_depth_p)
   ) tb (
     .clk_i(core_clk)
+    ,.cgra_xcel_clk_i(cgra_xcel_clk)
     ,.reset_i(global_reset)
 
     ,.io_link_sif_i(io_link_sif_li)

@@ -89,4 +89,5 @@ void check_against_ref(const int* ref, int verif_base_addr, int size) {
       bsg_fail();
     }
   }
+  bsg_printf("[passed]\n");
 }

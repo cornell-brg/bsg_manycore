@@ -53,6 +53,7 @@ module bsg_nonsynth_manycore_testbench
   )
   (
     input clk_i
+    , input cgra_xcel_clk_i
     , input reset_i
 
     , output tag_done_o
@@ -650,7 +651,7 @@ module bsg_nonsynth_manycore_testbench
         ,.num_row_p(num_tiles_y_p)
         ,.max_out_credits_p(32)
       ) cgra_bay (
-        .xcel_clk_i(clk_i)
+        .xcel_clk_i(cgra_xcel_clk_i)
         ,.xcel_reset_i(reset_r)
         ,.mc_clk_i(clk_i)
         ,.mc_reset_i(reset_r)

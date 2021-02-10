@@ -155,6 +155,11 @@ module brg_cgra_pod
   // CDC
   //=========================================================================
 
+  // These links are li/lo to/from xcel tile. I moved them here to avoid the
+  // forward reference warning.
+  bsg_manycore_link_sif_s [num_row_p-1:0] xcel_proc_links_li;
+  bsg_manycore_link_sif_s [num_row_p-1:0] xcel_proc_links_lo;
+
   for (genvar i = 0; i < num_row_p; i++) begin: rof2
     bsg_async_noc_link #(
       .width_p($bits(bsg_manycore_fwd_link_sif_s)-2),
@@ -188,9 +193,6 @@ module brg_cgra_pod
   // brg_8x8_cgra_xcel_tile
   //=========================================================================
   // CGRA accelerator tile
-
-  bsg_manycore_link_sif_s [num_row_p-1:0] xcel_proc_links_li;
-  bsg_manycore_link_sif_s [num_row_p-1:0] xcel_proc_links_lo;
 
   brg_8x8_cgra_xcel_tile #(
     .x_cord_width_p(x_cord_width_p)

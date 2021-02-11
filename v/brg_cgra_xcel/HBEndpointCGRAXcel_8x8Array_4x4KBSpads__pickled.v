@@ -3724,48 +3724,26 @@ module Alu__Type_Bits33
   output logic [32:0] out ,
   input  logic [0:0] reset 
 );
-  localparam logic [5:0] __const__int_width_at_up_data_gating  = 6'd32;
   localparam logic [5:0] __const__dpath_width_at_up_eq_gt_wire  = 6'd33;
+  localparam logic [5:0] __const__int_width_at_comb_logic  = 6'd32;
   logic [0:0] a_eq_b;
   logic [0:0] a_gt_b;
   logic [0:0] a_sgt_b;
-  logic [32:0] add_a_wire;
-  logic [32:0] add_b_wire;
-  logic [32:0] and_a_wire;
-  logic [32:0] and_b_wire;
-  logic [32:0] cp0_wire;
-  logic [32:0] cp1_wire;
-  logic [32:0] eq_a_wire;
-  logic [32:0] eq_b_wire;
-  logic [32:0] gt_a_wire;
-  logic [32:0] gt_b_wire;
-  logic [32:0] or_a_wire;
-  logic [32:0] or_b_wire;
-  logic [33:0] sgt_a_wire;
-  logic [33:0] sgt_b_wire;
   logic [33:0] sgt_r_wire;
-  logic [32:0] sll_a_wire;
-  logic [32:0] sll_b_wire;
-  logic [32:0] srl_a_wire;
-  logic [32:0] srl_b_wire;
-  logic [32:0] sub_a_wire;
-  logic [32:0] sub_b_wire;
-  logic [32:0] xor_a_wire;
-  logic [32:0] xor_b_wire;
 
   // PyMTL Update Block Source
   // At /work/global/pp482/cgra/src/cgra/Alu.py:128
   // @update
   // def comb_logic():
-  //   if   s.fn == AluOp.CP0 : s.out @= s.cp0_wire                         # COPY OP0
-  //   elif s.fn == AluOp.CP1 : s.out @= s.cp1_wire                         # COPY OP1
-  //   elif s.fn == AluOp.ADD : s.out @= s.add_a_wire + s.add_b_wire        # ADD
-  //   elif s.fn == AluOp.SUB : s.out @= s.sub_a_wire - s.sub_b_wire        # SUB
-  //   elif s.fn == AluOp.SLL : s.out @= s.sll_a_wire << s.sll_b_wire       # SLL
-  //   elif s.fn == AluOp.SRL : s.out @= s.srl_a_wire >> s.srl_b_wire       # SRL
-  //   elif s.fn == AluOp.AND : s.out @= s.and_a_wire & s.and_b_wire        # AND
-  //   elif s.fn == AluOp.OR  : s.out @= s.or_a_wire  | s.or_b_wire         # OR
-  //   elif s.fn == AluOp.XOR : s.out @= s.xor_a_wire ^ s.xor_b_wire        # XOR
+  //   if   s.fn == AluOp.CP0 : s.out @= s.in0                         # COPY OP0
+  //   elif s.fn == AluOp.CP1 : s.out @= s.in1                         # COPY OP1
+  //   elif s.fn == AluOp.ADD : s.out @= s.in0 + s.in1        # ADD
+  //   elif s.fn == AluOp.SUB : s.out @= s.in0 - s.in1        # SUB
+  //   elif s.fn == AluOp.SLL : s.out @= s.in0 << s.in1       # SLL
+  //   elif s.fn == AluOp.SRL : s.out @= concat( b1(0), s.in0[0:int_width] ) >> s.in1       # SRL
+  //   elif s.fn == AluOp.AND : s.out @= s.in0 & s.in1        # AND
+  //   elif s.fn == AluOp.OR  : s.out @= s.in0 | s.in1         # OR
+  //   elif s.fn == AluOp.XOR : s.out @= s.in0 ^ s.in1        # XOR
   //   elif s.fn == AluOp.EQ  : s.out @= 1 if  s.a_eq_b else 0              # EQ
   //   elif s.fn == AluOp.NE  : s.out @= 1 if ~s.a_eq_b else 0              # NE
   //   elif s.fn == AluOp.GT  : s.out @= 1 if  s.a_gt_b else 0              # GT
@@ -3776,31 +3754,31 @@ module Alu__Type_Bits33
   
   always_comb begin : comb_logic
     if ( fn == 4'd0 ) begin
-      out = cp0_wire;
+      out = in0;
     end
     else if ( fn == 4'd1 ) begin
-      out = cp1_wire;
+      out = in1;
     end
     else if ( fn == 4'd2 ) begin
-      out = add_a_wire + add_b_wire;
+      out = in0 + in1;
     end
     else if ( fn == 4'd3 ) begin
-      out = sub_a_wire - sub_b_wire;
+      out = in0 - in1;
     end
     else if ( fn == 4'd4 ) begin
-      out = sll_a_wire << sll_b_wire;
+      out = in0 << in1;
     end
     else if ( fn == 4'd5 ) begin
-      out = srl_a_wire >> srl_b_wire;
+      out = { 1'd0, in0[6'd31:6'd0] } >> in1;
     end
     else if ( fn == 4'd6 ) begin
-      out = and_a_wire & and_b_wire;
+      out = in0 & in1;
     end
     else if ( fn == 4'd7 ) begin
-      out = or_a_wire | or_b_wire;
+      out = in0 | in1;
     end
     else if ( fn == 4'd8 ) begin
-      out = xor_a_wire ^ xor_b_wire;
+      out = in0 ^ in1;
     end
     else if ( fn == 4'd9 ) begin
       out = a_eq_b ? 33'd1 : 33'd0;
@@ -3828,109 +3806,69 @@ module Alu__Type_Bits33
   // At /work/global/pp482/cgra/src/cgra/Alu.py:72
   // @update
   // def up_data_gating():
-  //   s.cp0_wire   @= s.in0 if s.fn == AluOp.CP0 else 0
-  //   s.cp1_wire   @= s.in1 if s.fn == AluOp.CP1 else 0
+  //   # s.cp0_wire   @= s.in0 if s.fn == AluOp.CP0 else 0
+  //   # s.cp1_wire   @= s.in1 if s.fn == AluOp.CP1 else 0
   // 
-  //   s.add_a_wire @= s.in0 if s.fn == AluOp.ADD else 0
-  //   s.add_b_wire @= s.in1 if s.fn == AluOp.ADD else 0
+  //   # s.add_a_wire @= s.in0 if s.fn == AluOp.ADD else 0
+  //   # s.add_b_wire @= s.in1 if s.fn == AluOp.ADD else 0
   // 
-  //   s.sub_a_wire @= s.in0 if s.fn == AluOp.SUB else 0
-  //   s.sub_b_wire @= s.in1 if s.fn == AluOp.SUB else 0
+  //   # s.sub_a_wire @= s.in0 if s.fn == AluOp.SUB else 0
+  //   # s.sub_b_wire @= s.in1 if s.fn == AluOp.SUB else 0
   // 
-  //   s.sll_a_wire @= s.in0 if s.fn == AluOp.SLL else 0
-  //   s.sll_b_wire @= s.in1 if s.fn == AluOp.SLL else 0
+  //   # s.sll_a_wire @= s.in0 if s.fn == AluOp.SLL else 0
+  //   # s.sll_b_wire @= s.in1 if s.fn == AluOp.SLL else 0
   // 
-  //   # ALU should perform 32-bit logical right shift
-  //   s.srl_a_wire @= concat( b1(0), s.in0[0:int_width] ) if s.fn == AluOp.SRL else 0
-  //   s.srl_b_wire @= s.in1 if s.fn == AluOp.SRL else 0
+  //   # # ALU should perform 32-bit logical right shift
+  //   # s.srl_a_wire @= concat( b1(0), s.in0[0:int_width] ) if s.fn == AluOp.SRL else 0
+  //   # s.srl_b_wire @= s.in1 if s.fn == AluOp.SRL else 0
   // 
-  //   s.and_a_wire @= s.in0 if s.fn == AluOp.AND else 0
-  //   s.and_b_wire @= s.in1 if s.fn == AluOp.AND else 0
+  //   # s.and_a_wire @= s.in0 if s.fn == AluOp.AND else 0
+  //   # s.and_b_wire @= s.in1 if s.fn == AluOp.AND else 0
   // 
-  //   s.or_a_wire  @= s.in0 if s.fn == AluOp.OR  else 0
-  //   s.or_b_wire  @= s.in1 if s.fn == AluOp.OR  else 0
+  //   # s.or_a_wire  @= s.in0 if s.fn == AluOp.OR  else 0
+  //   # s.or_b_wire  @= s.in1 if s.fn == AluOp.OR  else 0
   // 
-  //   s.xor_a_wire @= s.in0 if s.fn == AluOp.XOR else 0
-  //   s.xor_b_wire @= s.in1 if s.fn == AluOp.XOR else 0
+  //   # s.xor_a_wire @= s.in0 if s.fn == AluOp.XOR else 0
+  //   # s.xor_b_wire @= s.in1 if s.fn == AluOp.XOR else 0
   // 
-  //   if ( s.fn == AluOp.EQ  ) | ( s.fn == AluOp.NE ) | ( s.fn == AluOp.GEQ ) | ( s.fn == AluOp.SGEQ ):
-  //     s.eq_a_wire @= s.in0
-  //     s.eq_b_wire @= s.in1
-  //   else:
-  //     s.eq_a_wire @= 0
-  //     s.eq_b_wire @= 0
+  //   # if ( s.fn == AluOp.EQ  ) | ( s.fn == AluOp.NE ) | ( s.fn == AluOp.GEQ ) | ( s.fn == AluOp.SGEQ ):
+  //   #   s.eq_a_wire @= s.in0
+  //   #   s.eq_b_wire @= s.in1
+  //   # else:
+  //   #   s.eq_a_wire @= 0
+  //   #   s.eq_b_wire @= 0
   // 
-  //   if ( s.fn == AluOp.GT ) | ( s.fn == AluOp.GEQ ):
-  //     s.gt_a_wire @= s.in0
-  //     s.gt_b_wire @= s.in1
-  //   else:
-  //     s.gt_a_wire @= 0
-  //     s.gt_b_wire @= 0
+  //   # if ( s.fn == AluOp.GT ) | ( s.fn == AluOp.GEQ ):
+  //   #   s.gt_a_wire @= s.in0
+  //   #   s.gt_b_wire @= s.in1
+  //   # else:
+  //   #   s.gt_a_wire @= 0
+  //   #   s.gt_b_wire @= 0
   // 
-  //   if ( s.fn == AluOp.SGT ) | ( s.fn == AluOp.SGEQ ):
-  //     s.sgt_a_wire @= sext( s.in1, sgt_width )
-  //     s.sgt_b_wire @= sext( s.in0, sgt_width )
-  //   else:
-  //     s.sgt_a_wire @= 0
-  //     s.sgt_b_wire @= 0
+  //   # if ( s.fn == AluOp.SGT ) | ( s.fn == AluOp.SGEQ ):
+  //   #   s.sgt_a_wire @= sext( s.in1, sgt_width )
+  //   #   s.sgt_b_wire @= sext( s.in0, sgt_width )
+  //   # else:
+  //   #   s.sgt_a_wire @= 0
+  //   #   s.sgt_b_wire @= 0
   // 
-  //   s.sgt_r_wire @= s.sgt_a_wire - s.sgt_b_wire
+  //   s.sgt_r_wire @= sext( s.in1, sgt_width ) - sext( s.in0, sgt_width )
   
   always_comb begin : up_data_gating
-    cp0_wire = ( fn == 4'd0 ) ? in0 : 33'd0;
-    cp1_wire = ( fn == 4'd1 ) ? in1 : 33'd0;
-    add_a_wire = ( fn == 4'd2 ) ? in0 : 33'd0;
-    add_b_wire = ( fn == 4'd2 ) ? in1 : 33'd0;
-    sub_a_wire = ( fn == 4'd3 ) ? in0 : 33'd0;
-    sub_b_wire = ( fn == 4'd3 ) ? in1 : 33'd0;
-    sll_a_wire = ( fn == 4'd4 ) ? in0 : 33'd0;
-    sll_b_wire = ( fn == 4'd4 ) ? in1 : 33'd0;
-    srl_a_wire = ( fn == 4'd5 ) ? { 1'd0, in0[6'd31:6'd0] } : 33'd0;
-    srl_b_wire = ( fn == 4'd5 ) ? in1 : 33'd0;
-    and_a_wire = ( fn == 4'd6 ) ? in0 : 33'd0;
-    and_b_wire = ( fn == 4'd6 ) ? in1 : 33'd0;
-    or_a_wire = ( fn == 4'd7 ) ? in0 : 33'd0;
-    or_b_wire = ( fn == 4'd7 ) ? in1 : 33'd0;
-    xor_a_wire = ( fn == 4'd8 ) ? in0 : 33'd0;
-    xor_b_wire = ( fn == 4'd8 ) ? in1 : 33'd0;
-    if ( ( ( ( fn == 4'd9 ) | ( fn == 4'd10 ) ) | ( fn == 4'd12 ) ) | ( fn == 4'd14 ) ) begin
-      eq_a_wire = in0;
-      eq_b_wire = in1;
-    end
-    else begin
-      eq_a_wire = 33'd0;
-      eq_b_wire = 33'd0;
-    end
-    if ( ( fn == 4'd11 ) | ( fn == 4'd12 ) ) begin
-      gt_a_wire = in0;
-      gt_b_wire = in1;
-    end
-    else begin
-      gt_a_wire = 33'd0;
-      gt_b_wire = 33'd0;
-    end
-    if ( ( fn == 4'd13 ) | ( fn == 4'd14 ) ) begin
-      sgt_a_wire = { { 1 { in1[32] } }, in1 };
-      sgt_b_wire = { { 1 { in0[32] } }, in0 };
-    end
-    else begin
-      sgt_a_wire = 34'd0;
-      sgt_b_wire = 34'd0;
-    end
-    sgt_r_wire = sgt_a_wire - sgt_b_wire;
+    sgt_r_wire = { { 1 { in1[32] } }, in1 } - { { 1 { in0[32] } }, in0 };
   end
 
   // PyMTL Update Block Source
   // At /work/global/pp482/cgra/src/cgra/Alu.py:122
   // @update
   // def up_eq_gt_wire():
-  //   s.a_eq_b  @= s.eq_a_wire == s.eq_b_wire
-  //   s.a_gt_b  @= s.gt_a_wire > s.gt_b_wire
+  //   s.a_eq_b  @= s.in0 == s.in1
+  //   s.a_gt_b  @= s.in0 > s.in1
   //   s.a_sgt_b @= s.sgt_r_wire[dpath_width]
   
   always_comb begin : up_eq_gt_wire
-    a_eq_b = eq_a_wire == eq_b_wire;
-    a_gt_b = gt_a_wire > gt_b_wire;
+    a_eq_b = in0 == in1;
+    a_gt_b = in0 > in1;
     a_sgt_b = sgt_r_wire[6'( __const__dpath_width_at_up_eq_gt_wire )];
   end
 
@@ -4977,7 +4915,7 @@ module FunctUnit__24f351cbdd3e67d4
   //-------------------------------------------------------------
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/FunctUnit.py:303
+  // At /work/global/pp482/cgra/src/cgra/FunctUnit.py:302
   // s.is_occupied //= lambda: (s.in_val & s.in_rdy) | s.llfu.is_occupied
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_PE_rc_0__dpath_fu_is_occupied
@@ -5111,41 +5049,41 @@ module FunctUnit__24f351cbdd3e67d4
   // @update
   // def fu_gen_out_msg():
   //   s.out.msg.result @= s.alu.out
-  //   s.out.msg.is_opd_bool_true @= s.in_msg.opd_b != 0
+  //   s.out.msg.is_opd_bool_true @= 0
+  // 
+  //   if (s.cfg.opcode == CFG.OP_B_TYPE) & s.in_val:
+  //     s.out.msg.is_opd_bool_true @= s.in_msg.opd_b != 0
+  // 
   //   if s.cfg.opcode == CFG.OP_Q_TYPE:
   //     if s.is_llfu_op:
   //       s.out.msg.result @= s.llfu.out.msg.result
-  //       s.out.msg.is_opd_bool_true @= s.llfu.out.msg.opd_b != 0
   //     # if s.is_llfu_op & ~s.imul_use_alu_out:
   //     #   s.out.msg.result @= s.llfu.out.msg.result
-  //     #   s.out.msg.is_opd_bool_true @= s.llfu.out.msg.opd_b != 0
   //     # if s.is_llfu_op & s.imul_use_alu_out:
   //     #   s.out.msg.result @= s.alu.out
   //     #   if s.cfg.func == CFG.MAD:
-  //     #     s.out.msg.is_opd_bool_true @= s.llfu.out.msg.opd_rf != 0
   //     #   else:
-  //     #     s.out.msg.is_opd_bool_true @= s.llfu.out.msg.opd_b != 0
   //     if s.is_phi_init & s.riu.out_val:
   //       s.out.msg.result @= s.phi_init_operand
-  //       s.out.msg.is_opd_bool_true @= 0
   
   always_comb begin : fu_gen_out_msg
     out__msg.result = alu__out;
-    out__msg.is_opd_bool_true = in_msg.opd_b != 33'd0;
+    out__msg.is_opd_bool_true = 1'd0;
+    if ( ( cfg.opcode == 1'd1 ) & in_val ) begin
+      out__msg.is_opd_bool_true = in_msg.opd_b != 33'd0;
+    end
     if ( cfg.opcode == 1'd0 ) begin
       if ( is_llfu_op ) begin
         out__msg.result = llfu__out__msg.result;
-        out__msg.is_opd_bool_true = llfu__out__msg.opd_b != 33'd0;
       end
       if ( is_phi_init & riu__out_val ) begin
         out__msg.result = phi_init_operand;
-        out__msg.is_opd_bool_true = 1'd0;
       end
     end
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/FunctUnit.py:246
+  // At /work/global/pp482/cgra/src/cgra/FunctUnit.py:245
   // @update
   // def fu_gen_out_val():
   //   s.out.val @= 0
@@ -21571,20 +21509,20 @@ endmodule
 
 
 // PyMTL Component HBEndpointRXAdapter Definition
-// Full name: HBEndpointRXAdapter__hb_params_<hammerblade.params.HBParams object at 0x7fd340e48e90>__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:2, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// Full name: HBEndpointRXAdapter__hb_params_<hammerblade.params.HBParams object at 0x7f1971d0b7d0>__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:2, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
 // At /work/global/pp482/cgra/src/hammerblade/HBEndpointRXAdapter.py
 
-module HBEndpointRXAdapter__517d10a216843d55
+module HBEndpointRXAdapter__8ec12a820cf36595
 (
   input  logic [0:0] clk ,
-  input  logic [4:0] my_x ,
-  input  logic [3:0] my_y ,
+  input  logic [6:0] my_x ,
+  input  logic [6:0] my_y ,
   input  logic [27:0] req_addr ,
   input  logic [31:0] req_data ,
   input  logic [6:0] req_load_info ,
   input  logic [3:0] req_mask ,
-  input  logic [4:0] req_src_x_cord ,
-  input  logic [3:0] req_src_y_cord ,
+  input  logic [6:0] req_src_x_cord ,
+  input  logic [6:0] req_src_y_cord ,
   input  logic [0:0] req_val ,
   input  logic [0:0] req_we ,
   output logic [0:0] req_yumi ,
@@ -21678,16 +21616,16 @@ endmodule
 
 
 // PyMTL Component HBEndpointTXAdapter Definition
-// Full name: HBEndpointTXAdapter__hb_params_<hammerblade.params.HBParams object at 0x7fd340e48e90>__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:2, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// Full name: HBEndpointTXAdapter__hb_params_<hammerblade.params.HBParams object at 0x7f1971d0b7d0>__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:2, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
 // At /work/global/pp482/cgra/src/hammerblade/HBEndpointTXAdapter.py
 
-module HBEndpointTXAdapter__517d10a216843d55
+module HBEndpointTXAdapter__8ec12a820cf36595
 (
   input  logic [0:0] clk ,
-  input  logic [4:0] my_x ,
-  input  logic [3:0] my_y ,
-  input  logic [4:0] req_credits ,
-  output logic [88:0] req_pkt ,
+  input  logic [6:0] my_x ,
+  input  logic [6:0] my_y ,
+  input  logic [5:0] req_credits ,
+  output logic [96:0] req_pkt ,
   input  logic [0:0] req_rdy ,
   output logic [0:0] req_val ,
   input  logic [0:0] reset ,
@@ -21706,7 +21644,7 @@ module HBEndpointTXAdapter__517d10a216843d55
 );
 
   assign req_val = 1'd0;
-  assign req_pkt = 89'd0;
+  assign req_pkt = 97'd0;
   assign resp_yumi = 1'd0;
   assign mem_minion__req__rdy[0] = 1'd1;
   assign mem_minion__resp__en[0] = 1'd0;
@@ -21725,7 +21663,7 @@ endmodule
 
 
 // PyMTL Component HBEndpointCGRAXcel Definition
-// Full name: HBEndpointCGRAXcel__hb_params_<hammerblade.params.HBParams object at 0x7fd340e48e90>__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:2, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// Full name: HBEndpointCGRAXcel__hb_params_<hammerblade.params.HBParams object at 0x7f1971d0b7d0>__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:2, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
 // At /work/global/pp482/cgra/src/hammerblade/HBEndpointCGRAXcel.py
 
 module HBEndpointCGRAXcel_8x8Array_4x4KBSpads
@@ -21735,16 +21673,16 @@ module HBEndpointCGRAXcel_8x8Array_4x4KBSpads
   input  logic [31:0] in_data_i ,
   input  logic [6:0] in_load_info_i ,
   input  logic [3:0] in_mask_i ,
-  input  logic [4:0] in_src_x_cord_i ,
-  input  logic [3:0] in_src_y_cord_i ,
+  input  logic [6:0] in_src_x_cord_i ,
+  input  logic [6:0] in_src_y_cord_i ,
   input  logic [0:0] in_v_i ,
   input  logic [0:0] in_we_i ,
   output logic [0:0] in_yumi_o ,
-  input  logic [4:0] my_x_i ,
-  input  logic [3:0] my_y_i ,
+  input  logic [6:0] my_x_i ,
+  input  logic [6:0] my_y_i ,
   input  logic [0:0] out_credit_or_ready_i ,
-  input  logic [4:0] out_credits_i ,
-  output logic [88:0] out_packet_o ,
+  input  logic [5:0] out_credits_i ,
+  output logic [96:0] out_packet_o ,
   output logic [0:0] out_v_o ,
   input  logic [0:0] reset ,
   input  logic [31:0] returned_data_r_i ,
@@ -21802,14 +21740,14 @@ module HBEndpointCGRAXcel_8x8Array_4x4KBSpads
   //-------------------------------------------------------------
 
   logic [0:0] rx__clk;
-  logic [4:0] rx__my_x;
-  logic [3:0] rx__my_y;
+  logic [6:0] rx__my_x;
+  logic [6:0] rx__my_y;
   logic [27:0] rx__req_addr;
   logic [31:0] rx__req_data;
   logic [6:0] rx__req_load_info;
   logic [3:0] rx__req_mask;
-  logic [4:0] rx__req_src_x_cord;
-  logic [3:0] rx__req_src_y_cord;
+  logic [6:0] rx__req_src_x_cord;
+  logic [6:0] rx__req_src_y_cord;
   logic [0:0] rx__req_val;
   logic [0:0] rx__req_we;
   logic [0:0] rx__req_yumi;
@@ -21823,7 +21761,7 @@ module HBEndpointCGRAXcel_8x8Array_4x4KBSpads
   CgraXcelRespMsg__wen_1__addr_14__data_32 rx__xcel_master__resp__msg;
   logic [0:0] rx__xcel_master__resp__rdy;
 
-  HBEndpointRXAdapter__517d10a216843d55 rx
+  HBEndpointRXAdapter__8ec12a820cf36595 rx
   (
     .clk( rx__clk ),
     .my_x( rx__my_x ),
@@ -21857,10 +21795,10 @@ module HBEndpointCGRAXcel_8x8Array_4x4KBSpads
   //-------------------------------------------------------------
 
   logic [0:0] tx__clk;
-  logic [4:0] tx__my_x;
-  logic [3:0] tx__my_y;
-  logic [4:0] tx__req_credits;
-  logic [88:0] tx__req_pkt;
+  logic [6:0] tx__my_x;
+  logic [6:0] tx__my_y;
+  logic [5:0] tx__req_credits;
+  logic [96:0] tx__req_pkt;
   logic [0:0] tx__req_rdy;
   logic [0:0] tx__req_val;
   logic [0:0] tx__reset;
@@ -21877,7 +21815,7 @@ module HBEndpointCGRAXcel_8x8Array_4x4KBSpads
   CgraRemoteMemRespMsg__wen_1__addr_28__data_32 tx__mem_minion__resp__msg [0:3];
   logic [0:0] tx__mem_minion__resp__rdy [0:3];
 
-  HBEndpointTXAdapter__517d10a216843d55 tx
+  HBEndpointTXAdapter__8ec12a820cf36595 tx
   (
     .clk( tx__clk ),
     .my_x( tx__my_x ),

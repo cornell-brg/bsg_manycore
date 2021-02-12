@@ -648,7 +648,7 @@ module bsg_nonsynth_manycore_testbench
         ,.x_cord_width_p(x_cord_width_p)
         ,.y_cord_width_p(y_cord_width_p)
         ,.ruche_factor_X_p(ruche_factor_X_p)
-        ,.num_row_p(num_tiles_y_p)
+        ,.num_row_p(4)
         ,.max_out_credits_p(32)
       ) cgra_bay (
         .xcel_clk_i(cgra_xcel_clk_i)

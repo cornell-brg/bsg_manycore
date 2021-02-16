@@ -45,13 +45,13 @@ endif
 NBF_FILE = $(PROG_NAME).nbf
 
 # PP: still use vcdplus.vpd if $(VPD_FILENAME) is absent
-VPD_FILENAME ?= vcdplus.vpd
+# VPD_FILENAME ?= vcdplus.vpd
+# 							 +vpd_filename=$(VPD_FILENAME) \
 
 BSG_SIM_OPTS = +nbf_file=$(NBF_FILE) \
                +max_cycle=$(MAX_CYCLES) \
                +num_pods=$(bsg_pods_size) \
                +vanilla_trace_en=$(TRACE) \
-							 +vpd_filename=$(VPD_FILENAME) \
                -licqueue -reportstats \
                -l run.log
 

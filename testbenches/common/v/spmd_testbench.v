@@ -175,15 +175,15 @@ module spmd_testbench();
   // PP: specify vpd filename based on the given vpd_filename arg
   // This allows parallel VPD generation without having multiple tasks
   // stepping on each other.
-  string vpd_filename;
-  initial begin
-    $value$plusargs("vpd_filename=%s", vpd_filename);
-    $vcdplusfile(vpd_filename);
-    $vcdpluson;
-    $vcdplusmemon;
-    $vcdplusautoflushon;
-    $display("[INFO][SPMD-TESTBENCH] VPD filename set to %s", vpd_filename);
-  end
+  /* string vpd_filename; */
+  /* initial begin */
+  /*   $value$plusargs("vpd_filename=%s", vpd_filename); */
+  /*   $vcdplusfile(vpd_filename); */
+  /*   $vcdpluson; */
+  /*   $vcdplusmemon; */
+  /*   $vcdplusautoflushon; */
+  /*   $display("[INFO][SPMD-TESTBENCH] VPD filename set to %s", vpd_filename); */
+  /* end */
 
   // global counter
   logic [31:0] global_ctr;

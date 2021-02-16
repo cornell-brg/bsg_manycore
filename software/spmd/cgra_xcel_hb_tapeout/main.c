@@ -90,7 +90,16 @@ int main()
 
     bsg_printf("[INFO] cgra-xcel starts!\n");
 
-    for (i = 0; i < NUM_TEST_VECTORS; i++) {
+    if (is_run_all_tests()) {
+      for (i = 0; i < NUM_TEST_VECTORS; i++) {
+        run_test( i, test_name[i],
+                  bstrm_addr[i], bstrm_size[i],
+                  insts_addr[i], arg0_addr[i], arg1_addr[i],
+                  arg2_addr[i], arg3_addr[i], inst_size[i],
+                  verif_base[i], result_size[i], ref_addr[i]);
+      }
+    } else {
+      i = get_test_index();
       run_test( i, test_name[i],
                 bstrm_addr[i], bstrm_size[i],
                 insts_addr[i], arg0_addr[i], arg1_addr[i],

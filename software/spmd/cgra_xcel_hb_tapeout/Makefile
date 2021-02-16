@@ -4,10 +4,10 @@ bsg_tiles_Y = 1
 
 all: main.run
 
+RISCV_GCC_EXTRA_OPTS ?= -DTEST_SEL=all
 
 CGRA_HEADER_FILES =  cgra_xcel_hb_tapeout.h
 CGRA_HEADER_FILES += ./cgra_test_vectors/cgra_test_vectors.dat
-CGRA_HEADER_FILES += ./cgra_test_vectors/cgra_tv_vvadd_8x8.dat
 
 OBJECT_FILES=main.o
 

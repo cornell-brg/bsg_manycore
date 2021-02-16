@@ -3,6 +3,11 @@
 #include "bsg_manycore.h"
 #include "bsg_set_tile_x_y.h"
 
+#define str(s) #s
+#define xstr(s) str(s)
+
+#define TEST_NAME xstr(TEST_SEL)
+
 // Useful macros
 
 #define POD_CORD_X_WIDTH 3
@@ -90,4 +95,45 @@ void check_against_ref(const int* ref, int verif_base_addr, int size) {
     }
   }
   bsg_printf("[passed]\n");
+}
+
+int get_str_len(const char* str) {
+  int len = 0;
+  for(len = 0; str[len] != '\0'; len++) ;
+  return len;
+}
+
+int is_str_same(const char* str1, const char* str2) {
+  int len1 = get_str_len(str1);
+  int len2 = get_str_len(str2);
+  if (len1 != len2)
+    return 0;
+  for (int i = 0; i < len1; i++)
+    if (str1[i] != str2[i])
+      return 0;
+  return 1;
+}
+
+int is_run_all_tests() {
+  const char* str_all = "all";
+  const char* str_test = TEST_NAME;
+  int str_len = get_str_len(str_test);
+
+  if (str_len != 3)
+    return 0;
+
+  for (int i = 0; i < str_len; i++)
+    if (str_all[i] != str_test[i])
+      return 0;
+
+  return 1;
+}
+
+int get_test_index() {
+  const char* str_test = TEST_NAME;
+  for (int i = 0; i < NUM_TEST_VECTORS; i++)
+    if (is_str_same(test_name[i], str_test))
+      return i;
+  bsg_printf("[FAILED] The given test name %s is not registered!\n", str_test);
+  bsg_fail();
 }

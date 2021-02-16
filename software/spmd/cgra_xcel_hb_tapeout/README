@@ -1,10 +1,5 @@
-This CGRA test runner supports parallel RTL simulation and VPD generation. To run all test cases:
+This CGRA test runner supports parallel RTL simulation and VPD generation. To run one test case (e.g., vvadd_8x8):
 
-  make BSG_MACHINE_PATH=$TOP/bsg_manycore/machines/pod_1x1_cgra_xcel_pod CGRA_TEST=all
+  ./test_runner.sh vvadd_8x8 $TOP/bsg_manycore/machines/pod_1x1_cgra_xcel_pod
 
-To run one test case (e.g., vvadd_8x8):
-
-  make BSG_MACHINE_PATH=$TOP/bsg_manycore/machines/pod_1x1_cgra_xcel_pod CGRA_TEST=vvadd_8x8
-
-If you want to add a new test case, copy over the test vector .dat file to under
-cgra_test_vectors and rerun ./register_tests.py.
+Ideally you need a qsub job script if you want to parallelize the RTL simulation workloads.

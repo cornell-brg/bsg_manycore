@@ -11,3 +11,4 @@ dramsim3epoch.json
 *.ld
 dis
 *.png
+cgra_test_*/

@@ -25,6 +25,9 @@ VCS_FLAGS    += -reportstats
 VCS_FLAGS    += -assert svaext  # needed for "assert final"
 #VCS_FLAGS    += +vcs+loopreport
 
+# PP: Make sure we are running RTL hard simulation
+VCS_FLAGS    += +define+BRG_RTL_HARD_SIM +define+ARM_UD_MODEL
+
 VCS_CFLAGS   =  -cpp g++
 VCS_CFLAGS   += -CFLAGS "-std=c++11 -g -Wall"
 VCS_CFLAGS   += -CFLAGS "-fPIC"

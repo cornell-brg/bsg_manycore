@@ -129,10 +129,10 @@ typedef struct packed {
 } mmxbar_resp_17_CgraLocalMemRespMsg__97a8fdbd88c53709;
 
 // PyMTL Component CGRAXcelCtrl Definition
-// Full name: CGRAXcelCtrl__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:2, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// Full name: CGRAXcelCtrl__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
 // At /work/global/pp482/cgra/src/cgra/CGRAXcelCtrl.py
 
-module CGRAXcelCtrl__24f351cbdd3e67d4
+module CGRAXcelCtrl__07e21c4d4fa663e6
 (
   output logic [0:0] cgra_xminion_req_en ,
   input  logic [0:0] cgra_xminion_req_rdy ,
@@ -299,10 +299,10 @@ endmodule
 
 
 // PyMTL Component CGRACoreCtrl Definition
-// Full name: CGRACoreCtrl__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:2, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// Full name: CGRACoreCtrl__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
 // At /work/global/pp482/cgra/src/cgra/CGRACoreCtrl.py
 
-module CGRACoreCtrl__24f351cbdd3e67d4
+module CGRACoreCtrl__07e21c4d4fa663e6
 (
   output logic [0:0] CSR_wen ,
   output logic [0:0] cfg_init ,
@@ -472,10 +472,10 @@ endmodule
 
 
 // PyMTL Component ConfigEngineCtrl Definition
-// Full name: ConfigEngineCtrl__num_modules_9__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:2, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// Full name: ConfigEngineCtrl__num_modules_9__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
 // At /work/global/pp482/cgra/src/cgra/ConfigEngineCtrl.py
 
-module ConfigEngineCtrl__b666e1db5a53424e
+module ConfigEngineCtrl__7a3f723b2782421e
 (
   input  logic [0:0] cfg_init ,
   output logic [0:0] cfg_out_val ,
@@ -901,10 +901,10 @@ endmodule
 
 
 // PyMTL Component ConfigEngineDpath Definition
-// Full name: ConfigEngineDpath__num_modules_9__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:2, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// Full name: ConfigEngineDpath__num_modules_9__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
 // At /work/global/pp482/cgra/src/cgra/ConfigEngineDpath.py
 
-module ConfigEngineDpath__b666e1db5a53424e
+module ConfigEngineDpath__7a3f723b2782421e
 (
   input  logic [1:0] cfg_cmd ,
   input  logic [13:0] cfg_me_base_addr ,
@@ -1133,10 +1133,10 @@ endmodule
 
 
 // PyMTL Component ConfigEngine Definition
-// Full name: ConfigEngine__num_modules_9__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:2, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// Full name: ConfigEngine__num_modules_9__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
 // At /work/global/pp482/cgra/src/cgra/ConfigEngine.py
 
-module ConfigEngine__b666e1db5a53424e
+module ConfigEngine__7a3f723b2782421e
 (
   input  logic [1:0] cfg_cmd ,
   input  logic [0:0] cfg_init ,
@@ -1180,7 +1180,7 @@ module ConfigEngine__b666e1db5a53424e
   logic [0:0] ctrl__start_with_ME;
   logic [0:0] ctrl__start_with_PE;
 
-  ConfigEngineCtrl__b666e1db5a53424e ctrl
+  ConfigEngineCtrl__7a3f723b2782421e ctrl
   (
     .cfg_init( ctrl__cfg_init ),
     .cfg_out_val( ctrl__cfg_out_val ),
@@ -1232,7 +1232,7 @@ module ConfigEngine__b666e1db5a53424e
   logic [0:0] dpath__start_with_PE;
   logic [3:0] dpath__y_cord;
 
-  ConfigEngineDpath__b666e1db5a53424e dpath
+  ConfigEngineDpath__7a3f723b2782421e dpath
   (
     .cfg_cmd( dpath__cfg_cmd ),
     .cfg_me_base_addr( dpath__cfg_me_base_addr ),
@@ -1294,10 +1294,10 @@ endmodule
 
 
 // PyMTL Component ConfigEngineCtrl Definition
-// Full name: ConfigEngineCtrl__num_modules_8__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:2, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// Full name: ConfigEngineCtrl__num_modules_8__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
 // At /work/global/pp482/cgra/src/cgra/ConfigEngineCtrl.py
 
-module ConfigEngineCtrl__7bab677ba9e9f52a
+module ConfigEngineCtrl__35b26261d06d20ce
 (
   input  logic [0:0] cfg_init ,
   output logic [0:0] cfg_out_val ,
@@ -1622,10 +1622,10 @@ endmodule
 
 
 // PyMTL Component ConfigEngineDpath Definition
-// Full name: ConfigEngineDpath__num_modules_8__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:2, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// Full name: ConfigEngineDpath__num_modules_8__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
 // At /work/global/pp482/cgra/src/cgra/ConfigEngineDpath.py
 
-module ConfigEngineDpath__7bab677ba9e9f52a
+module ConfigEngineDpath__35b26261d06d20ce
 (
   input  logic [1:0] cfg_cmd ,
   input  logic [13:0] cfg_me_base_addr ,
@@ -1830,10 +1830,10 @@ endmodule
 
 
 // PyMTL Component ConfigEngine Definition
-// Full name: ConfigEngine__num_modules_8__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:2, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// Full name: ConfigEngine__num_modules_8__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
 // At /work/global/pp482/cgra/src/cgra/ConfigEngine.py
 
-module ConfigEngine__7bab677ba9e9f52a
+module ConfigEngine__35b26261d06d20ce
 (
   input  logic [1:0] cfg_cmd ,
   input  logic [0:0] cfg_init ,
@@ -1877,7 +1877,7 @@ module ConfigEngine__7bab677ba9e9f52a
   logic [0:0] ctrl__start_with_ME;
   logic [0:0] ctrl__start_with_PE;
 
-  ConfigEngineCtrl__7bab677ba9e9f52a ctrl
+  ConfigEngineCtrl__35b26261d06d20ce ctrl
   (
     .cfg_init( ctrl__cfg_init ),
     .cfg_out_val( ctrl__cfg_out_val ),
@@ -1929,7 +1929,7 @@ module ConfigEngine__7bab677ba9e9f52a
   logic [0:0] dpath__start_with_PE;
   logic [3:0] dpath__y_cord;
 
-  ConfigEngineDpath__7bab677ba9e9f52a dpath
+  ConfigEngineDpath__35b26261d06d20ce dpath
   (
     .cfg_cmd( dpath__cfg_cmd ),
     .cfg_me_base_addr( dpath__cfg_me_base_addr ),
@@ -2171,10 +2171,10 @@ endmodule
 
 
 // PyMTL Component MemEngineCtrl Definition
-// Full name: MemEngineCtrl__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:2, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// Full name: MemEngineCtrl__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
 // At /work/global/pp482/cgra/src/cgra/MemEngineCtrl.py
 
-module MemEngineCtrl__24f351cbdd3e67d4
+module MemEngineCtrl__07e21c4d4fa663e6
 (
   input  logic [0:0] cfg_deq_val ,
   output logic [0:0] cfg_out_val ,
@@ -2350,10 +2350,10 @@ endmodule
 
 
 // PyMTL Component MemEngineDpath Definition
-// Full name: MemEngineDpath__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:2, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// Full name: MemEngineDpath__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
 // At /work/global/pp482/cgra/src/cgra/MemEngineDpath.py
 
-module MemEngineDpath__24f351cbdd3e67d4
+module MemEngineDpath__07e21c4d4fa663e6
 (
   input  logic [37:0] cfg_deq_msg ,
   output logic [37:0] cfg_out_msg ,
@@ -3347,10 +3347,10 @@ endmodule
 
 
 // PyMTL Component MemEngine Definition
-// Full name: MemEngine__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:2, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// Full name: MemEngine__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
 // At /work/global/pp482/cgra/src/cgra/MemEngine.py
 
-module MemEngine__24f351cbdd3e67d4
+module MemEngine__07e21c4d4fa663e6
 (
   input  logic [0:0] clk ,
   input  logic [3:0] id_cord ,
@@ -3427,7 +3427,7 @@ module MemEngine__24f351cbdd3e67d4
   logic [0:0] ctrl__resp_recved;
   logic [0:0] ctrl__self_cfg_deq;
 
-  MemEngineCtrl__24f351cbdd3e67d4 ctrl
+  MemEngineCtrl__07e21c4d4fa663e6 ctrl
   (
     .cfg_deq_val( ctrl__cfg_deq_val ),
     .cfg_out_val( ctrl__cfg_out_val ),
@@ -3480,7 +3480,7 @@ module MemEngine__24f351cbdd3e67d4
   logic [0:0] dpath__self_cfg_deq;
   logic [3:0] dpath__x_cord;
 
-  MemEngineDpath__24f351cbdd3e67d4 dpath
+  MemEngineDpath__07e21c4d4fa663e6 dpath
   (
     .cfg_deq_msg( dpath__cfg_deq_msg ),
     .cfg_out_msg( dpath__cfg_out_msg ),
@@ -3617,10 +3617,10 @@ endmodule
 
 
 // PyMTL Component ProcElementCtrl Definition
-// Full name: ProcElementCtrl__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:2, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// Full name: ProcElementCtrl__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
 // At /work/global/pp482/cgra/src/cgra/ProcElementCtrl.py
 
-module ProcElementCtrl__24f351cbdd3e67d4
+module ProcElementCtrl__07e21c4d4fa663e6
 (
   input  logic [0:0] cfg_deq_val ,
   output logic [0:0] cfg_out_val ,
@@ -3724,26 +3724,64 @@ module Alu__Type_Bits33
   output logic [32:0] out ,
   input  logic [0:0] reset 
 );
+  localparam logic [5:0] __const__int_width_at_up_data_gating  = 6'd32;
   localparam logic [5:0] __const__dpath_width_at_up_eq_gt_wire  = 6'd33;
-  localparam logic [5:0] __const__int_width_at_comb_logic  = 6'd32;
   logic [0:0] a_eq_b;
   logic [0:0] a_gt_b;
   logic [0:0] a_sgt_b;
+  logic [32:0] add_a_wire;
+  logic [32:0] add_b_wire;
+  logic [32:0] and_a_wire;
+  logic [32:0] and_b_wire;
+  logic [32:0] cp0_wire;
+  logic [32:0] cp1_wire;
+  logic [32:0] eq_a_wire;
+  logic [32:0] eq_b_wire;
+  logic [32:0] gt_a_wire;
+  logic [32:0] gt_b_wire;
+  logic [32:0] or_a_wire;
+  logic [32:0] or_b_wire;
+  logic [33:0] sgt_a_wire;
+  logic [33:0] sgt_b_wire;
   logic [33:0] sgt_r_wire;
+  logic [32:0] sll_a_wire;
+  logic [32:0] sll_b_wire;
+  logic [32:0] srl_a_wire;
+  logic [32:0] srl_b_wire;
+  logic [32:0] sub_a_wire;
+  logic [32:0] sub_b_wire;
+  logic [32:0] xor_a_wire;
+  logic [32:0] xor_b_wire;
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/Alu.py:128
+  // At /work/global/pp482/cgra/src/cgra/Alu.py:131
   // @update
   // def comb_logic():
-  //   if   s.fn == AluOp.CP0 : s.out @= s.in0                         # COPY OP0
-  //   elif s.fn == AluOp.CP1 : s.out @= s.in1                         # COPY OP1
-  //   elif s.fn == AluOp.ADD : s.out @= s.in0 + s.in1        # ADD
-  //   elif s.fn == AluOp.SUB : s.out @= s.in0 - s.in1        # SUB
-  //   elif s.fn == AluOp.SLL : s.out @= s.in0 << s.in1       # SLL
-  //   elif s.fn == AluOp.SRL : s.out @= concat( b1(0), s.in0[0:int_width] ) >> s.in1       # SRL
-  //   elif s.fn == AluOp.AND : s.out @= s.in0 & s.in1        # AND
-  //   elif s.fn == AluOp.OR  : s.out @= s.in0 | s.in1         # OR
-  //   elif s.fn == AluOp.XOR : s.out @= s.in0 ^ s.in1        # XOR
+  //   # if   s.fn == AluOp.CP0 : s.out @= s.in0                         # COPY OP0
+  //   # elif s.fn == AluOp.CP1 : s.out @= s.in1                         # COPY OP1
+  //   # elif s.fn == AluOp.ADD : s.out @= s.in0 + s.in1        # ADD
+  //   # elif s.fn == AluOp.SUB : s.out @= s.in0 - s.in1        # SUB
+  //   # elif s.fn == AluOp.SLL : s.out @= s.in0 << s.in1       # SLL
+  //   # elif s.fn == AluOp.SRL : s.out @= concat( b1(0), s.in0[0:int_width] ) >> s.in1       # SRL
+  //   # elif s.fn == AluOp.AND : s.out @= s.in0 & s.in1        # AND
+  //   # elif s.fn == AluOp.OR  : s.out @= s.in0 | s.in1         # OR
+  //   # elif s.fn == AluOp.XOR : s.out @= s.in0 ^ s.in1        # XOR
+  //   # elif s.fn == AluOp.EQ  : s.out @= 1 if  s.a_eq_b else 0              # EQ
+  //   # elif s.fn == AluOp.NE  : s.out @= 1 if ~s.a_eq_b else 0              # NE
+  //   # elif s.fn == AluOp.GT  : s.out @= 1 if  s.a_gt_b else 0              # GT
+  //   # elif s.fn == AluOp.GEQ : s.out @= 1 if  s.a_gt_b |  s.a_eq_b else 0  # GEQ
+  //   # elif s.fn == AluOp.SGT : s.out @= 1 if  s.a_sgt_b else 0             # GT
+  //   # elif s.fn == AluOp.SGEQ: s.out @= 1 if  s.a_sgt_b |  s.a_eq_b else 0 # GEQ
+  //   # else:                    s.out @= 0                                 # NOP
+  //   if s.fn == AluOp.CP0 : s.out @= s.cp0_wire                         # COPY OP0
+  //   elif s.fn == AluOp.CP1 : s.out @= s.cp1_wire                         # COPY OP1
+  //   elif s.fn == AluOp.ADD : s.out @= s.add_a_wire + s.add_b_wire        # ADD
+  //   elif s.fn == AluOp.SUB : s.out @= s.sub_a_wire - s.sub_b_wire        # SUB
+  //   elif s.fn == AluOp.SLL : s.out @= s.sll_a_wire << s.sll_b_wire       # SLL
+  //   elif s.fn == AluOp.SRL : s.out @= s.srl_a_wire >> s.srl_b_wire       # SRL
+  //   elif s.fn == AluOp.AND : s.out @= s.and_a_wire & s.and_b_wire        # AND
+  //   elif s.fn == AluOp.OR  : s.out @= s.or_a_wire | s.or_b_wire         # OR
+  //   elif s.fn == AluOp.XOR : s.out @= s.xor_a_wire ^ s.xor_b_wire        # XOR
   //   elif s.fn == AluOp.EQ  : s.out @= 1 if  s.a_eq_b else 0              # EQ
   //   elif s.fn == AluOp.NE  : s.out @= 1 if ~s.a_eq_b else 0              # NE
   //   elif s.fn == AluOp.GT  : s.out @= 1 if  s.a_gt_b else 0              # GT
@@ -3754,31 +3792,31 @@ module Alu__Type_Bits33
   
   always_comb begin : comb_logic
     if ( fn == 4'd0 ) begin
-      out = in0;
+      out = cp0_wire;
     end
     else if ( fn == 4'd1 ) begin
-      out = in1;
+      out = cp1_wire;
     end
     else if ( fn == 4'd2 ) begin
-      out = in0 + in1;
+      out = add_a_wire + add_b_wire;
     end
     else if ( fn == 4'd3 ) begin
-      out = in0 - in1;
+      out = sub_a_wire - sub_b_wire;
     end
     else if ( fn == 4'd4 ) begin
-      out = in0 << in1;
+      out = sll_a_wire << sll_b_wire;
     end
     else if ( fn == 4'd5 ) begin
-      out = { 1'd0, in0[6'd31:6'd0] } >> in1;
+      out = srl_a_wire >> srl_b_wire;
     end
     else if ( fn == 4'd6 ) begin
-      out = in0 & in1;
+      out = and_a_wire & and_b_wire;
     end
     else if ( fn == 4'd7 ) begin
-      out = in0 | in1;
+      out = or_a_wire | or_b_wire;
     end
     else if ( fn == 4'd8 ) begin
-      out = in0 ^ in1;
+      out = xor_a_wire ^ xor_b_wire;
     end
     else if ( fn == 4'd9 ) begin
       out = a_eq_b ? 33'd1 : 33'd0;
@@ -3806,69 +3844,111 @@ module Alu__Type_Bits33
   // At /work/global/pp482/cgra/src/cgra/Alu.py:72
   // @update
   // def up_data_gating():
-  //   # s.cp0_wire   @= s.in0 if s.fn == AluOp.CP0 else 0
-  //   # s.cp1_wire   @= s.in1 if s.fn == AluOp.CP1 else 0
+  //   s.cp0_wire   @= s.in0 if s.fn == AluOp.CP0 else 0
+  //   s.cp1_wire   @= s.in1 if s.fn == AluOp.CP1 else 0
   // 
-  //   # s.add_a_wire @= s.in0 if s.fn == AluOp.ADD else 0
-  //   # s.add_b_wire @= s.in1 if s.fn == AluOp.ADD else 0
+  //   s.add_a_wire @= s.in0 if s.fn == AluOp.ADD else 0
+  //   s.add_b_wire @= s.in1 if s.fn == AluOp.ADD else 0
   // 
-  //   # s.sub_a_wire @= s.in0 if s.fn == AluOp.SUB else 0
-  //   # s.sub_b_wire @= s.in1 if s.fn == AluOp.SUB else 0
+  //   s.sub_a_wire @= s.in0 if s.fn == AluOp.SUB else 0
+  //   s.sub_b_wire @= s.in1 if s.fn == AluOp.SUB else 0
   // 
-  //   # s.sll_a_wire @= s.in0 if s.fn == AluOp.SLL else 0
-  //   # s.sll_b_wire @= s.in1 if s.fn == AluOp.SLL else 0
+  //   s.sll_a_wire @= s.in0 if s.fn == AluOp.SLL else 0
+  //   s.sll_b_wire @= s.in1 if s.fn == AluOp.SLL else 0
   // 
-  //   # # ALU should perform 32-bit logical right shift
-  //   # s.srl_a_wire @= concat( b1(0), s.in0[0:int_width] ) if s.fn == AluOp.SRL else 0
-  //   # s.srl_b_wire @= s.in1 if s.fn == AluOp.SRL else 0
+  //   # ALU should perform 32-bit logical right shift
+  //   s.srl_a_wire @= concat( b1(0), s.in0[0:int_width] ) if s.fn == AluOp.SRL else 0
+  //   s.srl_b_wire @= s.in1 if s.fn == AluOp.SRL else 0
   // 
-  //   # s.and_a_wire @= s.in0 if s.fn == AluOp.AND else 0
-  //   # s.and_b_wire @= s.in1 if s.fn == AluOp.AND else 0
+  //   s.and_a_wire @= s.in0 if s.fn == AluOp.AND else 0
+  //   s.and_b_wire @= s.in1 if s.fn == AluOp.AND else 0
   // 
-  //   # s.or_a_wire  @= s.in0 if s.fn == AluOp.OR  else 0
-  //   # s.or_b_wire  @= s.in1 if s.fn == AluOp.OR  else 0
+  //   s.or_a_wire  @= s.in0 if s.fn == AluOp.OR  else 0
+  //   s.or_b_wire  @= s.in1 if s.fn == AluOp.OR  else 0
   // 
-  //   # s.xor_a_wire @= s.in0 if s.fn == AluOp.XOR else 0
-  //   # s.xor_b_wire @= s.in1 if s.fn == AluOp.XOR else 0
+  //   s.xor_a_wire @= s.in0 if s.fn == AluOp.XOR else 0
+  //   s.xor_b_wire @= s.in1 if s.fn == AluOp.XOR else 0
   // 
-  //   # if ( s.fn == AluOp.EQ  ) | ( s.fn == AluOp.NE ) | ( s.fn == AluOp.GEQ ) | ( s.fn == AluOp.SGEQ ):
-  //   #   s.eq_a_wire @= s.in0
-  //   #   s.eq_b_wire @= s.in1
-  //   # else:
-  //   #   s.eq_a_wire @= 0
-  //   #   s.eq_b_wire @= 0
+  //   if ( s.fn == AluOp.EQ  ) | ( s.fn == AluOp.NE ) | ( s.fn == AluOp.GEQ ) | ( s.fn == AluOp.SGEQ ):
+  //     s.eq_a_wire @= s.in0
+  //     s.eq_b_wire @= s.in1
+  //   else:
+  //     s.eq_a_wire @= 0
+  //     s.eq_b_wire @= 0
   // 
-  //   # if ( s.fn == AluOp.GT ) | ( s.fn == AluOp.GEQ ):
-  //   #   s.gt_a_wire @= s.in0
-  //   #   s.gt_b_wire @= s.in1
-  //   # else:
-  //   #   s.gt_a_wire @= 0
-  //   #   s.gt_b_wire @= 0
+  //   if ( s.fn == AluOp.GT ) | ( s.fn == AluOp.GEQ ):
+  //     s.gt_a_wire @= s.in0
+  //     s.gt_b_wire @= s.in1
+  //   else:
+  //     s.gt_a_wire @= 0
+  //     s.gt_b_wire @= 0
   // 
-  //   # if ( s.fn == AluOp.SGT ) | ( s.fn == AluOp.SGEQ ):
-  //   #   s.sgt_a_wire @= sext( s.in1, sgt_width )
-  //   #   s.sgt_b_wire @= sext( s.in0, sgt_width )
-  //   # else:
-  //   #   s.sgt_a_wire @= 0
-  //   #   s.sgt_b_wire @= 0
+  //   if ( s.fn == AluOp.SGT ) | ( s.fn == AluOp.SGEQ ):
+  //     s.sgt_a_wire @= sext( s.in1, sgt_width )
+  //     s.sgt_b_wire @= sext( s.in0, sgt_width )
+  //   else:
+  //     s.sgt_a_wire @= 0
+  //     s.sgt_b_wire @= 0
   // 
-  //   s.sgt_r_wire @= sext( s.in1, sgt_width ) - sext( s.in0, sgt_width )
+  //   s.sgt_r_wire @= s.sgt_a_wire - s.sgt_b_wire
   
   always_comb begin : up_data_gating
-    sgt_r_wire = { { 1 { in1[32] } }, in1 } - { { 1 { in0[32] } }, in0 };
+    cp0_wire = ( fn == 4'd0 ) ? in0 : 33'd0;
+    cp1_wire = ( fn == 4'd1 ) ? in1 : 33'd0;
+    add_a_wire = ( fn == 4'd2 ) ? in0 : 33'd0;
+    add_b_wire = ( fn == 4'd2 ) ? in1 : 33'd0;
+    sub_a_wire = ( fn == 4'd3 ) ? in0 : 33'd0;
+    sub_b_wire = ( fn == 4'd3 ) ? in1 : 33'd0;
+    sll_a_wire = ( fn == 4'd4 ) ? in0 : 33'd0;
+    sll_b_wire = ( fn == 4'd4 ) ? in1 : 33'd0;
+    srl_a_wire = ( fn == 4'd5 ) ? { 1'd0, in0[6'd31:6'd0] } : 33'd0;
+    srl_b_wire = ( fn == 4'd5 ) ? in1 : 33'd0;
+    and_a_wire = ( fn == 4'd6 ) ? in0 : 33'd0;
+    and_b_wire = ( fn == 4'd6 ) ? in1 : 33'd0;
+    or_a_wire = ( fn == 4'd7 ) ? in0 : 33'd0;
+    or_b_wire = ( fn == 4'd7 ) ? in1 : 33'd0;
+    xor_a_wire = ( fn == 4'd8 ) ? in0 : 33'd0;
+    xor_b_wire = ( fn == 4'd8 ) ? in1 : 33'd0;
+    if ( ( ( ( fn == 4'd9 ) | ( fn == 4'd10 ) ) | ( fn == 4'd12 ) ) | ( fn == 4'd14 ) ) begin
+      eq_a_wire = in0;
+      eq_b_wire = in1;
+    end
+    else begin
+      eq_a_wire = 33'd0;
+      eq_b_wire = 33'd0;
+    end
+    if ( ( fn == 4'd11 ) | ( fn == 4'd12 ) ) begin
+      gt_a_wire = in0;
+      gt_b_wire = in1;
+    end
+    else begin
+      gt_a_wire = 33'd0;
+      gt_b_wire = 33'd0;
+    end
+    if ( ( fn == 4'd13 ) | ( fn == 4'd14 ) ) begin
+      sgt_a_wire = { { 1 { in1[32] } }, in1 };
+      sgt_b_wire = { { 1 { in0[32] } }, in0 };
+    end
+    else begin
+      sgt_a_wire = 34'd0;
+      sgt_b_wire = 34'd0;
+    end
+    sgt_r_wire = sgt_a_wire - sgt_b_wire;
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/Alu.py:122
+  // At /work/global/pp482/cgra/src/cgra/Alu.py:123
   // @update
   // def up_eq_gt_wire():
-  //   s.a_eq_b  @= s.in0 == s.in1
-  //   s.a_gt_b  @= s.in0 > s.in1
+  //   s.a_eq_b @= s.eq_a_wire == s.eq_b_wire
+  //   s.a_gt_b @= s.gt_a_wire > s.gt_b_wire
+  //   # s.a_eq_b  @= s.in0 == s.in1
+  //   # s.a_gt_b  @= s.in0 > s.in1
   //   s.a_sgt_b @= s.sgt_r_wire[dpath_width]
   
   always_comb begin : up_eq_gt_wire
-    a_eq_b = in0 == in1;
-    a_gt_b = in0 > in1;
+    a_eq_b = eq_a_wire == eq_b_wire;
+    a_gt_b = gt_a_wire > gt_b_wire;
     a_sgt_b = sgt_r_wire[6'( __const__dpath_width_at_up_eq_gt_wire )];
   end
 
@@ -4469,7 +4549,7 @@ endmodule
 
 
 // PyMTL Component LLFU Definition
-// Full name: LLFU__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:2, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// Full name: LLFU__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
 // At /work/global/pp482/cgra/src/cgra/LLFU.py
 
 module LLFU
@@ -4770,10 +4850,10 @@ endmodule
 
 
 // PyMTL Component FunctUnit Definition
-// Full name: FunctUnit__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:2, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// Full name: FunctUnit__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
 // At /work/global/pp482/cgra/src/cgra/FunctUnit.py
 
-module FunctUnit__24f351cbdd3e67d4
+module FunctUnit__07e21c4d4fa663e6
 (
   input  PEConfigMsg_8x8__69ed92dd9fa67f76 cfg ,
   input  logic [0:0] cfg_reset ,
@@ -4965,12 +5045,12 @@ module FunctUnit__24f351cbdd3e67d4
   // At /work/global/pp482/cgra/src/cgra/FunctUnit.py:149
   // @update
   // def fu_gen_alu_inputs():
-  //   s.alu_opd_a @= s.in_msg.opd_a
-  //   s.alu_opd_b @= s.in_msg.opd_b
+  //   s.alu_opd_a @= s.in_msg.opd_a if ~s.in_msg.is_faking_opA else 0
+  //   s.alu_opd_b @= s.in_msg.opd_b if ~s.in_msg.is_faking_opB else 0
   
   always_comb begin : fu_gen_alu_inputs
-    alu_opd_a = in_msg.opd_a;
-    alu_opd_b = in_msg.opd_b;
+    alu_opd_a = ( ~in_msg.is_faking_opA ) ? in_msg.opd_a : 33'd0;
+    alu_opd_b = ( ~in_msg.is_faking_opB ) ? in_msg.opd_b : 33'd0;
   end
 
   // PyMTL Update Block Source
@@ -5220,7 +5300,7 @@ endmodule
 // PyMTL Component RegisterFile1R1W Definition
 // At /work/global/pp482/cgra/src/misc/RegisterFile1R1W.py
 
-module RegisterFile1R1W__Type_Bits33__nregs_2
+module RegisterFile1R1W__Type_Bits33__nregs_1
 (
   input  logic [0:0] clk ,
   input  logic [0:0] raddr ,
@@ -5230,16 +5310,16 @@ module RegisterFile1R1W__Type_Bits33__nregs_2
   input  logic [32:0] wdata ,
   input  logic [0:0] wen 
 );
-  localparam logic [1:0] __const__nregs_at_up_rf_wen  = 2'd2;
+  localparam logic [0:0] __const__nregs_at_up_rf_wen  = 1'd1;
   //-------------------------------------------------------------
-  // Component regs[0:1]
+  // Component regs[0:0]
   //-------------------------------------------------------------
 
-  logic [0:0] regs__clk [0:1];
-  logic [0:0] regs__en [0:1];
-  logic [32:0] regs__in_ [0:1];
-  logic [32:0] regs__out [0:1];
-  logic [0:0] regs__reset [0:1];
+  logic [0:0] regs__clk [0:0];
+  logic [0:0] regs__en [0:0];
+  logic [32:0] regs__in_ [0:0];
+  logic [32:0] regs__out [0:0];
+  logic [0:0] regs__reset [0:0];
 
   RegEnRst__Type_Bits33__reset_value_0 regs__0
   (
@@ -5250,21 +5330,12 @@ module RegisterFile1R1W__Type_Bits33__nregs_2
     .reset( regs__reset[0] )
   );
 
-  RegEnRst__Type_Bits33__reset_value_0 regs__1
-  (
-    .clk( regs__clk[1] ),
-    .en( regs__en[1] ),
-    .in_( regs__in_[1] ),
-    .out( regs__out[1] ),
-    .reset( regs__reset[1] )
-  );
-
   //-------------------------------------------------------------
-  // End of component regs[0:1]
+  // End of component regs[0:0]
   //-------------------------------------------------------------
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/misc/RegisterFile1R1W.py:20
+  // At /work/global/pp482/cgra/src/misc/RegisterFile1R1W.py:21
   // @update
   // def up_rf_read():
   //   s.rdata @= s.regs[ s.raddr ].out
@@ -5274,7 +5345,7 @@ module RegisterFile1R1W__Type_Bits33__nregs_2
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/misc/RegisterFile1R1W.py:24
+  // At /work/global/pp482/cgra/src/misc/RegisterFile1R1W.py:25
   // @update
   // def up_rf_wen():
   //   for i in range(nregs):
@@ -5282,7 +5353,7 @@ module RegisterFile1R1W__Type_Bits33__nregs_2
   //     s.regs[i].in_ @= s.wdata
   
   always_comb begin : up_rf_wen
-    for ( int unsigned i = 1'd0; i < 2'( __const__nregs_at_up_rf_wen ); i += 1'd1 ) begin
+    for ( int unsigned i = 1'd0; i < 1'( __const__nregs_at_up_rf_wen ); i += 1'd1 ) begin
       regs__en[1'(i)] = wen & ( 1'(i) == waddr );
       regs__in_[1'(i)] = wdata;
     end
@@ -5290,17 +5361,15 @@ module RegisterFile1R1W__Type_Bits33__nregs_2
 
   assign regs__clk[0] = clk;
   assign regs__reset[0] = reset;
-  assign regs__clk[1] = clk;
-  assign regs__reset[1] = reset;
 
 endmodule
 
 
 // PyMTL Component SwitchBoxCtrl Definition
-// Full name: SwitchBoxCtrl__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:2, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// Full name: SwitchBoxCtrl__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
 // At /work/global/pp482/cgra/src/cgra/SwitchBoxCtrl.py
 
-module SwitchBoxCtrl__24f351cbdd3e67d4
+module SwitchBoxCtrl__07e21c4d4fa663e6
 (
   input  PEConfigMsg_8x8__69ed92dd9fa67f76 cfg ,
   input  logic [0:0] cfg_reset ,
@@ -5937,10 +6006,10 @@ endmodule
 
 
 // PyMTL Component SwitchBoxDpath Definition
-// Full name: SwitchBoxDpath__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:2, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// Full name: SwitchBoxDpath__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
 // At /work/global/pp482/cgra/src/cgra/SwitchBoxDpath.py
 
-module SwitchBoxDpath__24f351cbdd3e67d4
+module SwitchBoxDpath__07e21c4d4fa663e6
 (
   input  logic [0:0] cfg_reset ,
   input  logic [0:0] clk ,
@@ -6396,10 +6465,10 @@ endmodule
 
 
 // PyMTL Component SwitchBox Definition
-// Full name: SwitchBox__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:2, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// Full name: SwitchBox__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
 // At /work/global/pp482/cgra/src/cgra/SwitchBox.py
 
-module SwitchBox__24f351cbdd3e67d4
+module SwitchBox__07e21c4d4fa663e6
 (
   input  PEConfigMsg_8x8__69ed92dd9fa67f76 cfg ,
   input  logic [0:0] cfg_reset ,
@@ -6452,7 +6521,7 @@ module SwitchBox__24f351cbdd3e67d4
   logic [2:0] ctrl__out_mux_sel [0:3];
   logic [0:0] ctrl__reset;
 
-  SwitchBoxCtrl__24f351cbdd3e67d4 ctrl
+  SwitchBoxCtrl__07e21c4d4fa663e6 ctrl
   (
     .cfg( ctrl__cfg ),
     .cfg_reset( ctrl__cfg_reset ),
@@ -6511,7 +6580,7 @@ module SwitchBox__24f351cbdd3e67d4
   logic [0:0] dpath__out__rdy [0:3];
   logic [0:0] dpath__out__val [0:3];
 
-  SwitchBoxDpath__24f351cbdd3e67d4 dpath
+  SwitchBoxDpath__07e21c4d4fa663e6 dpath
   (
     .cfg_reset( dpath__cfg_reset ),
     .clk( dpath__clk ),
@@ -6661,10 +6730,10 @@ endmodule
 
 
 // PyMTL Component ProcElementDpath Definition
-// Full name: ProcElementDpath__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:2, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// Full name: ProcElementDpath__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
 // At /work/global/pp482/cgra/src/cgra/ProcElementDpath.py
 
-module ProcElementDpath__24f351cbdd3e67d4
+module ProcElementDpath__07e21c4d4fa663e6
 (
   input  logic [37:0] cfg_deq_msg ,
   output logic [37:0] cfg_out_msg ,
@@ -6757,7 +6826,7 @@ module ProcElementDpath__24f351cbdd3e67d4
   logic [0:0] fu__out__rdy;
   logic [0:0] fu__out__val;
 
-  FunctUnit__24f351cbdd3e67d4 fu
+  FunctUnit__07e21c4d4fa663e6 fu
   (
     .cfg( fu__cfg ),
     .cfg_reset( fu__cfg_reset ),
@@ -6790,7 +6859,7 @@ module ProcElementDpath__24f351cbdd3e67d4
   logic [32:0] rf__wdata;
   logic [0:0] rf__wen;
 
-  RegisterFile1R1W__Type_Bits33__nregs_2 rf
+  RegisterFile1R1W__Type_Bits33__nregs_1 rf
   (
     .clk( rf__clk ),
     .raddr( rf__raddr ),
@@ -6829,7 +6898,7 @@ module ProcElementDpath__24f351cbdd3e67d4
   logic [0:0] sb__out__rdy [0:3];
   logic [0:0] sb__out__val [0:3];
 
-  SwitchBox__24f351cbdd3e67d4 sb
+  SwitchBox__07e21c4d4fa663e6 sb
   (
     .cfg( sb__cfg ),
     .cfg_reset( sb__cfg_reset ),
@@ -7229,7 +7298,7 @@ endmodule
 
 
 // PyMTL Component ProcElement Definition
-// Full name: ProcElement__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:2, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// Full name: ProcElement__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
 // At /work/global/pp482/cgra/src/cgra/ProcElement.py
 
 `ifndef BRG_BOTTOM_UP_SYNTH
@@ -7293,7 +7362,7 @@ module ProcElement
   logic [2:0] ctrl__rf_src;
   logic [0:0] ctrl__rf_wen;
 
-  ProcElementCtrl__24f351cbdd3e67d4 ctrl
+  ProcElementCtrl__07e21c4d4fa663e6 ctrl
   (
     .cfg_deq_val( ctrl__cfg_deq_val ),
     .cfg_out_val( ctrl__cfg_out_val ),
@@ -7338,7 +7407,7 @@ module ProcElement
   logic [0:0] dpath__out__rdy [0:3];
   logic [0:0] dpath__out__val [0:3];
 
-  ProcElementDpath__24f351cbdd3e67d4 dpath
+  ProcElementDpath__07e21c4d4fa663e6 dpath
   (
     .cfg_deq_msg( dpath__cfg_deq_msg ),
     .cfg_out_msg( dpath__cfg_out_msg ),
@@ -7697,10 +7766,10 @@ endmodule
 
 
 // PyMTL Component CGRACoreDpath Definition
-// Full name: CGRACoreDpath__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:2, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// Full name: CGRACoreDpath__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
 // At /work/global/pp482/cgra/src/cgra/CGRACoreDpath.py
 
-module CGRACoreDpath__24f351cbdd3e67d4
+module CGRACoreDpath__07e21c4d4fa663e6
 (
   input  logic [0:0] CSR_wen ,
   input  logic [0:0] cfg_init ,
@@ -7760,7 +7829,7 @@ module CGRACoreDpath__24f351cbdd3e67d4
   CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 CE_e__mem_master__resp__msg [0:7];
   logic [0:0] CE_e__mem_master__resp__rdy [0:7];
 
-  ConfigEngine__b666e1db5a53424e CE_e__0
+  ConfigEngine__7a3f723b2782421e CE_e__0
   (
     .cfg_cmd( CE_e__cfg_cmd[0] ),
     .cfg_init( CE_e__cfg_init[0] ),
@@ -7781,7 +7850,7 @@ module CGRACoreDpath__24f351cbdd3e67d4
     .mem_master__resp__rdy( CE_e__mem_master__resp__rdy[0] )
   );
 
-  ConfigEngine__b666e1db5a53424e CE_e__1
+  ConfigEngine__7a3f723b2782421e CE_e__1
   (
     .cfg_cmd( CE_e__cfg_cmd[1] ),
     .cfg_init( CE_e__cfg_init[1] ),
@@ -7802,7 +7871,7 @@ module CGRACoreDpath__24f351cbdd3e67d4
     .mem_master__resp__rdy( CE_e__mem_master__resp__rdy[1] )
   );
 
-  ConfigEngine__b666e1db5a53424e CE_e__2
+  ConfigEngine__7a3f723b2782421e CE_e__2
   (
     .cfg_cmd( CE_e__cfg_cmd[2] ),
     .cfg_init( CE_e__cfg_init[2] ),
@@ -7823,7 +7892,7 @@ module CGRACoreDpath__24f351cbdd3e67d4
     .mem_master__resp__rdy( CE_e__mem_master__resp__rdy[2] )
   );
 
-  ConfigEngine__b666e1db5a53424e CE_e__3
+  ConfigEngine__7a3f723b2782421e CE_e__3
   (
     .cfg_cmd( CE_e__cfg_cmd[3] ),
     .cfg_init( CE_e__cfg_init[3] ),
@@ -7844,7 +7913,7 @@ module CGRACoreDpath__24f351cbdd3e67d4
     .mem_master__resp__rdy( CE_e__mem_master__resp__rdy[3] )
   );
 
-  ConfigEngine__b666e1db5a53424e CE_e__4
+  ConfigEngine__7a3f723b2782421e CE_e__4
   (
     .cfg_cmd( CE_e__cfg_cmd[4] ),
     .cfg_init( CE_e__cfg_init[4] ),
@@ -7865,7 +7934,7 @@ module CGRACoreDpath__24f351cbdd3e67d4
     .mem_master__resp__rdy( CE_e__mem_master__resp__rdy[4] )
   );
 
-  ConfigEngine__b666e1db5a53424e CE_e__5
+  ConfigEngine__7a3f723b2782421e CE_e__5
   (
     .cfg_cmd( CE_e__cfg_cmd[5] ),
     .cfg_init( CE_e__cfg_init[5] ),
@@ -7886,7 +7955,7 @@ module CGRACoreDpath__24f351cbdd3e67d4
     .mem_master__resp__rdy( CE_e__mem_master__resp__rdy[5] )
   );
 
-  ConfigEngine__b666e1db5a53424e CE_e__6
+  ConfigEngine__7a3f723b2782421e CE_e__6
   (
     .cfg_cmd( CE_e__cfg_cmd[6] ),
     .cfg_init( CE_e__cfg_init[6] ),
@@ -7907,7 +7976,7 @@ module CGRACoreDpath__24f351cbdd3e67d4
     .mem_master__resp__rdy( CE_e__mem_master__resp__rdy[6] )
   );
 
-  ConfigEngine__b666e1db5a53424e CE_e__7
+  ConfigEngine__7a3f723b2782421e CE_e__7
   (
     .cfg_cmd( CE_e__cfg_cmd[7] ),
     .cfg_init( CE_e__cfg_init[7] ),
@@ -7954,7 +8023,7 @@ module CGRACoreDpath__24f351cbdd3e67d4
   CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 CE_s__mem_master__resp__msg;
   logic [0:0] CE_s__mem_master__resp__rdy;
 
-  ConfigEngine__7bab677ba9e9f52a CE_s
+  ConfigEngine__35b26261d06d20ce CE_s
   (
     .cfg_cmd( CE_s__cfg_cmd ),
     .cfg_init( CE_s__cfg_init ),
@@ -8596,7 +8665,7 @@ module CGRACoreDpath__24f351cbdd3e67d4
   logic [0:0] ME__out__rdy [0:15];
   logic [0:0] ME__out__val [0:15];
 
-  MemEngine__24f351cbdd3e67d4 ME__0
+  MemEngine__07e21c4d4fa663e6 ME__0
   (
     .clk( ME__clk[0] ),
     .id_cord( ME__id_cord[0] ),
@@ -8622,7 +8691,7 @@ module CGRACoreDpath__24f351cbdd3e67d4
     .out__val( ME__out__val[0] )
   );
 
-  MemEngine__24f351cbdd3e67d4 ME__1
+  MemEngine__07e21c4d4fa663e6 ME__1
   (
     .clk( ME__clk[1] ),
     .id_cord( ME__id_cord[1] ),
@@ -8648,7 +8717,7 @@ module CGRACoreDpath__24f351cbdd3e67d4
     .out__val( ME__out__val[1] )
   );
 
-  MemEngine__24f351cbdd3e67d4 ME__2
+  MemEngine__07e21c4d4fa663e6 ME__2
   (
     .clk( ME__clk[2] ),
     .id_cord( ME__id_cord[2] ),
@@ -8674,7 +8743,7 @@ module CGRACoreDpath__24f351cbdd3e67d4
     .out__val( ME__out__val[2] )
   );
 
-  MemEngine__24f351cbdd3e67d4 ME__3
+  MemEngine__07e21c4d4fa663e6 ME__3
   (
     .clk( ME__clk[3] ),
     .id_cord( ME__id_cord[3] ),
@@ -8700,7 +8769,7 @@ module CGRACoreDpath__24f351cbdd3e67d4
     .out__val( ME__out__val[3] )
   );
 
-  MemEngine__24f351cbdd3e67d4 ME__4
+  MemEngine__07e21c4d4fa663e6 ME__4
   (
     .clk( ME__clk[4] ),
     .id_cord( ME__id_cord[4] ),
@@ -8726,7 +8795,7 @@ module CGRACoreDpath__24f351cbdd3e67d4
     .out__val( ME__out__val[4] )
   );
 
-  MemEngine__24f351cbdd3e67d4 ME__5
+  MemEngine__07e21c4d4fa663e6 ME__5
   (
     .clk( ME__clk[5] ),
     .id_cord( ME__id_cord[5] ),
@@ -8752,7 +8821,7 @@ module CGRACoreDpath__24f351cbdd3e67d4
     .out__val( ME__out__val[5] )
   );
 
-  MemEngine__24f351cbdd3e67d4 ME__6
+  MemEngine__07e21c4d4fa663e6 ME__6
   (
     .clk( ME__clk[6] ),
     .id_cord( ME__id_cord[6] ),
@@ -8778,7 +8847,7 @@ module CGRACoreDpath__24f351cbdd3e67d4
     .out__val( ME__out__val[6] )
   );
 
-  MemEngine__24f351cbdd3e67d4 ME__7
+  MemEngine__07e21c4d4fa663e6 ME__7
   (
     .clk( ME__clk[7] ),
     .id_cord( ME__id_cord[7] ),
@@ -8804,7 +8873,7 @@ module CGRACoreDpath__24f351cbdd3e67d4
     .out__val( ME__out__val[7] )
   );
 
-  MemEngine__24f351cbdd3e67d4 ME__8
+  MemEngine__07e21c4d4fa663e6 ME__8
   (
     .clk( ME__clk[8] ),
     .id_cord( ME__id_cord[8] ),
@@ -8830,7 +8899,7 @@ module CGRACoreDpath__24f351cbdd3e67d4
     .out__val( ME__out__val[8] )
   );
 
-  MemEngine__24f351cbdd3e67d4 ME__9
+  MemEngine__07e21c4d4fa663e6 ME__9
   (
     .clk( ME__clk[9] ),
     .id_cord( ME__id_cord[9] ),
@@ -8856,7 +8925,7 @@ module CGRACoreDpath__24f351cbdd3e67d4
     .out__val( ME__out__val[9] )
   );
 
-  MemEngine__24f351cbdd3e67d4 ME__10
+  MemEngine__07e21c4d4fa663e6 ME__10
   (
     .clk( ME__clk[10] ),
     .id_cord( ME__id_cord[10] ),
@@ -8882,7 +8951,7 @@ module CGRACoreDpath__24f351cbdd3e67d4
     .out__val( ME__out__val[10] )
   );
 
-  MemEngine__24f351cbdd3e67d4 ME__11
+  MemEngine__07e21c4d4fa663e6 ME__11
   (
     .clk( ME__clk[11] ),
     .id_cord( ME__id_cord[11] ),
@@ -8908,7 +8977,7 @@ module CGRACoreDpath__24f351cbdd3e67d4
     .out__val( ME__out__val[11] )
   );
 
-  MemEngine__24f351cbdd3e67d4 ME__12
+  MemEngine__07e21c4d4fa663e6 ME__12
   (
     .clk( ME__clk[12] ),
     .id_cord( ME__id_cord[12] ),
@@ -8934,7 +9003,7 @@ module CGRACoreDpath__24f351cbdd3e67d4
     .out__val( ME__out__val[12] )
   );
 
-  MemEngine__24f351cbdd3e67d4 ME__13
+  MemEngine__07e21c4d4fa663e6 ME__13
   (
     .clk( ME__clk[13] ),
     .id_cord( ME__id_cord[13] ),
@@ -8960,7 +9029,7 @@ module CGRACoreDpath__24f351cbdd3e67d4
     .out__val( ME__out__val[13] )
   );
 
-  MemEngine__24f351cbdd3e67d4 ME__14
+  MemEngine__07e21c4d4fa663e6 ME__14
   (
     .clk( ME__clk[14] ),
     .id_cord( ME__id_cord[14] ),
@@ -8986,7 +9055,7 @@ module CGRACoreDpath__24f351cbdd3e67d4
     .out__val( ME__out__val[14] )
   );
 
-  MemEngine__24f351cbdd3e67d4 ME__15
+  MemEngine__07e21c4d4fa663e6 ME__15
   (
     .clk( ME__clk[15] ),
     .id_cord( ME__id_cord[15] ),
@@ -12812,10 +12881,10 @@ endmodule
 
 
 // PyMTL Component CGRACore Definition
-// Full name: CGRACore__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:2, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// Full name: CGRACore__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
 // At /work/global/pp482/cgra/src/cgra/CGRACore.py
 
-module CGRACore__24f351cbdd3e67d4
+module CGRACore__07e21c4d4fa663e6
 (
   input  logic [0:0] clk ,
   output logic [0:0] is_calc_done ,
@@ -12855,7 +12924,7 @@ module CGRACore__24f351cbdd3e67d4
   logic [0:0] ctrl__xminion_resp_en;
   logic [0:0] ctrl__xminion_resp_rdy;
 
-  CGRACoreCtrl__24f351cbdd3e67d4 ctrl
+  CGRACoreCtrl__07e21c4d4fa663e6 ctrl
   (
     .CSR_wen( ctrl__CSR_wen ),
     .cfg_init( ctrl__cfg_init ),
@@ -12906,7 +12975,7 @@ module CGRACore__24f351cbdd3e67d4
   CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 dpath__spad_masters__resp__msg [0:15];
   logic [0:0] dpath__spad_masters__resp__rdy [0:15];
 
-  CGRACoreDpath__24f351cbdd3e67d4 dpath
+  CGRACoreDpath__07e21c4d4fa663e6 dpath
   (
     .CSR_wen( dpath__CSR_wen ),
     .cfg_init( dpath__cfg_init ),
@@ -20962,10 +21031,10 @@ endmodule
 
 
 // PyMTL Component CGRAXcelDpath Definition
-// Full name: CGRAXcelDpath__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:2, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// Full name: CGRAXcelDpath__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
 // At /work/global/pp482/cgra/src/cgra/CGRAXcelDpath.py
 
-module CGRAXcelDpath__24f351cbdd3e67d4
+module CGRAXcelDpath__07e21c4d4fa663e6
 (
   input  logic [0:0] cgra_xminion_req_en ,
   output logic [0:0] cgra_xminion_req_rdy ,
@@ -21014,7 +21083,7 @@ module CGRAXcelDpath__24f351cbdd3e67d4
   CgraXcelRespMsg__wen_1__addr_14__data_32 cgra__xcel_minion__resp__msg;
   logic [0:0] cgra__xcel_minion__resp__rdy;
 
-  CGRACore__24f351cbdd3e67d4 cgra
+  CGRACore__07e21c4d4fa663e6 cgra
   (
     .clk( cgra__clk ),
     .is_calc_done( cgra__is_calc_done ),
@@ -21304,10 +21373,10 @@ endmodule
 
 
 // PyMTL Component CGRAXcel Definition
-// Full name: CGRAXcel__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:2, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// Full name: CGRAXcel__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
 // At /work/global/pp482/cgra/src/cgra/CGRAXcel.py
 
-module CGRAXcel__24f351cbdd3e67d4
+module CGRAXcel__07e21c4d4fa663e6
 (
   input  logic [0:0] clk ,
   input  logic [0:0] reset ,
@@ -21355,7 +21424,7 @@ module CGRAXcel__24f351cbdd3e67d4
   logic [0:0] ctrl__xminion_resp_en;
   logic [0:0] ctrl__xminion_resp_rdy;
 
-  CGRAXcelCtrl__24f351cbdd3e67d4 ctrl
+  CGRAXcelCtrl__07e21c4d4fa663e6 ctrl
   (
     .cgra_xminion_req_en( ctrl__cgra_xminion_req_en ),
     .cgra_xminion_req_rdy( ctrl__cgra_xminion_req_rdy ),
@@ -21420,7 +21489,7 @@ module CGRAXcel__24f351cbdd3e67d4
   CgraRemoteMemRespMsg__wen_1__addr_28__data_32 dpath__mem_master__resp__msg [0:3];
   logic [0:0] dpath__mem_master__resp__rdy [0:3];
 
-  CGRAXcelDpath__24f351cbdd3e67d4 dpath
+  CGRAXcelDpath__07e21c4d4fa663e6 dpath
   (
     .cgra_xminion_req_en( dpath__cgra_xminion_req_en ),
     .cgra_xminion_req_rdy( dpath__cgra_xminion_req_rdy ),
@@ -21509,10 +21578,10 @@ endmodule
 
 
 // PyMTL Component HBEndpointRXAdapter Definition
-// Full name: HBEndpointRXAdapter__hb_params_<hammerblade.params.HBParams object at 0x7f1971d0b7d0>__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:2, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// Full name: HBEndpointRXAdapter__hb_params_<hammerblade.params.HBParams object at 0x7fdef7866090>__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
 // At /work/global/pp482/cgra/src/hammerblade/HBEndpointRXAdapter.py
 
-module HBEndpointRXAdapter__8ec12a820cf36595
+module HBEndpointRXAdapter__0eabfe82ed1d6f0c
 (
   input  logic [0:0] clk ,
   input  logic [6:0] my_x ,
@@ -21616,10 +21685,10 @@ endmodule
 
 
 // PyMTL Component HBEndpointTXAdapter Definition
-// Full name: HBEndpointTXAdapter__hb_params_<hammerblade.params.HBParams object at 0x7f1971d0b7d0>__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:2, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// Full name: HBEndpointTXAdapter__hb_params_<hammerblade.params.HBParams object at 0x7fdef7866090>__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
 // At /work/global/pp482/cgra/src/hammerblade/HBEndpointTXAdapter.py
 
-module HBEndpointTXAdapter__8ec12a820cf36595
+module HBEndpointTXAdapter__0eabfe82ed1d6f0c
 (
   input  logic [0:0] clk ,
   input  logic [6:0] my_x ,
@@ -21663,7 +21732,7 @@ endmodule
 
 
 // PyMTL Component HBEndpointCGRAXcel Definition
-// Full name: HBEndpointCGRAXcel__hb_params_<hammerblade.params.HBParams object at 0x7f1971d0b7d0>__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:2, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// Full name: HBEndpointCGRAXcel__hb_params_<hammerblade.params.HBParams object at 0x7fdef7866090>__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
 // At /work/global/pp482/cgra/src/hammerblade/HBEndpointCGRAXcel.py
 
 module HBEndpointCGRAXcel_8x8Array_4x4KBSpads
@@ -21713,7 +21782,7 @@ module HBEndpointCGRAXcel_8x8Array_4x4KBSpads
   CgraXcelRespMsg__wen_1__addr_14__data_32 cgra_xcel__xcel_minion__resp__msg;
   logic [0:0] cgra_xcel__xcel_minion__resp__rdy;
 
-  CGRAXcel__24f351cbdd3e67d4 cgra_xcel
+  CGRAXcel__07e21c4d4fa663e6 cgra_xcel
   (
     .clk( cgra_xcel__clk ),
     .reset( cgra_xcel__reset ),
@@ -21761,7 +21830,7 @@ module HBEndpointCGRAXcel_8x8Array_4x4KBSpads
   CgraXcelRespMsg__wen_1__addr_14__data_32 rx__xcel_master__resp__msg;
   logic [0:0] rx__xcel_master__resp__rdy;
 
-  HBEndpointRXAdapter__8ec12a820cf36595 rx
+  HBEndpointRXAdapter__0eabfe82ed1d6f0c rx
   (
     .clk( rx__clk ),
     .my_x( rx__my_x ),
@@ -21815,7 +21884,7 @@ module HBEndpointCGRAXcel_8x8Array_4x4KBSpads
   CgraRemoteMemRespMsg__wen_1__addr_28__data_32 tx__mem_minion__resp__msg [0:3];
   logic [0:0] tx__mem_minion__resp__rdy [0:3];
 
-  HBEndpointTXAdapter__8ec12a820cf36595 tx
+  HBEndpointTXAdapter__0eabfe82ed1d6f0c tx
   (
     .clk( tx__clk ),
     .my_x( tx__my_x ),

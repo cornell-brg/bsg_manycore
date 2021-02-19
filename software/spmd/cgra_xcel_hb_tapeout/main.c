@@ -22,7 +22,7 @@
 //                               verif_base_addr (word address) in the
 //                               CGRA EVA space
 // reference: address of the reference array in DRAM
-void run_test( int test_num, const char* test_name,
+void run_test( int test_num, const char* test_name, int is_sram_test,
                const int* mem_image,
                int mem_image_size,
                const int* instructions,
@@ -44,34 +44,38 @@ void run_test( int test_num, const char* test_name,
 
     bsg_printf("[INFO] Config and data have been staged into CGRA scratchpad!\n");
 
-    //==========================================================
-    // Execute CGRA instructions by performing remote stores
-    //==========================================================
+    if ( !is_sram_test ) {
 
-    for (i = 0; i < instruction_size; i++)
-      if (instructions[i] == CONFIG_INST) {
-        execute_config(
-            config_arg0[cfg_IC], config_arg1[cfg_IC],
-            config_arg2[cfg_IC], config_arg3[cfg_IC]);
-        cfg_IC++;
-      } else if (instructions[i] == LAUNCH_INST) {
-        execute_launch();
+      //==========================================================
+      // Execute CGRA instructions by performing remote stores
+      //==========================================================
+
+      for (i = 0; i < instruction_size; i++)
+        if (instructions[i] == CONFIG_INST) {
+          execute_config(
+              config_arg0[cfg_IC], config_arg1[cfg_IC],
+              config_arg2[cfg_IC], config_arg3[cfg_IC]);
+          cfg_IC++;
+        } else if (instructions[i] == LAUNCH_INST) {
+          execute_launch();
+        }
+
+      bsg_printf("[INFO] All CGRA instructions executed! Polling till CGRA finishes...\n");
+
+      //==========================================================
+      // Polling the status of the CGRA until it's done
+      //==========================================================
+      // TODO: this will generate tons of network traffic! the
+      // CGRA should be able to signal the processor when it's
+      // done...
+
+      while( done == 0 ) {
+        CGRA_REG_RD(CGRA_REG_CALC_DONE, done);
       }
 
-    bsg_printf("[INFO] All CGRA instructions executed! Polling till CGRA finishes...\n");
+      bsg_printf("[INFO] CGRA has finished computation!\n");
 
-    //==========================================================
-    // Polling the status of the CGRA until it's done
-    //==========================================================
-    // TODO: this will generate tons of network traffic! the
-    // CGRA should be able to signal the processor when it's
-    // done...
-
-    while( done == 0 ) {
-      CGRA_REG_RD(CGRA_REG_CALC_DONE, done);
     }
-
-    bsg_printf("[INFO] CGRA has finished computation!\n");
 
     //==========================================================
     // Compare results with reference
@@ -92,7 +96,7 @@ int main()
 
     if (is_run_all_tests()) {
       for (i = 0; i < NUM_TEST_VECTORS; i++) {
-        run_test( i, test_name[i],
+        run_test( i, test_name[i], is_sram_test[i],
                   bstrm_addr[i], bstrm_size[i],
                   insts_addr[i], arg0_addr[i], arg1_addr[i],
                   arg2_addr[i], arg3_addr[i], inst_size[i],
@@ -100,7 +104,7 @@ int main()
       }
     } else {
       i = get_test_index();
-      run_test( i, test_name[i],
+      run_test( i, test_name[i], is_sram_test[i],
                 bstrm_addr[i], bstrm_size[i],
                 insts_addr[i], arg0_addr[i], arg1_addr[i],
                 arg2_addr[i], arg3_addr[i], inst_size[i],

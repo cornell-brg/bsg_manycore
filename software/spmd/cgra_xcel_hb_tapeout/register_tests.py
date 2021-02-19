@@ -33,6 +33,10 @@ const char* test_name[NUM_TEST_VECTORS] __attribute__ ((section (".dram"))) = {{
 {test_name}
 }};
 
+const int is_sram_test[NUM_TEST_VECTORS] __attribute__ ((section (".dram"))) = {{
+{is_sram_test}
+}};
+
 const int* bstrm_addr[NUM_TEST_VECTORS] __attribute__ ((section (".dram"))) = {{
 {bstrm_addr}
 }};
@@ -128,6 +132,7 @@ def dump_test_vector_header( names ):
   num_test_vectors    = len(names)
   pound_include_stmts = gen_include_stmts( names )
   test_name           = gen_var_names( "_name", names, indent=2 )
+  is_sram_test        = gen_var_names( "_is_sram_test", names, indent=2 )
   bstrm_addr          = gen_var_names( "_bstrm", names, indent=2 )
   bstrm_size          = gen_var_names( "_bstrm_size", names, indent=2 )
   insts_addr          = gen_var_names( "_instructions", names, indent=2 )

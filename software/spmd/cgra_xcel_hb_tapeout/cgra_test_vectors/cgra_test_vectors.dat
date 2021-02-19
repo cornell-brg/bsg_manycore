@@ -10,10 +10,6 @@ const char* test_name[NUM_TEST_VECTORS] __attribute__ ((section (".dram"))) = {
   sram_read_write_8x8_name
 };
 
-const int is_sram_test[NUM_TEST_VECTORS] __attribute__ ((section (".dram"))) = {
-  sram_read_write_8x8_is_sram_test
-};
-
 const int* bstrm_addr[NUM_TEST_VECTORS] __attribute__ ((section (".dram"))) = {
   sram_read_write_8x8_bstrm
 };
@@ -56,4 +52,8 @@ int result_size[NUM_TEST_VECTORS] __attribute__ ((section (".dram"))) = {
 
 const int* ref_addr[NUM_TEST_VECTORS] __attribute__ ((section (".dram"))) = {
   sram_read_write_8x8_reference
+};
+
+int is_sram_test[NUM_TEST_VECTORS] __attribute__ ((section (".dram"))) = {
+  sram_read_write_8x8_is_sram_test
 };

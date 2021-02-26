@@ -3,57 +3,71 @@
 // data files under ./cgra_test_vectors.
 
 #include "cgra_tv_sram_read_write_8x8.dat"
+#include "cgra_tv_vvadd_8x8.dat"
 
-#define NUM_TEST_VECTORS 1
+#define NUM_TEST_VECTORS 2
 
 const char* test_name[NUM_TEST_VECTORS] __attribute__ ((section (".dram"))) = {
-  sram_read_write_8x8_name
+  sram_read_write_8x8_name,
+  vvadd_8x8_name
 };
 
 const int* bstrm_addr[NUM_TEST_VECTORS] __attribute__ ((section (".dram"))) = {
-  sram_read_write_8x8_bstrm
+  sram_read_write_8x8_bstrm,
+  vvadd_8x8_bstrm
 };
 
 int bstrm_size[NUM_TEST_VECTORS] __attribute__ ((section (".dram"))) = {
-  sram_read_write_8x8_bstrm_size
+  sram_read_write_8x8_bstrm_size,
+  vvadd_8x8_bstrm_size
 };
 
 const int* insts_addr[NUM_TEST_VECTORS] __attribute__ ((section (".dram"))) = {
-  sram_read_write_8x8_instructions
+  sram_read_write_8x8_instructions,
+  vvadd_8x8_instructions
 };
 
 const int* arg0_addr[NUM_TEST_VECTORS] __attribute__ ((section (".dram"))) = {
-  sram_read_write_8x8_arg0
+  sram_read_write_8x8_arg0,
+  vvadd_8x8_arg0
 };
 
 const int* arg1_addr[NUM_TEST_VECTORS] __attribute__ ((section (".dram"))) = {
-  sram_read_write_8x8_arg1
+  sram_read_write_8x8_arg1,
+  vvadd_8x8_arg1
 };
 
 const int* arg2_addr[NUM_TEST_VECTORS] __attribute__ ((section (".dram"))) = {
-  sram_read_write_8x8_arg2
+  sram_read_write_8x8_arg2,
+  vvadd_8x8_arg2
 };
 
 const int* arg3_addr[NUM_TEST_VECTORS] __attribute__ ((section (".dram"))) = {
-  sram_read_write_8x8_arg3
+  sram_read_write_8x8_arg3,
+  vvadd_8x8_arg3
 };
 
 int inst_size[NUM_TEST_VECTORS] __attribute__ ((section (".dram"))) = {
-  sram_read_write_8x8_inst_size
+  sram_read_write_8x8_inst_size,
+  vvadd_8x8_inst_size
 };
 
 int verif_base[NUM_TEST_VECTORS] __attribute__ ((section (".dram"))) = {
-  sram_read_write_8x8_verif_base
+  sram_read_write_8x8_verif_base,
+  vvadd_8x8_verif_base
 };
 
 int result_size[NUM_TEST_VECTORS] __attribute__ ((section (".dram"))) = {
-  sram_read_write_8x8_result_size
+  sram_read_write_8x8_result_size,
+  vvadd_8x8_result_size
 };
 
 const int* ref_addr[NUM_TEST_VECTORS] __attribute__ ((section (".dram"))) = {
-  sram_read_write_8x8_reference
+  sram_read_write_8x8_reference,
+  vvadd_8x8_reference
 };
 
 int is_sram_test[NUM_TEST_VECTORS] __attribute__ ((section (".dram"))) = {
-  sram_read_write_8x8_is_sram_test
+  sram_read_write_8x8_is_sram_test,
+  vvadd_8x8_is_sram_test
 };

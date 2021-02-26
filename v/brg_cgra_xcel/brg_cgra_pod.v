@@ -10,6 +10,7 @@
 module brg_cgra_pod
   import bsg_manycore_pkg::*;
   import bsg_noc_pkg::*; // {P=0, W, E, N, S}
+  import bsg_tag_pkg::*;
   #(  parameter addr_width_p="inv"
     , parameter data_width_p="inv"
     , parameter x_cord_width_p="inv"
@@ -32,27 +33,49 @@ module brg_cgra_pod
     , input mc_clk_i
     , input mc_reset_i
 
+    // bsg_tag interface used to program the global_y registers
+    , input bsg_tag_s [num_row_p-1:0] bsg_tag_i
+
     // This pod only takes links from one side
-    , input  [num_row_p-1:0][link_sif_width_lp-1:0] mc_hor_links_i
-    , output [num_row_p-1:0][link_sif_width_lp-1:0] mc_hor_links_o
+    , input  [num_row_p-1:0][E:E][ruche_x_link_sif_width_lp-1:0] mc_ruche_links_i
+    , output logic [num_row_p-1:0][E:E][ruche_x_link_sif_width_lp-1:0] mc_ruche_links_o
 
-    , input  [num_row_p-1:0][ruche_x_link_sif_width_lp-1:0] mc_ruche_links_i
-    , output [num_row_p-1:0][ruche_x_link_sif_width_lp-1:0] mc_ruche_links_o
+    , input  [num_row_p-1:0][E:E][link_sif_width_lp-1:0] mc_hor_links_i
+    , output logic [num_row_p-1:0][E:E][link_sif_width_lp-1:0] mc_hor_links_o
 
-    , input [x_cord_width_p-1:0] global_x_i
-    , input [num_row_p-1:0][y_cord_width_p-1:0] global_y_i
+    , input [S:N][link_sif_width_lp-1:0]                mc_ver_links_i
+    , output logic [S:N][link_sif_width_lp-1:0]         mc_ver_links_o
   );
 
   `declare_bsg_manycore_link_sif_s(addr_width_p, data_width_p, x_cord_width_p, y_cord_width_p);
+
+  //=========================================================================
+  // bsg_tag_clients
+  //=========================================================================
+  // Used to program the global_y registers.
+
+  // TODO: the x cord is hard coded!
+  wire [x_cord_width_p-1:0] global_x_li = 'h20;
+  logic [num_row_p-1:0][y_cord_width_p-1:0] global_y_li;
+  for (genvar i = 0; i < num_row_p; i++)
+    begin : btc
+      bsg_tag_client
+       #(.width_p(y_cord_width_p), .default_p(0))
+       btc
+        (.bsg_tag_i(bsg_tag_i[i])
+
+         ,.recv_clk_i(xcel_clk_i)
+         ,.recv_reset_i(1'b0)
+         ,.recv_new_r_o()
+         ,.recv_data_r_o(global_y_li[i])
+         );
+    end
 
   //=========================================================================
   // bsg_manycore_hor_io_router_column
   //=========================================================================
   // Since we assume the CGRA xcel pod is on the east side, we explicitly tie
   // off the east side of links.
-
-  logic [S:N][link_sif_width_lp-1:0] mc_ver_links_li;
-  logic [S:N][link_sif_width_lp-1:0] mc_ver_links_lo;
 
   bsg_manycore_link_sif_s [num_row_p-1:0] mc_proc_links_li;
   bsg_manycore_link_sif_s [num_row_p-1:0] mc_proc_links_lo;
@@ -78,9 +101,8 @@ module brg_cgra_pod
     .clk_i(mc_clk_i)
     ,.reset_i(mc_reset_i)
 
-    // Tie off unused vertical links
-    ,.ver_link_sif_i(mc_ver_links_li)
-    ,.ver_link_sif_o(mc_ver_links_lo)
+    ,.ver_link_sif_i(mc_ver_links_i)
+    ,.ver_link_sif_o(mc_ver_links_o)
 
     ,.proc_link_sif_i(mc_proc_links_li)
     ,.proc_link_sif_o(mc_proc_links_lo)
@@ -91,42 +113,16 @@ module brg_cgra_pod
     ,.ruche_link_i(mc_ruche_links_li)
     ,.ruche_link_o(mc_ruche_links_lo)
     
-    ,.global_x_i(global_x_i)
-    ,.global_y_i(global_y_i)
-  );
-
-  // Tie off vertical links on the north and south sides
-
-  bsg_manycore_link_sif_tieoff #(
-    .addr_width_p(addr_width_p)
-    ,.data_width_p(data_width_p)
-    ,.x_cord_width_p(x_cord_width_p)
-    ,.y_cord_width_p(y_cord_width_p)
-  ) ver_n_tieoff (
-    .clk_i(mc_clk_i)
-    ,.reset_i(mc_reset_i)
-    ,.link_sif_i(mc_ver_links_lo[N])
-    ,.link_sif_o(mc_ver_links_li[N])
-  );
-
-  bsg_manycore_link_sif_tieoff #(
-    .addr_width_p(addr_width_p)
-    ,.data_width_p(data_width_p)
-    ,.x_cord_width_p(x_cord_width_p)
-    ,.y_cord_width_p(y_cord_width_p)
-  ) ver_s_tieoff (
-    .clk_i(mc_clk_i)
-    ,.reset_i(mc_reset_i)
-    ,.link_sif_i(mc_ver_links_lo[S])
-    ,.link_sif_o(mc_ver_links_li[S])
+    ,.global_x_i(global_x_li)
+    ,.global_y_i(global_y_li)
   );
 
   // Handle horizontal links
 
   for (genvar i = 0; i < num_row_p; i++) begin: hor_tieoff
     // Bring in the mesh network links from the west side
-    assign mc_hor_links_o[i] = mc_hor_links_lo[i][W];
-    assign mc_hor_links_li[i][W] = mc_hor_links_i[i];
+    assign mc_hor_links_o[i][E] = mc_hor_links_lo[i][W];
+    assign mc_hor_links_li[i][W] = mc_hor_links_i[i][E];
     // hor link E gets '0
     assign mc_hor_links_li[i][E] = '0;
 
@@ -138,7 +134,7 @@ module brg_cgra_pod
       ,.harden_p(0)
     ) rb_col_to_mc (
       .i(mc_ruche_links_lo[i][W])
-      ,.o(mc_ruche_links_o[i])
+      ,.o(mc_ruche_links_o[i][E])
     );
     bsg_ruche_buffer #(
       .width_p(ruche_x_link_sif_width_lp)
@@ -146,7 +142,7 @@ module brg_cgra_pod
       ,.ruche_stage_p(0)
       ,.harden_p(0)
     ) rb_mc_to_col (
-      .i(mc_ruche_links_i[i])
+      .i(mc_ruche_links_i[i][E])
       ,.o(mc_ruche_links_li[i][W])
     );
   end
@@ -160,7 +156,7 @@ module brg_cgra_pod
   bsg_manycore_link_sif_s [num_row_p-1:0] xcel_proc_links_li;
   bsg_manycore_link_sif_s [num_row_p-1:0] xcel_proc_links_lo;
 
-  for (genvar i = 0; i < num_row_p; i++) begin: rof2
+  for (genvar i = 0; i < num_row_p; i++) begin: rof4
     bsg_async_noc_link #(
       .width_p($bits(bsg_manycore_fwd_link_sif_s)-2),
       .lg_size_p(3)
@@ -207,8 +203,8 @@ module brg_cgra_pod
     ,.reset_i(xcel_reset_i)
     ,.link_sif_i(xcel_proc_links_li)
     ,.link_sif_o(xcel_proc_links_lo)
-    ,.my_x_i(global_x_i)
-    ,.my_y_i(global_y_i[0])
+    ,.my_x_i(global_x_li)
+    ,.my_y_i(global_y_li[0])
   );
 
 endmodule

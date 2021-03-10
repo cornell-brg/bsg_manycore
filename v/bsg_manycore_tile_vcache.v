@@ -23,6 +23,7 @@ module bsg_manycore_tile_vcache
     , parameter vcache_block_size_in_words_p="inv"
     , parameter vcache_dma_data_width_p="inv"
 
+    // wh_ruche_factor_p supported only for 2^n, n>0.
     , parameter wh_ruche_factor_p="inv"
     , parameter wh_cid_width_p="inv"
     , parameter wh_flit_width_p="inv"
@@ -32,15 +33,22 @@ module bsg_manycore_tile_vcache
 
     , parameter req_fifo_els_p=4
 
+    , parameter lg_wh_ruche_factor_lp = `BSG_SAFE_CLOG2(wh_ruche_factor_p)
+
     , parameter manycore_link_sif_width_lp =
       `bsg_manycore_link_sif_width(addr_width_p,data_width_p,x_cord_width_p,y_cord_width_p)
 
     , parameter wh_link_sif_width_lp = 
       `bsg_ready_and_link_sif_width(wh_flit_width_p)
+
+    , parameter vcache_amo_support_p = (1 << e_cache_amo_swap)
+                                | (1 << e_cache_amo_or)
+                                | (1 << e_cache_amo_add)
   )
   (
     input clk_i
     , input reset_i
+    , output logic reset_o
 
     , input  [wh_ruche_factor_p-1:0][E:W][wh_link_sif_width_lp-1:0] wh_link_sif_i
     , output [wh_ruche_factor_p-1:0][E:W][wh_link_sif_width_lp-1:0] wh_link_sif_o  
@@ -52,9 +60,11 @@ module bsg_manycore_tile_vcache
     , input [x_cord_width_p-1:0] global_x_i
     , input [y_cord_width_p-1:0] global_y_i
 
+    , output logic [x_cord_width_p-1:0] global_x_o
+    , output logic [y_cord_width_p-1:0] global_y_o
+
     // wormhole cord
-    , input [wh_cord_width_p-1:0] my_wh_cord_i
-    , input [wh_cid_width_p-1:0]  my_wh_cid_i
+    //, input [wh_cid_width_p-1:0]  my_wh_cid_i
     , input wh_dest_east_not_west_i
   );
 
@@ -74,6 +84,32 @@ module bsg_manycore_tile_vcache
     ,.data_i(reset_i)
     ,.data_o(reset_r)
   );
+
+  assign reset_o = reset_r;
+
+
+  // feedthrough coordinate bits
+  logic [x_cord_width_p-1:0] global_x_r;
+  logic [y_cord_width_p-1:0] global_y_r;
+
+  bsg_dff #(
+    .width_p(x_cord_width_p)
+  ) x_dff (
+    .clk_i(clk_i)
+    ,.data_i(global_x_i)
+    ,.data_o(global_x_r)
+  );
+
+  bsg_dff #(
+    .width_p(y_cord_width_p)
+  ) y_dff (
+    .clk_i(clk_i)
+    ,.data_i(global_y_i)
+    ,.data_o(global_y_r)
+  );
+
+  assign global_x_o = global_x_r;
+  assign global_y_o = y_cord_width_p'(global_y_r+1);
 
   // mesh router
   // vcache connects to P
@@ -100,8 +136,8 @@ module bsg_manycore_tile_vcache
     ,.proc_link_sif_i(proc_link_sif_li)
     ,.proc_link_sif_o(proc_link_sif_lo)
 
-    ,.global_x_i(global_x_i)
-    ,.global_y_i(global_y_i)
+    ,.global_x_i(global_x_r)
+    ,.global_y_i(global_y_r)
   );
 
   assign ver_link_sif_o[S] = link_sif_lo[S];
@@ -172,6 +208,7 @@ module bsg_manycore_tile_vcache
     ,.sets_p(vcache_sets_p)
     ,.ways_p(vcache_ways_p)
     ,.dma_data_width_p(vcache_dma_data_width_p)
+    ,.amo_support_p(vcache_amo_support_p)
   ) cache (
     .clk_i(clk_i)
     ,.reset_i(reset_r)
@@ -235,9 +272,12 @@ module bsg_manycore_tile_vcache
     ,.wh_link_sif_i(cache_wh_link_li)
     ,.wh_link_sif_o(cache_wh_link_lo)
 
-    ,.my_wh_cord_i(my_wh_cord_i)
+    ,.my_wh_cord_i(global_x_r)
     ,.dest_wh_cord_i({wh_cord_width_p{wh_dest_east_not_west_i}})
-    ,.my_wh_cid_i(my_wh_cid_i)
+    // concentrator id
+    // lower bits come from lower bits of global_x
+    // upper bits come from whether its north or south vc.
+    ,.my_wh_cid_i({~global_y_r[0], global_x_r[0+:lg_wh_ruche_factor_lp]})
   );
   
 
@@ -258,7 +298,7 @@ module bsg_manycore_tile_vcache
     ,.link_i(wh_link_li)
     ,.link_o(wh_link_lo)
 
-    ,.my_cord_i(my_wh_cord_i)
+    ,.my_cord_i(global_x_r)
   );
 
   assign wh_link_li[P] = cache_wh_link_lo;

@@ -32,3 +32,6 @@ BSG_MACHINE_MEM_CFG                   = e_vcache_test_mem
 
 # PP: tell the TB we are using the CGRAXcelPod composition
 BSG_MACHINE_COMPOSITION            = 1
+
+BSG_MACHINE_SUBARRAY_X                = 1
+BSG_MACHINE_SUBARRAY_Y                = 1

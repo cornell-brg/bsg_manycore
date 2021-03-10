@@ -169,6 +169,7 @@ module network_tx
       case (remote_req_i.amo_type)
         e_vanilla_amoswap:  out_packet.op_v2 = e_remote_amoswap;
         e_vanilla_amoor:    out_packet.op_v2 = e_remote_amoor;
+        e_vanilla_amoadd:   out_packet.op_v2 = e_remote_amoadd;
         default:            out_packet.op_v2 = e_remote_amoswap;  // should never happen.
       endcase
     end
@@ -226,8 +227,8 @@ module network_tx
   always_ff @ (negedge clk_i) begin
 
     if (remote_req_v_i & is_invalid_addr_lo) begin
-      $display("[ERROR][TX] Invalid EVA access. t=%0t, x=%d, y=%d, addr=%h",
-        $time, {pod_x_i, my_x_i}, {pod_y_i, my_y_i}, remote_req_i.addr);
+      $display("[ERROR][TX] Invalid EVA access. t=%0t, x=%d, y=%d, addr=%h data=%h w=%b",
+        $time, {pod_x_i, my_x_i}, {pod_y_i, my_y_i}, remote_req_i.addr, remote_req_i.data, remote_req_i.write_not_read);
     end 
 
     if (returned_v_i) begin

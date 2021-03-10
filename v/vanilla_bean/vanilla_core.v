@@ -571,19 +571,19 @@ module vanilla_core
 
 
   // save pc+4 of jalr/jal for predicting jalr branch target
-  logic [pc_width_lp-1:0] jalr_prediction_r;
+  // For risc-v, hints for saving return address for jalr/jal are encoded implicitly in the rd used.
+  // For jalr/jal, save the pc+4 when rd = x1 or x5.
+  wire jalr_prediction_write_en = (exe_r.decode.is_jal_op | exe_r.decode.is_jalr_op)
+    & ((exe_r.instruction.rd == 5'd1) | (exe_r.instruction.rd == 5'd5));
 
-  assign jalr_prediction = (exe_r.decode.is_jal_op | exe_r.decode.is_jalr_op)
-    ? exe_r.pc_plus4[2+:pc_width_lp]
-    : jalr_prediction_r;
-
-  bsg_dff_reset #(
+  bsg_dff_reset_en_bypass #(
     .width_p(pc_width_lp)
   ) jalr_pred_dff (
     .clk_i(clk_i)
     ,.reset_i(reset_i)
-    ,.data_i(jalr_prediction)
-    ,.data_o(jalr_prediction_r)
+    ,.en_i(jalr_prediction_write_en)
+    ,.data_i(exe_r.pc_plus4[2+:pc_width_lp])
+    ,.data_o(jalr_prediction)
   ); 
 
   // alu/csr result mux
@@ -1098,6 +1098,7 @@ module vanilla_core
   
   // debug printing for interrupt and mret
   // synopsys translate_off
+
   always_ff @ (negedge clk_i) begin
     if (~reset_i & ~stall_all & interrupt_ready) begin
       if (remote_interrupt_ready) begin
@@ -1114,6 +1115,14 @@ module vanilla_core
       $display("[INFO][VCORE] mret called. t=%0t, x=%0d, y=%0d, mepc=%h",
         $time, global_x_i, global_y_i, {mepc_r, 2'b00});
     end
+
+/*    if (jalr_mispredict)
+      $display("[INFO][VCORE] jalr_mispredict. t=%0t, x=%0d, y=%0d, true=%x pred=%x\n", 
+	       $time, global_x_i, global_y_i, 
+	       { alu_jalr_addr, 2'b00 },
+	       { exe_r.pred_or_jump_addr[2+:pc_width_lp], 2'b00 }
+	       );
+ */
   end
   // synopsys translate_on
 

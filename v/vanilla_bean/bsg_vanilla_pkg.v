@@ -59,9 +59,10 @@ typedef struct packed {
 
 // remote request from vanilla core
 //
-typedef enum logic [0:0] {
+typedef enum logic [1:0] {
   e_vanilla_amoswap
   , e_vanilla_amoor
+  , e_vanilla_amoadd
 } bsg_vanilla_amo_type_e;
 
 typedef struct packed
@@ -424,6 +425,10 @@ typedef struct packed {
 `define RV32_FENCE_FUN3   3'b000
 `define RV32_FENCE   {4'b0000,4'b????,4'b????,5'b00000,`RV32_FENCE_FUN3,5'b00000,`RV32_MISC_MEM}
 
+//TRIGGER SAIF DUMP defines
+`define SAIF_TRIGGER_START {12'b000000000001,5'b00000,3'b000,5'b00000,`RV32_OP_IMM}
+`define SAIF_TRIGGER_END {12'b000000000010,5'b00000,3'b000,5'b00000,`RV32_OP_IMM}
+
 // CSR encoding
 `define RV32_CSRRW_FUN3  3'b001
 `define RV32_CSRRS_FUN3  3'b010
@@ -477,6 +482,7 @@ typedef struct packed {
 `define RV32_LR_W_AQ    {5'b00010,2'b10,5'b00000,5'b?????,3'b010,5'b?????,`RV32_AMO_OP}
 `define RV32_AMOSWAP_W  {5'b00001,2'b??,5'b?????,5'b?????,3'b010,5'b?????,`RV32_AMO_OP}
 `define RV32_AMOOR_W    {5'b01000,2'b??,5'b?????,5'b?????,3'b010,5'b?????,`RV32_AMO_OP}
+`define RV32_AMOADD_W   {5'b00000,2'b??,5'b?????,5'b?????,3'b010,5'b?????,`RV32_AMO_OP}
 
 // RV32F Instruction Encodings
 `define RV32_OP_FP            7'b1010011

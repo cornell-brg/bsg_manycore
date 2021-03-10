@@ -123,6 +123,12 @@ inline int bsg_lr_aq(int *p) { int tmp; __asm__ __volatile__("lr.w.aq %0,%1\n" :
 #elif defined(__GNUC__) || defined(__GNUG__)
 inline int bsg_lr(int *p)    { int tmp; __asm__ __volatile__("lr.w    %0,%1\n" : "=r" (tmp) : "A" (*p)); return tmp; }
 inline int bsg_lr_aq(int *p) { int tmp; __asm__ __volatile__("lr.w.aq %0,%1\n" : "=r" (tmp) : "A" (*p)); return tmp; }
+
+inline int bsg_li(int constant_val) { int result; asm("li %0, %1" : "=r"(result) : "i"(constant_val)); return result; }
+inline int bsg_div(int a, int b)  { int result; __asm__ __volatile__("divu %0,%1,%2" : "=r"(result) : "r" (a), "r" (b)); return result; }
+inline int bsg_mulu(int a, int b) { int result; __asm__ __volatile__("mul %0,%1,%2" : "=r"(result) : "r" (a), "r" (b)); return result; }
+
+
 #else
 #error Unsupported Compiler!
 #endif
@@ -221,6 +227,11 @@ inline void bsg_fence()      { __asm__ __volatile__("fence" :::); }
 #define BSG_CUDA_PRINT_STAT_TG_ID_MASK      ((1 << BSG_CUDA_PRINT_STAT_TG_ID_WIDTH) - 1)  // 0x3FFF
 #define BSG_CUDA_PRINT_STAT_X_MASK          ((1 << BSG_CUDA_PRINT_STAT_X_WIDTH) - 1)      // 0x3F
 #define BSG_CUDA_PRINT_STAT_Y_MASK          ((1 << BSG_CUDA_PRINT_STAT_Y_WIDTH) - 1)      // 0x3F
+
+//Macros for triggering saif generation
+#define bsg_saif_start() asm volatile ("addi zero,zero,1")
+
+#define bsg_saif_end() asm volatile ("addi zero,zero,2")
 
 
 #define bsg_print_stat(tag) do { bsg_remote_int_ptr ptr = bsg_remote_ptr_io(IO_X_INDEX,0xd0c); *ptr = tag; } while (0)

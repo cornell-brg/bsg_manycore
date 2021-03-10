@@ -44,7 +44,9 @@ DEFAULT_MACHINES = pod_1x1 pod_1x1_hbm2 pod_4x4
 
 DEFAULT_TARGETS = $(foreach machine, $(DEFAULT_MACHINES),$(machine)/simv)
 DEFAULT_DEBUG_TARGETS = $(foreach machine, $(DEFAULT_MACHINES),$(machine)/simv-debug)
-all: $(DEFAULT_TARGETS) $(DEFAULT_DEBUG_TARGETS)
+DEFAULT_PROFILE_TARGETS = $(foreach machine, $(DEFAULT_MACHINES),$(machine)/simv-profile)
+
+all: $(DEFAULT_TARGETS) $(DEFAULT_DEBUG_TARGETS) $(DEFAULT_PROFILE_TARGETS)
 
 # set_machine_variables includes the Makefile.machine.include file and sets the
 # VCS_DEFINES that define the architecture for a machine. This should be called
@@ -75,6 +77,8 @@ define set_machine_variables
 	$(eval VCS_DEFINES += +define+BSG_MACHINE_NETWORK_CFG="${BSG_MACHINE_NETWORK_CFG}")
 	$(eval VCS_DEFINES += +define+BSG_MACHINE_RUCHE_FACTOR_X="${BSG_MACHINE_RUCHE_FACTOR_X}")
 	$(eval VCS_DEFINES += +define+BSG_MACHINE_COMPOSITION="${BSG_MACHINE_COMPOSITION}")
+	$(eval VCS_DEFINES += +define+BSG_MACHINE_SUBARRAY_X="${BSG_MACHINE_SUBARRAY_X}")
+	$(eval VCS_DEFINES += +define+BSG_MACHINE_SUBARRAY_Y="${BSG_MACHINE_SUBARRAY_Y}")
 	# specify where the host module is instantiated for profiler trigger (print_stat).
 	# relative to $root
 	$(eval VCS_DEFINES += +define+HOST_MODULE_PATH=spmd_testbench) 
@@ -115,9 +119,21 @@ ASCII_TO_ROM_PY = $(BASEJUMP_STL_DIR)/bsg_mem/bsg_ascii_to_rom.py
 		$(VCS_INCLUDES) $(VCS_DEFINES) $(CSOURCES) $(VCS_SOURCES) $*/bsg_tag_boot_rom.v $*/cgra_hpod_rom.v \
 		-l $*/build-debug.log -Mdir=$*/csrc-debug
 
+# building simv-profile
+# with trace-based profiler for bloodgraphs etc
+%/simv-profile : %/Makefile.machine.include $(VSOURCES) $(CSOURCES) $(VINCLUDES) $(VHEADERS) 
+	$(call set_machine_variables,$<)
+	python $(POD_TRACE_GEN_PY) $(BSG_MACHINE_PODS_X) $(BSG_MACHINE_PODS_Y) $(BSG_MACHINE_X_CORD_WIDTH) > $*/pod_trace.tr
+	python $(ASCII_TO_ROM_PY) $*/pod_trace.tr bsg_tag_boot_rom > $*/bsg_tag_boot_rom.v
+	$(eval VCS_FLAGS += +define+BSG_ENABLE_PROFILING) # Debug adds these two variables to generate waveforms
+	$(VCS) $(VCS_FLAGS) $(VCS_CFLAGS) -o $@ \
+		$(VCS_INCLUDES) $(VCS_DEFINES) $(CSOURCES) $(VCS_SOURCES) $*/bsg_tag_boot_rom.v \
+		-l $*/build.log -Mdir=$*/csrc
+
+
 clean:
-	rm -rf csrc
-	rm -rf */*.log */*.daidir */simv */simv-debug
+	rm -rf */csrc*
+	rm -rf */*.log */*.daidir */simv */simv-debug */simv-profile
 	rm -rf stack.info.*
-	rm -f vc_hdrs.h
+	rm -f */vc_hdrs.h
 	rm -f */*.tr */bsg_tag_boot_rom.v */cgra_hpod_rom.v

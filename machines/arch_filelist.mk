@@ -197,11 +197,8 @@ VSOURCES += $(BSG_MANYCORE_DIR)/v/bsg_manycore_hor_io_router.v
 VSOURCES += $(BSG_MANYCORE_DIR)/v/bsg_manycore_hor_io_router_column.v
 
 # PP: CGRAXcel sources
-# PP: bsg_async_noc_link for CDC
-VSOURCES += $(BP_TOP_DIR)/v/bsg_async_noc_link.sv
 VSOURCES += $(BSG_MANYCORE_DIR)/v/brg_cgra_xcel/HBEndpointCGRAXcel_8x8Array_4x4KBSpads__pickled.v
 VSOURCES += $(BSG_MANYCORE_DIR)/v/brg_cgra_xcel/brg_8x8_cgra_xcel.v
-VSOURCES += $(BSG_MANYCORE_DIR)/v/brg_cgra_xcel/brg_8x8_cgra_xcel_tile.v
 VSOURCES += $(BSG_MANYCORE_DIR)/v/brg_cgra_xcel/brg_cgra_pod.v
 
 # PP: Include SRAM verilog model for RTL hard simulation

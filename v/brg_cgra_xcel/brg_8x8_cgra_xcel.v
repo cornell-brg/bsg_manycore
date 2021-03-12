@@ -14,8 +14,6 @@ module brg_8x8_cgra_xcel
     ,addr_width_p                 = "inv"
     ,max_out_credits_p            = 32
 
-    ,num_mesh_links_per_cgra      = 4
-
     // Derived local parameters
     ,packet_width_lp                = `bsg_manycore_packet_width(addr_width_p,data_width_p,x_cord_width_p,y_cord_width_p)
     ,bsg_manycore_link_sif_width_lp = `bsg_manycore_link_sif_width(addr_width_p,data_width_p,x_cord_width_p,y_cord_width_p)
@@ -24,24 +22,14 @@ module brg_8x8_cgra_xcel
     , input reset_i
 
     // mesh network
-    , input  [num_mesh_links_per_cgra-1:0][bsg_manycore_link_sif_width_lp-1:0] link_sif_i
-    , output [num_mesh_links_per_cgra-1:0][bsg_manycore_link_sif_width_lp-1:0] link_sif_o
+    , input  [3:0][bsg_manycore_link_sif_width_lp-1:0] link_sif_i
+    , output [3:0][bsg_manycore_link_sif_width_lp-1:0] link_sif_o
 
     // Coordinate of the top-left tile (assuming the xcel pod is on the east
     // side of a manycore pod)
     , input   [x_cord_width_p-1:0]                my_x_i
     , input   [y_cord_width_p-1:0]                my_y_i
-    );
-
-    // Register reset for better timing
-    logic reset_r;
-    bsg_dff #(
-      .width_p(1)
-    ) reset_reg (
-      .clk_i(clk_i)
-      ,.data_i(reset_i)
-      ,.data_o(reset_r)
-    );
+  );
 
     //--------------------------------------------------------------
     // Endpoint standard
@@ -50,36 +38,36 @@ module brg_8x8_cgra_xcel
     `declare_bsg_manycore_packet_s(addr_width_p, data_width_p, x_cord_width_p, y_cord_width_p);
 
     // endpoint slave interface ports
-    logic [num_mesh_links_per_cgra-1:0]                             in_v_lo         ;
-    logic [num_mesh_links_per_cgra-1:0][data_width_p-1:0]           in_data_lo      ;
-    logic [num_mesh_links_per_cgra-1:0][(data_width_p>>3)-1:0]      in_mask_lo      ;
-    logic [num_mesh_links_per_cgra-1:0][addr_width_p-1:0]           in_addr_lo      ;
-    logic [num_mesh_links_per_cgra-1:0]                             in_we_lo        ;
-    bsg_manycore_load_info_s [num_mesh_links_per_cgra-1:0]          in_load_info_lo ;
-    logic [num_mesh_links_per_cgra-1:0][x_cord_width_p-1:0]         in_src_x_cord_lo;
-    logic [num_mesh_links_per_cgra-1:0][y_cord_width_p-1:0]         in_src_y_cord_lo;
-    logic [num_mesh_links_per_cgra-1:0]                             in_yumi_li      ;
+    logic [3:0]                             in_v_lo         ;
+    logic [3:0][data_width_p-1:0]           in_data_lo      ;
+    logic [3:0][(data_width_p>>3)-1:0]      in_mask_lo      ;
+    logic [3:0][addr_width_p-1:0]           in_addr_lo      ;
+    logic [3:0]                             in_we_lo        ;
+    bsg_manycore_load_info_s [3:0]          in_load_info_lo ;
+    logic [3:0][x_cord_width_p-1:0]         in_src_x_cord_lo;
+    logic [3:0][y_cord_width_p-1:0]         in_src_y_cord_lo;
+    logic [3:0]                             in_yumi_li      ;
 
-    logic [num_mesh_links_per_cgra-1:0][data_width_p-1:0]           returning_data_li;
-    logic [num_mesh_links_per_cgra-1:0]                             returning_v_li   ;
+    logic [3:0][data_width_p-1:0]           returning_data_li;
+    logic [3:0]                             returning_v_li   ;
 
     // endpoint master interface ports
-    logic [num_mesh_links_per_cgra-1:0]                                  out_v_li              ;
-    logic [num_mesh_links_per_cgra-1:0][packet_width_lp-1:0]             out_packet_li         ;
-    logic [num_mesh_links_per_cgra-1:0]                                  out_credit_or_ready_lo;
-    logic [num_mesh_links_per_cgra-1:0][$clog2(max_out_credits_p+1)-1:0] out_credits_lo        ;
+    logic [3:0]                                  out_v_li              ;
+    logic [3:0][packet_width_lp-1:0]             out_packet_li         ;
+    logic [3:0]                                  out_credit_or_ready_lo;
+    logic [3:0][$clog2(max_out_credits_p+1)-1:0] out_credits_lo        ;
 
-    logic [num_mesh_links_per_cgra-1:0][data_width_p-1:0]           returned_data_lo     ;
-    logic [num_mesh_links_per_cgra-1:0][4:0]                        returned_reg_id_lo   ;
-    logic [num_mesh_links_per_cgra-1:0]                             returned_v_lo        ;
-    bsg_manycore_return_packet_type_e [num_mesh_links_per_cgra-1:0] returned_pkt_type_lo ;
-    logic [num_mesh_links_per_cgra-1:0]                             returned_yumi_li     ;
-    logic [num_mesh_links_per_cgra-1:0]                             returned_fifo_full_lo;
+    logic [3:0][data_width_p-1:0]           returned_data_lo     ;
+    logic [3:0][4:0]                        returned_reg_id_lo   ;
+    logic [3:0]                             returned_v_lo        ;
+    bsg_manycore_return_packet_type_e [3:0] returned_pkt_type_lo ;
+    logic [3:0]                             returned_yumi_li     ;
+    logic [3:0]                             returned_fifo_full_lo;
 
-    logic [num_mesh_links_per_cgra-1:0]                             unused_returned_credit_v_lo        ;
-    logic [num_mesh_links_per_cgra-1:0][4:0]                        unused_returned_credit_reg_id_lo   ;
+    logic [3:0]                             unused_returned_credit_v_lo        ;
+    logic [3:0][4:0]                        unused_returned_credit_reg_id_lo   ;
 
-    for (genvar i = 0; i < num_mesh_links_per_cgra; i++) begin
+    for (genvar i = 0; i < 4; i++) begin : ep
 
       bsg_manycore_endpoint_standard
       #(
@@ -91,7 +79,7 @@ module brg_8x8_cgra_xcel
         ,.max_out_credits_p     ( max_out_credits_p )
       ) endpoint_gs
       (  .clk_i ( clk_i )
-        ,.reset_i ( reset_r )
+        ,.reset_i ( reset_i )
 
         // mesh network
         ,.link_sif_i( link_sif_i[i] )
@@ -145,7 +133,7 @@ module brg_8x8_cgra_xcel
 
     HBEndpointCGRAXcel_8x8Array_4x4KBSpads hb_cgra_xcel (
       .clk                   ( clk_i                  ),
-      .reset                 ( reset_r                ),
+      .reset                 ( reset_i                ),
 
       .my_x_i                ( my_x_i                 ),
       .my_y_i                ( my_y_i                 ),
@@ -181,7 +169,7 @@ module brg_8x8_cgra_xcel
     //--------------------------------------------------------------
     // TODO: support multiple memory masters
 
-    for (genvar i = 1; i < num_mesh_links_per_cgra; i++) begin
+    for (genvar i = 1; i < 4; i++) begin
       assign in_yumi_li[i] = in_v_lo[i];
       assign returning_data_li[i] = 0;
       assign returning_v_li[i] = 1'b0;

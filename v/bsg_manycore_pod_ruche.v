@@ -36,7 +36,8 @@ module bsg_manycore_pod_ruche
     , parameter dmem_size_p="inv"
     , parameter icache_entries_p="inv"
     , parameter icache_tag_width_p="inv"
-   
+ 
+    , parameter num_vcache_rows_p="inv"  
     , parameter vcache_addr_width_p="inv" 
     , parameter vcache_data_width_p="inv" 
     , parameter vcache_ways_p="inv"
@@ -53,8 +54,6 @@ module bsg_manycore_pod_ruche
     , parameter wh_cord_width_p="inv"
     , parameter wh_len_width_p="inv"
     
-    , parameter reset_depth_p=2
-
     , parameter manycore_link_sif_width_lp =
       `bsg_manycore_link_sif_width(addr_width_p,data_width_p,x_cord_width_p,y_cord_width_p)
 
@@ -63,10 +62,19 @@ module bsg_manycore_pod_ruche
 
     , parameter wh_link_sif_width_lp = 
       `bsg_ready_and_link_sif_width(wh_flit_width_p)
+
+    // This is used to define heterogeneous arrays. Each index defines
+    // the type of an X/Y coordinate in the array. This is a vector of
+    // num_tiles_x_p*num_tiles_y_p ints; type "0" is the
+    // default. See bsg_manycore_hetero_socket.v for more types.
+    `ifndef SYNTHESIS
+    , parameter int hetero_type_vec_p [0:(num_tiles_y_p*num_tiles_x_p) - 1]  = '{default:0}
+    `endif
   )
   (
     // manycore 
     input clk_i
+    , input [num_tiles_x_p-1:0] reset_i
 
     , input  [E:W][num_tiles_y_p-1:0][manycore_link_sif_width_lp-1:0] hor_link_sif_i
     , output [E:W][num_tiles_y_p-1:0][manycore_link_sif_width_lp-1:0] hor_link_sif_o
@@ -79,14 +87,12 @@ module bsg_manycore_pod_ruche
 
 
     // vcache
-    , input  [E:W][wh_ruche_factor_p-1:0][wh_link_sif_width_lp-1:0] north_wh_link_sif_i
-    , output [E:W][wh_ruche_factor_p-1:0][wh_link_sif_width_lp-1:0] north_wh_link_sif_o
-    , input bsg_tag_s north_bsg_tag_i
+    , input  [E:W][num_vcache_rows_p-1:0][wh_ruche_factor_p-1:0][wh_link_sif_width_lp-1:0] north_wh_link_sif_i
+    , output [E:W][num_vcache_rows_p-1:0][wh_ruche_factor_p-1:0][wh_link_sif_width_lp-1:0] north_wh_link_sif_o
 
+    , input  [E:W][num_vcache_rows_p-1:0][wh_ruche_factor_p-1:0][wh_link_sif_width_lp-1:0] south_wh_link_sif_i
+    , output [E:W][num_vcache_rows_p-1:0][wh_ruche_factor_p-1:0][wh_link_sif_width_lp-1:0] south_wh_link_sif_o
 
-    , input  [E:W][wh_ruche_factor_p-1:0][wh_link_sif_width_lp-1:0] south_wh_link_sif_i
-    , output [E:W][wh_ruche_factor_p-1:0][wh_link_sif_width_lp-1:0] south_wh_link_sif_o
-    , input bsg_tag_s south_bsg_tag_i
 
     // pod cord (should be all same value for all columns)
     , input [num_tiles_x_p-1:0][x_cord_width_p-1:0] global_x_i
@@ -99,45 +105,16 @@ module bsg_manycore_pod_ruche
   `declare_bsg_ready_and_link_sif_s(wh_flit_width_p, wh_link_sif_s);
 
 
-  // bsg tag clients
-  bsg_manycore_pod_tag_payload_s north_tag_payload;
-  bsg_manycore_pod_tag_payload_s south_tag_payload;
-
-  bsg_tag_client #(
-    .width_p($bits(bsg_manycore_pod_tag_payload_s))
-    ,.default_p(0)
-  ) btc_n (
-    .bsg_tag_i(north_bsg_tag_i)
-    ,.recv_clk_i(clk_i)
-    ,.recv_reset_i(1'b0)
-    ,.recv_new_r_o()
-    ,.recv_data_r_o(north_tag_payload)
-  );
-
-  // flop north_tag_payload.reset for each column of subarray.
-  logic [num_subarray_x_p-1:0] reset_r;
-  bsg_dff_chain #(
-    .width_p(num_subarray_x_p)
-    ,.num_stages_p(reset_depth_p)
-  ) reset_dff (
-    .clk_i(clk_i)
-    ,.data_i({num_subarray_x_p{north_tag_payload.reset}})
-    ,.data_o(reset_r)
-  );
-
-
   // vcache row (north)
-  logic [num_subarray_x_p-1:0][subarray_num_tiles_x_lp-1:0] north_vc_reset_li;
   logic [num_subarray_x_p-1:0][subarray_num_tiles_x_lp-1:0] north_vc_reset_lo;
-  wh_link_sif_s [num_subarray_x_p-1:0][E:W][wh_ruche_factor_p-1:0] north_vc_wh_link_sif_li;
-  wh_link_sif_s [num_subarray_x_p-1:0][E:W][wh_ruche_factor_p-1:0] north_vc_wh_link_sif_lo;
+  wh_link_sif_s [num_subarray_x_p-1:0][E:W][num_vcache_rows_p-1:0][wh_ruche_factor_p-1:0] north_vc_wh_link_sif_li;
+  wh_link_sif_s [num_subarray_x_p-1:0][E:W][num_vcache_rows_p-1:0][wh_ruche_factor_p-1:0] north_vc_wh_link_sif_lo;
   bsg_manycore_link_sif_s [num_subarray_x_p-1:0][S:N][subarray_num_tiles_x_lp-1:0] north_vc_ver_link_sif_li;
   bsg_manycore_link_sif_s [num_subarray_x_p-1:0][S:N][subarray_num_tiles_x_lp-1:0] north_vc_ver_link_sif_lo;
   logic [num_subarray_x_p-1:0][subarray_num_tiles_x_lp-1:0][x_cord_width_p-1:0] north_vc_global_x_li;
   logic [num_subarray_x_p-1:0][subarray_num_tiles_x_lp-1:0][y_cord_width_p-1:0] north_vc_global_y_li;
   logic [num_subarray_x_p-1:0][subarray_num_tiles_x_lp-1:0][x_cord_width_p-1:0] north_vc_global_x_lo;
   logic [num_subarray_x_p-1:0][subarray_num_tiles_x_lp-1:0][y_cord_width_p-1:0] north_vc_global_y_lo;
-  logic [num_subarray_x_p-1:0][subarray_num_tiles_x_lp-1:0] north_vc_wh_dest_east_not_west_li;
 
   for (genvar x = 0; x < num_subarray_x_p; x++) begin: north_vc_x
     bsg_manycore_tile_vcache_array #(
@@ -153,6 +130,7 @@ module bsg_manycore_pod_ruche
 
       ,.subarray_num_tiles_x_p(subarray_num_tiles_x_lp)
 
+      ,.num_vcache_rows_p(num_vcache_rows_p)
       ,.vcache_addr_width_p(vcache_addr_width_p)
       ,.vcache_data_width_p(vcache_data_width_p)
       ,.vcache_ways_p(vcache_ways_p)
@@ -168,7 +146,7 @@ module bsg_manycore_pod_ruche
     ) north_vc_row (
       .clk_i(clk_i)
 
-      ,.reset_i({subarray_num_tiles_x_lp{reset_r[x]}})
+      ,.reset_i(reset_i[(subarray_num_tiles_x_lp*x)+:subarray_num_tiles_x_lp])
       ,.reset_o(north_vc_reset_lo[x])
 
       ,.wh_link_sif_i(north_vc_wh_link_sif_li[x])
@@ -181,12 +159,8 @@ module bsg_manycore_pod_ruche
       ,.global_y_i(north_vc_global_y_li[x])
       ,.global_x_o(north_vc_global_x_lo[x])
       ,.global_y_o(north_vc_global_y_lo[x])
-
-      ,.wh_dest_east_not_west_i(north_vc_wh_dest_east_not_west_li[x])
     );
 
-    // connect reset
-    assign north_vc_reset_li[x] = {subarray_num_tiles_x_lp{reset_r[x]}};
 
     // connect coordinates
     assign north_vc_global_x_li[x] = global_x_i[x*subarray_num_tiles_x_lp+:subarray_num_tiles_x_lp];
@@ -214,22 +188,6 @@ module bsg_manycore_pod_ruche
       assign north_vc_wh_link_sif_li[x][E] = north_vc_wh_link_sif_lo[x+1][W];
     end
 
-    // connect wh dest coord
-    if (num_subarray_x_p == 1) begin
-      for (genvar i = 0; i < subarray_num_tiles_x_lp; i++) begin
-        assign north_vc_wh_dest_east_not_west_li[x][i] = (i < (subarray_num_tiles_x_lp/2))
-          ? north_tag_payload.wh_dest_east_not_west[0]
-          : north_tag_payload.wh_dest_east_not_west[1];
-      end
-    end
-    else begin
-      for (genvar i = 0; i < subarray_num_tiles_x_lp; i++) begin
-        assign north_vc_wh_dest_east_not_west_li[x][i] = (x < (num_subarray_x_p/2))
-          ? north_tag_payload.wh_dest_east_not_west[0]
-          : north_tag_payload.wh_dest_east_not_west[1];
-      end
-    end    
-
   end
 
 
@@ -249,6 +207,19 @@ module bsg_manycore_pod_ruche
   logic [num_subarray_y_p-1:0][num_subarray_x_p-1:0][subarray_num_tiles_x_lp-1:0] mc_reset_li;
   logic [num_subarray_y_p-1:0][num_subarray_x_p-1:0][subarray_num_tiles_x_lp-1:0] mc_reset_lo;
 
+  // Split the hetero_type_vec_p array into sub-arrays.
+  `ifndef SYNTHESIS
+  typedef int hetero_type_sub_vec[0:(subarray_num_tiles_y_lp*subarray_num_tiles_x_lp) - 1];
+  function hetero_type_sub_vec get_subarray_hetero_type_vec(int y, int x);
+    hetero_type_sub_vec vec;
+    for (int sy_i = 0; sy_i < subarray_num_tiles_y_lp; sy_i++) begin
+      for (int sx_i = 0; sx_i < subarray_num_tiles_x_lp; sx_i++) begin
+        vec[sy_i*subarray_num_tiles_x_lp + sx_i] = hetero_type_vec_p[(sy_i + y * subarray_num_tiles_y_lp) * num_tiles_x_p + x * subarray_num_tiles_x_lp + sx_i];
+      end
+    end
+    return vec;
+  endfunction
+  `endif
 
   for (genvar y = 0; y < num_subarray_y_p; y++) begin: mc_y
     for (genvar x = 0; x < num_subarray_x_p; x++) begin: mc_x
@@ -256,6 +227,8 @@ module bsg_manycore_pod_ruche
         .dmem_size_p(dmem_size_p)
         ,.icache_entries_p(icache_entries_p)
         ,.icache_tag_width_p(icache_tag_width_p)
+
+        ,.num_vcache_rows_p(num_vcache_rows_p)
         ,.vcache_size_p(vcache_size_p)
         ,.vcache_block_size_in_words_p(vcache_block_size_in_words_p)
         ,.vcache_sets_p(vcache_sets_p)
@@ -264,7 +237,7 @@ module bsg_manycore_pod_ruche
 
         ,.subarray_num_tiles_x_p(subarray_num_tiles_x_lp)
         ,.subarray_num_tiles_y_p(subarray_num_tiles_y_lp)
-        
+
         ,.pod_x_cord_width_p(pod_x_cord_width_p)
         ,.pod_y_cord_width_p(pod_y_cord_width_p)
         ,.x_cord_width_p(x_cord_width_p)
@@ -272,6 +245,9 @@ module bsg_manycore_pod_ruche
         ,.addr_width_p(addr_width_p)
         ,.data_width_p(data_width_p)
         ,.ruche_factor_X_p(ruche_factor_X_p)
+          `ifndef SYNTHESIS
+        ,.hetero_type_vec_p(get_subarray_hetero_type_vec(y, x))
+          `endif
       ) mc (
         .clk_i(clk_i)
 
@@ -350,29 +326,15 @@ module bsg_manycore_pod_ruche
     end
   end
 
-  
-
-  // south vc bsg_tag client
-  bsg_tag_client #(
-    .width_p($bits(bsg_manycore_pod_tag_payload_s))
-    ,.default_p(0)
-  ) btc_s (
-    .bsg_tag_i(south_bsg_tag_i)
-    ,.recv_clk_i(clk_i)
-    ,.recv_reset_i(1'b0)
-    ,.recv_new_r_o()
-    ,.recv_data_r_o(south_tag_payload)
-  );
 
   // vcache row (south)
   logic [num_subarray_x_p-1:0][subarray_num_tiles_x_lp-1:0] south_vc_reset_li;
-  wh_link_sif_s [num_subarray_x_p-1:0][E:W][wh_ruche_factor_p-1:0] south_vc_wh_link_sif_li;
-  wh_link_sif_s [num_subarray_x_p-1:0][E:W][wh_ruche_factor_p-1:0] south_vc_wh_link_sif_lo;
+  wh_link_sif_s [num_subarray_x_p-1:0][E:W][num_vcache_rows_p-1:0][wh_ruche_factor_p-1:0] south_vc_wh_link_sif_li;
+  wh_link_sif_s [num_subarray_x_p-1:0][E:W][num_vcache_rows_p-1:0][wh_ruche_factor_p-1:0] south_vc_wh_link_sif_lo;
   bsg_manycore_link_sif_s [num_subarray_x_p-1:0][S:N][subarray_num_tiles_x_lp-1:0] south_vc_ver_link_sif_li;
   bsg_manycore_link_sif_s [num_subarray_x_p-1:0][S:N][subarray_num_tiles_x_lp-1:0] south_vc_ver_link_sif_lo;
   logic [num_subarray_x_p-1:0][subarray_num_tiles_x_lp-1:0][x_cord_width_p-1:0] south_vc_global_x_li;
   logic [num_subarray_x_p-1:0][subarray_num_tiles_x_lp-1:0][y_cord_width_p-1:0] south_vc_global_y_li;
-  logic [num_subarray_x_p-1:0][subarray_num_tiles_x_lp-1:0] south_vc_wh_dest_east_not_west_li;
   
   for (genvar x = 0; x < num_subarray_x_p; x++) begin: south_vc_x
     bsg_manycore_tile_vcache_array #(
@@ -388,6 +350,7 @@ module bsg_manycore_pod_ruche
 
       ,.subarray_num_tiles_x_p(subarray_num_tiles_x_lp)
 
+      ,.num_vcache_rows_p(num_vcache_rows_p)
       ,.vcache_addr_width_p(vcache_addr_width_p)
       ,.vcache_data_width_p(vcache_data_width_p)
       ,.vcache_ways_p(vcache_ways_p)
@@ -415,8 +378,6 @@ module bsg_manycore_pod_ruche
       ,.global_y_i(south_vc_global_y_li[x])
       ,.global_x_o()
       ,.global_y_o()
-
-      ,.wh_dest_east_not_west_i(south_vc_wh_dest_east_not_west_li[x])
     );
 
     // connect reset
@@ -451,25 +412,6 @@ module bsg_manycore_pod_ruche
       assign south_vc_wh_link_sif_li[x+1][W] = south_vc_wh_link_sif_lo[x][E];
       assign south_vc_wh_link_sif_li[x][E] = south_vc_wh_link_sif_lo[x+1][W];
     end
-
-
-    // connect wh dest coord
-    if (num_subarray_x_p == 1) begin
-      for (genvar i = 0; i < subarray_num_tiles_x_lp; i++) begin
-        assign south_vc_wh_dest_east_not_west_li[x][i] = (i < (subarray_num_tiles_x_lp/2))
-          ? south_tag_payload.wh_dest_east_not_west[0]
-          : south_tag_payload.wh_dest_east_not_west[1];
-      end
-    end
-    else begin
-      for (genvar i = 0; i < subarray_num_tiles_x_lp; i++) begin
-        assign south_vc_wh_dest_east_not_west_li[x][i] = (x < (num_subarray_x_p/2))
-          ? south_tag_payload.wh_dest_east_not_west[0]
-          : south_tag_payload.wh_dest_east_not_west[1];
-      end
-    end    
-
-
 
   end
 

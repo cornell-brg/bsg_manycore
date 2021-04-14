@@ -30,6 +30,7 @@ VCS_FLAGS    += +define+BRG_RTL_HARD_SIM +define+ARM_UD_MODEL
 
 VCS_CFLAGS   =  -cpp g++
 VCS_CFLAGS   += -CFLAGS "-std=c++11 -g -Wall"
+VCS_CFLAGS   += -CFLAGS "-O2"
 VCS_CFLAGS   += -CFLAGS "-fPIC"
 VCS_CFLAGS 	 += -CFLAGS "-I$(BASEJUMP_STL_DIR)/imports/DRAMSim3/src"
 VCS_CFLAGS   += -CFLAGS "-I$(BASEJUMP_STL_DIR)/imports/DRAMSim3/ext/headers"
@@ -79,6 +80,9 @@ define set_machine_variables
 	$(eval VCS_DEFINES += +define+BSG_MACHINE_COMPOSITION="${BSG_MACHINE_COMPOSITION}")
 	$(eval VCS_DEFINES += +define+BSG_MACHINE_SUBARRAY_X="${BSG_MACHINE_SUBARRAY_X}")
 	$(eval VCS_DEFINES += +define+BSG_MACHINE_SUBARRAY_Y="${BSG_MACHINE_SUBARRAY_Y}")
+	$(eval VCS_DEFINES += +define+BSG_MACHINE_NUM_VCACHE_ROWS="${BSG_MACHINE_NUM_VCACHE_ROWS}")
+	$(eval VCS_DEFINES += +define+BSG_MACHINE_NUM_VCACHES_PER_CHANNEL="${BSG_MACHINE_NUM_VCACHES_PER_CHANNEL}")
+	$(eval VCS_DEFINES += +define+BSG_MACHINE_DRAMSIM3_PKG="${BSG_MACHINE_DRAMSIM3_PKG}")
 	# specify where the host module is instantiated for profiler trigger (print_stat).
 	# relative to $root
 	$(eval VCS_DEFINES += +define+HOST_MODULE_PATH=spmd_testbench) 
@@ -100,7 +104,7 @@ ASCII_TO_ROM_PY = $(BASEJUMP_STL_DIR)/bsg_mem/bsg_ascii_to_rom.py
 	$(call set_machine_variables,$<)
 	python3 $(CGRA_HPOD_TRACE_GEN_PY) $(BSG_MACHINE_PODS_X) $(BSG_MACHINE_PODS_Y) > $*/cgra_hpod_trace.tr
 	python2 $(ASCII_TO_ROM_PY) $*/cgra_hpod_trace.tr cgra_hpod_rom > $*/cgra_hpod_rom.v
-	python3 $(POD_TRACE_GEN_PY) $(BSG_MACHINE_PODS_X) $(BSG_MACHINE_PODS_Y) $(BSG_MACHINE_X_CORD_WIDTH) > $*/pod_trace.tr
+	python3 $(POD_TRACE_GEN_PY) $(BSG_MACHINE_PODS_X) $(BSG_MACHINE_PODS_Y) > $*/pod_trace.tr
 	python2 $(ASCII_TO_ROM_PY) $*/pod_trace.tr bsg_tag_boot_rom > $*/bsg_tag_boot_rom.v
 	$(VCS) $(VCS_FLAGS) $(VCS_CFLAGS) -o $@ \
 		$(VCS_INCLUDES) $(VCS_DEFINES) $(CSOURCES) $(VCS_SOURCES) $*/bsg_tag_boot_rom.v $*/cgra_hpod_rom.v \
@@ -112,7 +116,7 @@ ASCII_TO_ROM_PY = $(BASEJUMP_STL_DIR)/bsg_mem/bsg_ascii_to_rom.py
 	$(call set_machine_variables,$<)
 	python3 $(CGRA_HPOD_TRACE_GEN_PY) $(BSG_MACHINE_PODS_X) $(BSG_MACHINE_PODS_Y) > $*/cgra_hpod_trace.tr
 	python2 $(ASCII_TO_ROM_PY) $*/cgra_hpod_trace.tr cgra_hpod_rom > $*/cgra_hpod_rom.v
-	python3 $(POD_TRACE_GEN_PY) $(BSG_MACHINE_PODS_X) $(BSG_MACHINE_PODS_Y) $(BSG_MACHINE_X_CORD_WIDTH) > $*/pod_trace.tr
+	python3 $(POD_TRACE_GEN_PY) $(BSG_MACHINE_PODS_X) $(BSG_MACHINE_PODS_Y) > $*/pod_trace.tr
 	python2 $(ASCII_TO_ROM_PY) $*/pod_trace.tr bsg_tag_boot_rom > $*/bsg_tag_boot_rom.v
 	$(eval VCS_FLAGS += -debug_pp +vcs+vcdpluson) # Debug adds these two variables to generate waveforms
 	$(VCS) $(VCS_FLAGS) $(VCS_CFLAGS) -o $@ \
@@ -123,12 +127,13 @@ ASCII_TO_ROM_PY = $(BASEJUMP_STL_DIR)/bsg_mem/bsg_ascii_to_rom.py
 # with trace-based profiler for bloodgraphs etc
 %/simv-profile : %/Makefile.machine.include $(VSOURCES) $(CSOURCES) $(VINCLUDES) $(VHEADERS) 
 	$(call set_machine_variables,$<)
-	python $(POD_TRACE_GEN_PY) $(BSG_MACHINE_PODS_X) $(BSG_MACHINE_PODS_Y) $(BSG_MACHINE_X_CORD_WIDTH) > $*/pod_trace.tr
+	python $(POD_TRACE_GEN_PY) $(BSG_MACHINE_PODS_X) $(BSG_MACHINE_PODS_Y) > $*/pod_trace.tr
 	python $(ASCII_TO_ROM_PY) $*/pod_trace.tr bsg_tag_boot_rom > $*/bsg_tag_boot_rom.v
 	$(eval VCS_FLAGS += +define+BSG_ENABLE_PROFILING) # Debug adds these two variables to generate waveforms
+	$(eval VCS_CFLAGS   += -CFLAGS "-DBLOOD_GRAPH")
 	$(VCS) $(VCS_FLAGS) $(VCS_CFLAGS) -o $@ \
 		$(VCS_INCLUDES) $(VCS_DEFINES) $(CSOURCES) $(VCS_SOURCES) $*/bsg_tag_boot_rom.v \
-		-l $*/build.log -Mdir=$*/csrc
+		-l $*/build-profile.log -Mdir=$*/csrc-profile
 
 
 clean:

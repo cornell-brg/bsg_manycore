@@ -16,6 +16,8 @@ module bsg_manycore_tile_vcache
     , parameter x_cord_width_p="inv"
     , parameter y_cord_width_p="inv"
 
+    , parameter num_tiles_y_p="inv"
+
     , parameter vcache_addr_width_p="inv"
     , parameter vcache_data_width_p="inv"
     , parameter vcache_ways_p="inv"
@@ -34,6 +36,8 @@ module bsg_manycore_tile_vcache
     , parameter req_fifo_els_p=4
 
     , parameter lg_wh_ruche_factor_lp = `BSG_SAFE_CLOG2(wh_ruche_factor_p)
+
+    , parameter y_subcord_width_lp = `BSG_SAFE_CLOG2(num_tiles_y_p)
 
     , parameter manycore_link_sif_width_lp =
       `bsg_manycore_link_sif_width(addr_width_p,data_width_p,x_cord_width_p,y_cord_width_p)
@@ -62,10 +66,6 @@ module bsg_manycore_tile_vcache
 
     , output logic [x_cord_width_p-1:0] global_x_o
     , output logic [y_cord_width_p-1:0] global_y_o
-
-    // wormhole cord
-    //, input [wh_cid_width_p-1:0]  my_wh_cid_i
-    , input wh_dest_east_not_west_i
   );
 
 
@@ -110,6 +110,8 @@ module bsg_manycore_tile_vcache
 
   assign global_x_o = global_x_r;
   assign global_y_o = y_cord_width_p'(global_y_r+1);
+
+
 
   // mesh router
   // vcache connects to P
@@ -156,6 +158,7 @@ module bsg_manycore_tile_vcache
   logic cache_v_lo;
   logic cache_yumi_li;  
   logic v_we_lo;
+  logic wh_dest_east_not_west_lo;
 
   bsg_manycore_link_to_cache #(
     .link_addr_width_p(addr_width_p) // word addr
@@ -184,6 +187,8 @@ module bsg_manycore_tile_vcache
     ,.yumi_o(cache_yumi_li)
 
     ,.v_we_i(v_we_lo)
+
+    ,.wh_dest_east_not_west_o(wh_dest_east_not_west_lo)
   );
 
 
@@ -273,13 +278,13 @@ module bsg_manycore_tile_vcache
     ,.wh_link_sif_o(cache_wh_link_lo)
 
     ,.my_wh_cord_i(global_x_r)
-    ,.dest_wh_cord_i({wh_cord_width_p{wh_dest_east_not_west_i}})
+    ,.dest_wh_cord_i({wh_cord_width_p{wh_dest_east_not_west_lo}})
     // concentrator id
     // lower bits come from lower bits of global_x
     // upper bits come from whether its north or south vc.
-    ,.my_wh_cid_i({~global_y_r[0], global_x_r[0+:lg_wh_ruche_factor_lp]})
+    ,.my_wh_cid_i({~global_y_r[y_subcord_width_lp-1], global_x_r[0+:lg_wh_ruche_factor_lp]})
   );
-  
+ 
 
   // wormhole router
   // vcache DMA connects to P

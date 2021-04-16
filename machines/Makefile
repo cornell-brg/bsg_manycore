@@ -5,6 +5,8 @@ BSG_MANYCORE_DIR := $(shell git rev-parse --show-toplevel)
 BASEJUMP_STL_DIR := $(abspath $(BSG_MANYCORE_DIR)/../basejump_stl)
 # PP: bsg_async_noc_link is under blackparrot source directory
 BP_TOP_DIR := $(abspath $(BSG_MANYCORE_DIR)/../black-parrot/bp_top/src)
+# PP: SDR stuff
+BIGBLADE_DIR := $(abspath $(BSG_MANYCORE_DIR)/../hb_bigblade)
 
 # Sets "VCS" variable
 # include $(BSG_MANYCORE_DIR)/../bsg_cadenv/cadenv.mk

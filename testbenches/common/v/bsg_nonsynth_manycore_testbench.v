@@ -63,6 +63,17 @@ module bsg_nonsynth_manycore_testbench
     // num_tiles_x_p*num_tiles_y_p ints; type "0" is the
     // default. See bsg_manycore_hetero_socket.v for more types.
     , parameter int hetero_type_vec_p [0:(num_tiles_y_p*num_tiles_x_p) - 1]  = '{default:0}
+
+    , localparam sdr_lg_fifo_depth_gp = 3
+    , localparam sdr_lg_credit_to_token_decimation_gp = 0
+
+    , localparam x_subcord_width_lp=`BSG_SAFE_CLOG2(num_tiles_x_p)
+    , localparam y_subcord_width_lp=`BSG_SAFE_CLOG2(num_tiles_y_p)
+
+    , localparam fwd_width_lp =
+      `bsg_manycore_packet_width(addr_width_p, data_width_p, x_cord_width_p, y_cord_width_p)
+    , localparam rev_width_lp =
+      `bsg_manycore_return_packet_width(x_cord_width_p, y_cord_width_p, data_width_p)
   )
   (
     input clk_i
@@ -98,6 +109,35 @@ module bsg_nonsynth_manycore_testbench
     $display("[INFO][TESTBENCH] enable_cache_profiling_p             = %d", enable_cache_profiling_p);
   end
 
+  logic async_uplink_reset, async_downlink_reset, async_downstream_reset, async_token_reset;
+  logic reset_done;
+  initial
+    begin
+      @(negedge reset_i);
+
+      $display("[INFO][SDR-Reset] Start SDR reset sequence at time ", $stime);
+
+      async_uplink_reset     = 1;
+      async_downlink_reset   = 1;
+      async_downstream_reset = 1;
+      async_token_reset      = 0;
+      reset_done             = 0;
+
+      #100000;
+      async_token_reset = 1;
+      #100000;
+      async_token_reset = 0;
+      #100000;
+      async_uplink_reset = 0;
+      #100000;
+      async_downlink_reset = 0;
+      #100000;
+      async_downstream_reset = 0;
+      #100000;
+      reset_done = 1;
+
+      $display("[INFO][SDR-Reset] SDR reset sequence finished at time ", $stime);
+    end
 
   // BSG TAG MASTER
   logic tag_done_lo;
@@ -109,7 +149,8 @@ module bsg_nonsynth_manycore_testbench
     ,.wh_cord_width_p(wh_cord_width_p)
   ) mtm (
     .clk_i(clk_i)
-    ,.reset_i(reset_i)
+    // PP: only start tag programming after SDR reset has finished
+    ,.reset_i(reset_i | ~reset_done)
     
     ,.tag_done_o(tag_done_lo)
     ,.pod_tags_o(pod_tags_lo)
@@ -121,70 +162,68 @@ module bsg_nonsynth_manycore_testbench
   // BSG tag master for the CGRA half pod
   //---------------------------------------------------------------------
 
-  localparam cgra_tag_num_clients_lp = 4;
-  localparam cgra_tag_payload_width_lp = y_cord_width_p;
-  localparam cgra_tag_lg_payload_width_lp = `BSG_WIDTH(cgra_tag_payload_width_lp);
-  localparam cgra_tag_max_payload_width_lp = (1<<cgra_tag_lg_payload_width_lp)-1;
-  localparam cgra_tag_rom_data_width_lp = 4+1+`BSG_SAFE_CLOG2(cgra_tag_num_clients_lp)+1+cgra_tag_lg_payload_width_lp+cgra_tag_max_payload_width_lp;
-  localparam cgra_tag_rom_addr_width_lp = 12;
+  // localparam cgra_tag_num_clients_lp = 4;
+  // localparam cgra_tag_payload_width_lp = y_cord_width_p;
+  // localparam cgra_tag_lg_payload_width_lp = `BSG_WIDTH(cgra_tag_payload_width_lp);
+  // localparam cgra_tag_max_payload_width_lp = (1<<cgra_tag_lg_payload_width_lp)-1;
+  // localparam cgra_tag_rom_data_width_lp = 4+1+`BSG_SAFE_CLOG2(cgra_tag_num_clients_lp)+1+cgra_tag_lg_payload_width_lp+cgra_tag_max_payload_width_lp;
+  // localparam cgra_tag_rom_addr_width_lp = 12;
 
-  logic cgra_tag_tr_valid_lo, cgra_tag_tr_data_lo, cgra_tag_tr_done_lo;
-  logic [cgra_tag_rom_data_width_lp-1:0] cgra_tag_rom_data;
-  logic [cgra_tag_rom_addr_width_lp-1:0] cgra_tag_rom_addr;
+  // logic cgra_tag_tr_valid_lo, cgra_tag_tr_data_lo, cgra_tag_tr_done_lo;
+  // logic [cgra_tag_rom_data_width_lp-1:0] cgra_tag_rom_data;
+  // logic [cgra_tag_rom_addr_width_lp-1:0] cgra_tag_rom_addr;
 
-  logic cgra_tag_done_lo;
-  bsg_tag_s [num_pods_y_p-1:0][cgra_tag_num_clients_lp-1:0] cgra_tags_lo;
+  // logic cgra_tag_done_lo;
+  // bsg_tag_s [num_pods_y_p-1:0][cgra_tag_num_clients_lp-1:0] cgra_tags_lo;
 
-  bsg_tag_trace_replay
-   #(.rom_addr_width_p(cgra_tag_rom_addr_width_lp)
-     ,.rom_data_width_p(cgra_tag_rom_data_width_lp)
-     ,.num_clients_p(cgra_tag_num_clients_lp)
-     ,.max_payload_width_p(cgra_tag_max_payload_width_lp)
-     ,.num_masters_p(1)
-     )
-   cgra_tag_tr
-    (.clk_i(clk_i)
-     ,.reset_i(reset_i)
-     ,.en_i(1'b1)
+  // bsg_tag_trace_replay
+  //  #(.rom_addr_width_p(cgra_tag_rom_addr_width_lp)
+  //    ,.rom_data_width_p(cgra_tag_rom_data_width_lp)
+  //    ,.num_clients_p(cgra_tag_num_clients_lp)
+  //    ,.max_payload_width_p(cgra_tag_max_payload_width_lp)
+  //    ,.num_masters_p(1)
+  //    )
+  //  cgra_tag_tr
+  //   (.clk_i(clk_i)
+  //    ,.reset_i(reset_i)
+  //    ,.en_i(1'b1)
 
-     ,.rom_addr_o(cgra_tag_rom_addr)
-     ,.rom_data_i(cgra_tag_rom_data)
+  //    ,.rom_addr_o(cgra_tag_rom_addr)
+  //    ,.rom_data_i(cgra_tag_rom_data)
 
-     ,.valid_i(1'b0)
-     ,.data_i('0)
-     ,.ready_o()
+  //    ,.valid_i(1'b0)
+  //    ,.data_i('0)
+  //    ,.ready_o()
 
-     ,.valid_o(cgra_tag_tr_valid_lo)
-     ,.en_r_o()
-     ,.tag_data_o(cgra_tag_tr_data_lo)
-     ,.yumi_i(cgra_tag_tr_valid_lo)
+  //    ,.valid_o(cgra_tag_tr_valid_lo)
+  //    ,.en_r_o()
+  //    ,.tag_data_o(cgra_tag_tr_data_lo)
+  //    ,.yumi_i(cgra_tag_tr_valid_lo)
 
-     ,.done_o(cgra_tag_tr_done_lo)
-     ,.error_o()
-     );
+  //    ,.done_o(cgra_tag_tr_done_lo)
+  //    ,.error_o()
+  //    );
 
-  // Auto generated cgra_hpod_rom
-  cgra_hpod_rom #(
-    .width_p(cgra_tag_rom_data_width_lp)
-    ,.addr_width_p(cgra_tag_rom_addr_width_lp)
-  ) hpod_rom (
-    .addr_i(cgra_tag_rom_addr)
-    ,.data_o(cgra_tag_rom_data)
-  );
+  // cgra_hpod_rom #(
+  //   .width_p(cgra_tag_rom_data_width_lp)
+  //   ,.addr_width_p(cgra_tag_rom_addr_width_lp)
+  // ) hpod_rom (
+  //   .addr_i(cgra_tag_rom_addr)
+  //   ,.data_o(cgra_tag_rom_data)
+  // );
 
-  bsg_tag_master
-   #(.els_p(cgra_tag_num_clients_lp), .lg_width_p(cgra_tag_lg_payload_width_lp))
-   cgra_tag_btm
-    (.clk_i(clk_i)
-     ,.data_i(cgra_tag_tr_valid_lo & cgra_tag_tr_data_lo)
-     ,.en_i(1'b1)
-     ,.clients_r_o(cgra_tags_lo)
-    );
+  // bsg_tag_master
+  //  #(.els_p(cgra_tag_num_clients_lp), .lg_width_p(cgra_tag_lg_payload_width_lp))
+  //  cgra_tag_btm
+  //   (.clk_i(clk_i)
+  //    ,.data_i(cgra_tag_tr_valid_lo & cgra_tag_tr_data_lo)
+  //    ,.en_i(1'b1)
+  //    ,.clients_r_o(cgra_tags_lo)
+  //   );
 
   //---------------------------------------------------------------------
-
   // deassert reset when tag programming is done.
-  wire reset = ~(tag_done_lo & cgra_tag_tr_done_lo);
+  wire reset = ~tag_done_lo;
   logic reset_r;
   bsg_dff_chain #(
     .width_p(1)
@@ -194,7 +233,6 @@ module bsg_nonsynth_manycore_testbench
     ,.data_i(reset)
     ,.data_o(reset_r)
   );
-
 
   // instantiate manycore
   `declare_bsg_manycore_link_sif_s(addr_width_p,data_width_p,x_cord_width_p,y_cord_width_p);
@@ -739,9 +777,26 @@ module bsg_nonsynth_manycore_testbench
 
   // HOR TIEOFF (east)
   if (bsg_manycore_composition == e_manycore) begin: mc_tieoff
-    // This is a pure manycore composition. Tie off east HOR links
+    // PP: This is a pure manycore composition. Tie off east HOR links
     for (genvar j = 0; j < num_pods_y_p; j++) begin
       for (genvar k = 0; k < num_tiles_y_p; k++) begin
+        bsg_manycore_link_sif_tieoff #(
+          .addr_width_p(addr_width_p)
+          ,.data_width_p(data_width_p)
+          ,.x_cord_width_p(x_cord_width_p)
+          ,.y_cord_width_p(y_cord_width_p)
+        ) hor_e_tieoff (
+          .clk_i(clk_i)
+          ,.reset_i(reset_r)
+          ,.link_sif_i(hor_link_sif_lo[E][j][k])
+          ,.link_sif_o(hor_link_sif_li[E][j][k])
+        );
+      end
+    end
+  end else begin: cgra_e_tieoff
+    // PP: Tie off east HOR links #4 to #7
+    for (genvar j = 0; j < num_pods_y_p; j++) begin
+      for (genvar k = 4; k < num_tiles_y_p; k++) begin
         bsg_manycore_link_sif_tieoff #(
           .addr_width_p(addr_width_p)
           ,.data_width_p(data_width_p)
@@ -780,29 +835,46 @@ module bsg_nonsynth_manycore_testbench
 
   // RUCHE LINK TIEOFF (east)
   if (bsg_manycore_composition == e_manycore) begin: mc_ruche_e_tieoff
-    // This is a pure manycore composition. Tie off east ruche links
+    // PP: This is a pure manycore composition. Tie off east ruche links
     for (genvar j = 0; j < num_pods_y_p; j++) begin
       for (genvar k = 0; k < num_tiles_y_p; k++) begin
-        for (genvar l = 0; l < ruche_factor_X_p; l++) begin
-          bsg_manycore_ruche_x_link_sif_tieoff #(
-            .addr_width_p(addr_width_p)
-            ,.data_width_p(data_width_p)
-            ,.x_cord_width_p(x_cord_width_p)
-            ,.y_cord_width_p(y_cord_width_p)
-            ,.ruche_stage_p(l)
-            ,.ruche_factor_X_p(ruche_factor_X_p)
-            ,.west_not_east_p(0)
-          ) re_tieoff (
-            .clk_i(clk_i)
-            ,.reset_i(reset_r)
-            ,.ruche_link_i(ruche_link_lo[E][j][k][l])
-            ,.ruche_link_o(ruche_link_li[E][j][k][l])
-          );
-        end
+        bsg_manycore_ruche_x_link_sif_tieoff #(
+          .addr_width_p(addr_width_p)
+          ,.data_width_p(data_width_p)
+          ,.x_cord_width_p(x_cord_width_p)
+          ,.y_cord_width_p(y_cord_width_p)
+          ,.ruche_stage_p(2)
+          ,.ruche_factor_X_p(ruche_factor_X_p)
+          ,.west_not_east_p(0)
+        ) re_tieoff (
+          .clk_i(clk_i)
+          ,.reset_i(reset_r)
+          ,.ruche_link_i(ruche_link_lo[E][j][k])
+          ,.ruche_link_o(ruche_link_li[E][j][k])
+        );
+      end
+    end
+  end else begin: cgra_re_tieoff
+    // PP: Tie off east ruche links #4 to #7
+    for (genvar j = 0; j < num_pods_y_p; j++) begin
+      for (genvar k = 4; k < num_tiles_y_p; k++) begin
+        bsg_manycore_ruche_x_link_sif_tieoff #(
+          .addr_width_p(addr_width_p)
+          ,.data_width_p(data_width_p)
+          ,.x_cord_width_p(x_cord_width_p)
+          ,.y_cord_width_p(y_cord_width_p)
+          ,.ruche_stage_p(2)
+          ,.ruche_factor_X_p(ruche_factor_X_p)
+          ,.west_not_east_p(0)
+        ) re_tieoff (
+          .clk_i(clk_i)
+          ,.reset_i(reset_r)
+          ,.ruche_link_i(ruche_link_lo[E][j][k])
+          ,.ruche_link_o(ruche_link_li[E][j][k])
+        );
       end
     end
   end
-
 
   //-------------------------------------------------------------------------
   // CGRAXcel bay
@@ -814,148 +886,212 @@ module bsg_nonsynth_manycore_testbench
 
     for (genvar i = 0; i < num_pods_y_p; i++) begin: xbay
 
-      bsg_manycore_ruche_x_link_sif_s [3:0][E:E] cgra_pod_ruche_link_li;
-      bsg_manycore_ruche_x_link_sif_s [3:0][E:E] cgra_pod_ruche_link_lo;
+      //-------------------------------------------------------------
+      // East side SDR interface
+      //-------------------------------------------------------------
+      // Reference implementation:
+      // bigblade_pow_row/v/bsg_manycore_pod_row_sdr.v
 
-      bsg_manycore_link_sif_s [3:0][E:E] cgra_pod_hor_link_sif_li;
-      bsg_manycore_link_sif_s [3:0][E:E] cgra_pod_hor_link_sif_lo;
+      logic [3:0] sdr_e_core_reset_li, sdr_e_core_reset_lo;
+      logic [3:0][x_cord_width_p-1:0] sdr_e_core_global_x_li, sdr_e_core_global_x_lo;
+      logic [3:0][y_cord_width_p-1:0] sdr_e_core_global_y_li, sdr_e_core_global_y_lo;
 
-      bsg_manycore_link_sif_s [S:N] cgra_pod_ver_link_sif_li;
-      bsg_manycore_link_sif_s [S:N] cgra_pod_ver_link_sif_lo;
+      bsg_manycore_link_sif_s [3:0][S:N] sdr_e_ver_link_sif_li, sdr_e_ver_link_sif_lo;
+      logic [3:0] sdr_e_async_uplink_reset_li,     sdr_e_async_uplink_reset_lo;
+      logic [3:0] sdr_e_async_downlink_reset_li,   sdr_e_async_downlink_reset_lo;
+      logic [3:0] sdr_e_async_downstream_reset_li, sdr_e_async_downstream_reset_lo;
+      logic [3:0] sdr_e_async_token_reset_li,      sdr_e_async_token_reset_lo;
 
-      bsg_manycore_link_sif_tieoff #(
-          .addr_width_p(addr_width_p)
-          ,.data_width_p(data_width_p)
-          ,.x_cord_width_p(x_cord_width_p)
-          ,.y_cord_width_p(y_cord_width_p)
-        ) ver_n_tieoff (
-          .clk_i(clk_i)
-          ,.reset_i(reset_r)
-          ,.link_sif_i(cgra_pod_ver_link_sif_lo[N])
-          ,.link_sif_o(cgra_pod_ver_link_sif_li[N])
+      // Connections to CGRA
+      logic [3:0]                   c_hor_io_fwd_link_clk_li;
+      logic [3:0][fwd_width_lp-1:0] c_hor_io_fwd_link_data_li;
+      logic [3:0]                   c_hor_io_fwd_link_v_li;
+      logic [3:0]                   c_hor_io_fwd_link_token_lo;
+
+      logic [3:0]                   c_hor_io_fwd_link_clk_lo;
+      logic [3:0][fwd_width_lp-1:0] c_hor_io_fwd_link_data_lo;
+      logic [3:0]                   c_hor_io_fwd_link_v_lo;
+      logic [3:0]                   c_hor_io_fwd_link_token_li;
+
+      logic [3:0]                   c_hor_io_rev_link_clk_li;
+      logic [3:0][fwd_width_lp-1:0] c_hor_io_rev_link_data_li;
+      logic [3:0]                   c_hor_io_rev_link_v_li;
+      logic [3:0]                   c_hor_io_rev_link_token_lo;
+
+      logic [3:0]                   c_hor_io_rev_link_clk_lo;
+      logic [3:0][fwd_width_lp-1:0] c_hor_io_rev_link_data_lo;
+      logic [3:0]                   c_hor_io_rev_link_v_lo;
+      logic [3:0]                   c_hor_io_rev_link_token_li;
+
+      // PP: only connect 4 links to the CGRA half pod
+      for (genvar y = 0; y < 4; y++) begin: sdr_e_y
+        bsg_manycore_link_ruche_to_sdr_east #(
+          .lg_fifo_depth_p                  (sdr_lg_fifo_depth_gp)
+          ,.lg_credit_to_token_decimation_p (sdr_lg_credit_to_token_decimation_gp)
+
+          ,.x_cord_width_p      (x_cord_width_p)
+          ,.y_cord_width_p      (y_cord_width_p)
+          ,.addr_width_p        (addr_width_p)
+          ,.data_width_p        (data_width_p)
+          ,.ruche_factor_X_p    (ruche_factor_X_p)
+        ) sdr_e (
+          .core_clk_i       (clk_i)
+          ,.core_reset_i    (sdr_e_core_reset_li[y])
+          ,.core_reset_o    (sdr_e_core_reset_lo[y])
+      
+          ,.core_ver_link_sif_i   (sdr_e_ver_link_sif_li[y])
+          ,.core_ver_link_sif_o   (sdr_e_ver_link_sif_lo[y])
+
+          ,.core_hor_link_sif_i   (hor_link_sif_lo[E][i][y])
+          ,.core_hor_link_sif_o   (hor_link_sif_li[E][i][y])
+
+          ,.core_ruche_link_i     (ruche_link_lo[E][i][y])
+          ,.core_ruche_link_o     (ruche_link_li[E][i][y])
+
+          ,.core_global_x_i       (sdr_e_core_global_x_li[y])
+          ,.core_global_y_i       (sdr_e_core_global_y_li[y])
+          ,.core_global_x_o       (sdr_e_core_global_x_lo[y])
+          ,.core_global_y_o       (sdr_e_core_global_y_lo[y])
+
+          ,.async_uplink_reset_i      (sdr_e_async_uplink_reset_li[y])
+          ,.async_downlink_reset_i    (sdr_e_async_downlink_reset_li[y])
+          ,.async_downstream_reset_i  (sdr_e_async_downstream_reset_li[y])
+          ,.async_token_reset_i       (sdr_e_async_token_reset_li[y])
+
+          ,.async_uplink_reset_o      (sdr_e_async_uplink_reset_lo[y])
+          ,.async_downlink_reset_o    (sdr_e_async_downlink_reset_lo[y])
+          ,.async_downstream_reset_o  (sdr_e_async_downstream_reset_lo[y])
+          ,.async_token_reset_o       (sdr_e_async_token_reset_lo[y])
+
+          ,.io_fwd_link_clk_o       (c_hor_io_fwd_link_clk_li[y])
+          ,.io_fwd_link_data_o      (c_hor_io_fwd_link_data_li[y])
+          ,.io_fwd_link_v_o         (c_hor_io_fwd_link_v_li[y])
+          ,.io_fwd_link_token_i     (c_hor_io_fwd_link_token_lo[y])
+
+          ,.io_fwd_link_clk_i       (c_hor_io_fwd_link_clk_lo[y])
+          ,.io_fwd_link_data_i      (c_hor_io_fwd_link_data_lo[y])
+          ,.io_fwd_link_v_i         (c_hor_io_fwd_link_v_lo[y])
+          ,.io_fwd_link_token_o     (c_hor_io_fwd_link_token_li[y])
+
+          ,.io_rev_link_clk_o       (c_hor_io_rev_link_clk_li[y])
+          ,.io_rev_link_data_o      (c_hor_io_rev_link_data_li[y])
+          ,.io_rev_link_v_o         (c_hor_io_rev_link_v_li[y])
+          ,.io_rev_link_token_i     (c_hor_io_rev_link_token_lo[y])
+
+          ,.io_rev_link_clk_i       (c_hor_io_rev_link_clk_lo[y])
+          ,.io_rev_link_data_i      (c_hor_io_rev_link_data_lo[y])
+          ,.io_rev_link_v_i         (c_hor_io_rev_link_v_lo[y])
+          ,.io_rev_link_token_o     (c_hor_io_rev_link_token_li[y])
         );
 
-      bsg_manycore_link_sif_tieoff #(
-          .addr_width_p(addr_width_p)
-          ,.data_width_p(data_width_p)
-          ,.x_cord_width_p(x_cord_width_p)
-          ,.y_cord_width_p(y_cord_width_p)
-        ) ver_s_tieoff (
-          .clk_i(clk_i)
-          ,.reset_i(reset_r)
-          ,.link_sif_i(cgra_pod_ver_link_sif_lo[S])
-          ,.link_sif_o(cgra_pod_ver_link_sif_li[S])
-        );
-
-      for (genvar j = 0 ; j < num_tiles_y_p; j++) begin: cgra_ruche_y
-        if ( j < 4 ) begin: fi
-          assign cgra_pod_ruche_link_li[j][E] = ruche_link_lo[E][i][j][1];
-          assign ruche_link_li[E][i][j][1] = cgra_pod_ruche_link_lo[j][E];
-
-          assign cgra_pod_hor_link_sif_li[j][E] = hor_link_sif_lo[E][i][j];
-          assign hor_link_sif_li[E][i][j] = cgra_pod_hor_link_sif_lo[j][E];
-        end else begin: toff_e
-          // Tie off east ruche link of index 1
-          bsg_manycore_ruche_x_link_sif_tieoff #(
-            .addr_width_p(addr_width_p)
-            ,.data_width_p(data_width_p)
-            ,.x_cord_width_p(x_cord_width_p)
-            ,.y_cord_width_p(y_cord_width_p)
-            ,.ruche_stage_p(1)
-            ,.ruche_factor_X_p(ruche_factor_X_p)
-            ,.west_not_east_p(0)
-          ) cgra_pod_re_tieoff_f1 (
-            .clk_i(clk_i)
-            ,.reset_i(reset_r)
-            ,.ruche_link_i(ruche_link_lo[E][i][j][1])
-            ,.ruche_link_o(ruche_link_li[E][i][j][1])
-          );
-
-          // Tie off east mesh link
+        // connect between sdr east
+        if (y < 3) begin
+          // core reset
+          assign sdr_e_core_reset_li[y+1] = sdr_e_core_reset_lo[y];
+          // core global cord
+          assign sdr_e_core_global_x_li[y+1] = sdr_e_core_global_x_lo[y];
+          assign sdr_e_core_global_y_li[y+1] = sdr_e_core_global_y_lo[y];
+          // ver link
+          assign sdr_e_ver_link_sif_li[y][S] = sdr_e_ver_link_sif_lo[y+1][N];
+          assign sdr_e_ver_link_sif_li[y+1][N] = sdr_e_ver_link_sif_lo[y][S];
+          // async reset
+          assign sdr_e_async_uplink_reset_li[y+1] = sdr_e_async_uplink_reset_lo[y];
+          assign sdr_e_async_downlink_reset_li[y+1] = sdr_e_async_downlink_reset_lo[y];
+          assign sdr_e_async_downstream_reset_li[y+1] = sdr_e_async_downstream_reset_lo[y];
+          assign sdr_e_async_token_reset_li[y+1] = sdr_e_async_token_reset_lo[y];
+        end else begin
+          // core reset
+          assign sdr_e_core_reset_li[0] = reset_r;
+          // core global cord
+          assign sdr_e_core_global_x_li[0] = { (pod_x_cord_width_p)'(1+num_pods_x_p), (x_subcord_width_lp)'(0) };
+          assign sdr_e_core_global_y_li[0] = { (pod_y_cord_width_p)'(1+2*i), (y_subcord_width_lp)'(0) };
+          // ver link -- tieoff
           bsg_manycore_link_sif_tieoff #(
             .addr_width_p(addr_width_p)
             ,.data_width_p(data_width_p)
             ,.x_cord_width_p(x_cord_width_p)
             ,.y_cord_width_p(y_cord_width_p)
-          ) hor_e_tieoff (
+          ) sdr_ver_n0o_tieoff (
             .clk_i(clk_i)
             ,.reset_i(reset_r)
-            ,.link_sif_i(hor_link_sif_lo[E][i][j])
-            ,.link_sif_o(hor_link_sif_li[E][i][j])
+            ,.link_sif_i(sdr_e_ver_link_sif_lo[0][N])
+            ,.link_sif_o(sdr_e_ver_link_sif_li[3][S])
           );
+          bsg_manycore_link_sif_tieoff #(
+            .addr_width_p(addr_width_p)
+            ,.data_width_p(data_width_p)
+            ,.x_cord_width_p(x_cord_width_p)
+            ,.y_cord_width_p(y_cord_width_p)
+          ) sdr_ver_n0i_tieoff (
+            .clk_i(clk_i)
+            ,.reset_i(reset_r)
+            ,.link_sif_i(sdr_e_ver_link_sif_lo[3][S])
+            ,.link_sif_o(sdr_e_ver_link_sif_li[0][N])
+          );
+          // async reset
+          assign sdr_e_async_uplink_reset_li[0] = async_uplink_reset;
+          assign sdr_e_async_downlink_reset_li[0] = async_downlink_reset;
+          assign sdr_e_async_downstream_reset_li[0] = async_downstream_reset;
+          assign sdr_e_async_token_reset_li[0] = async_token_reset;
         end
 
-        // Tie off east ruche links of index 0 and 2
-        bsg_manycore_ruche_x_link_sif_tieoff #(
-          .addr_width_p(addr_width_p)
-          ,.data_width_p(data_width_p)
-          ,.x_cord_width_p(x_cord_width_p)
-          ,.y_cord_width_p(y_cord_width_p)
-          ,.ruche_stage_p(0)
-          ,.ruche_factor_X_p(ruche_factor_X_p)
-          ,.west_not_east_p(0)
-        ) cgra_pod_re_tieoff_f0 (
-          .clk_i(clk_i)
-          ,.reset_i(reset_r)
-          ,.ruche_link_i(ruche_link_lo[E][i][j][0])
-          ,.ruche_link_o(ruche_link_li[E][i][j][0])
-        );
-        bsg_manycore_ruche_x_link_sif_tieoff #(
-          .addr_width_p(addr_width_p)
-          ,.data_width_p(data_width_p)
-          ,.x_cord_width_p(x_cord_width_p)
-          ,.y_cord_width_p(y_cord_width_p)
-          ,.ruche_stage_p(2)
-          ,.ruche_factor_X_p(ruche_factor_X_p)
-          ,.west_not_east_p(0)
-        ) cgra_pod_re_tieoff_f2 (
-          .clk_i(clk_i)
-          ,.reset_i(reset_r)
-          ,.ruche_link_i(ruche_link_lo[E][i][j][2])
-          ,.ruche_link_o(ruche_link_li[E][i][j][2])
-        );
-      end
+      end  // for: sdr_e_y
+
+      //-------------------------------------------------------------
+      // CGRA half pod instantiation
+      //-------------------------------------------------------------
+
+      logic [3:0][y_cord_width_p-1:0] c_global_y_cord_li;
+      assign c_global_y_cord_li[0] = { (pod_y_cord_width_p)'(1+i), 0 };
+      assign c_global_y_cord_li[1] = { (pod_y_cord_width_p)'(1+i), 1 };
+      assign c_global_y_cord_li[2] = { (pod_y_cord_width_p)'(1+i), 2 };
+      assign c_global_y_cord_li[3] = { (pod_y_cord_width_p)'(1+i), 3 };
 
       brg_cgra_pod #(
         .addr_width_p(addr_width_p)
         ,.data_width_p(data_width_p)
         ,.x_cord_width_p(x_cord_width_p)
         ,.y_cord_width_p(y_cord_width_p)
-        ,.ruche_factor_X_p(ruche_factor_X_p)
-        ,.num_row_p(4)
         ,.max_out_credits_p(32)
       ) cgra_bay (
-        .xcel_clk_i(cgra_xcel_clk_i)
-        ,.xcel_reset_i(reset_r)
-        ,.mc_clk_i(clk_i)
-        ,.mc_reset_i(reset_r)
-        ,.bsg_tag_i(cgra_tags_lo)
-        ,.mc_ruche_links_i(cgra_pod_ruche_link_li)
-        ,.mc_ruche_links_o(cgra_pod_ruche_link_lo)
-        ,.mc_hor_links_i(cgra_pod_hor_link_sif_li)
-        ,.mc_hor_links_o(cgra_pod_hor_link_sif_lo)
-        ,.mc_ver_links_i(cgra_pod_ver_link_sif_li)
-        ,.mc_ver_links_o(cgra_pod_ver_link_sif_lo)
-      );
-  for (genvar j = 0; j < num_pods_y_p; j++) begin
-    for (genvar k = 0; k < num_tiles_y_p; k++) begin
-      bsg_manycore_ruche_x_link_sif_tieoff #(
-        ,.ruche_stage_p(2)
-        ,.ruche_factor_X_p(ruche_factor_X_p)
-        ,.west_not_east_p(0)
-      ) re_tieoff (
-        .clk_i(clk_i)
+        .clk_i(cgra_xcel_clk_i)
         ,.reset_i(reset_r)
-        ,.ruche_link_i(ruche_link_lo[E][j][k])
-        ,.ruche_link_o(ruche_link_li[E][j][k])
+        ,.global_y_cord_i(c_global_y_cord_li)
+
+        ,.async_uplink_reset_i(async_uplink_reset)
+        ,.async_downlink_reset_i(async_downlink_reset)
+        ,.async_downstream_reset_i(async_downstream_reset)
+        ,.async_token_reset_i(async_token_reset)
+
+        ,.async_uplink_reset_o()
+        ,.async_downlink_reset_o()
+        ,.async_downstream_reset_o()
+        ,.async_token_reset_o()
+
+        ,.io_fwd_link_clk_o(c_hor_io_fwd_link_clk_lo)
+        ,.io_fwd_link_data_o(c_hor_io_fwd_link_data_lo)
+        ,.io_fwd_link_v_o(c_hor_io_fwd_link_v_lo)
+        ,.io_fwd_link_token_i(c_hor_io_fwd_link_token_li)
+
+        ,.io_fwd_link_clk_i(c_hor_io_fwd_link_clk_li)
+        ,.io_fwd_link_data_i(c_hor_io_fwd_link_data_li)
+        ,.io_fwd_link_v_i(c_hor_io_fwd_link_v_li)
+        ,.io_fwd_link_token_o(c_hor_io_fwd_link_token_lo)
+
+        ,.io_rev_link_clk_o(c_hor_io_rev_link_clk_lo)
+        ,.io_rev_link_data_o(c_hor_io_rev_link_data_lo)
+        ,.io_rev_link_v_o(c_hor_io_rev_link_v_lo)
+        ,.io_rev_link_token_i(c_hor_io_rev_link_token_li)
+
+        ,.io_rev_link_clk_i(c_hor_io_rev_link_clk_li)
+        ,.io_rev_link_data_i(c_hor_io_rev_link_data_li)
+        ,.io_rev_link_v_i(c_hor_io_rev_link_v_li)
+        ,.io_rev_link_token_o(c_hor_io_rev_link_token_lo)
       );
-    end
-  end
 
+    end // for: xbay
 
-
-
-
+  end // if: cgra_xcel_bay
 
 
 

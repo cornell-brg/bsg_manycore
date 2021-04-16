@@ -6,6 +6,9 @@ VINCLUDES += $(BASEJUMP_STL_DIR)/bsg_misc
 VINCLUDES += $(BASEJUMP_STL_DIR)/bsg_cache
 VINCLUDES += $(BASEJUMP_STL_DIR)/bsg_noc
 VINCLUDES += $(BASEJUMP_STL_DIR)/bsg_tag
+# PP: SDR
+VINCLUDES += $(BASEJUMP_STL_DIR)/bsg_link
+VINCLUDES += $(BIGBLADE_DIR)/common/sdr/sdr_horizontal/v
 VINCLUDES += $(BSG_MANYCORE_DIR)/v
 VINCLUDES += $(BSG_MANYCORE_DIR)/v/vanilla_bean
 VINCLUDES += $(BSG_MANYCORE_DIR)/imports/HardFloat/source
@@ -192,6 +195,33 @@ VSOURCES += $(BSG_MANYCORE_DIR)/v/bsg_manycore_link_sif_tieoff.v
 VSOURCES += $(BSG_MANYCORE_DIR)/v/bsg_manycore_ruche_x_link_sif_tieoff.v
 VSOURCES += $(BSG_MANYCORE_DIR)/v/bsg_ruche_buffer.v
 VSOURCES += $(BSG_MANYCORE_DIR)/v/bsg_ruche_anti_buffer.v
+
+# PP: SDR dependencies -- from sdr_horizontal/tcl/filelist.tcl
+VSOURCES += $(BASEJUMP_STL_DIR)/bsg_misc/bsg_xor.v
+VSOURCES += $(BASEJUMP_STL_DIR)/bsg_async/bsg_async_credit_counter.v
+VSOURCES += $(BASEJUMP_STL_DIR)/bsg_misc/bsg_array_reverse.v
+VSOURCES += $(BASEJUMP_STL_DIR)/bsg_misc/bsg_gray_to_binary.v
+VSOURCES += $(BASEJUMP_STL_DIR)/bsg_misc/bsg_binary_plus_one_to_gray.v
+VSOURCES += $(BASEJUMP_STL_DIR)/bsg_misc/bsg_wait_cycles.v
+VSOURCES += $(BASEJUMP_STL_DIR)/bsg_misc/bsg_counter_up_down_variable.v
+VSOURCES += $(BASEJUMP_STL_DIR)/bsg_dataflow/bsg_channel_tunnel.v
+VSOURCES += $(BASEJUMP_STL_DIR)/bsg_dataflow/bsg_channel_tunnel_in.v
+VSOURCES += $(BASEJUMP_STL_DIR)/bsg_dataflow/bsg_channel_tunnel_out.v
+VSOURCES += $(BASEJUMP_STL_DIR)/bsg_dataflow/bsg_1_to_n_tagged_fifo.v
+VSOURCES += $(BASEJUMP_STL_DIR)/bsg_dataflow/bsg_1_to_n_tagged.v
+# VSOURCES += $(BASEJUMP_STL_DIR)/bsg_dataflow/bsg_round_robin_1_to_n.v
+VSOURCES += $(BASEJUMP_STL_DIR)/bsg_dataflow/bsg_fifo_1r1w_pseudo_large.v
+# VSOURCES += $(BASEJUMP_STL_DIR)/bsg_dataflow/bsg_serial_in_parallel_out_full.v
+VSOURCES += $(BASEJUMP_STL_DIR)/bsg_fsb/bsg_fsb_pkg.v
+VSOURCES += $(BASEJUMP_STL_DIR)/bsg_link/bsg_link_sdr.v
+VSOURCES += $(BASEJUMP_STL_DIR)/bsg_link/bsg_link_sdr_downstream.v
+VSOURCES += $(BASEJUMP_STL_DIR)/bsg_link/bsg_link_sdr_upstream.v
+VSOURCES += $(BASEJUMP_STL_DIR)/bsg_link/bsg_link_isdr_phy.v
+VSOURCES += $(BASEJUMP_STL_DIR)/bsg_link/bsg_link_osdr_phy.v
+VSOURCES += $(BASEJUMP_STL_DIR)/bsg_link/bsg_link_osdr_phy_phase_align.v
+VSOURCES += $(BASEJUMP_STL_DIR)/bsg_link/bsg_link_source_sync_downstream.v
+VSOURCES += $(BASEJUMP_STL_DIR)/bsg_link/bsg_link_source_sync_upstream_sync.v
+VSOURCES += $(BIGBLADE_DIR)/common/sdr/sdr_horizontal/v/bsg_manycore_link_ruche_to_sdr_east.v
 
 # PP: hor io routers
 VSOURCES += $(BSG_MANYCORE_DIR)/v/bsg_manycore_hor_io_router.v

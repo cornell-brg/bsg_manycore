@@ -21,6 +21,9 @@ module brg_cgra_pod
       `bsg_manycore_packet_width(addr_width_p, data_width_p, x_cord_width_p, y_cord_width_p)
     , localparam rev_width_lp =
       `bsg_manycore_return_packet_width(x_cord_width_p, y_cord_width_p, data_width_p)
+
+    , localparam sdr_lg_fifo_depth_gp = 3
+    , localparam sdr_lg_credit_to_token_decimation_gp = 0
   )
   (
     input clk_i

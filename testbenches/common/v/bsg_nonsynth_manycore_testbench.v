@@ -117,24 +117,24 @@ module bsg_nonsynth_manycore_testbench
 
       $display("[INFO][SDR-Reset] Start SDR reset sequence at time ", $stime);
 
-      async_uplink_reset     = 1;
-      async_downlink_reset   = 1;
-      async_downstream_reset = 1;
-      async_token_reset      = 0;
-      reset_done             = 0;
+      async_uplink_reset     = 1'b1;
+      async_downlink_reset   = 1'b1;
+      async_downstream_reset = 1'b1;
+      async_token_reset      = 1'b0;
+      reset_done             = 1'b0;
 
       #100000;
-      async_token_reset = 1;
+      async_token_reset = 1'b1;
       #100000;
-      async_token_reset = 0;
+      async_token_reset = 1'b0;
       #100000;
-      async_uplink_reset = 0;
+      async_uplink_reset = 1'b0;
       #100000;
-      async_downlink_reset = 0;
+      async_downlink_reset = 1'b0;
       #100000;
-      async_downstream_reset = 0;
+      async_downstream_reset = 1'b0;
       #100000;
-      reset_done = 1;
+      reset_done = 1'b1;
 
       $display("[INFO][SDR-Reset] SDR reset sequence finished at time ", $stime);
     end
@@ -878,12 +878,12 @@ module bsg_nonsynth_manycore_testbench
       logic [3:0]                   c_hor_io_fwd_link_token_li;
 
       logic [3:0]                   c_hor_io_rev_link_clk_li;
-      logic [3:0][fwd_width_lp-1:0] c_hor_io_rev_link_data_li;
+      logic [3:0][rev_width_lp-1:0] c_hor_io_rev_link_data_li;
       logic [3:0]                   c_hor_io_rev_link_v_li;
       logic [3:0]                   c_hor_io_rev_link_token_lo;
 
       logic [3:0]                   c_hor_io_rev_link_clk_lo;
-      logic [3:0][fwd_width_lp-1:0] c_hor_io_rev_link_data_lo;
+      logic [3:0][rev_width_lp-1:0] c_hor_io_rev_link_data_lo;
       logic [3:0]                   c_hor_io_rev_link_v_lo;
       logic [3:0]                   c_hor_io_rev_link_token_li;
 
@@ -1006,10 +1006,10 @@ module bsg_nonsynth_manycore_testbench
       //-------------------------------------------------------------
 
       logic [3:0][y_cord_width_p-1:0] c_global_y_cord_li;
-      assign c_global_y_cord_li[0] = { (pod_y_cord_width_p)'(1+i), 0 };
-      assign c_global_y_cord_li[1] = { (pod_y_cord_width_p)'(1+i), 1 };
-      assign c_global_y_cord_li[2] = { (pod_y_cord_width_p)'(1+i), 2 };
-      assign c_global_y_cord_li[3] = { (pod_y_cord_width_p)'(1+i), 3 };
+      assign c_global_y_cord_li[0] = { (pod_y_cord_width_p)'(1+i), (y_subcord_width_lp)'(0) };
+      assign c_global_y_cord_li[1] = { (pod_y_cord_width_p)'(1+i), (y_subcord_width_lp)'(1) };
+      assign c_global_y_cord_li[2] = { (pod_y_cord_width_p)'(1+i), (y_subcord_width_lp)'(2) };
+      assign c_global_y_cord_li[3] = { (pod_y_cord_width_p)'(1+i), (y_subcord_width_lp)'(3) };
 
       brg_cgra_pod #(
         .addr_width_p(addr_width_p)

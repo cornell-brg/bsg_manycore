@@ -77,7 +77,7 @@ module bsg_nonsynth_manycore_testbench
   )
   (
     input clk_i
-    , input cgra_xcel_clk_i
+    /* , input cgra_xcel_clk_i */
     , input reset_i
 
     , output tag_done_o

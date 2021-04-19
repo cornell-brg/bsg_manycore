@@ -13,3 +13,4 @@ stack.info.*
 */csrc-profile
 */*.tr
 */bsg_tag_boot_rom.v
+*/cgra_hpod_rom.v

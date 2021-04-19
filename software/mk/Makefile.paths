@@ -1,5 +1,5 @@
 BSG_IP_CORES_DIR ?= $(BSG_MANYCORE_DIR)/../basejump_stl
 # PP: we should always use the globally installed RISCV toolchain
-RISCV_BIN_DIR = /work/global/brg/install/bare-pkgs/x86_64-centos7/brg-riscv-tools/brg-riscv-tools/bin
+RISCV_BIN_DIR = /work/global/brg/install/bare-pkgs/x86_64-centos7/pkgs/bsg_manycore_tools_v4.3.0/software/riscv-tools/riscv-install/bin
 CAD_DIR ?= $(BSG_MANYCORE_DIR)/../bsg_cadenv
 BSG_MACHINE_PATH ?= $(BSG_MANYCORE_DIR)/machines/pod_1x1

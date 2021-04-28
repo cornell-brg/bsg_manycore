@@ -234,4 +234,5 @@ VSOURCES += $(BSG_MANYCORE_DIR)/v/brg_cgra_xcel/brg_cgra_pod_sync.v
 VSOURCES += $(BSG_MANYCORE_DIR)/v/brg_cgra_xcel/brg_cgra_pod.v
 
 # PP: Include SRAM verilog model for RTL hard simulation
-VSOURCES += /work/global/secure/en-ec-brg-vip-gf-14nm-14lppxl-nda/hb-chip/sram/*.v
+# Update: we don't need this if we only want to perform RTL-soft sims
+# VSOURCES += /work/global/secure/en-ec-brg-vip-gf-14nm-14lppxl-nda/hb-chip/sram/*.v

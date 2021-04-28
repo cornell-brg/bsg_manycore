@@ -1,3 +1,10 @@
+# Branch: pp482-bigblade 
+
+This branch is almost the same as tapeout_bigblade, except that the default
+simulation setup is RTL-soft instead of RTL-hard. This means anyone who has
+not signed the GF14 NDA can still safely run bigblade simulations (either
+driven by the bare-metal C runtime, CUDA-Lite, or PyTorch).
+
 # Overview 
 
 This repo contains the **bsg\_manycore** source code with contributions from the [Bespoke Silicon Group](http://cseweb.ucsd.edu/~mbtaylor/research_team.html) and others.

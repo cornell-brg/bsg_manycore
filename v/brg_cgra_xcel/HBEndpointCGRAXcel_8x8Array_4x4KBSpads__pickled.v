@@ -31,13 +31,14 @@ typedef struct packed {
   logic [31:0] data;
 } CgraXcelRespMsg__wen_1__addr_14__data_32;
 
-// PyMTL BitStruct CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 Definition
+// PyMTL BitStruct CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 Definition
 typedef struct packed {
   logic [0:0] wen;
   logic [13:0] addr;
   logic [31:0] data;
+  logic [1:0] len;
   logic [6:0] opaque;
-} CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7;
+} CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7;
 
 // PyMTL BitStruct CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 Definition
 typedef struct packed {
@@ -47,14 +48,15 @@ typedef struct packed {
   logic [6:0] opaque;
 } CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7;
 
-// PyMTL BitStruct MEConfigMsg_8x8__06461221025326f2 Definition
+// PyMTL BitStruct MEConfigMsg_8x8__a7d34585dbb74c46 Definition
 typedef struct packed {
   logic [0:0] wen;
   logic [13:0] base_addr;
   logic [7:0] incr_addr;
   logic [0:0] is_fp;
-  logic [7:0] count;
-} MEConfigMsg_8x8__06461221025326f2;
+  logic [0:0] is_bf16;
+  logic [6:0] count;
+} MEConfigMsg_8x8__a7d34585dbb74c46;
 
 // PyMTL BitStruct PEConfigMsg_8x8__69ed92dd9fa67f76 Definition
 typedef struct packed {
@@ -116,11 +118,11 @@ typedef struct packed {
   logic [6:0] opaque;
 } CgraPerBankMemRespMsg__wen_1__addr_10__data_32__opaque_7;
 
-// PyMTL BitStruct mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd Definition
+// PyMTL BitStruct mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d Definition
 typedef struct packed {
   logic [1:0] dst;
-  CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 payload;
-} mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd;
+  CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 payload;
+} mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d;
 
 // PyMTL BitStruct mmxbar_resp_17_CgraLocalMemRespMsg__97a8fdbd88c53709 Definition
 typedef struct packed {
@@ -129,10 +131,10 @@ typedef struct packed {
 } mmxbar_resp_17_CgraLocalMemRespMsg__97a8fdbd88c53709;
 
 // PyMTL Component CGRAXcelCtrl Definition
-// Full name: CGRAXcelCtrl__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
-// At /work/global/pp482/cgra/src/cgra/CGRAXcelCtrl.py
+// Full name: CGRAXcelCtrl__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, enable_debug_ports:False, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:4, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// At /work/global/pp482/test/cgra-src/src/cgra/CGRAXcelCtrl.py
 
-module CGRAXcelCtrl__07e21c4d4fa663e6
+module CGRAXcelCtrl__7bb22bb10af9a0d4
 (
   output logic [0:0] cgra_xminion_req_en ,
   input  logic [0:0] cgra_xminion_req_rdy ,
@@ -171,7 +173,7 @@ module CGRAXcelCtrl__07e21c4d4fa663e6
   logic [0:0] state;
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/CGRAXcelCtrl.py:96
+  // At /work/global/pp482/test/cgra-src/src/cgra/CGRAXcelCtrl.py:96
   // s.cgra_xminion_req_en   //= lambda: s.is_CSR_signal & s.cgra_xminion_req_rdy
   
   always_comb begin : _lambda__s_cgra_xcel_ctrl_cgra_xminion_req_en
@@ -179,7 +181,7 @@ module CGRAXcelCtrl__07e21c4d4fa663e6
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/CGRAXcelCtrl.py:92
+  // At /work/global/pp482/test/cgra-src/src/cgra/CGRAXcelCtrl.py:92
   // s.is_staging //= lambda: s.state == FREEZE
   
   always_comb begin : _lambda__s_cgra_xcel_ctrl_is_staging
@@ -187,7 +189,7 @@ module CGRAXcelCtrl__07e21c4d4fa663e6
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/CGRAXcelCtrl.py:108
+  // At /work/global/pp482/test/cgra-src/src/cgra/CGRAXcelCtrl.py:108
   // s.is_xminion_resp_from_scratchpad //= lambda: s.xbar_xminion_resp_en & s.xminion_resp_rdy
   
   always_comb begin : _lambda__s_cgra_xcel_ctrl_is_xminion_resp_from_scratchpad
@@ -195,7 +197,7 @@ module CGRAXcelCtrl__07e21c4d4fa663e6
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/CGRAXcelCtrl.py:93
+  // At /work/global/pp482/test/cgra-src/src/cgra/CGRAXcelCtrl.py:93
   // s.stage_val //= lambda: s.xminion_req_en & s.is_scratchpad_transaction
   
   always_comb begin : _lambda__s_cgra_xcel_ctrl_stage_val
@@ -203,7 +205,7 @@ module CGRAXcelCtrl__07e21c4d4fa663e6
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/CGRAXcelCtrl.py:100
+  // At /work/global/pp482/test/cgra-src/src/cgra/CGRAXcelCtrl.py:100
   // s.xbar_xminion_req_en   //= lambda: s.is_scratchpad_access & s.xbar_xminion_req_rdy
   
   always_comb begin : _lambda__s_cgra_xcel_ctrl_xbar_xminion_req_en
@@ -211,7 +213,7 @@ module CGRAXcelCtrl__07e21c4d4fa663e6
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/CGRAXcelCtrl.py:101
+  // At /work/global/pp482/test/cgra-src/src/cgra/CGRAXcelCtrl.py:101
   // s.xbar_xminion_resp_rdy //= lambda: s.xminion_resp_rdy
   
   always_comb begin : _lambda__s_cgra_xcel_ctrl_xbar_xminion_resp_rdy
@@ -219,7 +221,7 @@ module CGRAXcelCtrl__07e21c4d4fa663e6
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/CGRAXcelCtrl.py:105
+  // At /work/global/pp482/test/cgra-src/src/cgra/CGRAXcelCtrl.py:105
   // s.xminion_req_rdy //= lambda: (~s.is_CSR_transaction & s.xbar_xminion_req_rdy) | (s.is_CSR_transaction & s.cgra_xminion_req_rdy)
   
   always_comb begin : _lambda__s_cgra_xcel_ctrl_xminion_req_rdy
@@ -227,7 +229,7 @@ module CGRAXcelCtrl__07e21c4d4fa663e6
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/CGRAXcelCtrl.py:106
+  // At /work/global/pp482/test/cgra-src/src/cgra/CGRAXcelCtrl.py:106
   // s.xminion_resp_en //= lambda: (s.xbar_xminion_resp_en | s.cgra_xminion_resp_en) & s.xminion_resp_rdy
   
   always_comb begin : _lambda__s_cgra_xcel_ctrl_xminion_resp_en
@@ -235,7 +237,7 @@ module CGRAXcelCtrl__07e21c4d4fa663e6
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/CGRAXcelCtrl.py:76
+  // At /work/global/pp482/test/cgra-src/src/cgra/CGRAXcelCtrl.py:76
   // @update
   // def cgra_xcel_next_state():
   //   s.next_state @= s.state
@@ -261,7 +263,7 @@ module CGRAXcelCtrl__07e21c4d4fa663e6
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/CGRAXcelCtrl.py:86
+  // At /work/global/pp482/test/cgra-src/src/cgra/CGRAXcelCtrl.py:86
   // @update
   // def gen_signals():
   //   s.is_go_signal         @= s.xminion_req_en  & s.is_go_transaction
@@ -275,7 +277,7 @@ module CGRAXcelCtrl__07e21c4d4fa663e6
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/CGRAXcelCtrl.py:69
+  // At /work/global/pp482/test/cgra-src/src/cgra/CGRAXcelCtrl.py:69
   // @update_ff
   // def cgra_xcel_fsm():
   //   if s.reset:
@@ -299,10 +301,10 @@ endmodule
 
 
 // PyMTL Component CGRACoreCtrl Definition
-// Full name: CGRACoreCtrl__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
-// At /work/global/pp482/cgra/src/cgra/CGRACoreCtrl.py
+// Full name: CGRACoreCtrl__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, enable_debug_ports:False, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:4, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// At /work/global/pp482/test/cgra-src/src/cgra/CGRACoreCtrl.py
 
-module CGRACoreCtrl__07e21c4d4fa663e6
+module CGRACoreCtrl__7bb22bb10af9a0d4
 (
   output logic [0:0] CSR_wen ,
   output logic [0:0] cfg_init ,
@@ -331,7 +333,7 @@ module CGRACoreCtrl__07e21c4d4fa663e6
   logic [2:0] state;
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/CGRACoreCtrl.py:111
+  // At /work/global/pp482/test/cgra-src/src/cgra/CGRACoreCtrl.py:111
   // s.CSR_wen //= lambda: s.xminion_req_en & s.is_wen
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_ctrl_CSR_wen
@@ -339,7 +341,7 @@ module CGRACoreCtrl__07e21c4d4fa663e6
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/CGRACoreCtrl.py:110
+  // At /work/global/pp482/test/cgra-src/src/cgra/CGRACoreCtrl.py:110
   // s.cfg_init //= lambda: s.state == CFG_INIT
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_ctrl_cfg_init
@@ -347,7 +349,7 @@ module CGRACoreCtrl__07e21c4d4fa663e6
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/CGRACoreCtrl.py:109
+  // At /work/global/pp482/test/cgra-src/src/cgra/CGRACoreCtrl.py:109
   // s.is_calc //= lambda: s.state == CALC
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_ctrl_is_calc
@@ -355,7 +357,7 @@ module CGRACoreCtrl__07e21c4d4fa663e6
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/CGRACoreCtrl.py:51
+  // At /work/global/pp482/test/cgra-src/src/cgra/CGRACoreCtrl.py:51
   // s.is_calc_go //= lambda: s.is_calc_go_transaction & s.xminion_req_en
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_ctrl_is_calc_go
@@ -363,7 +365,7 @@ module CGRACoreCtrl__07e21c4d4fa663e6
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/CGRACoreCtrl.py:108
+  // At /work/global/pp482/test/cgra-src/src/cgra/CGRACoreCtrl.py:108
   // s.is_cfg //= lambda: s.state == CFG
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_ctrl_is_cfg
@@ -371,7 +373,7 @@ module CGRACoreCtrl__07e21c4d4fa663e6
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/CGRACoreCtrl.py:50
+  // At /work/global/pp482/test/cgra-src/src/cgra/CGRACoreCtrl.py:50
   // s.is_cfg_go  //= lambda: s.is_cfg_go_transaction  & s.xminion_req_en
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_ctrl_is_cfg_go
@@ -379,7 +381,7 @@ module CGRACoreCtrl__07e21c4d4fa663e6
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/CGRACoreCtrl.py:101
+  // At /work/global/pp482/test/cgra-src/src/cgra/CGRACoreCtrl.py:101
   // s.xminion_req_rdy  //= lambda: s.state == FREEZE
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_ctrl_xminion_req_rdy
@@ -387,7 +389,7 @@ module CGRACoreCtrl__07e21c4d4fa663e6
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/CGRACoreCtrl.py:67
+  // At /work/global/pp482/test/cgra-src/src/cgra/CGRACoreCtrl.py:67
   // @update
   // def cgra_next_state():
   //   s.next_state @= s.state
@@ -431,7 +433,7 @@ module CGRACoreCtrl__07e21c4d4fa663e6
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/CGRACoreCtrl.py:60
+  // At /work/global/pp482/test/cgra-src/src/cgra/CGRACoreCtrl.py:60
   // @update_ff
   // def cgra_state():
   //   if s.reset:
@@ -448,7 +450,7 @@ module CGRACoreCtrl__07e21c4d4fa663e6
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/CGRACoreCtrl.py:92
+  // At /work/global/pp482/test/cgra-src/src/cgra/CGRACoreCtrl.py:92
   // @update_ff
   // def register_xminion_read_req_en():
   //   # Only respond to read requests. The response will happen in the
@@ -472,10 +474,10 @@ endmodule
 
 
 // PyMTL Component ConfigEngineCtrl Definition
-// Full name: ConfigEngineCtrl__num_modules_9__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
-// At /work/global/pp482/cgra/src/cgra/ConfigEngineCtrl.py
+// Full name: ConfigEngineCtrl__num_modules_9__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, enable_debug_ports:False, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:4, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineCtrl.py
 
-module ConfigEngineCtrl__7a3f723b2782421e
+module ConfigEngineCtrl__126fffb8bd5741d2
 (
   input  logic [0:0] cfg_init ,
   output logic [0:0] cfg_out_val ,
@@ -522,7 +524,7 @@ module ConfigEngineCtrl__7a3f723b2782421e
   logic [0:0] shift_reg_pt_map_next;
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineCtrl.py:156
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineCtrl.py:156
   // @update
   // def CE_ctrl_next_num_sent_cfgs():
   //   s.next_num_sent_cfgs @= s.num_sent_cfgs
@@ -542,7 +544,7 @@ module ConfigEngineCtrl__7a3f723b2782421e
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineCtrl.py:81
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineCtrl.py:81
   // @update
   // def CE_init_count_cfg():
   //   s.count_cfg_init @= num_modules
@@ -567,7 +569,7 @@ module ConfigEngineCtrl__7a3f723b2782421e
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineCtrl.py:204
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineCtrl.py:204
   // @update
   // def CE_next_PE_init_state():
   //   s.next_PE_init_state @= s.PE_init_state
@@ -597,7 +599,7 @@ module ConfigEngineCtrl__7a3f723b2782421e
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineCtrl.py:178
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineCtrl.py:178
   // @update
   // def CE_next_num_requested():
   //   s.next_num_requested @= s.num_requested
@@ -617,7 +619,7 @@ module ConfigEngineCtrl__7a3f723b2782421e
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineCtrl.py:249
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineCtrl.py:249
   // @update
   // def CE_next_reg_mem_rdata_en():
   //   s.next_reg_mem_rdata_en @= s.reg_mem_rdata_en
@@ -637,7 +639,7 @@ module ConfigEngineCtrl__7a3f723b2782421e
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineCtrl.py:216
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineCtrl.py:216
   // s.is_PE_init_addr //= lambda: ((s.PE_init_state == FIRE) & ~s.mmaster_req_en) | (s.next_PE_init_state == FIRE)
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_CE_e_0__ctrl_is_PE_init_addr
@@ -645,7 +647,7 @@ module ConfigEngineCtrl__7a3f723b2782421e
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineCtrl.py:227
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineCtrl.py:227
   // s.is_addr_incr_by_nword //= lambda: s.mmaster_req_en & ( s.count_cfgs != 0 ) & ( s.count_words == 0 )
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_CE_e_0__ctrl_is_addr_incr_by_nword
@@ -653,7 +655,7 @@ module ConfigEngineCtrl__7a3f723b2782421e
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineCtrl.py:226
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineCtrl.py:226
   // s.is_addr_incr_by_word //= lambda: s.mmaster_req_en & ( s.count_words != 0 )
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_CE_e_0__ctrl_is_addr_incr_by_word
@@ -661,7 +663,7 @@ module ConfigEngineCtrl__7a3f723b2782421e
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineCtrl.py:222
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineCtrl.py:222
   // s.is_done //= lambda: zext( s.num_sent_cfgs, p.addr_width ) == s.count_cfg_init
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_CE_e_0__ctrl_is_done
@@ -669,7 +671,7 @@ module ConfigEngineCtrl__7a3f723b2782421e
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineCtrl.py:132
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineCtrl.py:132
   // s.mmaster_req_en //= lambda: ((s.count_cfgs != 0) | (s.count_words != 0)) & s.mmaster_req_rdy
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_CE_e_0__ctrl_mmaster_req_en
@@ -677,7 +679,7 @@ module ConfigEngineCtrl__7a3f723b2782421e
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineCtrl.py:230
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineCtrl.py:230
   // s.start_with_ME //= lambda: ~s.is_ME_base_addr_zero
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_CE_e_0__ctrl_start_with_ME
@@ -685,7 +687,7 @@ module ConfigEngineCtrl__7a3f723b2782421e
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineCtrl.py:231
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineCtrl.py:231
   // s.start_with_PE //= lambda: s.is_ME_base_addr_zero & ~s.is_PE_base_addr_zero
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_CE_e_0__ctrl_start_with_PE
@@ -693,7 +695,7 @@ module ConfigEngineCtrl__7a3f723b2782421e
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineCtrl.py:91
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineCtrl.py:91
   // @update
   // def next_remaining_cfgs():
   //   if s.cfg_init:
@@ -715,7 +717,7 @@ module ConfigEngineCtrl__7a3f723b2782421e
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineCtrl.py:103
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineCtrl.py:103
   // @update
   // def next_remaining_words():
   //   if s.cfg_init:
@@ -742,7 +744,7 @@ module ConfigEngineCtrl__7a3f723b2782421e
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineCtrl.py:235
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineCtrl.py:235
   // @update
   // def shift_ptr_map_next():
   //   s.shift_reg_pt_map_next @= s.reg_mem_rdata_en << 1
@@ -754,7 +756,7 @@ module ConfigEngineCtrl__7a3f723b2782421e
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineCtrl.py:149
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineCtrl.py:149
   // @update_ff
   // def CE_ctrl_count_sent():
   //   if s.reset:
@@ -771,7 +773,7 @@ module ConfigEngineCtrl__7a3f723b2782421e
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineCtrl.py:197
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineCtrl.py:197
   // @update_ff
   // def CE_is_PE_init_addr():
   //   if s.reset:
@@ -788,7 +790,7 @@ module ConfigEngineCtrl__7a3f723b2782421e
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineCtrl.py:171
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineCtrl.py:171
   // @update_ff
   // def CE_num_requested_r():
   //   if s.reset:
@@ -805,7 +807,7 @@ module ConfigEngineCtrl__7a3f723b2782421e
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineCtrl.py:242
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineCtrl.py:242
   // @update_ff
   // def CE_out_reg_mem_rdata_en_r():
   //   if s.reset:
@@ -822,7 +824,7 @@ module ConfigEngineCtrl__7a3f723b2782421e
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineCtrl.py:61
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineCtrl.py:61
   // @update_ff
   // def reg_counts():
   //   if s.reset:
@@ -844,7 +846,7 @@ module ConfigEngineCtrl__7a3f723b2782421e
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineCtrl.py:122
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineCtrl.py:122
   // @update_ff
   // def ser_fifo_enqueue_registered():
   //   if s.reset:
@@ -869,7 +871,7 @@ endmodule
 
 
 // PyMTL Component RegEnRst Definition
-// At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/registers.py
+// At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/registers.py
 
 module RegEnRst__Type_Bits32__reset_value_0
 (
@@ -882,7 +884,7 @@ module RegEnRst__Type_Bits32__reset_value_0
   localparam logic [0:0] __const__reset_value_at_up_regenrst  = 1'd0;
 
   // PyMTL Update Block Source
-  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/registers.py:55
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/registers.py:55
   // @update_ff
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
@@ -901,10 +903,10 @@ endmodule
 
 
 // PyMTL Component ConfigEngineDpath Definition
-// Full name: ConfigEngineDpath__num_modules_9__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
-// At /work/global/pp482/cgra/src/cgra/ConfigEngineDpath.py
+// Full name: ConfigEngineDpath__num_modules_9__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, enable_debug_ports:False, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:4, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineDpath.py
 
-module ConfigEngineDpath__7a3f723b2782421e
+module ConfigEngineDpath__126fffb8bd5741d2
 (
   input  logic [1:0] cfg_cmd ,
   input  logic [13:0] cfg_me_base_addr ,
@@ -920,7 +922,7 @@ module ConfigEngineDpath__7a3f723b2782421e
   input  logic [0:0] is_addr_incr_by_word ,
   input  logic [0:0] is_cfg_sent ,
   input  CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 mem_resp_msg ,
-  output CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 mmaster_req_msg ,
+  output CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 mmaster_req_msg ,
   input  logic [0:0] reg_mem_rdata_en ,
   input  logic [0:0] reset ,
   input  logic [0:0] start_with_ME ,
@@ -962,7 +964,7 @@ module ConfigEngineDpath__7a3f723b2782421e
   //-------------------------------------------------------------
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineDpath.py:120
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineDpath.py:120
   // @update
   // def CE_init_target_x_cord():
   //   s.initial_target_x_cord @= 0
@@ -977,7 +979,7 @@ module ConfigEngineDpath__7a3f723b2782421e
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineDpath.py:101
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineDpath.py:101
   // @update
   // def CE_initial_val():
   //   s.initial_me_cfg_addr @= s.cfg_me_base_addr+(p.ncols-1+zext(s.y_cord, p.addr_width))*s.nwords_in_byte_addr
@@ -989,7 +991,7 @@ module ConfigEngineDpath__7a3f723b2782421e
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineDpath.py:106
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineDpath.py:106
   // @update
   // def CE_next_mem_req_addr():
   //   s.next_mem_req_addr @= s.mem_req_addr
@@ -1024,7 +1026,7 @@ module ConfigEngineDpath__7a3f723b2782421e
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineDpath.py:179
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineDpath.py:180
   // s.cfg_out_msg //= lambda: concat( s.target_x_cord, s.cfg_cmd, s.all_words_rdata[0:p.cfg_width] )
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_CE_e_0__dpath_cfg_out_msg
@@ -1032,7 +1034,7 @@ module ConfigEngineDpath__7a3f723b2782421e
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineDpath.py:185
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineDpath.py:186
   // s.is_ME_base_addr_zero //= lambda: s.cfg_me_base_addr == 0
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_CE_e_0__dpath_is_ME_base_addr_zero
@@ -1040,7 +1042,7 @@ module ConfigEngineDpath__7a3f723b2782421e
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineDpath.py:186
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineDpath.py:187
   // s.is_PE_base_addr_zero //= lambda: s.cfg_pe_base_addr == 0
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_CE_e_0__dpath_is_PE_base_addr_zero
@@ -1048,7 +1050,7 @@ module ConfigEngineDpath__7a3f723b2782421e
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineDpath.py:155
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineDpath.py:156
   // s.mmaster_req_msg.opaque //= lambda: zext( s.y_cord, p.opaque_width )
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_CE_e_0__dpath_mmaster_req_msg_opaque
@@ -1056,7 +1058,7 @@ module ConfigEngineDpath__7a3f723b2782421e
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineDpath.py:138
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineDpath.py:138
   // @update
   // def join_single_word():
   //   s.all_words_rdata[0:p.data_width] @= s.reg_mem_rdata[i].out
@@ -1066,7 +1068,7 @@ module ConfigEngineDpath__7a3f723b2782421e
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineDpath.py:171
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineDpath.py:172
   // @update
   // def next_target_x_cord_wire():
   //   s.next_target_x_cord @= s.target_x_cord
@@ -1086,7 +1088,7 @@ module ConfigEngineDpath__7a3f723b2782421e
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineDpath.py:73
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineDpath.py:73
   // @update_ff
   // def CE_mem_req_param_addr():
   //   if s.reset:
@@ -1103,7 +1105,7 @@ module ConfigEngineDpath__7a3f723b2782421e
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineDpath.py:164
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineDpath.py:165
   // @update_ff
   // def target_x_cord_ff():
   //   if s.reset:
@@ -1128,15 +1130,16 @@ module ConfigEngineDpath__7a3f723b2782421e
   assign mmaster_req_msg.wen = 1'd0;
   assign mmaster_req_msg.addr = mem_req_addr;
   assign mmaster_req_msg.data = 32'd0;
+  assign mmaster_req_msg.len = 2'd0;
 
 endmodule
 
 
 // PyMTL Component ConfigEngine Definition
-// Full name: ConfigEngine__num_modules_9__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
-// At /work/global/pp482/cgra/src/cgra/ConfigEngine.py
+// Full name: ConfigEngine__num_modules_9__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, enable_debug_ports:False, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:4, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngine.py
 
-module ConfigEngine__7a3f723b2782421e
+module ConfigEngine__126fffb8bd5741d2
 (
   input  logic [1:0] cfg_cmd ,
   input  logic [0:0] cfg_init ,
@@ -1150,7 +1153,7 @@ module ConfigEngine__7a3f723b2782421e
   output logic [37:0] cfg_out__msg  ,
   output logic [0:0] cfg_out__val  ,
   output logic [0:0] mem_master__req__en ,
-  output CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 mem_master__req__msg ,
+  output CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 mem_master__req__msg ,
   input logic [0:0] mem_master__req__rdy ,
   input logic [0:0] mem_master__resp__en ,
   input CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 mem_master__resp__msg ,
@@ -1180,7 +1183,7 @@ module ConfigEngine__7a3f723b2782421e
   logic [0:0] ctrl__start_with_ME;
   logic [0:0] ctrl__start_with_PE;
 
-  ConfigEngineCtrl__7a3f723b2782421e ctrl
+  ConfigEngineCtrl__126fffb8bd5741d2 ctrl
   (
     .cfg_init( ctrl__cfg_init ),
     .cfg_out_val( ctrl__cfg_out_val ),
@@ -1225,14 +1228,14 @@ module ConfigEngine__7a3f723b2782421e
   logic [0:0] dpath__is_addr_incr_by_word;
   logic [0:0] dpath__is_cfg_sent;
   CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 dpath__mem_resp_msg;
-  CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 dpath__mmaster_req_msg;
+  CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 dpath__mmaster_req_msg;
   logic [0:0] dpath__reg_mem_rdata_en;
   logic [0:0] dpath__reset;
   logic [0:0] dpath__start_with_ME;
   logic [0:0] dpath__start_with_PE;
   logic [3:0] dpath__y_cord;
 
-  ConfigEngineDpath__7a3f723b2782421e dpath
+  ConfigEngineDpath__126fffb8bd5741d2 dpath
   (
     .cfg_cmd( dpath__cfg_cmd ),
     .cfg_me_base_addr( dpath__cfg_me_base_addr ),
@@ -1294,10 +1297,10 @@ endmodule
 
 
 // PyMTL Component ConfigEngineCtrl Definition
-// Full name: ConfigEngineCtrl__num_modules_8__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
-// At /work/global/pp482/cgra/src/cgra/ConfigEngineCtrl.py
+// Full name: ConfigEngineCtrl__num_modules_8__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, enable_debug_ports:False, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:4, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineCtrl.py
 
-module ConfigEngineCtrl__35b26261d06d20ce
+module ConfigEngineCtrl__9b38f573ed946260
 (
   input  logic [0:0] cfg_init ,
   output logic [0:0] cfg_out_val ,
@@ -1338,7 +1341,7 @@ module ConfigEngineCtrl__35b26261d06d20ce
   logic [0:0] shift_reg_pt_map_next;
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineCtrl.py:156
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineCtrl.py:156
   // @update
   // def CE_ctrl_next_num_sent_cfgs():
   //   s.next_num_sent_cfgs @= s.num_sent_cfgs
@@ -1358,7 +1361,7 @@ module ConfigEngineCtrl__35b26261d06d20ce
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineCtrl.py:74
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineCtrl.py:74
   // @update
   // def CE_init_count_cfg_pure_ME():
   //   s.count_cfg_init @= num_modules
@@ -1373,7 +1376,7 @@ module ConfigEngineCtrl__35b26261d06d20ce
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineCtrl.py:178
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineCtrl.py:178
   // @update
   // def CE_next_num_requested():
   //   s.next_num_requested @= s.num_requested
@@ -1393,7 +1396,7 @@ module ConfigEngineCtrl__35b26261d06d20ce
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineCtrl.py:249
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineCtrl.py:249
   // @update
   // def CE_next_reg_mem_rdata_en():
   //   s.next_reg_mem_rdata_en @= s.reg_mem_rdata_en
@@ -1413,7 +1416,7 @@ module ConfigEngineCtrl__35b26261d06d20ce
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineCtrl.py:227
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineCtrl.py:227
   // s.is_addr_incr_by_nword //= lambda: s.mmaster_req_en & ( s.count_cfgs != 0 ) & ( s.count_words == 0 )
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_CE_s_ctrl_is_addr_incr_by_nword
@@ -1421,7 +1424,7 @@ module ConfigEngineCtrl__35b26261d06d20ce
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineCtrl.py:226
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineCtrl.py:226
   // s.is_addr_incr_by_word //= lambda: s.mmaster_req_en & ( s.count_words != 0 )
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_CE_s_ctrl_is_addr_incr_by_word
@@ -1429,7 +1432,7 @@ module ConfigEngineCtrl__35b26261d06d20ce
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineCtrl.py:222
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineCtrl.py:222
   // s.is_done //= lambda: zext( s.num_sent_cfgs, p.addr_width ) == s.count_cfg_init
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_CE_s_ctrl_is_done
@@ -1437,7 +1440,7 @@ module ConfigEngineCtrl__35b26261d06d20ce
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineCtrl.py:132
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineCtrl.py:132
   // s.mmaster_req_en //= lambda: ((s.count_cfgs != 0) | (s.count_words != 0)) & s.mmaster_req_rdy
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_CE_s_ctrl_mmaster_req_en
@@ -1445,7 +1448,7 @@ module ConfigEngineCtrl__35b26261d06d20ce
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineCtrl.py:230
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineCtrl.py:230
   // s.start_with_ME //= lambda: ~s.is_ME_base_addr_zero
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_CE_s_ctrl_start_with_ME
@@ -1453,7 +1456,7 @@ module ConfigEngineCtrl__35b26261d06d20ce
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineCtrl.py:231
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineCtrl.py:231
   // s.start_with_PE //= lambda: s.is_ME_base_addr_zero & ~s.is_PE_base_addr_zero
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_CE_s_ctrl_start_with_PE
@@ -1461,7 +1464,7 @@ module ConfigEngineCtrl__35b26261d06d20ce
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineCtrl.py:91
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineCtrl.py:91
   // @update
   // def next_remaining_cfgs():
   //   if s.cfg_init:
@@ -1483,7 +1486,7 @@ module ConfigEngineCtrl__35b26261d06d20ce
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineCtrl.py:103
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineCtrl.py:103
   // @update
   // def next_remaining_words():
   //   if s.cfg_init:
@@ -1510,7 +1513,7 @@ module ConfigEngineCtrl__35b26261d06d20ce
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineCtrl.py:235
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineCtrl.py:235
   // @update
   // def shift_ptr_map_next():
   //   s.shift_reg_pt_map_next @= s.reg_mem_rdata_en << 1
@@ -1522,7 +1525,7 @@ module ConfigEngineCtrl__35b26261d06d20ce
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineCtrl.py:149
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineCtrl.py:149
   // @update_ff
   // def CE_ctrl_count_sent():
   //   if s.reset:
@@ -1539,7 +1542,7 @@ module ConfigEngineCtrl__35b26261d06d20ce
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineCtrl.py:171
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineCtrl.py:171
   // @update_ff
   // def CE_num_requested_r():
   //   if s.reset:
@@ -1556,7 +1559,7 @@ module ConfigEngineCtrl__35b26261d06d20ce
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineCtrl.py:242
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineCtrl.py:242
   // @update_ff
   // def CE_out_reg_mem_rdata_en_r():
   //   if s.reset:
@@ -1573,7 +1576,7 @@ module ConfigEngineCtrl__35b26261d06d20ce
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineCtrl.py:61
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineCtrl.py:61
   // @update_ff
   // def reg_counts():
   //   if s.reset:
@@ -1595,7 +1598,7 @@ module ConfigEngineCtrl__35b26261d06d20ce
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineCtrl.py:122
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineCtrl.py:122
   // @update_ff
   // def ser_fifo_enqueue_registered():
   //   if s.reset:
@@ -1622,10 +1625,10 @@ endmodule
 
 
 // PyMTL Component ConfigEngineDpath Definition
-// Full name: ConfigEngineDpath__num_modules_8__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
-// At /work/global/pp482/cgra/src/cgra/ConfigEngineDpath.py
+// Full name: ConfigEngineDpath__num_modules_8__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, enable_debug_ports:False, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:4, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineDpath.py
 
-module ConfigEngineDpath__35b26261d06d20ce
+module ConfigEngineDpath__9b38f573ed946260
 (
   input  logic [1:0] cfg_cmd ,
   input  logic [13:0] cfg_me_base_addr ,
@@ -1641,7 +1644,7 @@ module ConfigEngineDpath__35b26261d06d20ce
   input  logic [0:0] is_addr_incr_by_word ,
   input  logic [0:0] is_cfg_sent ,
   input  CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 mem_resp_msg ,
-  output CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 mmaster_req_msg ,
+  output CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 mmaster_req_msg ,
   input  logic [0:0] reg_mem_rdata_en ,
   input  logic [0:0] reset ,
   input  logic [0:0] start_with_ME ,
@@ -1683,7 +1686,7 @@ module ConfigEngineDpath__35b26261d06d20ce
   //-------------------------------------------------------------
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineDpath.py:82
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineDpath.py:82
   // @update
   // def CE_initial_val_pure_ME_CE():
   //   s.initial_me_cfg_addr @= s.cfg_me_base_addr
@@ -1695,7 +1698,7 @@ module ConfigEngineDpath__35b26261d06d20ce
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineDpath.py:87
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineDpath.py:87
   // @update
   // def CE_next_mem_req_addr_pure_ME_CE():
   //   s.next_mem_req_addr @= s.mem_req_addr
@@ -1720,7 +1723,7 @@ module ConfigEngineDpath__35b26261d06d20ce
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineDpath.py:179
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineDpath.py:180
   // s.cfg_out_msg //= lambda: concat( s.target_x_cord, s.cfg_cmd, s.all_words_rdata[0:p.cfg_width] )
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_CE_s_dpath_cfg_out_msg
@@ -1728,7 +1731,7 @@ module ConfigEngineDpath__35b26261d06d20ce
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineDpath.py:185
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineDpath.py:186
   // s.is_ME_base_addr_zero //= lambda: s.cfg_me_base_addr == 0
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_CE_s_dpath_is_ME_base_addr_zero
@@ -1736,7 +1739,7 @@ module ConfigEngineDpath__35b26261d06d20ce
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineDpath.py:186
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineDpath.py:187
   // s.is_PE_base_addr_zero //= lambda: s.cfg_pe_base_addr == 0
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_CE_s_dpath_is_PE_base_addr_zero
@@ -1744,7 +1747,7 @@ module ConfigEngineDpath__35b26261d06d20ce
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineDpath.py:155
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineDpath.py:156
   // s.mmaster_req_msg.opaque //= lambda: zext( s.y_cord, p.opaque_width )
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_CE_s_dpath_mmaster_req_msg_opaque
@@ -1752,7 +1755,7 @@ module ConfigEngineDpath__35b26261d06d20ce
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineDpath.py:138
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineDpath.py:138
   // @update
   // def join_single_word():
   //   s.all_words_rdata[0:p.data_width] @= s.reg_mem_rdata[i].out
@@ -1762,7 +1765,7 @@ module ConfigEngineDpath__35b26261d06d20ce
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineDpath.py:171
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineDpath.py:172
   // @update
   // def next_target_x_cord_wire():
   //   s.next_target_x_cord @= s.target_x_cord
@@ -1782,7 +1785,7 @@ module ConfigEngineDpath__35b26261d06d20ce
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineDpath.py:73
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineDpath.py:73
   // @update_ff
   // def CE_mem_req_param_addr():
   //   if s.reset:
@@ -1799,7 +1802,7 @@ module ConfigEngineDpath__35b26261d06d20ce
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/ConfigEngineDpath.py:164
+  // At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngineDpath.py:165
   // @update_ff
   // def target_x_cord_ff():
   //   if s.reset:
@@ -1825,15 +1828,16 @@ module ConfigEngineDpath__35b26261d06d20ce
   assign mmaster_req_msg.wen = 1'd0;
   assign mmaster_req_msg.addr = mem_req_addr;
   assign mmaster_req_msg.data = 32'd0;
+  assign mmaster_req_msg.len = 2'd0;
 
 endmodule
 
 
 // PyMTL Component ConfigEngine Definition
-// Full name: ConfigEngine__num_modules_8__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
-// At /work/global/pp482/cgra/src/cgra/ConfigEngine.py
+// Full name: ConfigEngine__num_modules_8__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, enable_debug_ports:False, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:4, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// At /work/global/pp482/test/cgra-src/src/cgra/ConfigEngine.py
 
-module ConfigEngine__35b26261d06d20ce
+module ConfigEngine__9b38f573ed946260
 (
   input  logic [1:0] cfg_cmd ,
   input  logic [0:0] cfg_init ,
@@ -1847,7 +1851,7 @@ module ConfigEngine__35b26261d06d20ce
   output logic [37:0] cfg_out__msg  ,
   output logic [0:0] cfg_out__val  ,
   output logic [0:0] mem_master__req__en ,
-  output CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 mem_master__req__msg ,
+  output CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 mem_master__req__msg ,
   input logic [0:0] mem_master__req__rdy ,
   input logic [0:0] mem_master__resp__en ,
   input CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 mem_master__resp__msg ,
@@ -1877,7 +1881,7 @@ module ConfigEngine__35b26261d06d20ce
   logic [0:0] ctrl__start_with_ME;
   logic [0:0] ctrl__start_with_PE;
 
-  ConfigEngineCtrl__35b26261d06d20ce ctrl
+  ConfigEngineCtrl__9b38f573ed946260 ctrl
   (
     .cfg_init( ctrl__cfg_init ),
     .cfg_out_val( ctrl__cfg_out_val ),
@@ -1922,14 +1926,14 @@ module ConfigEngine__35b26261d06d20ce
   logic [0:0] dpath__is_addr_incr_by_word;
   logic [0:0] dpath__is_cfg_sent;
   CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 dpath__mem_resp_msg;
-  CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 dpath__mmaster_req_msg;
+  CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 dpath__mmaster_req_msg;
   logic [0:0] dpath__reg_mem_rdata_en;
   logic [0:0] dpath__reset;
   logic [0:0] dpath__start_with_ME;
   logic [0:0] dpath__start_with_PE;
   logic [3:0] dpath__y_cord;
 
-  ConfigEngineDpath__35b26261d06d20ce dpath
+  ConfigEngineDpath__9b38f573ed946260 dpath
   (
     .cfg_cmd( dpath__cfg_cmd ),
     .cfg_me_base_addr( dpath__cfg_me_base_addr ),
@@ -1991,7 +1995,7 @@ endmodule
 
 
 // PyMTL Component RegEnRst Definition
-// At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/registers.py
+// At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/registers.py
 
 module RegEnRst__Type_32__reset_value_0
 (
@@ -2004,7 +2008,7 @@ module RegEnRst__Type_32__reset_value_0
   localparam logic [0:0] __const__reset_value_at_up_regenrst  = 1'd0;
 
   // PyMTL Update Block Source
-  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/registers.py:55
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/registers.py:55
   // @update_ff
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
@@ -2023,7 +2027,7 @@ endmodule
 
 
 // PyMTL Component RegEnRst Definition
-// At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/registers.py
+// At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/registers.py
 
 module RegEnRst__Type_Bits38__reset_value_0
 (
@@ -2036,7 +2040,7 @@ module RegEnRst__Type_Bits38__reset_value_0
   localparam logic [0:0] __const__reset_value_at_up_regenrst  = 1'd0;
 
   // PyMTL Update Block Source
-  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/registers.py:55
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/registers.py:55
   // @update_ff
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
@@ -2055,7 +2059,7 @@ endmodule
 
 
 // PyMTL Component RegRst Definition
-// At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/registers.py
+// At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/registers.py
 
 module RegRst__Type_Bits1__reset_value_0
 (
@@ -2067,7 +2071,7 @@ module RegRst__Type_Bits1__reset_value_0
   localparam logic [0:0] __const__reset_value_at_up_regrst  = 1'd0;
 
   // PyMTL Update Block Source
-  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/registers.py:39
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/registers.py:39
   // @update_ff
   // def up_regrst():
   //   if s.reset: s.out <<= reset_value
@@ -2085,7 +2089,7 @@ endmodule
 
 
 // PyMTL Component ZeroBackPressureBuffer Definition
-// At /work/global/pp482/cgra/src/fifos/ZeroBackPressureBuffer.py
+// At /work/global/pp482/test/cgra-src/src/fifos/ZeroBackPressureBuffer.py
 
 module ZeroBackPressureBuffer__Type_Bits38
 (
@@ -2141,7 +2145,7 @@ module ZeroBackPressureBuffer__Type_Bits38
   //-------------------------------------------------------------
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/fifos/ZeroBackPressureBuffer.py:32
+  // At /work/global/pp482/test/cgra-src/src/fifos/ZeroBackPressureBuffer.py:32
   // @update
   // def upblk_full():
   //   # Pipeline behavior
@@ -2170,113 +2174,8 @@ module ZeroBackPressureBuffer__Type_Bits38
 endmodule
 
 
-// PyMTL Component MemEngineCtrl Definition
-// Full name: MemEngineCtrl__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
-// At /work/global/pp482/cgra/src/cgra/MemEngineCtrl.py
-
-module MemEngineCtrl__07e21c4d4fa663e6
-(
-  input  logic [0:0] cfg_deq_val ,
-  output logic [0:0] cfg_out_val ,
-  input  logic [0:0] clk ,
-  input  logic [0:0] count_zero ,
-  output logic [0:0] deq_rdy ,
-  input  logic [0:0] deq_val ,
-  input  logic [0:0] is_calc ,
-  input  logic [0:0] is_cfg_target_self ,
-  input  logic [0:0] is_cfg_write ,
-  output logic [0:0] is_done ,
-  input  logic [0:0] is_out_credit_zero ,
-  output logic [0:0] mem_deq_en ,
-  input  logic [0:0] mem_deq_rdy ,
-  output logic [0:0] mem_req_en ,
-  input  logic [0:0] mem_req_rdy ,
-  input  logic [0:0] no_pending_responses ,
-  input  logic [0:0] out_rdy ,
-  output logic [0:0] out_val ,
-  output logic [0:0] req_sent ,
-  input  logic [0:0] reset ,
-  output logic [0:0] resp_recved ,
-  output logic [0:0] self_cfg_deq 
-);
-
-  // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/MemEngineCtrl.py:58
-  // s.cfg_out_val //= lambda: ~s.is_cfg_target_self & s.cfg_deq_val
-  
-  always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_ME_0__ctrl_cfg_out_val
-    cfg_out_val = ( ~is_cfg_target_self ) & cfg_deq_val;
-  end
-
-  // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/MemEngineCtrl.py:54
-  // s.deq_rdy //= lambda: s.is_cfg_write & s.mem_req_rdy & ~s.is_out_credit_zero & s.is_calc
-  
-  always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_ME_0__ctrl_deq_rdy
-    deq_rdy = ( ( is_cfg_write & mem_req_rdy ) & ( ~is_out_credit_zero ) ) & is_calc;
-  end
-
-  // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/MemEngineCtrl.py:70
-  // s.is_done //= lambda: s.is_calc & s.no_pending_responses
-  
-  always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_ME_0__ctrl_is_done
-    is_done = is_calc & no_pending_responses;
-  end
-
-  // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/MemEngineCtrl.py:52
-  // s.mem_deq_en //= lambda: s.out_rdy & s.mem_deq_rdy
-  
-  always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_ME_0__ctrl_mem_deq_en
-    mem_deq_en = out_rdy & mem_deq_rdy;
-  end
-
-  // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/MemEngineCtrl.py:50
-  // s.mem_req_en //= lambda: ( (s.is_cfg_write & s.deq_val) | ~s.is_cfg_write ) & ~s.count_zero & ~s.is_out_credit_zero & s.mem_req_rdy & s.is_calc
-  
-  always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_ME_0__ctrl_mem_req_en
-    mem_req_en = ( ( ( ( ( is_cfg_write & deq_val ) | ( ~is_cfg_write ) ) & ( ~count_zero ) ) & ( ~is_out_credit_zero ) ) & mem_req_rdy ) & is_calc;
-  end
-
-  // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/MemEngineCtrl.py:56
-  // s.out_val //= lambda: ~s.is_cfg_write & s.mem_deq_rdy
-  
-  always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_ME_0__ctrl_out_val
-    out_val = ( ~is_cfg_write ) & mem_deq_rdy;
-  end
-
-  // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/MemEngineCtrl.py:66
-  // s.req_sent //= lambda: s.mem_req_en
-  
-  always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_ME_0__ctrl_req_sent
-    req_sent = mem_req_en;
-  end
-
-  // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/MemEngineCtrl.py:68
-  // s.resp_recved //= lambda: s.mem_deq_en
-  
-  always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_ME_0__ctrl_resp_recved
-    resp_recved = mem_deq_en;
-  end
-
-  // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/MemEngineCtrl.py:64
-  // s.self_cfg_deq //= lambda: s.is_cfg_target_self & s.cfg_deq_val
-  
-  always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_ME_0__ctrl_self_cfg_deq
-    self_cfg_deq = is_cfg_target_self & cfg_deq_val;
-  end
-
-endmodule
-
-
 // PyMTL VerilogPlaceholder FNToRecFN Definition
-// At /work/global/pp482/cgra/src/bsg_hardfloat/HardFloat/FNToRecFNRTL.py
+// At /work/global/pp482/test/cgra-src/src/bsg_hardfloat/HardFloat/FNToRecFNRTL.py
 
 //***********************************************************
 // Pickled source file of placeholder FNToRecFN__expWidth_8__sigWidth_24
@@ -2312,457 +2211,9 @@ endmodule
 
 
 
-// PyMTL VerilogPlaceholder RecFNToFN Definition
-// At /work/global/pp482/cgra/src/bsg_hardfloat/HardFloat/RecFNToFNRTL.py
-
-//***********************************************************
-// Pickled source file of placeholder RecFNToFN__expWidth_8__sigWidth_24
-//***********************************************************
-
-//-----------------------------------------------------------
-// Dependency of placeholder RecFNToFN
-// Wrapper of placeholder RecFNToFN__expWidth_8__sigWidth_24
-//-----------------------------------------------------------
-
-`ifndef RECFNTOFN__EXPWIDTH_8__SIGWIDTH_24
-`define RECFNTOFN__EXPWIDTH_8__SIGWIDTH_24
-
-module RecFNToFN__expWidth_8__sigWidth_24
-(
-  input logic reset,
-  input logic clk,
-  input logic [33-1:0] in_ ,
-  output logic [32-1:0] out 
-);
-  recFNToFN
-  #(
-    .expWidth( 8 ),
-    .sigWidth( 24 )
-  ) v
-  (
-    .in( in_ ),
-    .out( out )
-  );
-endmodule
-
-`endif /* RECFNTOFN__EXPWIDTH_8__SIGWIDTH_24 */
-
-
-
-// PyMTL Component MemEngineDpath Definition
-// Full name: MemEngineDpath__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
-// At /work/global/pp482/cgra/src/cgra/MemEngineDpath.py
-
-module MemEngineDpath__07e21c4d4fa663e6
-(
-  input  logic [37:0] cfg_deq_msg ,
-  output logic [37:0] cfg_out_msg ,
-  input  logic [0:0] clk ,
-  output logic [0:0] count_zero ,
-  input  logic [32:0] deq_msg ,
-  input  logic [3:0] id_cord ,
-  output logic [0:0] is_cfg_target_self ,
-  output logic [0:0] is_cfg_write ,
-  output logic [0:0] is_out_credit_zero ,
-  input  CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 mem_deq_ret ,
-  output CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 mem_req_msg ,
-  output logic [0:0] no_pending_responses ,
-  output logic [32:0] out_msg ,
-  input  logic [0:0] req_sent ,
-  input  logic [0:0] reset ,
-  input  logic [0:0] resp_recved ,
-  input  logic [0:0] self_cfg_deq ,
-  input  logic [3:0] x_cord 
-);
-  logic [13:0] cfg_addr;
-  logic [1:0] cfg_cmd;
-  logic [13:0] cfg_count;
-  logic [13:0] cfg_incr_addr;
-  logic [31:0] cfg_value;
-  logic [0:0] cfg_wen;
-  MEConfigMsg_8x8__06461221025326f2 cfg_with_fields;
-  MEConfigMsg_8x8__06461221025326f2 cfg_with_fields_r;
-  logic [3:0] cfg_x_cord;
-  logic [0:0] is_reload_cmd;
-  logic [13:0] next_cfg_addr;
-  logic [13:0] next_cfg_count;
-  logic [13:0] next_cfg_incr_addr;
-  logic [0:0] next_cfg_wen;
-  logic [13:0] next_pending_response;
-  logic [2:0] out_credit;
-  logic [2:0] out_credit_n;
-  logic [13:0] pending_response;
-  logic [0:0] sel_FN2RecFN;
-  logic [0:0] sel_RecFN2FN;
-  //-------------------------------------------------------------
-  // Component fn_to_recfn
-  //-------------------------------------------------------------
-
-  logic [0:0] fn_to_recfn__clk;
-  logic [31:0] fn_to_recfn__in_;
-  logic [32:0] fn_to_recfn__out;
-  logic [0:0] fn_to_recfn__reset;
-
-  FNToRecFN__expWidth_8__sigWidth_24 fn_to_recfn
-  (
-    .clk( fn_to_recfn__clk ),
-    .in_( fn_to_recfn__in_ ),
-    .out( fn_to_recfn__out ),
-    .reset( fn_to_recfn__reset )
-  );
-
-  //-------------------------------------------------------------
-  // End of component fn_to_recfn
-  //-------------------------------------------------------------
-
-  //-------------------------------------------------------------
-  // Component recfn_to_fn
-  //-------------------------------------------------------------
-
-  logic [0:0] recfn_to_fn__clk;
-  logic [32:0] recfn_to_fn__in_;
-  logic [31:0] recfn_to_fn__out;
-  logic [0:0] recfn_to_fn__reset;
-
-  RecFNToFN__expWidth_8__sigWidth_24 recfn_to_fn
-  (
-    .clk( recfn_to_fn__clk ),
-    .in_( recfn_to_fn__in_ ),
-    .out( recfn_to_fn__out ),
-    .reset( recfn_to_fn__reset )
-  );
-
-  //-------------------------------------------------------------
-  // End of component recfn_to_fn
-  //-------------------------------------------------------------
-
-  // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/MemEngineDpath.py:134
-  // @update
-  // def ME_next_cfg_addr():
-  //   s.next_cfg_addr @= s.cfg_addr
-  //   if s.self_cfg_deq:
-  //     if ~s.is_reload_cmd:
-  //       s.next_cfg_addr @= s.cfg_with_fields.base_addr
-  //     else:
-  //       s.next_cfg_addr @= s.cfg_value[0:p.addr_width]
-  //   elif s.req_sent:
-  //     s.next_cfg_addr @= s.cfg_addr + s.cfg_incr_addr
-  
-  always_comb begin : ME_next_cfg_addr
-    next_cfg_addr = cfg_addr;
-    if ( self_cfg_deq ) begin
-      if ( ~is_reload_cmd ) begin
-        next_cfg_addr = cfg_with_fields.base_addr;
-      end
-      else
-        next_cfg_addr = cfg_value[5'd13:5'd0];
-    end
-    else if ( req_sent ) begin
-      next_cfg_addr = cfg_addr + cfg_incr_addr;
-    end
-  end
-
-  // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/MemEngineDpath.py:147
-  // @update
-  // def ME_next_cfg_count():
-  //   s.next_cfg_count @= s.cfg_count
-  //   if s.self_cfg_deq:
-  //     if ~s.is_reload_cmd:
-  //       s.next_cfg_count @= zext( s.cfg_with_fields.count, p.addr_width )
-  //     else:
-  //       s.next_cfg_count @= zext( s.cfg_with_fields_r.count, p.addr_width )
-  //   elif s.req_sent:
-  //     s.next_cfg_count @= s.cfg_count - 1
-  
-  always_comb begin : ME_next_cfg_count
-    next_cfg_count = cfg_count;
-    if ( self_cfg_deq ) begin
-      if ( ~is_reload_cmd ) begin
-        next_cfg_count = { { 6 { 1'b0 } }, cfg_with_fields.count };
-      end
-      else
-        next_cfg_count = { { 6 { 1'b0 } }, cfg_with_fields_r.count };
-    end
-    else if ( req_sent ) begin
-      next_cfg_count = cfg_count - 14'd1;
-    end
-  end
-
-  // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/MemEngineDpath.py:123
-  // @update
-  // def ME_next_cfg_incr_addr():
-  //   s.next_cfg_incr_addr @= s.cfg_incr_addr
-  //   if s.self_cfg_deq:
-  //     if ~s.is_reload_cmd:
-  //       s.next_cfg_incr_addr @= zext( s.cfg_with_fields.incr_addr, p.addr_width )
-  //     else:
-  //       s.next_cfg_incr_addr @= zext( s.cfg_with_fields_r.incr_addr, p.addr_width )
-  
-  always_comb begin : ME_next_cfg_incr_addr
-    next_cfg_incr_addr = cfg_incr_addr;
-    if ( self_cfg_deq ) begin
-      if ( ~is_reload_cmd ) begin
-        next_cfg_incr_addr = { { 6 { 1'b0 } }, cfg_with_fields.incr_addr };
-      end
-      else
-        next_cfg_incr_addr = { { 6 { 1'b0 } }, cfg_with_fields_r.incr_addr };
-    end
-  end
-
-  // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/MemEngineDpath.py:112
-  // @update
-  // def ME_next_cfg_wen():
-  //   s.next_cfg_wen @= s.cfg_wen
-  //   if s.self_cfg_deq:
-  //     if ~s.is_reload_cmd:
-  //       s.next_cfg_wen @= s.cfg_with_fields.wen
-  //     else:
-  //       s.next_cfg_wen @= s.cfg_with_fields_r.wen
-  
-  always_comb begin : ME_next_cfg_wen
-    next_cfg_wen = cfg_wen;
-    if ( self_cfg_deq ) begin
-      if ( ~is_reload_cmd ) begin
-        next_cfg_wen = cfg_with_fields.wen;
-      end
-      else
-        next_cfg_wen = cfg_with_fields_r.wen;
-    end
-  end
-
-  // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/MemEngineDpath.py:160
-  // @update
-  // def ME_next_pending_response():
-  //   s.next_pending_response @= s.pending_response
-  //   if s.self_cfg_deq:
-  //     if ~s.is_reload_cmd:
-  //       s.next_pending_response @= zext( s.cfg_with_fields.count, p.addr_width )
-  //     else:
-  //       s.next_pending_response @= zext( s.cfg_with_fields_r.count, p.addr_width )
-  //   elif s.resp_recved:
-  //     s.next_pending_response @= s.pending_response - 1
-  
-  always_comb begin : ME_next_pending_response
-    next_pending_response = pending_response;
-    if ( self_cfg_deq ) begin
-      if ( ~is_reload_cmd ) begin
-        next_pending_response = { { 6 { 1'b0 } }, cfg_with_fields.count };
-      end
-      else
-        next_pending_response = { { 6 { 1'b0 } }, cfg_with_fields_r.count };
-    end
-    else if ( resp_recved ) begin
-      next_pending_response = pending_response - 14'd1;
-    end
-  end
-
-  // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/MemEngineDpath.py:182
-  // @update
-  // def ME_outward_credit_next():
-  //   s.out_credit_n @= s.out_credit
-  //   if s.req_sent & ~s.resp_recved:
-  //     s.out_credit_n @= s.out_credit-1
-  //   if ~s.req_sent & s.resp_recved:
-  //     s.out_credit_n @= s.out_credit+1
-  
-  always_comb begin : ME_outward_credit_next
-    out_credit_n = out_credit;
-    if ( req_sent & ( ~resp_recved ) ) begin
-      out_credit_n = out_credit - 3'd1;
-    end
-    if ( ( ~req_sent ) & resp_recved ) begin
-      out_credit_n = out_credit + 3'd1;
-    end
-  end
-
-  // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/MemEngineDpath.py:228
-  // s.count_zero //= lambda: s.cfg_count == 0
-  
-  always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_ME_0__dpath_count_zero
-    count_zero = cfg_count == 14'd0;
-  end
-
-  // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/MemEngineDpath.py:234
-  // s.is_cfg_target_self //= lambda: s.cfg_x_cord == s.x_cord
-  
-  always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_ME_0__dpath_is_cfg_target_self
-    is_cfg_target_self = cfg_x_cord == x_cord;
-  end
-
-  // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/MemEngineDpath.py:232
-  // s.is_cfg_write //= lambda: s.cfg_wen
-  
-  always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_ME_0__dpath_is_cfg_write
-    is_cfg_write = cfg_wen;
-  end
-
-  // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/MemEngineDpath.py:238
-  // s.is_out_credit_zero //= lambda: s.out_credit == 0
-  
-  always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_ME_0__dpath_is_out_credit_zero
-    is_out_credit_zero = out_credit == 3'd0;
-  end
-
-  // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/MemEngineDpath.py:236
-  // s.is_reload_cmd //= lambda: (s.cfg_cmd == CfgCmd.RF_LOAD_FP) | (s.cfg_cmd == CfgCmd.RF_LOAD_INT)
-  
-  always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_ME_0__dpath_is_reload_cmd
-    is_reload_cmd = ( cfg_cmd == 2'd2 ) | ( cfg_cmd == 2'd1 );
-  end
-
-  // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/MemEngineDpath.py:217
-  // s.mem_req_msg.data //= lambda: s.recfn_to_fn.out if s.sel_RecFN2FN else s.deq_msg[0:p.data_width]
-  
-  always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_ME_0__dpath_mem_req_msg_data
-    mem_req_msg.data = sel_RecFN2FN ? recfn_to_fn__out : deq_msg[6'd31:6'd0];
-  end
-
-  // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/MemEngineDpath.py:218
-  // s.mem_req_msg.opaque //= lambda: zext( s.id_cord, p.opaque_width )
-  
-  always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_ME_0__dpath_mem_req_msg_opaque
-    mem_req_msg.opaque = { { 3 { 1'b0 } }, id_cord };
-  end
-
-  // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/MemEngineDpath.py:230
-  // s.no_pending_responses //= lambda: s.pending_response == 0
-  
-  always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_ME_0__dpath_no_pending_responses
-    no_pending_responses = pending_response == 14'd0;
-  end
-
-  // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/MemEngineDpath.py:220
-  // s.out_msg //= lambda: s.fn_to_recfn.out if s.sel_FN2RecFN else sext( s.mem_deq_ret.data, p.dpath_width )
-  
-  always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_ME_0__dpath_out_msg
-    out_msg = sel_FN2RecFN ? fn_to_recfn__out : { { 1 { mem_deq_ret.data[31] } }, mem_deq_ret.data };
-  end
-
-  // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/MemEngineDpath.py:203
-  // s.sel_FN2RecFN //= lambda: s.cfg_with_fields_r.is_fp & (~s.cfg_with_fields_r.wen)
-  
-  always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_ME_0__dpath_sel_FN2RecFN
-    sel_FN2RecFN = cfg_with_fields_r.is_fp & ( ~cfg_with_fields_r.wen );
-  end
-
-  // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/MemEngineDpath.py:202
-  // s.sel_RecFN2FN //= lambda: s.cfg_with_fields_r.is_fp & s.cfg_with_fields_r.wen
-  
-  always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_ME_0__dpath_sel_RecFN2FN
-    sel_RecFN2FN = cfg_with_fields_r.is_fp & cfg_with_fields_r.wen;
-  end
-
-  // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/MemEngineDpath.py:67
-  // @update_ff
-  // def ME_cfg_w_field_reg():
-  //   if s.reset:
-  //     s.cfg_with_fields_r <<= p.me_cfg_type()
-  //   else:
-  //     if s.self_cfg_deq & ~s.is_reload_cmd:
-  //       s.cfg_with_fields_r <<= s.cfg_with_fields
-  
-  always_ff @(posedge clk) begin : ME_cfg_w_field_reg
-    if ( reset ) begin
-      cfg_with_fields_r <= { 1'd0, 14'd0, 8'd0, 1'd0, 8'd0 };
-    end
-    else if ( self_cfg_deq & ( ~is_reload_cmd ) ) begin
-      cfg_with_fields_r <= cfg_with_fields;
-    end
-  end
-
-  // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/MemEngineDpath.py:175
-  // @update_ff
-  // def ME_outward_credit_reg():
-  //   if s.reset:
-  //     s.out_credit <<= p.me_buffer_size
-  //   else:
-  //     s.out_credit <<= s.out_credit_n
-  
-  always_ff @(posedge clk) begin : ME_outward_credit_reg
-    if ( reset ) begin
-      out_credit <= 3'd4;
-    end
-    else
-      out_credit <= out_credit_n;
-  end
-
-  // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/MemEngineDpath.py:95
-  // @update_ff
-  // def ME_regsiters():
-  //   if s.reset:
-  //     s.cfg_wen <<= 0
-  //     s.cfg_incr_addr <<= 0
-  //     s.cfg_addr <<= 0
-  //     s.cfg_count <<= 0
-  //     s.pending_response <<= 0
-  //   else:
-  //     s.cfg_wen <<= s.next_cfg_wen
-  //     s.cfg_incr_addr <<= s.next_cfg_incr_addr
-  //     s.cfg_addr <<= s.next_cfg_addr
-  //     s.cfg_count <<= s.next_cfg_count
-  //     s.pending_response <<= s.next_pending_response
-  
-  always_ff @(posedge clk) begin : ME_regsiters
-    if ( reset ) begin
-      cfg_wen <= 1'd0;
-      cfg_incr_addr <= 14'd0;
-      cfg_addr <= 14'd0;
-      cfg_count <= 14'd0;
-      pending_response <= 14'd0;
-    end
-    else begin
-      cfg_wen <= next_cfg_wen;
-      cfg_incr_addr <= next_cfg_incr_addr;
-      cfg_addr <= next_cfg_addr;
-      cfg_count <= next_cfg_count;
-      pending_response <= next_pending_response;
-    end
-  end
-
-  assign cfg_with_fields.count = cfg_deq_msg[7:0];
-  assign cfg_with_fields.is_fp = cfg_deq_msg[8:8];
-  assign cfg_with_fields.incr_addr = cfg_deq_msg[16:9];
-  assign cfg_with_fields.base_addr = cfg_deq_msg[30:17];
-  assign cfg_with_fields.wen = cfg_deq_msg[31:31];
-  assign cfg_value = cfg_deq_msg[31:0];
-  assign cfg_x_cord = cfg_deq_msg[37:34];
-  assign cfg_cmd = cfg_deq_msg[33:32];
-  assign fn_to_recfn__clk = clk;
-  assign fn_to_recfn__reset = reset;
-  assign fn_to_recfn__in_ = mem_deq_ret.data;
-  assign recfn_to_fn__clk = clk;
-  assign recfn_to_fn__reset = reset;
-  assign recfn_to_fn__in_ = deq_msg;
-  assign mem_req_msg.wen = cfg_wen;
-  assign mem_req_msg.addr = cfg_addr;
-  assign cfg_out_msg = cfg_deq_msg;
-
-endmodule
-
-
 // PyMTL Component ValRdyNormalQueuePow2CtrlRTL Definition
 // Full name: ValRdyNormalQueuePow2CtrlRTL__num_entries_2__enable_clear_False__enable_accept_False
-// At /work/global/pp482/cgra/src/fifos/ValRdyNormalQueuePow2RTL.py
+// At /work/global/pp482/test/cgra-src/src/fifos/ValRdyNormalQueuePow2RTL.py
 
 module ValRdyNormalQueuePow2CtrlRTL__968b201917f3e91d
 (
@@ -2785,7 +2236,7 @@ module ValRdyNormalQueuePow2CtrlRTL__968b201917f3e91d
   logic [1:0] w_ptr_with_wrapbit;
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/fifos/ValRdyNormalQueuePow2RTL.py:100
+  // At /work/global/pp482/test/cgra-src/src/fifos/ValRdyNormalQueuePow2RTL.py:100
   // @update
   // def upblk_empty():
   //   s.empty @= (s.w_ptr_with_wrapbit == s.r_ptr_with_wrapbit)
@@ -2795,7 +2246,7 @@ module ValRdyNormalQueuePow2CtrlRTL__968b201917f3e91d
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/fifos/ValRdyNormalQueuePow2RTL.py:96
+  // At /work/global/pp482/test/cgra-src/src/fifos/ValRdyNormalQueuePow2RTL.py:96
   // @update
   // def upblk_full():
   //   s.full @= (s.w_ptr == s.r_ptr) & (s.w_ptr_with_wrapbit != s.r_ptr_with_wrapbit)
@@ -2805,7 +2256,7 @@ module ValRdyNormalQueuePow2CtrlRTL__968b201917f3e91d
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/fifos/ValRdyNormalQueuePow2RTL.py:162
+  // At /work/global/pp482/test/cgra-src/src/fifos/ValRdyNormalQueuePow2RTL.py:162
   // @update
   // def upblk_output_no_accept():
   //   s.enq_rdy @= ~ s.full
@@ -2819,7 +2270,7 @@ module ValRdyNormalQueuePow2CtrlRTL__968b201917f3e91d
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/fifos/ValRdyNormalQueuePow2RTL.py:147
+  // At /work/global/pp482/test/cgra-src/src/fifos/ValRdyNormalQueuePow2RTL.py:147
   // @update_ff
   // def upblk_r_ptr_no_clear():
   //   if s.reset:
@@ -2837,7 +2288,7 @@ module ValRdyNormalQueuePow2CtrlRTL__968b201917f3e91d
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/fifos/ValRdyNormalQueuePow2RTL.py:140
+  // At /work/global/pp482/test/cgra-src/src/fifos/ValRdyNormalQueuePow2RTL.py:140
   // @update_ff
   // def upblk_w_ptr_no_clear():
   //   if s.reset:
@@ -2865,7 +2316,7 @@ endmodule
 
 // PyMTL Component RegisterFile Definition
 // Full name: RegisterFile__Type_Bits33__nregs_2__rd_ports_1__wr_ports_1__const_zero_False
-// At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/register_files.py
+// At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/register_files.py
 
 module RegisterFile__20535936df5a8c95
 (
@@ -2882,7 +2333,7 @@ module RegisterFile__20535936df5a8c95
   logic [32:0] regs [0:1];
 
   // PyMTL Update Block Source
-  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/register_files.py:20
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/register_files.py:20
   // @update
   // def up_rf_read():
   //   for i in range( rd_ports ):
@@ -2894,7 +2345,7 @@ module RegisterFile__20535936df5a8c95
   end
 
   // PyMTL Update Block Source
-  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/register_files.py:32
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/register_files.py:32
   // @update_ff
   // def up_rf_write():
   //   for i in range( wr_ports ):
@@ -2912,7 +2363,7 @@ endmodule
 
 
 // PyMTL Component ValRdyNormalQueuePow2DpathRTL Definition
-// At /work/global/pp482/cgra/src/fifos/ValRdyNormalQueuePow2RTL.py
+// At /work/global/pp482/test/cgra-src/src/fifos/ValRdyNormalQueuePow2RTL.py
 
 module ValRdyNormalQueuePow2DpathRTL__EntryType_Bits33__num_entries_2
 (
@@ -2964,7 +2415,7 @@ endmodule
 
 // PyMTL Component ValRdyNormalQueuePow2RTL Definition
 // Full name: ValRdyNormalQueuePow2RTL__EntryType_Bits33__num_entries_2__enable_clear_False__enable_accept_False
-// At /work/global/pp482/cgra/src/fifos/ValRdyNormalQueuePow2RTL.py
+// At /work/global/pp482/test/cgra-src/src/fifos/ValRdyNormalQueuePow2RTL.py
 
 module ValRdyNormalQueuePow2RTL__140d67166b825442
 (
@@ -3057,7 +2508,7 @@ endmodule
 
 
 // PyMTL Component NormalQueuePow2CtrlRTL Definition
-// At /work/global/pp482/cgra/src/fifos/NormalQueuePow2RTL.py
+// At /work/global/pp482/test/cgra-src/src/fifos/NormalQueuePow2RTL.py
 
 module NormalQueuePow2CtrlRTL__num_entries_4
 (
@@ -3079,7 +2530,7 @@ module NormalQueuePow2CtrlRTL__num_entries_4
   logic [2:0] w_ptr_with_wrapbit;
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/fifos/NormalQueuePow2RTL.py:99
+  // At /work/global/pp482/test/cgra-src/src/fifos/NormalQueuePow2RTL.py:99
   // @update
   // def upblk_empty():
   //   s.empty @= (s.w_ptr_with_wrapbit == s.r_ptr_with_wrapbit)
@@ -3089,7 +2540,7 @@ module NormalQueuePow2CtrlRTL__num_entries_4
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/fifos/NormalQueuePow2RTL.py:95
+  // At /work/global/pp482/test/cgra-src/src/fifos/NormalQueuePow2RTL.py:95
   // @update
   // def upblk_full():
   //   s.full @= (s.w_ptr == s.r_ptr) & (s.w_ptr_with_wrapbit != s.r_ptr_with_wrapbit)
@@ -3099,7 +2550,7 @@ module NormalQueuePow2CtrlRTL__num_entries_4
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/fifos/NormalQueuePow2RTL.py:103
+  // At /work/global/pp482/test/cgra-src/src/fifos/NormalQueuePow2RTL.py:103
   // @update
   // def upblk_output():
   //   s.enq_rdy @= ~ s.full
@@ -3113,7 +2564,7 @@ module NormalQueuePow2CtrlRTL__num_entries_4
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/fifos/NormalQueuePow2RTL.py:88
+  // At /work/global/pp482/test/cgra-src/src/fifos/NormalQueuePow2RTL.py:88
   // @update_ff
   // def upblk_r_ptr():
   //   if s.reset:
@@ -3131,7 +2582,7 @@ module NormalQueuePow2CtrlRTL__num_entries_4
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/fifos/NormalQueuePow2RTL.py:81
+  // At /work/global/pp482/test/cgra-src/src/fifos/NormalQueuePow2RTL.py:81
   // @update_ff
   // def upblk_w_ptr():
   //   if s.reset:
@@ -3158,7 +2609,7 @@ endmodule
 
 // PyMTL Component RegisterFile Definition
 // Full name: RegisterFile__Type_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__nregs_4__rd_ports_1__wr_ports_1__const_zero_False
-// At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/register_files.py
+// At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/register_files.py
 
 module RegisterFile__83b02741e3660ddc
 (
@@ -3175,7 +2626,7 @@ module RegisterFile__83b02741e3660ddc
   CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 regs [0:3];
 
   // PyMTL Update Block Source
-  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/register_files.py:20
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/register_files.py:20
   // @update
   // def up_rf_read():
   //   for i in range( rd_ports ):
@@ -3187,7 +2638,7 @@ module RegisterFile__83b02741e3660ddc
   end
 
   // PyMTL Update Block Source
-  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/register_files.py:32
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/register_files.py:32
   // @update_ff
   // def up_rf_write():
   //   for i in range( wr_ports ):
@@ -3206,7 +2657,7 @@ endmodule
 
 // PyMTL Component NormalQueuePow2DpathRTL Definition
 // Full name: NormalQueuePow2DpathRTL__EntryType_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__num_entries_4
-// At /work/global/pp482/cgra/src/fifos/NormalQueuePow2RTL.py
+// At /work/global/pp482/test/cgra-src/src/fifos/NormalQueuePow2RTL.py
 
 module NormalQueuePow2DpathRTL__9291fbbb47766962
 (
@@ -3258,7 +2709,7 @@ endmodule
 
 // PyMTL Component NormalQueuePow2RTL Definition
 // Full name: NormalQueuePow2RTL__EntryType_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__num_entries_4
-// At /work/global/pp482/cgra/src/fifos/NormalQueuePow2RTL.py
+// At /work/global/pp482/test/cgra-src/src/fifos/NormalQueuePow2RTL.py
 
 module NormalQueuePow2RTL__9291fbbb47766962
 (
@@ -3346,11 +2797,48 @@ module NormalQueuePow2RTL__9291fbbb47766962
 endmodule
 
 
-// PyMTL Component MemEngine Definition
-// Full name: MemEngine__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
-// At /work/global/pp482/cgra/src/cgra/MemEngine.py
+// PyMTL VerilogPlaceholder RecFNToFN Definition
+// At /work/global/pp482/test/cgra-src/src/bsg_hardfloat/HardFloat/RecFNToFNRTL.py
 
-module MemEngine__07e21c4d4fa663e6
+//***********************************************************
+// Pickled source file of placeholder RecFNToFN__expWidth_8__sigWidth_24
+//***********************************************************
+
+//-----------------------------------------------------------
+// Dependency of placeholder RecFNToFN
+// Wrapper of placeholder RecFNToFN__expWidth_8__sigWidth_24
+//-----------------------------------------------------------
+
+`ifndef RECFNTOFN__EXPWIDTH_8__SIGWIDTH_24
+`define RECFNTOFN__EXPWIDTH_8__SIGWIDTH_24
+
+module RecFNToFN__expWidth_8__sigWidth_24
+(
+  input logic reset,
+  input logic clk,
+  input logic [33-1:0] in_ ,
+  output logic [32-1:0] out 
+);
+  recFNToFN
+  #(
+    .expWidth( 8 ),
+    .sigWidth( 24 )
+  ) v
+  (
+    .in( in_ ),
+    .out( out )
+  );
+endmodule
+
+`endif /* RECFNTOFN__EXPWIDTH_8__SIGWIDTH_24 */
+
+
+
+// PyMTL Component MemEngine Definition
+// Full name: MemEngine__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, enable_debug_ports:False, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:4, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py
+
+module MemEngine__7bb22bb10af9a0d4
 (
   input  logic [0:0] clk ,
   input  logic [3:0] id_cord ,
@@ -3366,7 +2854,7 @@ module MemEngine__07e21c4d4fa663e6
   output logic [0:0] in___rdy  ,
   input logic [0:0] in___val  ,
   output logic [0:0] mem_ifc__req__en ,
-  output CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 mem_ifc__req__msg ,
+  output CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 mem_ifc__req__msg ,
   input logic [0:0] mem_ifc__req__rdy ,
   input logic [0:0] mem_ifc__resp__en ,
   input CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 mem_ifc__resp__msg ,
@@ -3375,6 +2863,42 @@ module MemEngine__07e21c4d4fa663e6
   input logic [0:0] out__rdy  ,
   output logic [0:0] out__val  
 );
+  localparam logic [0:0] __const__L0_READ_IDLE  = 1'd0;
+  localparam logic [1:0] __const__L0_READ_SEND_HWORD0  = 2'd2;
+  localparam logic [0:0] __const__L0_READ_SEND_WORD  = 1'd1;
+  localparam logic [1:0] __const__L0_READ_SEND_HWORD1  = 2'd3;
+  logic [13:0] cfg_addr;
+  logic [1:0] cfg_cmd;
+  logic [13:0] cfg_count;
+  logic [13:0] cfg_incr_addr;
+  logic [31:0] cfg_value;
+  logic [0:0] cfg_wen;
+  MEConfigMsg_8x8__a7d34585dbb74c46 cfg_with_fields;
+  MEConfigMsg_8x8__a7d34585dbb74c46 cfg_with_fields_r;
+  logic [3:0] cfg_x_cord;
+  logic [0:0] count_zero;
+  logic [0:0] is_cfg_incr_16;
+  logic [0:0] is_cfg_incr_16_r;
+  logic [0:0] is_cfg_target_self;
+  logic [0:0] is_cfg_write;
+  logic [0:0] is_l0_read_done;
+  logic [0:0] is_loading_bf16;
+  logic [0:0] is_out_credit_zero;
+  logic [0:0] is_reload_cmd;
+  logic [13:0] l0_addr_r;
+  logic [31:0] l0_data_r;
+  logic [31:0] l0_half_word;
+  logic [1:0] l0_read_fsm;
+  logic [0:0] mem_req_sent;
+  logic [0:0] mem_resp_recved;
+  logic [0:0] no_pending_responses;
+  logic [2:0] out_credit;
+  logic [13:0] pending_response;
+  logic [0:0] resp_go_from_l0;
+  logic [0:0] sel_FN2RecFN;
+  logic [0:0] sel_RecFN2FN;
+  logic [0:0] self_cfg_deq;
+  logic [0:0] tokens_per_line;
   //-------------------------------------------------------------
   // Component cfg_q
   //-------------------------------------------------------------
@@ -3401,109 +2925,24 @@ module MemEngine__07e21c4d4fa663e6
   //-------------------------------------------------------------
 
   //-------------------------------------------------------------
-  // Component ctrl
+  // Component fn_to_recfn
   //-------------------------------------------------------------
 
-  logic [0:0] ctrl__cfg_deq_val;
-  logic [0:0] ctrl__cfg_out_val;
-  logic [0:0] ctrl__clk;
-  logic [0:0] ctrl__count_zero;
-  logic [0:0] ctrl__deq_rdy;
-  logic [0:0] ctrl__deq_val;
-  logic [0:0] ctrl__is_calc;
-  logic [0:0] ctrl__is_cfg_target_self;
-  logic [0:0] ctrl__is_cfg_write;
-  logic [0:0] ctrl__is_done;
-  logic [0:0] ctrl__is_out_credit_zero;
-  logic [0:0] ctrl__mem_deq_en;
-  logic [0:0] ctrl__mem_deq_rdy;
-  logic [0:0] ctrl__mem_req_en;
-  logic [0:0] ctrl__mem_req_rdy;
-  logic [0:0] ctrl__no_pending_responses;
-  logic [0:0] ctrl__out_rdy;
-  logic [0:0] ctrl__out_val;
-  logic [0:0] ctrl__req_sent;
-  logic [0:0] ctrl__reset;
-  logic [0:0] ctrl__resp_recved;
-  logic [0:0] ctrl__self_cfg_deq;
+  logic [0:0] fn_to_recfn__clk;
+  logic [31:0] fn_to_recfn__in_;
+  logic [32:0] fn_to_recfn__out;
+  logic [0:0] fn_to_recfn__reset;
 
-  MemEngineCtrl__07e21c4d4fa663e6 ctrl
+  FNToRecFN__expWidth_8__sigWidth_24 fn_to_recfn
   (
-    .cfg_deq_val( ctrl__cfg_deq_val ),
-    .cfg_out_val( ctrl__cfg_out_val ),
-    .clk( ctrl__clk ),
-    .count_zero( ctrl__count_zero ),
-    .deq_rdy( ctrl__deq_rdy ),
-    .deq_val( ctrl__deq_val ),
-    .is_calc( ctrl__is_calc ),
-    .is_cfg_target_self( ctrl__is_cfg_target_self ),
-    .is_cfg_write( ctrl__is_cfg_write ),
-    .is_done( ctrl__is_done ),
-    .is_out_credit_zero( ctrl__is_out_credit_zero ),
-    .mem_deq_en( ctrl__mem_deq_en ),
-    .mem_deq_rdy( ctrl__mem_deq_rdy ),
-    .mem_req_en( ctrl__mem_req_en ),
-    .mem_req_rdy( ctrl__mem_req_rdy ),
-    .no_pending_responses( ctrl__no_pending_responses ),
-    .out_rdy( ctrl__out_rdy ),
-    .out_val( ctrl__out_val ),
-    .req_sent( ctrl__req_sent ),
-    .reset( ctrl__reset ),
-    .resp_recved( ctrl__resp_recved ),
-    .self_cfg_deq( ctrl__self_cfg_deq )
+    .clk( fn_to_recfn__clk ),
+    .in_( fn_to_recfn__in_ ),
+    .out( fn_to_recfn__out ),
+    .reset( fn_to_recfn__reset )
   );
 
   //-------------------------------------------------------------
-  // End of component ctrl
-  //-------------------------------------------------------------
-
-  //-------------------------------------------------------------
-  // Component dpath
-  //-------------------------------------------------------------
-
-  logic [37:0] dpath__cfg_deq_msg;
-  logic [37:0] dpath__cfg_out_msg;
-  logic [0:0] dpath__clk;
-  logic [0:0] dpath__count_zero;
-  logic [32:0] dpath__deq_msg;
-  logic [3:0] dpath__id_cord;
-  logic [0:0] dpath__is_cfg_target_self;
-  logic [0:0] dpath__is_cfg_write;
-  logic [0:0] dpath__is_out_credit_zero;
-  CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 dpath__mem_deq_ret;
-  CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 dpath__mem_req_msg;
-  logic [0:0] dpath__no_pending_responses;
-  logic [32:0] dpath__out_msg;
-  logic [0:0] dpath__req_sent;
-  logic [0:0] dpath__reset;
-  logic [0:0] dpath__resp_recved;
-  logic [0:0] dpath__self_cfg_deq;
-  logic [3:0] dpath__x_cord;
-
-  MemEngineDpath__07e21c4d4fa663e6 dpath
-  (
-    .cfg_deq_msg( dpath__cfg_deq_msg ),
-    .cfg_out_msg( dpath__cfg_out_msg ),
-    .clk( dpath__clk ),
-    .count_zero( dpath__count_zero ),
-    .deq_msg( dpath__deq_msg ),
-    .id_cord( dpath__id_cord ),
-    .is_cfg_target_self( dpath__is_cfg_target_self ),
-    .is_cfg_write( dpath__is_cfg_write ),
-    .is_out_credit_zero( dpath__is_out_credit_zero ),
-    .mem_deq_ret( dpath__mem_deq_ret ),
-    .mem_req_msg( dpath__mem_req_msg ),
-    .no_pending_responses( dpath__no_pending_responses ),
-    .out_msg( dpath__out_msg ),
-    .req_sent( dpath__req_sent ),
-    .reset( dpath__reset ),
-    .resp_recved( dpath__resp_recved ),
-    .self_cfg_deq( dpath__self_cfg_deq ),
-    .x_cord( dpath__x_cord )
-  );
-
-  //-------------------------------------------------------------
-  // End of component dpath
+  // End of component fn_to_recfn
   //-------------------------------------------------------------
 
   //-------------------------------------------------------------
@@ -3566,16 +3005,442 @@ module MemEngine__07e21c4d4fa663e6
   // End of component mem_q
   //-------------------------------------------------------------
 
+  //-------------------------------------------------------------
+  // Component recfn_to_fn
+  //-------------------------------------------------------------
+
+  logic [0:0] recfn_to_fn__clk;
+  logic [32:0] recfn_to_fn__in_;
+  logic [31:0] recfn_to_fn__out;
+  logic [0:0] recfn_to_fn__reset;
+
+  RecFNToFN__expWidth_8__sigWidth_24 recfn_to_fn
+  (
+    .clk( recfn_to_fn__clk ),
+    .in_( recfn_to_fn__in_ ),
+    .out( recfn_to_fn__out ),
+    .reset( recfn_to_fn__reset )
+  );
+
+  //-------------------------------------------------------------
+  // End of component recfn_to_fn
+  //-------------------------------------------------------------
+
+  // PyMTL Lambda Block Source
+  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:287
+  // s.fn_to_recfn.in_ //= lambda: s.l0_half_word if s.is_loading_bf16 else s.l0_data_r
+  
+  always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_ME_0__fn_to_recfn_in_
+    fn_to_recfn__in_ = is_loading_bf16 ? l0_half_word : l0_data_r;
+  end
+
+  // PyMTL Lambda Block Source
+  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:129
+  // s.is_cfg_incr_16 //= lambda: s.cfg_with_fields.incr_addr == 2
+  
+  always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_ME_0__is_cfg_incr_16
+    is_cfg_incr_16 = cfg_with_fields.incr_addr == 8'd2;
+  end
+
+  // PyMTL Lambda Block Source
+  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:131
+  // s.is_cfg_incr_16_r //= lambda: s.cfg_with_fields_r.incr_addr == 2
+  
+  always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_ME_0__is_cfg_incr_16_r
+    is_cfg_incr_16_r = cfg_with_fields_r.incr_addr == 8'd2;
+  end
+
+  // PyMTL Lambda Block Source
+  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:121
+  // s.is_loading_bf16 //= lambda: ~s.is_cfg_write & s.cfg_with_fields_r.is_fp & s.cfg_with_fields_r.is_bf16
+  
+  always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_ME_0__is_loading_bf16
+    is_loading_bf16 = ( ( ~is_cfg_write ) & cfg_with_fields_r.is_fp ) & cfg_with_fields_r.is_bf16;
+  end
+
+  // PyMTL Lambda Block Source
+  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:284
+  // s.sel_FN2RecFN //= lambda: s.cfg_with_fields_r.is_fp & (~s.cfg_with_fields_r.wen)
+  
+  always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_ME_0__sel_FN2RecFN
+    sel_FN2RecFN = cfg_with_fields_r.is_fp & ( ~cfg_with_fields_r.wen );
+  end
+
+  // PyMTL Lambda Block Source
+  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:283
+  // s.sel_RecFN2FN //= lambda: s.cfg_with_fields_r.is_fp & s.cfg_with_fields_r.wen
+  
+  always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_ME_0__sel_RecFN2FN
+    sel_RecFN2FN = cfg_with_fields_r.is_fp & cfg_with_fields_r.wen;
+  end
+
+  // PyMTL Update Block Source
+  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:304
+  // @update
+  // def up_ME_ctrl():
+  //   # Helper signals
+  //   s.is_cfg_target_self   @= s.cfg_x_cord == s.x_cord
+  //   s.count_zero           @= s.cfg_count == 0
+  //   s.no_pending_responses @= s.pending_response == 0
+  //   s.is_cfg_write         @= s.cfg_wen
+  //   s.is_reload_cmd        @= (s.cfg_cmd == CfgCmd.RF_LOAD_FP) | (s.cfg_cmd == CfgCmd.RF_LOAD_INT)
+  //   s.is_out_credit_zero   @= s.out_credit == 0
+  //   s.self_cfg_deq         @= s.is_cfg_target_self & s.cfg_q.deq.val
+  //   s.is_done              @= s.is_calc & s.no_pending_responses
+  // 
+  //   s.out.val @= ~s.is_cfg_write & (s.l0_read_fsm != L0_READ_IDLE)
+  //   s.is_l0_read_done @= (((s.l0_read_fsm == L0_READ_SEND_WORD) | \
+  //                         (s.l0_read_fsm == L0_READ_SEND_HWORD1) | \
+  //                         ((s.l0_read_fsm == L0_READ_SEND_HWORD0) & (s.tokens_per_line == 1))) \
+  //                        & s.out.val & s.out.rdy ) \
+  //                        | (s.l0_read_fsm == L0_READ_IDLE)
+  // 
+  //   # Handshakes
+  //   s.mem_ifc.req.en @= ( (s.is_cfg_write & s.in_q.deq.val) \
+  //                     | (~s.is_cfg_write) ) \
+  //                     & ~s.count_zero & ~s.is_out_credit_zero \
+  //                     & s.mem_ifc.req.rdy & s.is_calc
+  //   s.mem_q.deq.en @= s.is_l0_read_done & s.mem_q.deq.rdy
+  //   s.in_q.deq.rdy @= s.is_cfg_write & s.mem_ifc.req.rdy & ~s.is_out_credit_zero & s.is_calc
+  //   s.cfg_out.val  @= ~s.is_cfg_target_self & s.cfg_q.deq.val
+  // 
+  //   # Helper signals derived from handshakes
+  //   s.mem_req_sent    @= s.mem_ifc.req.en
+  //   s.mem_resp_recved @= s.mem_q.deq.en
+  
+  always_comb begin : up_ME_ctrl
+    is_cfg_target_self = cfg_x_cord == x_cord;
+    count_zero = cfg_count == 14'd0;
+    no_pending_responses = pending_response == 14'd0;
+    is_cfg_write = cfg_wen;
+    is_reload_cmd = ( cfg_cmd == 2'd2 ) | ( cfg_cmd == 2'd1 );
+    is_out_credit_zero = out_credit == 3'd0;
+    self_cfg_deq = is_cfg_target_self & cfg_q__deq__val;
+    is_done = is_calc & no_pending_responses;
+    out__val = ( ~is_cfg_write ) & ( l0_read_fsm != 2'( __const__L0_READ_IDLE ) );
+    is_l0_read_done = ( ( ( ( ( l0_read_fsm == 2'( __const__L0_READ_SEND_WORD ) ) | ( l0_read_fsm == 2'( __const__L0_READ_SEND_HWORD1 ) ) ) | ( ( l0_read_fsm == 2'( __const__L0_READ_SEND_HWORD0 ) ) & ( tokens_per_line == 1'd1 ) ) ) & out__val ) & out__rdy ) | ( l0_read_fsm == 2'( __const__L0_READ_IDLE ) );
+    mem_ifc__req__en = ( ( ( ( ( is_cfg_write & in_q__deq__val ) | ( ~is_cfg_write ) ) & ( ~count_zero ) ) & ( ~is_out_credit_zero ) ) & mem_ifc__req__rdy ) & is_calc;
+    mem_q__deq__en = is_l0_read_done & mem_q__deq__rdy;
+    in_q__deq__rdy = ( ( is_cfg_write & mem_ifc__req__rdy ) & ( ~is_out_credit_zero ) ) & is_calc;
+    cfg_out__val = ( ~is_cfg_target_self ) & cfg_q__deq__val;
+    mem_req_sent = mem_ifc__req__en;
+    mem_resp_recved = mem_q__deq__en;
+  end
+
+  // PyMTL Update Block Source
+  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:340
+  // @update
+  // def up_ME_datapath():
+  //   s.mem_ifc.req.msg.wen    @= s.cfg_wen
+  //   s.mem_ifc.req.msg.addr   @= s.cfg_addr
+  //   # s.mem_ifc.req.msg.data   @= s.recfn_to_fn.out >> 16 if s.sel_RecFN2FN else s.in_q.deq.msg[0:p.data_width]
+  //   # s.mem_ifc.req.msg.len    @= 2 if s.is_cfg_write & s.cfg_with_fields_r.is_fp else 0
+  //   s.mem_ifc.req.msg.data   @= s.recfn_to_fn.out if s.sel_RecFN2FN else s.in_q.deq.msg[0:p.data_width]
+  //   s.mem_ifc.req.msg.len    @= 0
+  //   s.mem_ifc.req.msg.opaque @= zext( s.id_cord, p.opaque_width )
+  // 
+  //   s.out.msg @= sext( s.l0_data_r, p.dpath_width )
+  //   if s.sel_FN2RecFN:
+  //     s.out.msg @= s.fn_to_recfn.out
+  // 
+  //   s.cfg_out.msg @= s.cfg_q.deq.msg
+  
+  always_comb begin : up_ME_datapath
+    mem_ifc__req__msg.wen = cfg_wen;
+    mem_ifc__req__msg.addr = cfg_addr;
+    mem_ifc__req__msg.data = sel_RecFN2FN ? recfn_to_fn__out : in_q__deq__msg[6'd31:6'd0];
+    mem_ifc__req__msg.len = 2'd0;
+    mem_ifc__req__msg.opaque = { { 3 { 1'b0 } }, id_cord };
+    out__msg = { { 1 { l0_data_r[31] } }, l0_data_r };
+    if ( sel_FN2RecFN ) begin
+      out__msg = fn_to_recfn__out;
+    end
+    cfg_out__msg = cfg_q__deq__msg;
+  end
+
+  // PyMTL Update Block Source
+  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:263
+  // @update
+  // def up_l0_half_word():
+  //   s.l0_half_word @= 0
+  //   if s.l0_read_fsm == L0_READ_SEND_HWORD0:
+  //     s.l0_half_word @= concat( s.l0_data_r[0:16], b16(0) )
+  //   if s.l0_read_fsm == L0_READ_SEND_HWORD1:
+  //     s.l0_half_word @= concat( s.l0_data_r[16:32], b16(0) )
+  
+  always_comb begin : up_l0_half_word
+    l0_half_word = 32'd0;
+    if ( l0_read_fsm == 2'( __const__L0_READ_SEND_HWORD0 ) ) begin
+      l0_half_word = { l0_data_r[5'd15:5'd0], 16'd0 };
+    end
+    if ( l0_read_fsm == 2'( __const__L0_READ_SEND_HWORD1 ) ) begin
+      l0_half_word = { l0_data_r[5'd31:5'd16], 16'd0 };
+    end
+  end
+
+  // PyMTL Update Block Source
+  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:133
+  // @update_ff
+  // def up_configs_regs():
+  //   if s.reset:
+  //     s.cfg_wen           <<= 0
+  //     s.cfg_incr_addr     <<= 0
+  //     s.cfg_addr          <<= 0
+  //     s.cfg_count         <<= 0
+  //     s.pending_response  <<= 0
+  //     s.cfg_with_fields_r <<= p.me_cfg_type()
+  //     s.tokens_per_line   <<= 1
+  //   else:
+  //     if s.self_cfg_deq:
+  //       if ~s.is_reload_cmd:
+  //         s.cfg_wen           <<= s.cfg_with_fields.wen
+  //         s.cfg_incr_addr     <<= zext( 4 if s.is_cfg_incr_16 else s.cfg_with_fields.incr_addr, p.addr_width )
+  //         s.cfg_addr          <<= s.cfg_with_fields.base_addr
+  //         s.cfg_count         <<= zext( s.cfg_with_fields.count >> 1 if s.is_cfg_incr_16 else s.cfg_with_fields.count, p.addr_width )
+  //         s.pending_response  <<= zext( s.cfg_with_fields.count >> 1 if s.is_cfg_incr_16 else s.cfg_with_fields.count, p.addr_width )
+  //         s.cfg_with_fields_r <<= s.cfg_with_fields
+  //         s.tokens_per_line   <<= 0 if s.is_cfg_incr_16 else 1
+  //       else:
+  //         s.cfg_wen          <<= s.cfg_with_fields_r.wen
+  //         s.cfg_incr_addr    <<= zext( 4 if s.is_cfg_incr_16_r else s.cfg_with_fields_r.incr_addr, p.addr_width )
+  //         s.cfg_addr         <<= s.cfg_value[0:p.addr_width]
+  //         s.cfg_count        <<= zext( s.cfg_with_fields_r.count >> 1 if s.is_cfg_incr_16_r else s.cfg_with_fields_r.count, p.addr_width )
+  //         s.pending_response <<= zext( s.cfg_with_fields_r.count >> 1 if s.is_cfg_incr_16_r else s.cfg_with_fields_r.count, p.addr_width )
+  //         s.tokens_per_line  <<= 0 if s.is_cfg_incr_16_r else 1
+  //     else:
+  //       if s.mem_req_sent | s.resp_go_from_l0:
+  //         s.cfg_addr <<= s.cfg_addr + s.cfg_incr_addr
+  //         s.cfg_count <<= s.cfg_count - 1
+  //       if s.mem_resp_recved | s.resp_go_from_l0:
+  //         s.pending_response <<= s.pending_response - 1
+  
+  always_ff @(posedge clk) begin : up_configs_regs
+    if ( reset ) begin
+      cfg_wen <= 1'd0;
+      cfg_incr_addr <= 14'd0;
+      cfg_addr <= 14'd0;
+      cfg_count <= 14'd0;
+      pending_response <= 14'd0;
+      cfg_with_fields_r <= { 1'd0, 14'd0, 8'd0, 1'd0, 1'd0, 7'd0 };
+      tokens_per_line <= 1'd1;
+    end
+    else if ( self_cfg_deq ) begin
+      if ( ~is_reload_cmd ) begin
+        cfg_wen <= cfg_with_fields.wen;
+        cfg_incr_addr <= { { 6 { 1'b0 } }, is_cfg_incr_16 ? 8'd4 : cfg_with_fields.incr_addr };
+        cfg_addr <= cfg_with_fields.base_addr;
+        cfg_count <= { { 7 { 1'b0 } }, is_cfg_incr_16 ? cfg_with_fields.count >> 1'd1 : cfg_with_fields.count };
+        pending_response <= { { 7 { 1'b0 } }, is_cfg_incr_16 ? cfg_with_fields.count >> 1'd1 : cfg_with_fields.count };
+        cfg_with_fields_r <= cfg_with_fields;
+        tokens_per_line <= is_cfg_incr_16 ? 1'd0 : 1'd1;
+      end
+      else begin
+        cfg_wen <= cfg_with_fields_r.wen;
+        cfg_incr_addr <= { { 6 { 1'b0 } }, is_cfg_incr_16_r ? 8'd4 : cfg_with_fields_r.incr_addr };
+        cfg_addr <= cfg_value[5'd13:5'd0];
+        cfg_count <= { { 7 { 1'b0 } }, is_cfg_incr_16_r ? cfg_with_fields_r.count >> 1'd1 : cfg_with_fields_r.count };
+        pending_response <= { { 7 { 1'b0 } }, is_cfg_incr_16_r ? cfg_with_fields_r.count >> 1'd1 : cfg_with_fields_r.count };
+        tokens_per_line <= is_cfg_incr_16_r ? 1'd0 : 1'd1;
+      end
+    end
+    else begin
+      if ( mem_req_sent | resp_go_from_l0 ) begin
+        cfg_addr <= cfg_addr + cfg_incr_addr;
+        cfg_count <= cfg_count - 14'd1;
+      end
+      if ( mem_resp_recved | resp_go_from_l0 ) begin
+        pending_response <= pending_response - 14'd1;
+      end
+    end
+  end
+
+  // PyMTL Update Block Source
+  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:209
+  // @update_ff
+  // def up_l0_read_fsm():
+  //   if s.reset:
+  //     s.l0_read_fsm <<= L0_READ_IDLE
+  //   else:
+  //     if s.l0_read_fsm == L0_READ_IDLE:
+  //       if s.mem_q.deq.en & ~s.is_cfg_write:
+  //         if s.tokens_per_line == 0:
+  //           s.l0_read_fsm <<= L0_READ_SEND_HWORD0
+  //         if s.tokens_per_line == 1:
+  //           if ~s.is_loading_bf16:
+  //             s.l0_read_fsm <<= L0_READ_SEND_WORD
+  //           else:
+  //             # Do we want the upper or lower half of the word?
+  //             if ~s.mem_q.deq.ret.addr[1]:
+  //               # lower
+  //               s.l0_read_fsm <<= L0_READ_SEND_HWORD0
+  //             if s.mem_q.deq.ret.addr[1]:
+  //               # upper
+  //               s.l0_read_fsm <<= L0_READ_SEND_HWORD1
+  //     if s.l0_read_fsm == L0_READ_SEND_WORD:
+  //       if s.out.val & s.out.rdy:
+  //         if s.mem_q.deq.en:
+  //           # Eliminate bubble
+  //           s.l0_read_fsm <<= L0_READ_SEND_WORD
+  //         else:
+  //           s.l0_read_fsm <<= L0_READ_IDLE
+  //     if s.l0_read_fsm == L0_READ_SEND_HWORD0:
+  //       if s.out.val & s.out.rdy:
+  //         if s.tokens_per_line == 1:
+  //           if s.mem_q.deq.en:
+  //             # Eliminate bubble
+  //             s.l0_read_fsm <<= L0_READ_SEND_HWORD0
+  //           else:
+  //             s.l0_read_fsm <<= L0_READ_IDLE
+  //         else:
+  //           s.l0_read_fsm <<= L0_READ_SEND_HWORD1
+  //     if s.l0_read_fsm == L0_READ_SEND_HWORD1:
+  //       if s.out.val & s.out.rdy:
+  //         if s.mem_q.deq.en:
+  //           # Eliminate bubble
+  //           if s.tokens_per_line == 0:
+  //             s.l0_read_fsm <<= L0_READ_SEND_HWORD0
+  //           else:
+  //             # Do we want the upper or lower half of the word?
+  //             if ~s.mem_q.deq.ret.addr[1]:
+  //               # lower
+  //               s.l0_read_fsm <<= L0_READ_SEND_HWORD0
+  //             if s.mem_q.deq.ret.addr[1]:
+  //               # upper
+  //               s.l0_read_fsm <<= L0_READ_SEND_HWORD1
+  //         else:
+  //           s.l0_read_fsm <<= L0_READ_IDLE
+  
+  always_ff @(posedge clk) begin : up_l0_read_fsm
+    if ( reset ) begin
+      l0_read_fsm <= 2'( __const__L0_READ_IDLE );
+    end
+    else begin
+      if ( l0_read_fsm == 2'( __const__L0_READ_IDLE ) ) begin
+        if ( mem_q__deq__en & ( ~is_cfg_write ) ) begin
+          if ( tokens_per_line == 1'd0 ) begin
+            l0_read_fsm <= 2'( __const__L0_READ_SEND_HWORD0 );
+          end
+          if ( tokens_per_line == 1'd1 ) begin
+            if ( ~is_loading_bf16 ) begin
+              l0_read_fsm <= 2'( __const__L0_READ_SEND_WORD );
+            end
+            else begin
+              if ( ~mem_q__deq__ret.addr[4'd1] ) begin
+                l0_read_fsm <= 2'( __const__L0_READ_SEND_HWORD0 );
+              end
+              if ( mem_q__deq__ret.addr[4'd1] ) begin
+                l0_read_fsm <= 2'( __const__L0_READ_SEND_HWORD1 );
+              end
+            end
+          end
+        end
+      end
+      if ( l0_read_fsm == 2'( __const__L0_READ_SEND_WORD ) ) begin
+        if ( out__val & out__rdy ) begin
+          if ( mem_q__deq__en ) begin
+            l0_read_fsm <= 2'( __const__L0_READ_SEND_WORD );
+          end
+          else
+            l0_read_fsm <= 2'( __const__L0_READ_IDLE );
+        end
+      end
+      if ( l0_read_fsm == 2'( __const__L0_READ_SEND_HWORD0 ) ) begin
+        if ( out__val & out__rdy ) begin
+          if ( tokens_per_line == 1'd1 ) begin
+            if ( mem_q__deq__en ) begin
+              l0_read_fsm <= 2'( __const__L0_READ_SEND_HWORD0 );
+            end
+            else
+              l0_read_fsm <= 2'( __const__L0_READ_IDLE );
+          end
+          else
+            l0_read_fsm <= 2'( __const__L0_READ_SEND_HWORD1 );
+        end
+      end
+      if ( l0_read_fsm == 2'( __const__L0_READ_SEND_HWORD1 ) ) begin
+        if ( out__val & out__rdy ) begin
+          if ( mem_q__deq__en ) begin
+            if ( tokens_per_line == 1'd0 ) begin
+              l0_read_fsm <= 2'( __const__L0_READ_SEND_HWORD0 );
+            end
+            else begin
+              if ( ~mem_q__deq__ret.addr[4'd1] ) begin
+                l0_read_fsm <= 2'( __const__L0_READ_SEND_HWORD0 );
+              end
+              if ( mem_q__deq__ret.addr[4'd1] ) begin
+                l0_read_fsm <= 2'( __const__L0_READ_SEND_HWORD1 );
+              end
+            end
+          end
+          else
+            l0_read_fsm <= 2'( __const__L0_READ_IDLE );
+        end
+      end
+    end
+  end
+
+  // PyMTL Update Block Source
+  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:196
+  // @update_ff
+  // def up_l0_regs():
+  //   if s.reset:
+  //     s.l0_addr_r <<= 0
+  //     s.l0_data_r <<= 0
+  //   else:
+  //     if s.self_cfg_deq:
+  //       s.l0_addr_r <<= 0
+  //       s.l0_data_r <<= 0
+  //     elif s.mem_q.deq.en & ~s.is_cfg_write:
+  //       s.l0_addr_r <<= s.mem_q.deq.ret.addr
+  //       s.l0_data_r <<= s.mem_q.deq.ret.data
+  
+  always_ff @(posedge clk) begin : up_l0_regs
+    if ( reset ) begin
+      l0_addr_r <= 14'd0;
+      l0_data_r <= 32'd0;
+    end
+    else if ( self_cfg_deq ) begin
+      l0_addr_r <= 14'd0;
+      l0_data_r <= 32'd0;
+    end
+    else if ( mem_q__deq__en & ( ~is_cfg_write ) ) begin
+      l0_addr_r <= mem_q__deq__ret.addr;
+      l0_data_r <= mem_q__deq__ret.data;
+    end
+  end
+
+  // PyMTL Update Block Source
+  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:173
+  // @update_ff
+  // def up_out_credit_reg():
+  //   if s.reset:
+  //     s.out_credit <<= p.me_buffer_size
+  //   else:
+  //     if s.mem_req_sent & ~s.mem_resp_recved:
+  //       s.out_credit <<= s.out_credit-1
+  //     if ~s.mem_req_sent & s.mem_resp_recved:
+  //       s.out_credit <<= s.out_credit+1
+  
+  always_ff @(posedge clk) begin : up_out_credit_reg
+    if ( reset ) begin
+      out_credit <= 3'd4;
+    end
+    else begin
+      if ( mem_req_sent & ( ~mem_resp_recved ) ) begin
+        out_credit <= out_credit - 3'd1;
+      end
+      if ( ( ~mem_req_sent ) & mem_resp_recved ) begin
+        out_credit <= out_credit + 3'd1;
+      end
+    end
+  end
+
   assign cfg_q__clk = clk;
   assign cfg_q__reset = reset;
   assign in_q__clk = clk;
   assign in_q__reset = reset;
   assign mem_q__clk = clk;
   assign mem_q__reset = reset;
-  assign ctrl__clk = clk;
-  assign ctrl__reset = reset;
-  assign dpath__clk = clk;
-  assign dpath__reset = reset;
   assign cfg_q__enq__msg = cfg_in__msg;
   assign cfg_q__enq__val = cfg_in__val;
   assign in_q__enq__msg = in___msg;
@@ -3584,43 +3449,29 @@ module MemEngine__07e21c4d4fa663e6
   assign mem_q__enq__en = mem_ifc__resp__en;
   assign mem_q__enq__msg = mem_ifc__resp__msg;
   assign mem_ifc__resp__rdy = mem_q__enq__rdy;
-  assign mem_ifc__req__en = ctrl__mem_req_en;
-  assign ctrl__mem_req_rdy = mem_ifc__req__rdy;
-  assign mem_ifc__req__msg = dpath__mem_req_msg;
-  assign mem_q__deq__en = ctrl__mem_deq_en;
-  assign ctrl__mem_deq_rdy = mem_q__deq__rdy;
-  assign dpath__mem_deq_ret = mem_q__deq__ret;
-  assign ctrl__deq_val = in_q__deq__val;
-  assign in_q__deq__rdy = ctrl__deq_rdy;
-  assign dpath__deq_msg = in_q__deq__msg;
-  assign out__val = ctrl__out_val;
-  assign ctrl__out_rdy = out__rdy;
-  assign out__msg = dpath__out_msg;
-  assign ctrl__cfg_deq_val = cfg_q__deq__val;
-  assign dpath__cfg_deq_msg = cfg_q__deq__msg;
-  assign cfg_out__val = ctrl__cfg_out_val;
-  assign cfg_out__msg = dpath__cfg_out_msg;
-  assign is_done = ctrl__is_done;
-  assign ctrl__is_calc = is_calc;
-  assign dpath__id_cord = id_cord;
-  assign dpath__x_cord = x_cord;
-  assign ctrl__count_zero = dpath__count_zero;
-  assign ctrl__no_pending_responses = dpath__no_pending_responses;
-  assign ctrl__is_cfg_write = dpath__is_cfg_write;
-  assign ctrl__is_cfg_target_self = dpath__is_cfg_target_self;
-  assign dpath__self_cfg_deq = ctrl__self_cfg_deq;
-  assign dpath__req_sent = ctrl__req_sent;
-  assign dpath__resp_recved = ctrl__resp_recved;
-  assign ctrl__is_out_credit_zero = dpath__is_out_credit_zero;
+  assign cfg_with_fields.count = cfg_q__deq__msg[6:0];
+  assign cfg_with_fields.is_bf16 = cfg_q__deq__msg[7:7];
+  assign cfg_with_fields.is_fp = cfg_q__deq__msg[8:8];
+  assign cfg_with_fields.incr_addr = cfg_q__deq__msg[16:9];
+  assign cfg_with_fields.base_addr = cfg_q__deq__msg[30:17];
+  assign cfg_with_fields.wen = cfg_q__deq__msg[31:31];
+  assign cfg_value = cfg_q__deq__msg[31:0];
+  assign cfg_x_cord = cfg_q__deq__msg[37:34];
+  assign cfg_cmd = cfg_q__deq__msg[33:32];
+  assign fn_to_recfn__clk = clk;
+  assign fn_to_recfn__reset = reset;
+  assign recfn_to_fn__clk = clk;
+  assign recfn_to_fn__reset = reset;
+  assign recfn_to_fn__in_ = in_q__deq__msg;
 
 endmodule
 
 
 // PyMTL Component ProcElementCtrl Definition
-// Full name: ProcElementCtrl__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
-// At /work/global/pp482/cgra/src/cgra/ProcElementCtrl.py
+// Full name: ProcElementCtrl__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, enable_debug_ports:False, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:4, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// At /work/global/pp482/test/cgra-src/src/cgra/ProcElementCtrl.py
 
-module ProcElementCtrl__07e21c4d4fa663e6
+module ProcElementCtrl__7bb22bb10af9a0d4
 (
   input  logic [0:0] cfg_deq_val ,
   output logic [0:0] cfg_out_val ,
@@ -3637,7 +3488,7 @@ module ProcElementCtrl__07e21c4d4fa663e6
   logic [0:0] self_cfg_deq;
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/ProcElementCtrl.py:44
+  // At /work/global/pp482/test/cgra-src/src/cgra/ProcElementCtrl.py:44
   // s.cfg_out_val //= lambda: ~s.is_cfg_target_self & s.cfg_deq_val
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_PE_rc_0__ctrl_cfg_out_val
@@ -3645,7 +3496,7 @@ module ProcElementCtrl__07e21c4d4fa663e6
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/ProcElementCtrl.py:43
+  // At /work/global/pp482/test/cgra-src/src/cgra/ProcElementCtrl.py:43
   // s.cfg_r_en    //= lambda: s.self_cfg_deq & ~s.is_reload_cmd
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_PE_rc_0__ctrl_cfg_r_en
@@ -3653,7 +3504,7 @@ module ProcElementCtrl__07e21c4d4fa663e6
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/ProcElementCtrl.py:51
+  // At /work/global/pp482/test/cgra-src/src/cgra/ProcElementCtrl.py:51
   // s.rf_reload //= lambda: s.self_cfg_deq & s.is_reload_cmd
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_PE_rc_0__ctrl_rf_reload
@@ -3661,7 +3512,7 @@ module ProcElementCtrl__07e21c4d4fa663e6
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/ProcElementCtrl.py:50
+  // At /work/global/pp482/test/cgra-src/src/cgra/ProcElementCtrl.py:50
   // s.rf_wen //= lambda: s.rf_reload | ((s.rf_src == CFG.OUT_SRC_COMP) & s.fu_out_go & ~s.rf_reload)
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_PE_rc_0__ctrl_rf_wen
@@ -3669,7 +3520,7 @@ module ProcElementCtrl__07e21c4d4fa663e6
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/ProcElementCtrl.py:41
+  // At /work/global/pp482/test/cgra-src/src/cgra/ProcElementCtrl.py:41
   // s.self_cfg_deq //= lambda: s.is_cfg_target_self & s.cfg_deq_val
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_PE_rc_0__ctrl_self_cfg_deq
@@ -3681,7 +3532,7 @@ endmodule
 
 // PyMTL Component RegEnRst Definition
 // Full name: RegEnRst__Type_PEConfigMsg_8x8__69ed92dd9fa67f76__reset_value_0:00:0:0:0:0:0:0:0:0:0
-// At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/registers.py
+// At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/registers.py
 
 module RegEnRst__0fb4f3ed7b8ec906
 (
@@ -3694,7 +3545,7 @@ module RegEnRst__0fb4f3ed7b8ec906
   localparam PEConfigMsg_8x8__69ed92dd9fa67f76 __const__reset_value_at_up_regenrst  = { 1'd0, 6'd0, 3'd0, 3'd0, 3'd0, 3'd0, 3'd0, 3'd0, 2'd0, 3'd0, 2'd0 };
 
   // PyMTL Update Block Source
-  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/registers.py:55
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/registers.py:55
   // @update_ff
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
@@ -3713,7 +3564,7 @@ endmodule
 
 
 // PyMTL Component Alu Definition
-// At /work/global/pp482/cgra/src/cgra/Alu.py
+// At /work/global/pp482/test/cgra-src/src/cgra/Alu.py
 
 module Alu__Type_Bits33
 (
@@ -3754,7 +3605,7 @@ module Alu__Type_Bits33
   logic [32:0] xor_b_wire;
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/Alu.py:131
+  // At /work/global/pp482/test/cgra-src/src/cgra/Alu.py:131
   // @update
   // def comb_logic():
   //   # if   s.fn == AluOp.CP0 : s.out @= s.in0                         # COPY OP0
@@ -3841,7 +3692,7 @@ module Alu__Type_Bits33
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/Alu.py:72
+  // At /work/global/pp482/test/cgra-src/src/cgra/Alu.py:72
   // @update
   // def up_data_gating():
   //   s.cp0_wire   @= s.in0 if s.fn == AluOp.CP0 else 0
@@ -3937,7 +3788,7 @@ module Alu__Type_Bits33
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/Alu.py:123
+  // At /work/global/pp482/test/cgra-src/src/cgra/Alu.py:123
   // @update
   // def up_eq_gt_wire():
   //   s.a_eq_b @= s.eq_a_wire == s.eq_b_wire
@@ -3957,7 +3808,7 @@ endmodule
 
 // PyMTL Component ValRdyNormalQueuePow2CtrlRTL Definition
 // Full name: ValRdyNormalQueuePow2CtrlRTL__num_entries_2__enable_clear_True__enable_accept_False
-// At /work/global/pp482/cgra/src/fifos/ValRdyNormalQueuePow2RTL.py
+// At /work/global/pp482/test/cgra-src/src/fifos/ValRdyNormalQueuePow2RTL.py
 
 module ValRdyNormalQueuePow2CtrlRTL__650d7616a012fd9a
 (
@@ -3983,7 +3834,7 @@ module ValRdyNormalQueuePow2CtrlRTL__650d7616a012fd9a
   logic [1:0] w_ptr_with_wrapbit_n;
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/fifos/ValRdyNormalQueuePow2RTL.py:100
+  // At /work/global/pp482/test/cgra-src/src/fifos/ValRdyNormalQueuePow2RTL.py:100
   // @update
   // def upblk_empty():
   //   s.empty @= (s.w_ptr_with_wrapbit == s.r_ptr_with_wrapbit)
@@ -3993,7 +3844,7 @@ module ValRdyNormalQueuePow2CtrlRTL__650d7616a012fd9a
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/fifos/ValRdyNormalQueuePow2RTL.py:96
+  // At /work/global/pp482/test/cgra-src/src/fifos/ValRdyNormalQueuePow2RTL.py:96
   // @update
   // def upblk_full():
   //   s.full @= (s.w_ptr == s.r_ptr) & (s.w_ptr_with_wrapbit != s.r_ptr_with_wrapbit)
@@ -4003,7 +3854,7 @@ module ValRdyNormalQueuePow2CtrlRTL__650d7616a012fd9a
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/fifos/ValRdyNormalQueuePow2RTL.py:162
+  // At /work/global/pp482/test/cgra-src/src/fifos/ValRdyNormalQueuePow2RTL.py:162
   // @update
   // def upblk_output_no_accept():
   //   s.enq_rdy @= ~ s.full
@@ -4017,7 +3868,7 @@ module ValRdyNormalQueuePow2CtrlRTL__650d7616a012fd9a
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/fifos/ValRdyNormalQueuePow2RTL.py:131
+  // At /work/global/pp482/test/cgra-src/src/fifos/ValRdyNormalQueuePow2RTL.py:131
   // @update
   // def upblk_r_ptr_en_clear_next():
   //   s.r_ptr_with_wrapbit_n @= s.r_ptr_with_wrapbit
@@ -4037,7 +3888,7 @@ module ValRdyNormalQueuePow2CtrlRTL__650d7616a012fd9a
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/fifos/ValRdyNormalQueuePow2RTL.py:116
+  // At /work/global/pp482/test/cgra-src/src/fifos/ValRdyNormalQueuePow2RTL.py:116
   // @update
   // def upblk_w_ptr_en_clear_next():
   //   s.w_ptr_with_wrapbit_n @= s.w_ptr_with_wrapbit
@@ -4057,7 +3908,7 @@ module ValRdyNormalQueuePow2CtrlRTL__650d7616a012fd9a
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/fifos/ValRdyNormalQueuePow2RTL.py:124
+  // At /work/global/pp482/test/cgra-src/src/fifos/ValRdyNormalQueuePow2RTL.py:124
   // @update_ff
   // def upblk_r_ptr_en_clear():
   //   if s.reset:
@@ -4074,7 +3925,7 @@ module ValRdyNormalQueuePow2CtrlRTL__650d7616a012fd9a
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/fifos/ValRdyNormalQueuePow2RTL.py:109
+  // At /work/global/pp482/test/cgra-src/src/fifos/ValRdyNormalQueuePow2RTL.py:109
   // @update_ff
   // def upblk_w_ptr_en_clear():
   //   if s.reset:
@@ -4101,7 +3952,7 @@ endmodule
 
 // PyMTL Component RegisterFile Definition
 // Full name: RegisterFile__Type_CgraFUMsg_33__bca7feb9182334d7__nregs_2__rd_ports_1__wr_ports_1__const_zero_False
-// At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/register_files.py
+// At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/register_files.py
 
 module RegisterFile__a9c31e768e5c5fbe
 (
@@ -4118,7 +3969,7 @@ module RegisterFile__a9c31e768e5c5fbe
   CgraFUMsg_33__bca7feb9182334d7 regs [0:1];
 
   // PyMTL Update Block Source
-  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/register_files.py:20
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/register_files.py:20
   // @update
   // def up_rf_read():
   //   for i in range( rd_ports ):
@@ -4130,7 +3981,7 @@ module RegisterFile__a9c31e768e5c5fbe
   end
 
   // PyMTL Update Block Source
-  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/register_files.py:32
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/register_files.py:32
   // @update_ff
   // def up_rf_write():
   //   for i in range( wr_ports ):
@@ -4149,7 +4000,7 @@ endmodule
 
 // PyMTL Component ValRdyNormalQueuePow2DpathRTL Definition
 // Full name: ValRdyNormalQueuePow2DpathRTL__EntryType_CgraFUMsg_33__bca7feb9182334d7__num_entries_2
-// At /work/global/pp482/cgra/src/fifos/ValRdyNormalQueuePow2RTL.py
+// At /work/global/pp482/test/cgra-src/src/fifos/ValRdyNormalQueuePow2RTL.py
 
 module ValRdyNormalQueuePow2DpathRTL__b133560d3b930c66
 (
@@ -4201,7 +4052,7 @@ endmodule
 
 // PyMTL Component ValRdyNormalQueuePow2RTL Definition
 // Full name: ValRdyNormalQueuePow2RTL__EntryType_CgraFUMsg_33__bca7feb9182334d7__num_entries_2__enable_clear_True__enable_accept_False
-// At /work/global/pp482/cgra/src/fifos/ValRdyNormalQueuePow2RTL.py
+// At /work/global/pp482/test/cgra-src/src/fifos/ValRdyNormalQueuePow2RTL.py
 
 module ValRdyNormalQueuePow2RTL__0f4fbf26539de341
 (
@@ -4298,7 +4149,7 @@ endmodule
 
 
 // PyMTL VerilogPlaceholder MulAddRecFN Definition
-// At /work/global/pp482/cgra/src/bsg_hardfloat/HardFloat/MulAddRecFNRTL.py
+// At /work/global/pp482/test/cgra-src/src/bsg_hardfloat/HardFloat/MulAddRecFNRTL.py
 
 //***********************************************************
 // Pickled source file of placeholder MulAddRecFN__expWidth_8__sigWidth_24__imulEn_0
@@ -4351,7 +4202,7 @@ endmodule
 
 // PyMTL Component MulAddBFRecFN Definition
 // Full name: MulAddBFRecFN__expWidth_8__sigWidthBF_8__sigWidthFP_24__imulEn_0
-// At /work/global/pp482/cgra/src/bsg_hardfloat/HardFloat/MulAddBFRecFNRTL.py
+// At /work/global/pp482/test/cgra-src/src/bsg_hardfloat/HardFloat/MulAddBFRecFNRTL.py
 
 module MulAddBFRecFN__051aa469b6846160
 (
@@ -4406,7 +4257,7 @@ module MulAddBFRecFN__051aa469b6846160
   //-------------------------------------------------------------
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/bsg_hardfloat/HardFloat/MulAddBFRecFNRTL.py:46
+  // At /work/global/pp482/test/cgra-src/src/bsg_hardfloat/HardFloat/MulAddBFRecFNRTL.py:46
   // @update
   // def hf_fmadd_conv():
   //   s.a_fp32 @= concat( s.a, conv_pad_zeros )
@@ -4433,7 +4284,7 @@ endmodule
 
 
 // PyMTL Component RegEn Definition
-// At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/registers.py
+// At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/registers.py
 
 module RegEn__Type_CgraLLFUOutMsg_33__result_33__opd_b_33__opd_rf_33
 (
@@ -4445,7 +4296,7 @@ module RegEn__Type_CgraLLFUOutMsg_33__result_33__opd_b_33__opd_rf_33
 );
 
   // PyMTL Update Block Source
-  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/registers.py:25
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/registers.py:25
   // @update_ff
   // def up_regen():
   //   if s.en:
@@ -4462,7 +4313,7 @@ endmodule
 
 // PyMTL Component PipeQueue1RTL Definition
 // Full name: PipeQueue1RTL__Type_CgraLLFUOutMsg_33__result_33__opd_b_33__opd_rf_33
-// At /work/global/pp482/cgra/src/fifos/PipeQueue1RTL.py
+// At /work/global/pp482/test/cgra-src/src/fifos/PipeQueue1RTL.py
 
 module PipeQueue1RTL__0c116bc52e365ed0
 (
@@ -4501,7 +4352,7 @@ module PipeQueue1RTL__0c116bc52e365ed0
   //-------------------------------------------------------------
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/fifos/PipeQueue1RTL.py:38
+  // At /work/global/pp482/test/cgra-src/src/fifos/PipeQueue1RTL.py:38
   // @update
   // def up_pipeq_full():
   //   s.buffer.en @= s.enq.val & s.enq.rdy
@@ -4513,7 +4364,7 @@ module PipeQueue1RTL__0c116bc52e365ed0
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/fifos/PipeQueue1RTL.py:34
+  // At /work/global/pp482/test/cgra-src/src/fifos/PipeQueue1RTL.py:34
   // @update
   // def up_pipeq_set_enq_rdy():
   //   s.enq.rdy @= ~s.full | s.deq.rdy
@@ -4523,7 +4374,7 @@ module PipeQueue1RTL__0c116bc52e365ed0
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/fifos/PipeQueue1RTL.py:27
+  // At /work/global/pp482/test/cgra-src/src/fifos/PipeQueue1RTL.py:27
   // @update_ff
   // def up_full():
   //   if s.reset:
@@ -4549,8 +4400,8 @@ endmodule
 
 
 // PyMTL Component LLFU Definition
-// Full name: LLFU__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
-// At /work/global/pp482/cgra/src/cgra/LLFU.py
+// Full name: LLFU__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, enable_debug_ports:False, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:4, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// At /work/global/pp482/test/cgra-src/src/cgra/LLFU.py
 
 module LLFU
 (
@@ -4665,7 +4516,7 @@ module LLFU
   //-------------------------------------------------------------
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/LLFU.py:177
+  // At /work/global/pp482/test/cgra-src/src/cgra/LLFU.py:178
   // s.is_occupied //= lambda: reduce_or( s.in_flight )
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_PE_rc_0__dpath_fu_llfu_is_occupied
@@ -4673,7 +4524,7 @@ module LLFU
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/LLFU.py:83
+  // At /work/global/pp482/test/cgra-src/src/cgra/LLFU.py:83
   // @update
   // def llfu_input_gen():
   //   s.op_A @= s.in_.msg.opd_a
@@ -4787,7 +4638,7 @@ endmodule
 
 
 // PyMTL Component RecurInitUnit Definition
-// At /work/global/pp482/cgra/src/cgra/RecurInitUnit.py
+// At /work/global/pp482/test/cgra-src/src/cgra/RecurInitUnit.py
 
 module RecurInitUnit_noparam
 (
@@ -4802,7 +4653,7 @@ module RecurInitUnit_noparam
   logic [0:0] fired_n;
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/RecurInitUnit.py:47
+  // At /work/global/pp482/test/cgra-src/src/cgra/RecurInitUnit.py:47
   // s.out_val //= lambda: ~s.fired
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_PE_rc_0__dpath_fu_riu_out_val
@@ -4810,7 +4661,7 @@ module RecurInitUnit_noparam
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/RecurInitUnit.py:39
+  // At /work/global/pp482/test/cgra-src/src/cgra/RecurInitUnit.py:39
   // @update
   // def riu_fired_n():
   //   s.fired_n @= s.fired
@@ -4830,7 +4681,7 @@ module RecurInitUnit_noparam
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/RecurInitUnit.py:32
+  // At /work/global/pp482/test/cgra-src/src/cgra/RecurInitUnit.py:32
   // @update_ff
   // def riu_fired():
   //   if s.reset:
@@ -4850,10 +4701,10 @@ endmodule
 
 
 // PyMTL Component FunctUnit Definition
-// Full name: FunctUnit__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
-// At /work/global/pp482/cgra/src/cgra/FunctUnit.py
+// Full name: FunctUnit__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, enable_debug_ports:False, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:4, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// At /work/global/pp482/test/cgra-src/src/cgra/FunctUnit.py
 
-module FunctUnit__07e21c4d4fa663e6
+module FunctUnit__7bb22bb10af9a0d4
 (
   input  PEConfigMsg_8x8__69ed92dd9fa67f76 cfg ,
   input  logic [0:0] cfg_reset ,
@@ -4862,6 +4713,8 @@ module FunctUnit__07e21c4d4fa663e6
   output logic [0:0] is_occupied ,
   input  logic [32:0] phi_init_operand ,
   input  logic [0:0] reset ,
+  input  logic [0:0] sphi_en ,
+  input  logic [0:0] sphi_forward ,
   input CgraFUMsg_33__bca7feb9182334d7 in___msg  ,
   output logic [0:0] in___rdy  ,
   input logic [0:0] in___val  ,
@@ -4877,6 +4730,7 @@ module FunctUnit__07e21c4d4fa663e6
   logic [0:0] in_val;
   logic [0:0] is_llfu_op;
   logic [0:0] is_phi_init;
+  logic [0:0] is_sphi;
   logic [2:0] llfu_fn;
   //-------------------------------------------------------------
   // Component alu
@@ -4995,7 +4849,7 @@ module FunctUnit__07e21c4d4fa663e6
   //-------------------------------------------------------------
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/FunctUnit.py:302
+  // At /work/global/pp482/test/cgra-src/src/cgra/FunctUnit.py:312
   // s.is_occupied //= lambda: (s.in_val & s.in_rdy) | s.llfu.is_occupied
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_PE_rc_0__dpath_fu_is_occupied
@@ -5003,7 +4857,7 @@ module FunctUnit__07e21c4d4fa663e6
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/FunctUnit.py:99
+  // At /work/global/pp482/test/cgra-src/src/cgra/FunctUnit.py:105
   // @update
   // def fu_gen_alu_fn():
   //   if s.cfg.opcode == CFG.OP_B_TYPE:
@@ -5015,7 +4869,7 @@ module FunctUnit__07e21c4d4fa663e6
   //       s.alu_fn @= AluOp.NOP
   //       # if (s.cfg.func == CFG.MAC) | (s.cfg.func == CFG.MAD):
   //       #   s.alu_fn @= AluOp.ADD
-  //       if (s.cfg.func == CFG.PHI) & (~s.riu.out_val | ~s.is_phi_init):
+  //       if ((s.cfg.func == CFG.PHI) | ((s.cfg.func == CFG.SPHI) & s.sphi_forward)) & (~s.riu.out_val | ~s.is_phi_init):
   //         if ~s.in_msg.is_faking_opA & s.in_msg.is_faking_opB:
   //           s.alu_fn @= AluOp.CP0
   //         if s.in_msg.is_faking_opA & ~s.in_msg.is_faking_opB:
@@ -5029,7 +4883,7 @@ module FunctUnit__07e21c4d4fa663e6
       alu_fn = cfg.func[3'd3:3'd0];
       if ( cfg.func[3'd4] ) begin
         alu_fn = 4'd15;
-        if ( ( cfg.func == 6'd30 ) & ( ( ~riu__out_val ) | ( ~is_phi_init ) ) ) begin
+        if ( ( ( cfg.func == 6'd30 ) | ( ( cfg.func == 6'd29 ) & sphi_forward ) ) & ( ( ~riu__out_val ) | ( ~is_phi_init ) ) ) begin
           if ( ( ~in_msg.is_faking_opA ) & in_msg.is_faking_opB ) begin
             alu_fn = 4'd0;
           end
@@ -5042,7 +4896,7 @@ module FunctUnit__07e21c4d4fa663e6
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/FunctUnit.py:149
+  // At /work/global/pp482/test/cgra-src/src/cgra/FunctUnit.py:158
   // @update
   // def fu_gen_alu_inputs():
   //   s.alu_opd_a @= s.in_msg.opd_a if ~s.in_msg.is_faking_opA else 0
@@ -5054,7 +4908,7 @@ module FunctUnit__07e21c4d4fa663e6
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/FunctUnit.py:116
+  // At /work/global/pp482/test/cgra-src/src/cgra/FunctUnit.py:122
   // @update
   // def fu_gen_llfu_fn():
   //   s.llfu_fn @= LLFUOp.NOP
@@ -5071,6 +4925,9 @@ module FunctUnit__07e21c4d4fa663e6
   //       s.is_llfu_op @= 1
   //     if s.cfg.func == CFG.FMAD:
   //       s.llfu_fn @= LLFUOp.FMAD
+  //       s.is_llfu_op @= 1
+  //     if (s.cfg.func == CFG.SPHI) & ~s.sphi_forward:
+  //       s.llfu_fn @= LLFUOp.FADD
   //       s.is_llfu_op @= 1
   
   always_comb begin : fu_gen_llfu_fn
@@ -5093,11 +4950,15 @@ module FunctUnit__07e21c4d4fa663e6
         llfu_fn = 3'd3;
         is_llfu_op = 1'd1;
       end
+      if ( ( cfg.func == 6'd29 ) & ( ~sphi_forward ) ) begin
+        llfu_fn = 3'd0;
+        is_llfu_op = 1'd1;
+      end
     end
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/FunctUnit.py:165
+  // At /work/global/pp482/test/cgra-src/src/cgra/FunctUnit.py:174
   // @update
   // def fu_gen_llfu_inputs():
   //   s.llfu.fn @= s.llfu_fn
@@ -5113,7 +4974,8 @@ module FunctUnit__07e21c4d4fa663e6
   //   s.llfu.in_.msg.opd_rf @= s.in_msg.opd_rf
   // 
   //   s.llfu.in_.val @= s.in_val & s.is_llfu_op
-  //   s.llfu.out.rdy @= s.out.rdy if s.is_llfu_op else 0
+  //   s.llfu.out.rdy @= 1 if s.is_sphi else \
+  //                     s.out.rdy if s.is_llfu_op else 0
   
   always_comb begin : fu_gen_llfu_inputs
     llfu__fn = llfu_fn;
@@ -5121,11 +4983,11 @@ module FunctUnit__07e21c4d4fa663e6
     llfu__in___msg.opd_b = in_msg.opd_b;
     llfu__in___msg.opd_rf = in_msg.opd_rf;
     llfu__in___val = in_val & is_llfu_op;
-    llfu__out__rdy = is_llfu_op ? out__rdy : 1'd0;
+    llfu__out__rdy = is_sphi ? 1'd1 : is_llfu_op ? out__rdy : 1'd0;
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/FunctUnit.py:225
+  // At /work/global/pp482/test/cgra-src/src/cgra/FunctUnit.py:235
   // @update
   // def fu_gen_out_msg():
   //   s.out.msg.result @= s.alu.out
@@ -5163,7 +5025,7 @@ module FunctUnit__07e21c4d4fa663e6
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/FunctUnit.py:245
+  // At /work/global/pp482/test/cgra-src/src/cgra/FunctUnit.py:255
   // @update
   // def fu_gen_out_val():
   //   s.out.val @= 0
@@ -5171,7 +5033,7 @@ module FunctUnit__07e21c4d4fa663e6
   //     s.out.val @= s.in_val
   //     if s.cfg.opcode == CFG.OP_Q_TYPE:
   //       if s.is_llfu_op:
-  //         s.out.val @= s.llfu.out.val
+  //         s.out.val @= s.llfu.out.val if ~s.is_sphi else 0
   //       if s.is_phi_init & s.riu.out_val:
   //         s.out.val @= s.riu.out_val
   //       if s.cfg.func == CFG.NOP:
@@ -5183,7 +5045,7 @@ module FunctUnit__07e21c4d4fa663e6
       out__val = in_val;
       if ( cfg.opcode == 1'd0 ) begin
         if ( is_llfu_op ) begin
-          out__val = llfu__out__val;
+          out__val = ( ~is_sphi ) ? llfu__out__val : 1'd0;
         end
         if ( is_phi_init & riu__out_val ) begin
           out__val = riu__out_val;
@@ -5196,7 +5058,7 @@ module FunctUnit__07e21c4d4fa663e6
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/FunctUnit.py:208
+  // At /work/global/pp482/test/cgra-src/src/cgra/FunctUnit.py:218
   // @update
   // def fu_in_q_deq():
   //   s.in_rdy @= 0
@@ -5229,15 +5091,18 @@ module FunctUnit__07e21c4d4fa663e6
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/FunctUnit.py:93
+  // At /work/global/pp482/test/cgra-src/src/cgra/FunctUnit.py:97
   // @update
-  // def fu_is_phi_init():
-  //   s.is_phi_init @= (s.cfg.func == CFG.PHI) & \
+  // def fu_is_phi_ctrl():
+  //   s.is_phi_init @= ((s.cfg.func == CFG.PHI) | ((s.cfg.func == CFG.SPHI) & s.sphi_en)) & \
   //                    ((s.cfg.src_opd_a == CFG.SRC_SELF) | \
   //                     (s.cfg.src_opd_b == CFG.SRC_SELF))
+  //   s.is_sphi @= (s.cfg.opcode == CFG.OP_Q_TYPE) & \
+  //                (s.cfg.func == CFG.SPHI)
   
-  always_comb begin : fu_is_phi_init
-    is_phi_init = ( cfg.func == 6'd30 ) & ( ( cfg.src_opd_a == 3'd4 ) | ( cfg.src_opd_b == 3'd4 ) );
+  always_comb begin : fu_is_phi_ctrl
+    is_phi_init = ( ( cfg.func == 6'd30 ) | ( ( cfg.func == 6'd29 ) & sphi_en ) ) & ( ( cfg.src_opd_a == 3'd4 ) | ( cfg.src_opd_b == 3'd4 ) );
+    is_sphi = ( cfg.opcode == 1'd0 ) & ( cfg.func == 6'd29 );
   end
 
   assign in_q__clk = clk;
@@ -5266,7 +5131,7 @@ endmodule
 
 
 // PyMTL Component RegEnRst Definition
-// At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/registers.py
+// At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/registers.py
 
 module RegEnRst__Type_Bits33__reset_value_0
 (
@@ -5279,7 +5144,7 @@ module RegEnRst__Type_Bits33__reset_value_0
   localparam logic [0:0] __const__reset_value_at_up_regenrst  = 1'd0;
 
   // PyMTL Update Block Source
-  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/registers.py:55
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/registers.py:55
   // @update_ff
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
@@ -5297,29 +5162,34 @@ module RegEnRst__Type_Bits33__reset_value_0
 endmodule
 
 
-// PyMTL Component RegisterFile1R1W Definition
-// At /work/global/pp482/cgra/src/misc/RegisterFile1R1W.py
+// PyMTL Component RegisterFile2R1W Definition
+// At /work/global/pp482/test/cgra-src/src/misc/RegisterFile2R1W.py
 
-module RegisterFile1R1W__Type_Bits33__nregs_1
+module RegisterFile2R1W__Type_Bits33__nregs_4
 (
+  input  logic [0:0] clear ,
   input  logic [0:0] clk ,
-  input  logic [0:0] raddr ,
-  output logic [32:0] rdata ,
+  input  logic [1:0] raddr0 ,
+  input  logic [1:0] raddr1 ,
+  output logic [32:0] rdata0 ,
+  output logic [32:0] rdata1 ,
   input  logic [0:0] reset ,
-  input  logic [0:0] waddr ,
+  input  logic [1:0] waddr ,
   input  logic [32:0] wdata ,
   input  logic [0:0] wen 
 );
-  localparam logic [0:0] __const__nregs_at_up_rf_wen  = 1'd1;
+  localparam logic [2:0] __const__nregs_at_up_rf_wen  = 3'd4;
+  logic [0:0] bypass_write0;
+  logic [0:0] bypass_write1;
   //-------------------------------------------------------------
-  // Component regs[0:0]
+  // Component regs[0:3]
   //-------------------------------------------------------------
 
-  logic [0:0] regs__clk [0:0];
-  logic [0:0] regs__en [0:0];
-  logic [32:0] regs__in_ [0:0];
-  logic [32:0] regs__out [0:0];
-  logic [0:0] regs__reset [0:0];
+  logic [0:0] regs__clk [0:3];
+  logic [0:0] regs__en [0:3];
+  logic [32:0] regs__in_ [0:3];
+  logic [32:0] regs__out [0:3];
+  logic [0:0] regs__reset [0:3];
 
   RegEnRst__Type_Bits33__reset_value_0 regs__0
   (
@@ -5330,46 +5200,86 @@ module RegisterFile1R1W__Type_Bits33__nregs_1
     .reset( regs__reset[0] )
   );
 
+  RegEnRst__Type_Bits33__reset_value_0 regs__1
+  (
+    .clk( regs__clk[1] ),
+    .en( regs__en[1] ),
+    .in_( regs__in_[1] ),
+    .out( regs__out[1] ),
+    .reset( regs__reset[1] )
+  );
+
+  RegEnRst__Type_Bits33__reset_value_0 regs__2
+  (
+    .clk( regs__clk[2] ),
+    .en( regs__en[2] ),
+    .in_( regs__in_[2] ),
+    .out( regs__out[2] ),
+    .reset( regs__reset[2] )
+  );
+
+  RegEnRst__Type_Bits33__reset_value_0 regs__3
+  (
+    .clk( regs__clk[3] ),
+    .en( regs__en[3] ),
+    .in_( regs__in_[3] ),
+    .out( regs__out[3] ),
+    .reset( regs__reset[3] )
+  );
+
   //-------------------------------------------------------------
-  // End of component regs[0:0]
+  // End of component regs[0:3]
   //-------------------------------------------------------------
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/misc/RegisterFile1R1W.py:21
+  // At /work/global/pp482/test/cgra-src/src/misc/RegisterFile2R1W.py:35
   // @update
   // def up_rf_read():
-  //   s.rdata @= s.regs[ s.raddr ].out
+  //   s.bypass_write0 @= (s.raddr0 == s.waddr) & s.wen
+  //   s.bypass_write1 @= (s.raddr1 == s.waddr) & s.wen
+  //   s.rdata0 @= s.wdata if s.bypass_write0 else s.regs[ s.raddr0 ].out
+  //   s.rdata1 @= s.wdata if s.bypass_write1 else s.regs[ s.raddr1 ].out
   
   always_comb begin : up_rf_read
-    rdata = regs__out[raddr];
+    bypass_write0 = ( raddr0 == waddr ) & wen;
+    bypass_write1 = ( raddr1 == waddr ) & wen;
+    rdata0 = bypass_write0 ? wdata : regs__out[raddr0];
+    rdata1 = bypass_write1 ? wdata : regs__out[raddr1];
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/misc/RegisterFile1R1W.py:25
+  // At /work/global/pp482/test/cgra-src/src/misc/RegisterFile2R1W.py:42
   // @update
   // def up_rf_wen():
   //   for i in range(nregs):
-  //     s.regs[i].en @= s.wen & (i == s.waddr)
-  //     s.regs[i].in_ @= s.wdata
+  //     s.regs[i].en @= (s.wen & (i == s.waddr)) | s.clear
+  //     s.regs[i].in_ @= s.wdata if i == 0 else \
+  //                      s.wdata if ~s.clear else 0
   
   always_comb begin : up_rf_wen
-    for ( int unsigned i = 1'd0; i < 1'( __const__nregs_at_up_rf_wen ); i += 1'd1 ) begin
-      regs__en[1'(i)] = wen & ( 1'(i) == waddr );
-      regs__in_[1'(i)] = wdata;
+    for ( int unsigned i = 1'd0; i < 3'( __const__nregs_at_up_rf_wen ); i += 1'd1 ) begin
+      regs__en[2'(i)] = ( wen & ( 2'(i) == waddr ) ) | clear;
+      regs__in_[2'(i)] = ( 2'(i) == 2'd0 ) ? wdata : ( ~clear ) ? wdata : 33'd0;
     end
   end
 
   assign regs__clk[0] = clk;
   assign regs__reset[0] = reset;
+  assign regs__clk[1] = clk;
+  assign regs__reset[1] = reset;
+  assign regs__clk[2] = clk;
+  assign regs__reset[2] = reset;
+  assign regs__clk[3] = clk;
+  assign regs__reset[3] = reset;
 
 endmodule
 
 
 // PyMTL Component SwitchBoxCtrl Definition
-// Full name: SwitchBoxCtrl__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
-// At /work/global/pp482/cgra/src/cgra/SwitchBoxCtrl.py
+// Full name: SwitchBoxCtrl__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, enable_debug_ports:False, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:4, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// At /work/global/pp482/test/cgra-src/src/cgra/SwitchBoxCtrl.py
 
-module SwitchBoxCtrl__07e21c4d4fa663e6
+module SwitchBoxCtrl__7bb22bb10af9a0d4
 (
   input  PEConfigMsg_8x8__69ed92dd9fa67f76 cfg ,
   input  logic [0:0] cfg_reset ,
@@ -5400,8 +5310,10 @@ module SwitchBoxCtrl__07e21c4d4fa663e6
   logic [0:0] is_branch;
   logic [0:0] is_compound_op;
   logic [3:0] is_false_dir;
-  logic [0:0] is_phi;
+  logic [0:0] is_opd_a_self;
+  logic [0:0] is_opd_b_self;
   logic [0:0] is_raw_race;
+  logic [0:0] is_rf_circular;
   logic [3:0] is_true_dir;
   logic [0:0] next_rf_val;
   logic [2:0] non_br_NSWE_sel [0:3];
@@ -5411,7 +5323,7 @@ module SwitchBoxCtrl__07e21c4d4fa663e6
   logic [2:0] true_dir;
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/SwitchBoxCtrl.py:145
+  // At /work/global/pp482/test/cgra-src/src/cgra/SwitchBoxCtrl.py:151
   // @update
   // def SB_opA_rdy():
   //   s.opA_rdy @= s.fu_operands_rdy & s.fu_operands_val
@@ -5421,7 +5333,7 @@ module SwitchBoxCtrl__07e21c4d4fa663e6
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/SwitchBoxCtrl.py:155
+  // At /work/global/pp482/test/cgra-src/src/cgra/SwitchBoxCtrl.py:161
   // @update
   // def SB_opB_rdy():
   //   s.opB_rdy @= s.fu_operands_rdy & s.fu_operands_val
@@ -5431,7 +5343,7 @@ module SwitchBoxCtrl__07e21c4d4fa663e6
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/SwitchBoxCtrl.py:187
+  // At /work/global/pp482/test/cgra-src/src/cgra/SwitchBoxCtrl.py:196
   // s.compound_only_rf_val //= lambda: 1 if ~s.is_compound_op else s.rf_val
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_PE_rc_0__dpath_sb_ctrl_compound_only_rf_val
@@ -5439,7 +5351,7 @@ module SwitchBoxCtrl__07e21c4d4fa663e6
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/SwitchBoxCtrl.py:184
+  // At /work/global/pp482/test/cgra-src/src/cgra/SwitchBoxCtrl.py:193
   // s.dst_to_reg //= lambda: s.cfg.reg_src == CFG.OUT_SRC_COMP
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_PE_rc_0__dpath_sb_ctrl_dst_to_reg
@@ -5447,7 +5359,7 @@ module SwitchBoxCtrl__07e21c4d4fa663e6
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/SwitchBoxCtrl.py:91
+  // At /work/global/pp482/test/cgra-src/src/cgra/SwitchBoxCtrl.py:97
   // s.is_branch //= lambda: s.cfg.opcode == CFG.OP_B_TYPE
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_PE_rc_0__dpath_sb_ctrl_is_branch
@@ -5455,18 +5367,18 @@ module SwitchBoxCtrl__07e21c4d4fa663e6
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/SwitchBoxCtrl.py:179
+  // At /work/global/pp482/test/cgra-src/src/cgra/SwitchBoxCtrl.py:188
   // s.is_compound_op //= lambda: (s.cfg.opcode == CFG.OP_Q_TYPE) & \
   //                             ((s.cfg.func == CFG.MAC) | \
   //                              (s.cfg.func == CFG.MAD) | \
   //                              (s.cfg.func == CFG.FMAD))
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_PE_rc_0__dpath_sb_ctrl_is_compound_op
-    is_compound_op = ( cfg.opcode == 1'd0 ) & ( ( ( cfg.func == 6'd28 ) | ( cfg.func == 6'd29 ) ) | ( cfg.func == 6'd19 ) );
+    is_compound_op = ( cfg.opcode == 1'd0 ) & ( ( ( cfg.func == 6'd27 ) | ( cfg.func == 6'd28 ) ) | ( cfg.func == 6'd19 ) );
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/SwitchBoxCtrl.py:136
+  // At /work/global/pp482/test/cgra-src/src/cgra/SwitchBoxCtrl.py:142
   // s.is_opA_rf //= lambda: s.cfg.src_opd_a == CFG.SRC_SELF
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_PE_rc_0__dpath_sb_ctrl_is_opA_rf
@@ -5474,7 +5386,7 @@ module SwitchBoxCtrl__07e21c4d4fa663e6
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/SwitchBoxCtrl.py:137
+  // At /work/global/pp482/test/cgra-src/src/cgra/SwitchBoxCtrl.py:143
   // s.is_opB_rf //= lambda: s.cfg.src_opd_b == CFG.SRC_SELF
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_PE_rc_0__dpath_sb_ctrl_is_opB_rf
@@ -5482,23 +5394,23 @@ module SwitchBoxCtrl__07e21c4d4fa663e6
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/SwitchBoxCtrl.py:143
-  // s.is_phi //= lambda: (s.cfg.opcode == CFG.OP_Q_TYPE) & (s.cfg.func == CFG.PHI)
-  
-  always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_PE_rc_0__dpath_sb_ctrl_is_phi
-    is_phi = ( cfg.opcode == 1'd0 ) & ( cfg.func == 6'd30 );
-  end
-
-  // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/SwitchBoxCtrl.py:185
-  // s.is_raw_race //= lambda: s.src_from_reg & s.dst_to_reg
+  // At /work/global/pp482/test/cgra-src/src/cgra/SwitchBoxCtrl.py:194
+  // s.is_raw_race //= lambda: ~s.is_rf_circular & (s.src_from_reg & s.dst_to_reg)
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_PE_rc_0__dpath_sb_ctrl_is_raw_race
-    is_raw_race = src_from_reg & dst_to_reg;
+    is_raw_race = ( ~is_rf_circular ) & ( src_from_reg & dst_to_reg );
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/SwitchBoxCtrl.py:139
+  // At /work/global/pp482/test/cgra-src/src/cgra/SwitchBoxCtrl.py:181
+  // s.is_rf_circular //= lambda: (s.cfg.opcode == CFG.OP_Q_TYPE) & (s.cfg.func == CFG.FMAD) & (s.cfg.reg_src == CFG.OUT_SRC_COMP)
+  
+  always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_PE_rc_0__dpath_sb_ctrl_is_rf_circular
+    is_rf_circular = ( ( cfg.opcode == 1'd0 ) & ( cfg.func == 6'd19 ) ) & ( cfg.reg_src == 3'd4 );
+  end
+
+  // PyMTL Lambda Block Source
+  // At /work/global/pp482/test/cgra-src/src/cgra/SwitchBoxCtrl.py:145
   // s.opA_mux_sel //= lambda: s.cfg.src_opd_a[0:2]
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_PE_rc_0__dpath_sb_ctrl_opA_mux_sel
@@ -5506,7 +5418,7 @@ module SwitchBoxCtrl__07e21c4d4fa663e6
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/SwitchBoxCtrl.py:140
+  // At /work/global/pp482/test/cgra-src/src/cgra/SwitchBoxCtrl.py:146
   // s.opB_mux_sel //= lambda: s.cfg.src_opd_b[0:2]
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_PE_rc_0__dpath_sb_ctrl_opB_mux_sel
@@ -5514,7 +5426,7 @@ module SwitchBoxCtrl__07e21c4d4fa663e6
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/SwitchBoxCtrl.py:183
+  // At /work/global/pp482/test/cgra-src/src/cgra/SwitchBoxCtrl.py:192
   // s.src_from_reg //= lambda: s.is_opA_rf | s.is_opB_rf | s.is_compound_op
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_PE_rc_0__dpath_sb_ctrl_src_from_reg
@@ -5522,11 +5434,11 @@ module SwitchBoxCtrl__07e21c4d4fa663e6
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/SwitchBoxCtrl.py:210
+  // At /work/global/pp482/test/cgra-src/src/cgra/SwitchBoxCtrl.py:219
   // @update
   // def sb_fu_operand_val():
   //   s.fu_operands_val @= 0
-  //   if ~s.is_branch & (s.cfg.func == CFG.PHI):
+  //   if ~s.is_branch & ((s.cfg.func == CFG.PHI) | (s.cfg.func == CFG.SPHI)):
   //     # A Phi node which dynamically forwards the valid input
   //     if ~s.is_opA_rf & ~s.is_opB_rf:
   //       # Forwards the one that becomes valid first
@@ -5554,7 +5466,7 @@ module SwitchBoxCtrl__07e21c4d4fa663e6
   
   always_comb begin : sb_fu_operand_val
     fu_operands_val = 1'd0;
-    if ( ( ~is_branch ) & ( cfg.func == 6'd30 ) ) begin
+    if ( ( ~is_branch ) & ( ( cfg.func == 6'd30 ) | ( cfg.func == 6'd29 ) ) ) begin
       if ( ( ~is_opA_rf ) & ( ~is_opB_rf ) ) begin
         fu_operands_val = opA_val | opB_val;
       end
@@ -5585,7 +5497,7 @@ module SwitchBoxCtrl__07e21c4d4fa663e6
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/SwitchBoxCtrl.py:71
+  // At /work/global/pp482/test/cgra-src/src/cgra/SwitchBoxCtrl.py:77
   // @update
   // def sb_gen_adapter_masks():
   //   for i in range(p.sb_num_in):
@@ -5593,20 +5505,20 @@ module SwitchBoxCtrl__07e21c4d4fa663e6
   //       # Generate mask for NSWE output muxes
   //       s.in_adapter_mask[i][j] @= i != s.out_mux_src[j]
   //     # Generate mask for opA and opB output muxes
-  //     s.in_adapter_mask[i][OMUX.OPA] @= i != concat( b1(0), s.cfg.src_opd_a[0:2] )
-  //     s.in_adapter_mask[i][OMUX.OPB] @= i != concat( b1(0), s.cfg.src_opd_b[0:2] )
+  //     s.in_adapter_mask[i][OMUX.OPA] @= (i != concat( b1(0), s.cfg.src_opd_a[0:2] )) if ~s.is_opd_a_self else b1(1)
+  //     s.in_adapter_mask[i][OMUX.OPB] @= (i != concat( b1(0), s.cfg.src_opd_b[0:2] )) if ~s.is_opd_b_self else b1(1)
   
   always_comb begin : sb_gen_adapter_masks
     for ( int unsigned i = 1'd0; i < 3'd5; i += 1'd1 ) begin
       for ( int unsigned j = 1'd0; j < 3'd4; j += 1'd1 )
         in_adapter_mask[3'(i)][3'(j)] = 3'(i) != out_mux_src[2'(j)];
-      in_adapter_mask[3'(i)][3'd4] = 3'(i) != { 1'd0, cfg.src_opd_a[2'd1:2'd0] };
-      in_adapter_mask[3'(i)][3'd5] = 3'(i) != { 1'd0, cfg.src_opd_b[2'd1:2'd0] };
+      in_adapter_mask[3'(i)][3'd4] = ( ~is_opd_a_self ) ? 3'(i) != { 1'd0, cfg.src_opd_a[2'd1:2'd0] } : 1'd1;
+      in_adapter_mask[3'(i)][3'd5] = ( ~is_opd_b_self ) ? 3'(i) != { 1'd0, cfg.src_opd_b[2'd1:2'd0] } : 1'd1;
     end
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/SwitchBoxCtrl.py:102
+  // At /work/global/pp482/test/cgra-src/src/cgra/SwitchBoxCtrl.py:108
   // @update
   // def sb_gen_br_bool_dirs():
   //   for i in range(4):
@@ -5621,12 +5533,12 @@ module SwitchBoxCtrl__07e21c4d4fa663e6
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/SwitchBoxCtrl.py:239
+  // At /work/global/pp482/test/cgra-src/src/cgra/SwitchBoxCtrl.py:248
   // @update
   // def sb_gen_is_faking_signals():
   //   s.is_faking_opA @= 0
   //   s.is_faking_opB @= 0
-  //   if ~s.is_branch & (s.cfg.func == CFG.PHI):
+  //   if ~s.is_branch & ((s.cfg.func == CFG.PHI) | (s.cfg.func == CFG.SPHI)):
   //     if ~s.is_opA_rf & ~s.is_opB_rf:
   //       # Forwards the one that becomes valid the first
   //       s.is_faking_opA @= ~s.opA_val
@@ -5641,7 +5553,7 @@ module SwitchBoxCtrl__07e21c4d4fa663e6
   always_comb begin : sb_gen_is_faking_signals
     is_faking_opA = 1'd0;
     is_faking_opB = 1'd0;
-    if ( ( ~is_branch ) & ( cfg.func == 6'd30 ) ) begin
+    if ( ( ~is_branch ) & ( ( cfg.func == 6'd30 ) | ( cfg.func == 6'd29 ) ) ) begin
       if ( ( ~is_opA_rf ) & ( ~is_opB_rf ) ) begin
         is_faking_opA = ~opA_val;
         is_faking_opB = ~opB_val;
@@ -5658,7 +5570,7 @@ module SwitchBoxCtrl__07e21c4d4fa663e6
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/SwitchBoxCtrl.py:196
+  // At /work/global/pp482/test/cgra-src/src/cgra/SwitchBoxCtrl.py:205
   // @update
   // def sb_gen_next_rf_val():
   //   s.next_rf_val @= s.rf_val
@@ -5684,7 +5596,7 @@ module SwitchBoxCtrl__07e21c4d4fa663e6
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/SwitchBoxCtrl.py:122
+  // At /work/global/pp482/test/cgra-src/src/cgra/SwitchBoxCtrl.py:128
   // @update
   // def sb_output_br_NSWE_mux_sel():
   //   for i in range(4):
@@ -5704,7 +5616,7 @@ module SwitchBoxCtrl__07e21c4d4fa663e6
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/SwitchBoxCtrl.py:113
+  // At /work/global/pp482/test/cgra-src/src/cgra/SwitchBoxCtrl.py:119
   // @update
   // def sb_output_non_br_NSWE_mux_sel():
   //   for i in range(4):
@@ -5723,7 +5635,7 @@ module SwitchBoxCtrl__07e21c4d4fa663e6
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/SwitchBoxCtrl.py:57
+  // At /work/global/pp482/test/cgra-src/src/cgra/SwitchBoxCtrl.py:63
   // @update_ff
   // def sb_ctrl_register_cfg_reset():
   //   if s.reset:
@@ -5740,7 +5652,7 @@ module SwitchBoxCtrl__07e21c4d4fa663e6
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/SwitchBoxCtrl.py:189
+  // At /work/global/pp482/test/cgra-src/src/cgra/SwitchBoxCtrl.py:198
   // @update_ff
   // def sb_rf_val_gen():
   //   if s.reset:
@@ -5756,6 +5668,8 @@ module SwitchBoxCtrl__07e21c4d4fa663e6
       rf_val <= next_rf_val;
   end
 
+  assign is_opd_a_self = cfg.src_opd_a[2:2];
+  assign is_opd_b_self = cfg.src_opd_b[2:2];
   assign out_mux_src[0] = cfg.out_n_src;
   assign out_mux_src[1] = cfg.out_s_src;
   assign out_mux_src[2] = cfg.out_w_src;
@@ -5772,7 +5686,7 @@ endmodule
 
 
 // PyMTL Component EagerMultiDstAdapter Definition
-// At /work/global/pp482/cgra/src/cgra/EagerMultiDstAdapter.py
+// At /work/global/pp482/test/cgra-src/src/cgra/EagerMultiDstAdapter.py
 
 module EagerMultiDstAdapter__Type_Bits33__noutputs_6
 (
@@ -5800,7 +5714,7 @@ module EagerMultiDstAdapter__Type_Bits33__noutputs_6
   logic [5:0] sent_r;
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/EagerMultiDstAdapter.py:84
+  // At /work/global/pp482/test/cgra-src/src/cgra/EagerMultiDstAdapter.py:84
   // s.in_.rdy //= lambda: s.is_safe_to_go & ((s.mask_r | s.sent_r | s.out_go) == s.full_output_mask)
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_PE_rc_0__dpath_sb_dpath_in_adapters_0__in__rdy
@@ -5808,7 +5722,7 @@ module EagerMultiDstAdapter__Type_Bits33__noutputs_6
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/EagerMultiDstAdapter.py:35
+  // At /work/global/pp482/test/cgra-src/src/cgra/EagerMultiDstAdapter.py:35
   // s.in_go //= lambda: s.in_.val & s.in_.rdy
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_PE_rc_0__dpath_sb_dpath_in_adapters_0__in_go
@@ -5816,7 +5730,7 @@ module EagerMultiDstAdapter__Type_Bits33__noutputs_6
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/EagerMultiDstAdapter.py:82
+  // At /work/global/pp482/test/cgra-src/src/cgra/EagerMultiDstAdapter.py:82
   // s.is_safe_to_go //= lambda: s.is_calc & ~s.cfg_reset & ~s.mask_en
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_PE_rc_0__dpath_sb_dpath_in_adapters_0__is_safe_to_go
@@ -5824,7 +5738,7 @@ module EagerMultiDstAdapter__Type_Bits33__noutputs_6
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/EagerMultiDstAdapter.py:39
+  // At /work/global/pp482/test/cgra-src/src/cgra/EagerMultiDstAdapter.py:39
   // @update
   // def output_go():
   //   for i in range(noutputs):
@@ -5836,7 +5750,7 @@ module EagerMultiDstAdapter__Type_Bits33__noutputs_6
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/EagerMultiDstAdapter.py:98
+  // At /work/global/pp482/test/cgra-src/src/cgra/EagerMultiDstAdapter.py:98
   // @update
   // def output_msg_data_gating():
   //   for i in range(noutputs):
@@ -5855,7 +5769,7 @@ module EagerMultiDstAdapter__Type_Bits33__noutputs_6
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/EagerMultiDstAdapter.py:90
+  // At /work/global/pp482/test/cgra-src/src/cgra/EagerMultiDstAdapter.py:90
   // @update
   // def output_val():
   //   for i in range(noutputs):
@@ -5874,7 +5788,7 @@ module EagerMultiDstAdapter__Type_Bits33__noutputs_6
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/EagerMultiDstAdapter.py:68
+  // At /work/global/pp482/test/cgra-src/src/cgra/EagerMultiDstAdapter.py:68
   // @update
   // def sent_next():
   //   if s.in_go:
@@ -5891,7 +5805,7 @@ module EagerMultiDstAdapter__Type_Bits33__noutputs_6
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/EagerMultiDstAdapter.py:50
+  // At /work/global/pp482/test/cgra-src/src/cgra/EagerMultiDstAdapter.py:50
   // @update_ff
   // def mask_register():
   //   if s.reset:
@@ -5910,7 +5824,7 @@ module EagerMultiDstAdapter__Type_Bits33__noutputs_6
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/EagerMultiDstAdapter.py:61
+  // At /work/global/pp482/test/cgra-src/src/cgra/EagerMultiDstAdapter.py:61
   // @update_ff
   // def sent_register():
   //   if s.reset:
@@ -5930,7 +5844,7 @@ endmodule
 
 
 // PyMTL Component ValRdyMux Definition
-// At /work/global/pp482/cgra/src/misc/ValRdyMux.py
+// At /work/global/pp482/test/cgra-src/src/misc/ValRdyMux.py
 
 module ValRdyMux__Type_Bits33__ninputs_4
 (
@@ -5947,7 +5861,7 @@ module ValRdyMux__Type_Bits33__ninputs_4
   localparam logic [2:0] __const__ninputs_at_valrdy_ifc_muxing  = 3'd4;
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/misc/ValRdyMux.py:28
+  // At /work/global/pp482/test/cgra-src/src/misc/ValRdyMux.py:28
   // @update
   // def valrdy_ifc_muxing():
   //   for i in range(ninputs):
@@ -5968,7 +5882,7 @@ endmodule
 
 
 // PyMTL Component ValRdyMux Definition
-// At /work/global/pp482/cgra/src/misc/ValRdyMux.py
+// At /work/global/pp482/test/cgra-src/src/misc/ValRdyMux.py
 
 module ValRdyMux__Type_Bits33__ninputs_6
 (
@@ -5985,7 +5899,7 @@ module ValRdyMux__Type_Bits33__ninputs_6
   localparam logic [2:0] __const__ninputs_at_valrdy_ifc_muxing  = 3'd6;
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/misc/ValRdyMux.py:28
+  // At /work/global/pp482/test/cgra-src/src/misc/ValRdyMux.py:28
   // @update
   // def valrdy_ifc_muxing():
   //   for i in range(ninputs):
@@ -6006,10 +5920,10 @@ endmodule
 
 
 // PyMTL Component SwitchBoxDpath Definition
-// Full name: SwitchBoxDpath__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
-// At /work/global/pp482/cgra/src/cgra/SwitchBoxDpath.py
+// Full name: SwitchBoxDpath__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, enable_debug_ports:False, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:4, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// At /work/global/pp482/test/cgra-src/src/cgra/SwitchBoxDpath.py
 
-module SwitchBoxDpath__07e21c4d4fa663e6
+module SwitchBoxDpath__7bb22bb10af9a0d4
 (
   input  logic [0:0] cfg_reset ,
   input  logic [0:0] clk ,
@@ -6271,7 +6185,7 @@ module SwitchBoxDpath__07e21c4d4fa663e6
   //-------------------------------------------------------------
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/SwitchBoxDpath.py:98
+  // At /work/global/pp482/test/cgra-src/src/cgra/SwitchBoxDpath.py:98
   // s.fu_operands_msg.opd_a  //= lambda: s.rf_operand if s.is_opA_rf else s.opA_mux.out.msg
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_PE_rc_0__dpath_sb_dpath_fu_operands_msg_opd_a
@@ -6279,7 +6193,7 @@ module SwitchBoxDpath__07e21c4d4fa663e6
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/SwitchBoxDpath.py:99
+  // At /work/global/pp482/test/cgra-src/src/cgra/SwitchBoxDpath.py:99
   // s.fu_operands_msg.opd_b  //= lambda: s.rf_operand if s.is_opB_rf else s.opB_mux.out.msg
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_PE_rc_0__dpath_sb_dpath_fu_operands_msg_opd_b
@@ -6465,10 +6379,10 @@ endmodule
 
 
 // PyMTL Component SwitchBox Definition
-// Full name: SwitchBox__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
-// At /work/global/pp482/cgra/src/cgra/SwitchBox.py
+// Full name: SwitchBox__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, enable_debug_ports:False, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:4, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// At /work/global/pp482/test/cgra-src/src/cgra/SwitchBox.py
 
-module SwitchBox__07e21c4d4fa663e6
+module SwitchBox__7bb22bb10af9a0d4
 (
   input  PEConfigMsg_8x8__69ed92dd9fa67f76 cfg ,
   input  logic [0:0] cfg_reset ,
@@ -6521,7 +6435,7 @@ module SwitchBox__07e21c4d4fa663e6
   logic [2:0] ctrl__out_mux_sel [0:3];
   logic [0:0] ctrl__reset;
 
-  SwitchBoxCtrl__07e21c4d4fa663e6 ctrl
+  SwitchBoxCtrl__7bb22bb10af9a0d4 ctrl
   (
     .cfg( ctrl__cfg ),
     .cfg_reset( ctrl__cfg_reset ),
@@ -6580,7 +6494,7 @@ module SwitchBox__07e21c4d4fa663e6
   logic [0:0] dpath__out__rdy [0:3];
   logic [0:0] dpath__out__val [0:3];
 
-  SwitchBoxDpath__07e21c4d4fa663e6 dpath
+  SwitchBoxDpath__7bb22bb10af9a0d4 dpath
   (
     .cfg_reset( dpath__cfg_reset ),
     .clk( dpath__clk ),
@@ -6614,7 +6528,7 @@ module SwitchBox__07e21c4d4fa663e6
   //-------------------------------------------------------------
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/SwitchBox.py:83
+  // At /work/global/pp482/test/cgra-src/src/cgra/SwitchBox.py:83
   // s.ctrl.fu_out_go //= lambda: s.fu_out.val & s.fu_out.rdy
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_PE_rc_0__dpath_sb_ctrl_fu_out_go
@@ -6622,7 +6536,7 @@ module SwitchBox__07e21c4d4fa663e6
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/SwitchBox.py:107
+  // At /work/global/pp482/test/cgra-src/src/cgra/SwitchBox.py:107
   // s.is_occupied //= lambda: reduce_or( s.occupancy )
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_PE_rc_0__dpath_sb_is_occupied
@@ -6630,7 +6544,7 @@ module SwitchBox__07e21c4d4fa663e6
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/SwitchBox.py:105
+  // At /work/global/pp482/test/cgra-src/src/cgra/SwitchBox.py:105
   // s.occupancy[i] //= lambda: s.out[i].val & s.out[i].rdy
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_PE_rc_0__dpath_sb_occupancy_0_1_
@@ -6638,7 +6552,7 @@ module SwitchBox__07e21c4d4fa663e6
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/SwitchBox.py:105
+  // At /work/global/pp482/test/cgra-src/src/cgra/SwitchBox.py:105
   // s.occupancy[i] //= lambda: s.out[i].val & s.out[i].rdy
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_PE_rc_0__dpath_sb_occupancy_1_2_
@@ -6646,7 +6560,7 @@ module SwitchBox__07e21c4d4fa663e6
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/SwitchBox.py:105
+  // At /work/global/pp482/test/cgra-src/src/cgra/SwitchBox.py:105
   // s.occupancy[i] //= lambda: s.out[i].val & s.out[i].rdy
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_PE_rc_0__dpath_sb_occupancy_2_3_
@@ -6654,7 +6568,7 @@ module SwitchBox__07e21c4d4fa663e6
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/SwitchBox.py:105
+  // At /work/global/pp482/test/cgra-src/src/cgra/SwitchBox.py:105
   // s.occupancy[i] //= lambda: s.out[i].val & s.out[i].rdy
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_PE_rc_0__dpath_sb_occupancy_3_4_
@@ -6730,10 +6644,10 @@ endmodule
 
 
 // PyMTL Component ProcElementDpath Definition
-// Full name: ProcElementDpath__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
-// At /work/global/pp482/cgra/src/cgra/ProcElementDpath.py
+// Full name: ProcElementDpath__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, enable_debug_ports:False, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:4, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// At /work/global/pp482/test/cgra-src/src/cgra/ProcElementDpath.py
 
-module ProcElementDpath__07e21c4d4fa663e6
+module ProcElementDpath__7bb22bb10af9a0d4
 (
   input  logic [37:0] cfg_deq_msg ,
   output logic [37:0] cfg_out_msg ,
@@ -6757,13 +6671,34 @@ module ProcElementDpath__07e21c4d4fa663e6
   input logic [0:0] out__rdy [0:3] ,
   output logic [0:0] out__val [0:3] 
 );
+  localparam logic [0:0] __const__SPHI_FSM_RD01  = 1'd1;
+  localparam logic [1:0] __const__SPHI_FSM_RD23  = 2'd2;
+  localparam logic [2:0] __const__SPHI_FSM_RDIM  = 3'd6;
+  localparam logic [2:0] __const__SPHI_FSM_WAT2  = 3'd5;
+  localparam logic [3:0] __const__SPHI_FSM_WAT6  = 4'd10;
+  localparam logic [0:0] __const__SPHI_FSM_IDLE  = 1'd0;
+  localparam logic [1:0] __const__SPHI_FSM_WAT0  = 2'd3;
+  localparam logic [2:0] __const__SPHI_FSM_WAT1  = 3'd4;
+  localparam logic [2:0] __const__SPHI_FSM_WAT3  = 3'd7;
+  localparam logic [3:0] __const__SPHI_FSM_WAT4  = 4'd8;
+  localparam logic [3:0] __const__SPHI_FSM_WAT5  = 4'd9;
+  localparam logic [3:0] __const__SPHI_FSM_SEND  = 4'd11;
+  localparam logic [3:0] __const__SPHI_FSM_DONE  = 4'd12;
   logic [1:0] cfg_cmd;
   PEConfigMsg_8x8__69ed92dd9fa67f76 cfg_struct;
   logic [31:0] cfg_value;
   logic [3:0] cfg_x_cord;
-  logic [32:0] rf_operand;
+  logic [0:0] is_sphi;
+  logic [0:0] is_sphi_fu_val;
+  logic [0:0] is_sphi_rf_wen;
+  logic [0:0] is_sphi_sent;
+  logic [0:0] rf_is_circular;
+  logic [1:0] rf_raddr_circ_reg;
+  logic [0:0] rf_rdata_consumed;
   logic [32:0] rf_reload_value;
-  logic [32:0] rf_wdata;
+  logic [1:0] rf_waddr_circ_reg;
+  logic [0:0] rf_wdata_consumed;
+  logic [3:0] sphi_fsm;
   //-------------------------------------------------------------
   // Component cfg_r
   //-------------------------------------------------------------
@@ -6819,6 +6754,8 @@ module ProcElementDpath__07e21c4d4fa663e6
   logic [0:0] fu__is_occupied;
   logic [32:0] fu__phi_init_operand;
   logic [0:0] fu__reset;
+  logic [0:0] fu__sphi_en;
+  logic [0:0] fu__sphi_forward;
   CgraFUMsg_33__bca7feb9182334d7 fu__in___msg;
   logic [0:0] fu__in___rdy;
   logic [0:0] fu__in___val;
@@ -6826,7 +6763,7 @@ module ProcElementDpath__07e21c4d4fa663e6
   logic [0:0] fu__out__rdy;
   logic [0:0] fu__out__val;
 
-  FunctUnit__07e21c4d4fa663e6 fu
+  FunctUnit__7bb22bb10af9a0d4 fu
   (
     .cfg( fu__cfg ),
     .cfg_reset( fu__cfg_reset ),
@@ -6835,6 +6772,8 @@ module ProcElementDpath__07e21c4d4fa663e6
     .is_occupied( fu__is_occupied ),
     .phi_init_operand( fu__phi_init_operand ),
     .reset( fu__reset ),
+    .sphi_en( fu__sphi_en ),
+    .sphi_forward( fu__sphi_forward ),
     .in___msg( fu__in___msg ),
     .in___rdy( fu__in___rdy ),
     .in___val( fu__in___val ),
@@ -6851,19 +6790,25 @@ module ProcElementDpath__07e21c4d4fa663e6
   // Component rf
   //-------------------------------------------------------------
 
+  logic [0:0] rf__clear;
   logic [0:0] rf__clk;
-  logic [0:0] rf__raddr;
-  logic [32:0] rf__rdata;
+  logic [1:0] rf__raddr0;
+  logic [1:0] rf__raddr1;
+  logic [32:0] rf__rdata0;
+  logic [32:0] rf__rdata1;
   logic [0:0] rf__reset;
-  logic [0:0] rf__waddr;
+  logic [1:0] rf__waddr;
   logic [32:0] rf__wdata;
   logic [0:0] rf__wen;
 
-  RegisterFile1R1W__Type_Bits33__nregs_1 rf
+  RegisterFile2R1W__Type_Bits33__nregs_4 rf
   (
+    .clear( rf__clear ),
     .clk( rf__clk ),
-    .raddr( rf__raddr ),
-    .rdata( rf__rdata ),
+    .raddr0( rf__raddr0 ),
+    .raddr1( rf__raddr1 ),
+    .rdata0( rf__rdata0 ),
+    .rdata1( rf__rdata1 ),
     .reset( rf__reset ),
     .waddr( rf__waddr ),
     .wdata( rf__wdata ),
@@ -6898,7 +6843,7 @@ module ProcElementDpath__07e21c4d4fa663e6
   logic [0:0] sb__out__rdy [0:3];
   logic [0:0] sb__out__val [0:3];
 
-  SwitchBox__07e21c4d4fa663e6 sb
+  SwitchBox__7bb22bb10af9a0d4 sb
   (
     .cfg( sb__cfg ),
     .cfg_reset( sb__cfg_reset ),
@@ -6926,7 +6871,7 @@ module ProcElementDpath__07e21c4d4fa663e6
   //-------------------------------------------------------------
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/ProcElementDpath.py:154
+  // At /work/global/pp482/test/cgra-src/src/cgra/ProcElementDpath.py:315
   // s.fu_out_go //= lambda: s.fu.out.val & s.fu.out.rdy
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_PE_rc_0__dpath_fu_out_go
@@ -6934,7 +6879,23 @@ module ProcElementDpath__07e21c4d4fa663e6
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/ProcElementDpath.py:73
+  // At /work/global/pp482/test/cgra-src/src/cgra/ProcElementDpath.py:303
+  // s.fu.sphi_en //= lambda: s.sphi_fsm == SPHI_FSM_SEND
+  
+  always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_PE_rc_0__dpath_fu_sphi_en
+    fu__sphi_en = sphi_fsm == 4'( __const__SPHI_FSM_SEND );
+  end
+
+  // PyMTL Lambda Block Source
+  // At /work/global/pp482/test/cgra-src/src/cgra/ProcElementDpath.py:304
+  // s.fu.sphi_forward //= lambda: s.sphi_fsm == SPHI_FSM_DONE
+  
+  always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_PE_rc_0__dpath_fu_sphi_forward
+    fu__sphi_forward = sphi_fsm == 4'( __const__SPHI_FSM_DONE );
+  end
+
+  // PyMTL Lambda Block Source
+  // At /work/global/pp482/test/cgra-src/src/cgra/ProcElementDpath.py:87
   // s.is_cfg_target_self //= lambda: s.cfg_x_cord == s.x_cord
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_PE_rc_0__dpath_is_cfg_target_self
@@ -6942,7 +6903,7 @@ module ProcElementDpath__07e21c4d4fa663e6
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/ProcElementDpath.py:156
+  // At /work/global/pp482/test/cgra-src/src/cgra/ProcElementDpath.py:317
   // s.is_occupied //= lambda: s.fu.is_occupied | s.sb.is_occupied
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_PE_rc_0__dpath_is_occupied
@@ -6950,7 +6911,7 @@ module ProcElementDpath__07e21c4d4fa663e6
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/ProcElementDpath.py:74
+  // At /work/global/pp482/test/cgra-src/src/cgra/ProcElementDpath.py:88
   // s.is_reload_cmd //= lambda: (s.cfg_cmd == CfgCmd.RF_LOAD_FP) | (s.cfg_cmd == CfgCmd.RF_LOAD_INT)
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_PE_rc_0__dpath_is_reload_cmd
@@ -6958,19 +6919,312 @@ module ProcElementDpath__07e21c4d4fa663e6
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/ProcElementDpath.py:93
+  // At /work/global/pp482/test/cgra-src/src/cgra/ProcElementDpath.py:181
+  // s.rf_is_circular //= lambda: (s.cfg_r.out.opcode == CFG.OP_Q_TYPE) & (s.cfg_r.out.func == CFG.FMAD) & (s.cfg_r.out.reg_src == CFG.OUT_SRC_COMP)
+  
+  always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_PE_rc_0__dpath_rf_is_circular
+    rf_is_circular = ( ( cfg_r__out.opcode == 1'd0 ) & ( cfg_r__out.func == 6'd19 ) ) & ( cfg_r__out.reg_src == 3'd4 );
+  end
+
+  // PyMTL Lambda Block Source
+  // At /work/global/pp482/test/cgra-src/src/cgra/ProcElementDpath.py:107
   // s.rf_reload_value //= lambda: s.fn_to_recfn.out if s.cfg_cmd == CfgCmd.RF_LOAD_FP else sext( s.cfg_value, p.dpath_width )
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_PE_rc_0__dpath_rf_reload_value
     rf_reload_value = ( cfg_cmd == 2'd2 ) ? fn_to_recfn__out : { { 1 { cfg_value[31] } }, cfg_value };
   end
 
-  // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/ProcElementDpath.py:110
-  // s.rf_wdata //= lambda: s.rf_reload_value if s.rf_reload else s.fu.out.msg.result
+  // PyMTL Update Block Source
+  // At /work/global/pp482/test/cgra-src/src/cgra/ProcElementDpath.py:255
+  // @update
+  // def up_fu_ifc():
+  //   s.fu.in_.val @= 0
+  //   s.sb.fu_in.rdy @= 0
+  //   s.fu.in_.msg.opd_a @= 0
+  //   s.fu.in_.msg.opd_b @= 0
+  //   s.fu.in_.msg.opd_rf @= 0
+  //   s.fu.in_.msg.is_faking_opA @= 0
+  //   s.fu.in_.msg.is_faking_opB @= 0
+  // 
+  //   if s.is_sphi & (s.sphi_fsm != SPHI_FSM_DONE):
+  //     s.fu.in_.val               @= s.is_sphi_fu_val
+  //     s.sb.fu_in.rdy             @= s.fu.in_.rdy
+  //     s.fu.in_.msg.opd_a         @= s.rf.rdata0
+  //     s.fu.in_.msg.opd_b         @= s.rf.rdata1
+  //     s.fu.in_.msg.opd_rf        @= 0
+  //     s.fu.in_.msg.is_faking_opA @= 0
+  //     s.fu.in_.msg.is_faking_opB @= 0
+  //   else:
+  //     s.fu.in_.val   @= s.sb.fu_in.val
+  //     s.sb.fu_in.rdy @= s.fu.in_.rdy
+  //     s.fu.in_.msg   @= s.sb.fu_in.msg
+  // 
+  //   s.sb.rf_operand @= s.rf.rdata0
   
-  always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_PE_rc_0__dpath_rf_wdata
-    rf_wdata = rf_reload ? rf_reload_value : fu__out__msg.result;
+  always_comb begin : up_fu_ifc
+    fu__in___val = 1'd0;
+    sb__fu_in__rdy = 1'd0;
+    fu__in___msg.opd_a = 33'd0;
+    fu__in___msg.opd_b = 33'd0;
+    fu__in___msg.opd_rf = 33'd0;
+    fu__in___msg.is_faking_opA = 1'd0;
+    fu__in___msg.is_faking_opB = 1'd0;
+    if ( is_sphi & ( sphi_fsm != 4'( __const__SPHI_FSM_DONE ) ) ) begin
+      fu__in___val = is_sphi_fu_val;
+      sb__fu_in__rdy = fu__in___rdy;
+      fu__in___msg.opd_a = rf__rdata0;
+      fu__in___msg.opd_b = rf__rdata1;
+      fu__in___msg.opd_rf = 33'd0;
+      fu__in___msg.is_faking_opA = 1'd0;
+      fu__in___msg.is_faking_opB = 1'd0;
+    end
+    else begin
+      fu__in___val = sb__fu_in__val;
+      sb__fu_in__rdy = fu__in___rdy;
+      fu__in___msg = sb__fu_in__msg;
+    end
+    sb__rf_operand = rf__rdata0;
+  end
+
+  // PyMTL Update Block Source
+  // At /work/global/pp482/test/cgra-src/src/cgra/ProcElementDpath.py:186
+  // @update
+  // def up_rf_ctrl():
+  //   s.rf.raddr0 @= 0
+  //   if s.rf_is_circular:
+  //     s.rf.raddr0 @= s.rf_raddr_circ_reg
+  //   elif s.is_sphi:
+  //     s.rf.raddr0 @= 0
+  //     if s.sphi_fsm == SPHI_FSM_RD01:
+  //       s.rf.raddr0 @= 0
+  //     elif s.sphi_fsm == SPHI_FSM_RD23:
+  //       s.rf.raddr0 @= 2
+  //     elif s.sphi_fsm == SPHI_FSM_RDIM:
+  //       s.rf.raddr0 @= 0
+  //     elif s.sphi_fsm == SPHI_FSM_SEND:
+  //       s.rf.raddr0 @= 2
+  // 
+  //   s.rf.raddr1 @= 0
+  //   if s.is_sphi:
+  //     s.rf.raddr1 @= 0
+  //     if s.sphi_fsm == SPHI_FSM_RD01:
+  //       s.rf.raddr1 @= 1
+  //     elif s.sphi_fsm == SPHI_FSM_RD23:
+  //       s.rf.raddr1 @= 3
+  //     elif s.sphi_fsm == SPHI_FSM_RDIM:
+  //       s.rf.raddr1 @= 1
+  // 
+  //   s.rf.waddr @= 0
+  //   if s.rf_is_circular | s.is_sphi:
+  //     s.rf.waddr @= s.rf_waddr_circ_reg
+  // 
+  //   s.rf.wen @= s.rf_wen
+  //   if s.is_sphi:
+  //     s.rf.wen @= s.is_sphi_rf_wen
+  // 
+  //   s.rf.wdata @= s.fu.out.msg.result
+  //   if s.rf_reload:
+  //     s.rf.wdata @= s.rf_reload_value
+  // 
+  //   s.rf_rdata_consumed @= s.fu.in_.val & s.fu.in_.rdy
+  //   s.rf_wdata_consumed @= s.rf_wen
+  //   if s.is_sphi:
+  //     s.rf_wdata_consumed @= s.is_sphi_rf_wen
+  // 
+  //   s.rf.clear @= s.rf_reload
+  
+  always_comb begin : up_rf_ctrl
+    rf__raddr0 = 2'd0;
+    if ( rf_is_circular ) begin
+      rf__raddr0 = rf_raddr_circ_reg;
+    end
+    else if ( is_sphi ) begin
+      rf__raddr0 = 2'd0;
+      if ( sphi_fsm == 4'( __const__SPHI_FSM_RD01 ) ) begin
+        rf__raddr0 = 2'd0;
+      end
+      else if ( sphi_fsm == 4'( __const__SPHI_FSM_RD23 ) ) begin
+        rf__raddr0 = 2'd2;
+      end
+      else if ( sphi_fsm == 4'( __const__SPHI_FSM_RDIM ) ) begin
+        rf__raddr0 = 2'd0;
+      end
+      else if ( sphi_fsm == 4'( __const__SPHI_FSM_SEND ) ) begin
+        rf__raddr0 = 2'd2;
+      end
+    end
+    rf__raddr1 = 2'd0;
+    if ( is_sphi ) begin
+      rf__raddr1 = 2'd0;
+      if ( sphi_fsm == 4'( __const__SPHI_FSM_RD01 ) ) begin
+        rf__raddr1 = 2'd1;
+      end
+      else if ( sphi_fsm == 4'( __const__SPHI_FSM_RD23 ) ) begin
+        rf__raddr1 = 2'd3;
+      end
+      else if ( sphi_fsm == 4'( __const__SPHI_FSM_RDIM ) ) begin
+        rf__raddr1 = 2'd1;
+      end
+    end
+    rf__waddr = 2'd0;
+    if ( rf_is_circular | is_sphi ) begin
+      rf__waddr = rf_waddr_circ_reg;
+    end
+    rf__wen = rf_wen;
+    if ( is_sphi ) begin
+      rf__wen = is_sphi_rf_wen;
+    end
+    rf__wdata = fu__out__msg.result;
+    if ( rf_reload ) begin
+      rf__wdata = rf_reload_value;
+    end
+    rf_rdata_consumed = fu__in___val & fu__in___rdy;
+    rf_wdata_consumed = rf_wen;
+    if ( is_sphi ) begin
+      rf_wdata_consumed = is_sphi_rf_wen;
+    end
+    rf__clear = rf_reload;
+  end
+
+  // PyMTL Update Block Source
+  // At /work/global/pp482/test/cgra-src/src/cgra/ProcElementDpath.py:121
+  // @update
+  // def up_sphi_ctrl():
+  //   s.is_sphi @= (s.cfg_r.out.opcode == CFG.OP_Q_TYPE) & \
+  //                (s.cfg_r.out.func == CFG.SPHI)
+  //   s.is_sphi_fu_val @= (s.sphi_fsm == SPHI_FSM_RD01) | \
+  //                       (s.sphi_fsm == SPHI_FSM_RD23) | \
+  //                       (s.sphi_fsm == SPHI_FSM_RDIM)
+  //   s.is_sphi_rf_wen @= (s.sphi_fsm == SPHI_FSM_WAT2) | \
+  //                       (s.sphi_fsm == SPHI_FSM_RDIM) | \
+  //                       (s.sphi_fsm == SPHI_FSM_WAT6)
+  //   # Under SPHI config, the output of FU is not valid until
+  //   # we are ready to fire the sum reduction result.
+  //   s.is_sphi_sent @= s.fu.out.val & s.fu.out.rdy
+  
+  always_comb begin : up_sphi_ctrl
+    is_sphi = ( cfg_r__out.opcode == 1'd0 ) & ( cfg_r__out.func == 6'd29 );
+    is_sphi_fu_val = ( ( sphi_fsm == 4'( __const__SPHI_FSM_RD01 ) ) | ( sphi_fsm == 4'( __const__SPHI_FSM_RD23 ) ) ) | ( sphi_fsm == 4'( __const__SPHI_FSM_RDIM ) );
+    is_sphi_rf_wen = ( ( sphi_fsm == 4'( __const__SPHI_FSM_WAT2 ) ) | ( sphi_fsm == 4'( __const__SPHI_FSM_RDIM ) ) ) | ( sphi_fsm == 4'( __const__SPHI_FSM_WAT6 ) );
+    is_sphi_sent = fu__out__val & fu__out__rdy;
+  end
+
+  // PyMTL Update Block Source
+  // At /work/global/pp482/test/cgra-src/src/cgra/ProcElementDpath.py:231
+  // @update_ff
+  // def up_rf_circ_reg():
+  //   if s.reset:
+  //     s.rf_raddr_circ_reg <<= 0
+  //     s.rf_waddr_circ_reg <<= 0
+  //   else:
+  //     if s.cfg_reset:
+  //       s.rf_raddr_circ_reg <<= 0
+  //       s.rf_waddr_circ_reg <<= 0
+  //     else:
+  //       if s.rf_is_circular & s.rf_rdata_consumed:
+  //         s.rf_raddr_circ_reg <<= s.rf_raddr_circ_reg + 1
+  //       if (s.rf_is_circular | s.is_sphi) & s.rf_wdata_consumed & ~s.rf_reload:
+  //         s.rf_waddr_circ_reg <<= s.rf_waddr_circ_reg + 1
+  
+  always_ff @(posedge clk) begin : up_rf_circ_reg
+    if ( reset ) begin
+      rf_raddr_circ_reg <= 2'd0;
+      rf_waddr_circ_reg <= 2'd0;
+    end
+    else if ( cfg_reset ) begin
+      rf_raddr_circ_reg <= 2'd0;
+      rf_waddr_circ_reg <= 2'd0;
+    end
+    else begin
+      if ( rf_is_circular & rf_rdata_consumed ) begin
+        rf_raddr_circ_reg <= rf_raddr_circ_reg + 2'd1;
+      end
+      if ( ( ( rf_is_circular | is_sphi ) & rf_wdata_consumed ) & ( ~rf_reload ) ) begin
+        rf_waddr_circ_reg <= rf_waddr_circ_reg + 2'd1;
+      end
+    end
+  end
+
+  // PyMTL Update Block Source
+  // At /work/global/pp482/test/cgra-src/src/cgra/ProcElementDpath.py:135
+  // @update_ff
+  // def up_sphi_fsm():
+  //   if s.reset:
+  //     s.sphi_fsm <<= SPHI_FSM_IDLE
+  //   else:
+  //     if s.cfg_reset:
+  //       s.sphi_fsm <<= SPHI_FSM_IDLE
+  //     elif s.sphi_fsm == SPHI_FSM_IDLE:
+  //       s.sphi_fsm <<= SPHI_FSM_RD01 if s.is_calc & s.is_sphi else SPHI_FSM_IDLE
+  //     elif s.sphi_fsm == SPHI_FSM_RD01:
+  //       # Read reg0, reg1 into FADD LLFU
+  //       s.sphi_fsm <<= SPHI_FSM_RD23
+  //     elif s.sphi_fsm == SPHI_FSM_RD23:
+  //       # Read reg2, reg3 into FADD LLFU
+  //       s.sphi_fsm <<= SPHI_FSM_WAT0
+  //     elif s.sphi_fsm == SPHI_FSM_WAT0:
+  //       s.sphi_fsm <<= SPHI_FSM_WAT1
+  //     elif s.sphi_fsm == SPHI_FSM_WAT1:
+  //       s.sphi_fsm <<= SPHI_FSM_WAT2
+  //     elif s.sphi_fsm == SPHI_FSM_WAT2:
+  //       s.sphi_fsm <<= SPHI_FSM_RDIM
+  //     elif s.sphi_fsm == SPHI_FSM_RDIM:
+  //       # Read reg0, reg1 into FADD LLFU
+  //       s.sphi_fsm <<= SPHI_FSM_WAT3
+  //     elif s.sphi_fsm == SPHI_FSM_WAT3:
+  //       s.sphi_fsm <<= SPHI_FSM_WAT4
+  //     elif s.sphi_fsm == SPHI_FSM_WAT4:
+  //       s.sphi_fsm <<= SPHI_FSM_WAT5
+  //     elif s.sphi_fsm == SPHI_FSM_WAT5:
+  //       s.sphi_fsm <<= SPHI_FSM_WAT6
+  //     elif s.sphi_fsm == SPHI_FSM_WAT6:
+  //       s.sphi_fsm <<= SPHI_FSM_SEND
+  //     elif s.sphi_fsm == SPHI_FSM_SEND:
+  //       s.sphi_fsm <<= SPHI_FSM_DONE if s.is_sphi_sent else SPHI_FSM_SEND
+  
+  always_ff @(posedge clk) begin : up_sphi_fsm
+    if ( reset ) begin
+      sphi_fsm <= 4'( __const__SPHI_FSM_IDLE );
+    end
+    else if ( cfg_reset ) begin
+      sphi_fsm <= 4'( __const__SPHI_FSM_IDLE );
+    end
+    else if ( sphi_fsm == 4'( __const__SPHI_FSM_IDLE ) ) begin
+      sphi_fsm <= ( is_calc & is_sphi ) ? 4'( __const__SPHI_FSM_RD01 ) : 4'( __const__SPHI_FSM_IDLE );
+    end
+    else if ( sphi_fsm == 4'( __const__SPHI_FSM_RD01 ) ) begin
+      sphi_fsm <= 4'( __const__SPHI_FSM_RD23 );
+    end
+    else if ( sphi_fsm == 4'( __const__SPHI_FSM_RD23 ) ) begin
+      sphi_fsm <= 4'( __const__SPHI_FSM_WAT0 );
+    end
+    else if ( sphi_fsm == 4'( __const__SPHI_FSM_WAT0 ) ) begin
+      sphi_fsm <= 4'( __const__SPHI_FSM_WAT1 );
+    end
+    else if ( sphi_fsm == 4'( __const__SPHI_FSM_WAT1 ) ) begin
+      sphi_fsm <= 4'( __const__SPHI_FSM_WAT2 );
+    end
+    else if ( sphi_fsm == 4'( __const__SPHI_FSM_WAT2 ) ) begin
+      sphi_fsm <= 4'( __const__SPHI_FSM_RDIM );
+    end
+    else if ( sphi_fsm == 4'( __const__SPHI_FSM_RDIM ) ) begin
+      sphi_fsm <= 4'( __const__SPHI_FSM_WAT3 );
+    end
+    else if ( sphi_fsm == 4'( __const__SPHI_FSM_WAT3 ) ) begin
+      sphi_fsm <= 4'( __const__SPHI_FSM_WAT4 );
+    end
+    else if ( sphi_fsm == 4'( __const__SPHI_FSM_WAT4 ) ) begin
+      sphi_fsm <= 4'( __const__SPHI_FSM_WAT5 );
+    end
+    else if ( sphi_fsm == 4'( __const__SPHI_FSM_WAT5 ) ) begin
+      sphi_fsm <= 4'( __const__SPHI_FSM_WAT6 );
+    end
+    else if ( sphi_fsm == 4'( __const__SPHI_FSM_WAT6 ) ) begin
+      sphi_fsm <= 4'( __const__SPHI_FSM_SEND );
+    end
+    else if ( sphi_fsm == 4'( __const__SPHI_FSM_SEND ) ) begin
+      sphi_fsm <= is_sphi_sent ? 4'( __const__SPHI_FSM_DONE ) : 4'( __const__SPHI_FSM_SEND );
+    end
   end
 
   assign sb__clk = clk;
@@ -7001,15 +7255,6 @@ module ProcElementDpath__07e21c4d4fa663e6
   assign fn_to_recfn__clk = clk;
   assign fn_to_recfn__reset = reset;
   assign fn_to_recfn__in_ = cfg_value;
-  assign rf__raddr = 1'd0;
-  assign rf__waddr = 1'd0;
-  assign rf_operand = rf__rdata;
-  assign rf__wdata = rf_wdata;
-  assign rf__wen = rf_wen;
-  assign sb__rf_operand = rf_operand;
-  assign fu__in___msg = sb__fu_in__msg;
-  assign sb__fu_in__rdy = fu__in___rdy;
-  assign fu__in___val = sb__fu_in__val;
   assign sb__in___msg[0] = in___msg[0];
   assign in___rdy[0] = sb__in___rdy[0];
   assign sb__in___val[0] = in___val[0];
@@ -7040,7 +7285,7 @@ module ProcElementDpath__07e21c4d4fa663e6
   assign sb__cfg = cfg_r__out;
   assign sb__cfg_reset = cfg_r_en;
   assign sb__is_calc = is_calc;
-  assign fu__phi_init_operand = rf__rdata;
+  assign fu__phi_init_operand = rf__rdata0;
   assign fu__cfg = cfg_r__out;
   assign fu__cfg_reset = cfg_r_en;
   assign fu__is_calc = is_calc;
@@ -7052,7 +7297,7 @@ endmodule
 
 // PyMTL Component ValRdyNormalQueuePow2CtrlRTL Definition
 // Full name: ValRdyNormalQueuePow2CtrlRTL__num_entries_2__enable_clear_True__enable_accept_True
-// At /work/global/pp482/cgra/src/fifos/ValRdyNormalQueuePow2RTL.py
+// At /work/global/pp482/test/cgra-src/src/fifos/ValRdyNormalQueuePow2RTL.py
 
 module ValRdyNormalQueuePow2CtrlRTL__b79c6c030dcf4445
 (
@@ -7079,7 +7324,7 @@ module ValRdyNormalQueuePow2CtrlRTL__b79c6c030dcf4445
   logic [1:0] w_ptr_with_wrapbit_n;
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/fifos/ValRdyNormalQueuePow2RTL.py:100
+  // At /work/global/pp482/test/cgra-src/src/fifos/ValRdyNormalQueuePow2RTL.py:100
   // @update
   // def upblk_empty():
   //   s.empty @= (s.w_ptr_with_wrapbit == s.r_ptr_with_wrapbit)
@@ -7089,7 +7334,7 @@ module ValRdyNormalQueuePow2CtrlRTL__b79c6c030dcf4445
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/fifos/ValRdyNormalQueuePow2RTL.py:96
+  // At /work/global/pp482/test/cgra-src/src/fifos/ValRdyNormalQueuePow2RTL.py:96
   // @update
   // def upblk_full():
   //   s.full @= (s.w_ptr == s.r_ptr) & (s.w_ptr_with_wrapbit != s.r_ptr_with_wrapbit)
@@ -7099,7 +7344,7 @@ module ValRdyNormalQueuePow2CtrlRTL__b79c6c030dcf4445
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/fifos/ValRdyNormalQueuePow2RTL.py:155
+  // At /work/global/pp482/test/cgra-src/src/fifos/ValRdyNormalQueuePow2RTL.py:155
   // @update
   // def upblk_output_en_accept():
   //   s.enq_rdy @= ~ s.full & s.accept
@@ -7113,7 +7358,7 @@ module ValRdyNormalQueuePow2CtrlRTL__b79c6c030dcf4445
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/fifos/ValRdyNormalQueuePow2RTL.py:131
+  // At /work/global/pp482/test/cgra-src/src/fifos/ValRdyNormalQueuePow2RTL.py:131
   // @update
   // def upblk_r_ptr_en_clear_next():
   //   s.r_ptr_with_wrapbit_n @= s.r_ptr_with_wrapbit
@@ -7133,7 +7378,7 @@ module ValRdyNormalQueuePow2CtrlRTL__b79c6c030dcf4445
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/fifos/ValRdyNormalQueuePow2RTL.py:116
+  // At /work/global/pp482/test/cgra-src/src/fifos/ValRdyNormalQueuePow2RTL.py:116
   // @update
   // def upblk_w_ptr_en_clear_next():
   //   s.w_ptr_with_wrapbit_n @= s.w_ptr_with_wrapbit
@@ -7153,7 +7398,7 @@ module ValRdyNormalQueuePow2CtrlRTL__b79c6c030dcf4445
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/fifos/ValRdyNormalQueuePow2RTL.py:124
+  // At /work/global/pp482/test/cgra-src/src/fifos/ValRdyNormalQueuePow2RTL.py:124
   // @update_ff
   // def upblk_r_ptr_en_clear():
   //   if s.reset:
@@ -7170,7 +7415,7 @@ module ValRdyNormalQueuePow2CtrlRTL__b79c6c030dcf4445
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/fifos/ValRdyNormalQueuePow2RTL.py:109
+  // At /work/global/pp482/test/cgra-src/src/fifos/ValRdyNormalQueuePow2RTL.py:109
   // @update_ff
   // def upblk_w_ptr_en_clear():
   //   if s.reset:
@@ -7197,7 +7442,7 @@ endmodule
 
 // PyMTL Component ValRdyNormalQueuePow2RTL Definition
 // Full name: ValRdyNormalQueuePow2RTL__EntryType_Bits33__num_entries_2__enable_clear_True__enable_accept_True
-// At /work/global/pp482/cgra/src/fifos/ValRdyNormalQueuePow2RTL.py
+// At /work/global/pp482/test/cgra-src/src/fifos/ValRdyNormalQueuePow2RTL.py
 
 module ValRdyNormalQueuePow2RTL__65e485b98a2d2569
 (
@@ -7298,8 +7543,8 @@ endmodule
 
 
 // PyMTL Component ProcElement Definition
-// Full name: ProcElement__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
-// At /work/global/pp482/cgra/src/cgra/ProcElement.py
+// Full name: ProcElement__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, enable_debug_ports:False, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:4, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// At /work/global/pp482/test/cgra-src/src/cgra/ProcElement.py
 
 `ifndef BRG_BOTTOM_UP_SYNTH
 module ProcElement
@@ -7362,7 +7607,7 @@ module ProcElement
   logic [2:0] ctrl__rf_src;
   logic [0:0] ctrl__rf_wen;
 
-  ProcElementCtrl__07e21c4d4fa663e6 ctrl
+  ProcElementCtrl__7bb22bb10af9a0d4 ctrl
   (
     .cfg_deq_val( ctrl__cfg_deq_val ),
     .cfg_out_val( ctrl__cfg_out_val ),
@@ -7407,7 +7652,7 @@ module ProcElement
   logic [0:0] dpath__out__rdy [0:3];
   logic [0:0] dpath__out__val [0:3];
 
-  ProcElementDpath__07e21c4d4fa663e6 dpath
+  ProcElementDpath__7bb22bb10af9a0d4 dpath
   (
     .cfg_deq_msg( dpath__cfg_deq_msg ),
     .cfg_out_msg( dpath__cfg_out_msg ),
@@ -7517,7 +7762,7 @@ module ProcElement
   //-------------------------------------------------------------
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/ProcElement.py:99
+  // At /work/global/pp482/test/cgra-src/src/cgra/ProcElement.py:99
   // s.is_occupied //= lambda: s.is_calc & ~s.dpath.is_occupied
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_PE_rc_0__is_occupied
@@ -7603,7 +7848,7 @@ endmodule
 
 
 // PyMTL Component Reg Definition
-// At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/registers.py
+// At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/registers.py
 
 module Reg__Type_Bits1
 (
@@ -7614,7 +7859,7 @@ module Reg__Type_Bits1
 );
 
   // PyMTL Update Block Source
-  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/registers.py:10
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/registers.py:10
   // @update_ff
   // def up_reg():
   //   s.out <<= s.in_
@@ -7627,7 +7872,7 @@ endmodule
 
 
 // PyMTL Component ShiftRegister Definition
-// At /work/global/pp482/cgra/src/misc/ShiftRegister.py
+// At /work/global/pp482/test/cgra-src/src/misc/ShiftRegister.py
 
 module ShiftRegister__Type_Bits1__ncycles_1
 (
@@ -7661,7 +7906,7 @@ module ShiftRegister__Type_Bits1__ncycles_1
   //-------------------------------------------------------------
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/misc/ShiftRegister.py:20
+  // At /work/global/pp482/test/cgra-src/src/misc/ShiftRegister.py:20
   // @update
   // def SR_in():
   //   s.regs[0].in_ @= s.in_
@@ -7686,7 +7931,7 @@ module ShiftRegister__Type_Bits1__ncycles_1
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/misc/ShiftRegister.py:30
+  // At /work/global/pp482/test/cgra-src/src/misc/ShiftRegister.py:30
   // @update
   // def SR_out():
   //   s.out @= s.regs[ncycles-1].out
@@ -7707,22 +7952,22 @@ endmodule
 
 
 // PyMTL Component MemMasterIfcMux Definition
-// Full name: MemMasterIfcMux__ninputs_2__MasterIfcType_MemMasterIfcRTL__MinionIfcType_MemMinionIfcRTL__ReqType_CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7__RespType_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7
-// At /work/global/pp482/cgra/src/misc/MemMasterIfcMux.py
+// Full name: MemMasterIfcMux__ninputs_2__MasterIfcType_MemMasterIfcRTL__MinionIfcType_MemMinionIfcRTL__ReqType_CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7__RespType_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7
+// At /work/global/pp482/test/cgra-src/src/misc/MemMasterIfcMux.py
 
-module MemMasterIfcMux__a729082d09b6eb01
+module MemMasterIfcMux__68b5082d058b71fb
 (
   input  logic [0:0] clk ,
   input  logic [0:0] reset ,
   input  logic [0:0] sel ,
   input logic [0:0] in___req__en [0:1],
-  input CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 in___req__msg [0:1],
+  input CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 in___req__msg [0:1],
   output logic [0:0] in___req__rdy [0:1],
   output logic [0:0] in___resp__en [0:1],
   output CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 in___resp__msg [0:1],
   input logic [0:0] in___resp__rdy [0:1],
   output logic [0:0] out__req__en ,
-  output CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 out__req__msg ,
+  output CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 out__req__msg ,
   input logic [0:0] out__req__rdy ,
   input logic [0:0] out__resp__en ,
   input CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 out__resp__msg ,
@@ -7731,7 +7976,7 @@ module MemMasterIfcMux__a729082d09b6eb01
   localparam logic [1:0] __const__ninputs_at_mem_master_ifc_mux_upblk  = 2'd2;
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/misc/MemMasterIfcMux.py:27
+  // At /work/global/pp482/test/cgra-src/src/misc/MemMasterIfcMux.py:27
   // @update
   // def mem_master_ifc_mux_upblk():
   //   s.out.req.en          @= s.in_[s.sel].req.en
@@ -7766,10 +8011,10 @@ endmodule
 
 
 // PyMTL Component CGRACoreDpath Definition
-// Full name: CGRACoreDpath__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
-// At /work/global/pp482/cgra/src/cgra/CGRACoreDpath.py
+// Full name: CGRACoreDpath__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, enable_debug_ports:False, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:4, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// At /work/global/pp482/test/cgra-src/src/cgra/CGRACoreDpath.py
 
-module CGRACoreDpath__07e21c4d4fa663e6
+module CGRACoreDpath__7bb22bb10af9a0d4
 (
   input  logic [0:0] CSR_wen ,
   input  logic [0:0] cfg_init ,
@@ -7787,7 +8032,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   input  CgraXcelReqMsg__wen_1__addr_14__data_32 xminion_req_msg ,
   output CgraXcelRespMsg__wen_1__addr_14__data_32 xminion_resp_msg ,
   output logic [0:0] spad_masters__req__en [0:15],
-  output CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 spad_masters__req__msg [0:15],
+  output CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 spad_masters__req__msg [0:15],
   input logic [0:0] spad_masters__req__rdy [0:15],
   input logic [0:0] spad_masters__resp__en [0:15],
   input CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 spad_masters__resp__msg [0:15],
@@ -7823,13 +8068,13 @@ module CGRACoreDpath__07e21c4d4fa663e6
   logic [37:0] CE_e__cfg_out__msg [0:7];
   logic [0:0] CE_e__cfg_out__val [0:7];
   logic [0:0] CE_e__mem_master__req__en [0:7];
-  CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 CE_e__mem_master__req__msg [0:7];
+  CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 CE_e__mem_master__req__msg [0:7];
   logic [0:0] CE_e__mem_master__req__rdy [0:7];
   logic [0:0] CE_e__mem_master__resp__en [0:7];
   CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 CE_e__mem_master__resp__msg [0:7];
   logic [0:0] CE_e__mem_master__resp__rdy [0:7];
 
-  ConfigEngine__7a3f723b2782421e CE_e__0
+  ConfigEngine__126fffb8bd5741d2 CE_e__0
   (
     .cfg_cmd( CE_e__cfg_cmd[0] ),
     .cfg_init( CE_e__cfg_init[0] ),
@@ -7850,7 +8095,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
     .mem_master__resp__rdy( CE_e__mem_master__resp__rdy[0] )
   );
 
-  ConfigEngine__7a3f723b2782421e CE_e__1
+  ConfigEngine__126fffb8bd5741d2 CE_e__1
   (
     .cfg_cmd( CE_e__cfg_cmd[1] ),
     .cfg_init( CE_e__cfg_init[1] ),
@@ -7871,7 +8116,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
     .mem_master__resp__rdy( CE_e__mem_master__resp__rdy[1] )
   );
 
-  ConfigEngine__7a3f723b2782421e CE_e__2
+  ConfigEngine__126fffb8bd5741d2 CE_e__2
   (
     .cfg_cmd( CE_e__cfg_cmd[2] ),
     .cfg_init( CE_e__cfg_init[2] ),
@@ -7892,7 +8137,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
     .mem_master__resp__rdy( CE_e__mem_master__resp__rdy[2] )
   );
 
-  ConfigEngine__7a3f723b2782421e CE_e__3
+  ConfigEngine__126fffb8bd5741d2 CE_e__3
   (
     .cfg_cmd( CE_e__cfg_cmd[3] ),
     .cfg_init( CE_e__cfg_init[3] ),
@@ -7913,7 +8158,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
     .mem_master__resp__rdy( CE_e__mem_master__resp__rdy[3] )
   );
 
-  ConfigEngine__7a3f723b2782421e CE_e__4
+  ConfigEngine__126fffb8bd5741d2 CE_e__4
   (
     .cfg_cmd( CE_e__cfg_cmd[4] ),
     .cfg_init( CE_e__cfg_init[4] ),
@@ -7934,7 +8179,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
     .mem_master__resp__rdy( CE_e__mem_master__resp__rdy[4] )
   );
 
-  ConfigEngine__7a3f723b2782421e CE_e__5
+  ConfigEngine__126fffb8bd5741d2 CE_e__5
   (
     .cfg_cmd( CE_e__cfg_cmd[5] ),
     .cfg_init( CE_e__cfg_init[5] ),
@@ -7955,7 +8200,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
     .mem_master__resp__rdy( CE_e__mem_master__resp__rdy[5] )
   );
 
-  ConfigEngine__7a3f723b2782421e CE_e__6
+  ConfigEngine__126fffb8bd5741d2 CE_e__6
   (
     .cfg_cmd( CE_e__cfg_cmd[6] ),
     .cfg_init( CE_e__cfg_init[6] ),
@@ -7976,7 +8221,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
     .mem_master__resp__rdy( CE_e__mem_master__resp__rdy[6] )
   );
 
-  ConfigEngine__7a3f723b2782421e CE_e__7
+  ConfigEngine__126fffb8bd5741d2 CE_e__7
   (
     .cfg_cmd( CE_e__cfg_cmd[7] ),
     .cfg_init( CE_e__cfg_init[7] ),
@@ -8017,13 +8262,13 @@ module CGRACoreDpath__07e21c4d4fa663e6
   logic [37:0] CE_s__cfg_out__msg;
   logic [0:0] CE_s__cfg_out__val;
   logic [0:0] CE_s__mem_master__req__en;
-  CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 CE_s__mem_master__req__msg;
+  CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 CE_s__mem_master__req__msg;
   logic [0:0] CE_s__mem_master__req__rdy;
   logic [0:0] CE_s__mem_master__resp__en;
   CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 CE_s__mem_master__resp__msg;
   logic [0:0] CE_s__mem_master__resp__rdy;
 
-  ConfigEngine__35b26261d06d20ce CE_s
+  ConfigEngine__9b38f573ed946260 CE_s
   (
     .cfg_cmd( CE_s__cfg_cmd ),
     .cfg_init( CE_s__cfg_init ),
@@ -8656,7 +8901,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   logic [0:0] ME__in___rdy [0:15];
   logic [0:0] ME__in___val [0:15];
   logic [0:0] ME__mem_ifc__req__en [0:15];
-  CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 ME__mem_ifc__req__msg [0:15];
+  CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 ME__mem_ifc__req__msg [0:15];
   logic [0:0] ME__mem_ifc__req__rdy [0:15];
   logic [0:0] ME__mem_ifc__resp__en [0:15];
   CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 ME__mem_ifc__resp__msg [0:15];
@@ -8665,7 +8910,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   logic [0:0] ME__out__rdy [0:15];
   logic [0:0] ME__out__val [0:15];
 
-  MemEngine__07e21c4d4fa663e6 ME__0
+  MemEngine__7bb22bb10af9a0d4 ME__0
   (
     .clk( ME__clk[0] ),
     .id_cord( ME__id_cord[0] ),
@@ -8691,7 +8936,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
     .out__val( ME__out__val[0] )
   );
 
-  MemEngine__07e21c4d4fa663e6 ME__1
+  MemEngine__7bb22bb10af9a0d4 ME__1
   (
     .clk( ME__clk[1] ),
     .id_cord( ME__id_cord[1] ),
@@ -8717,7 +8962,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
     .out__val( ME__out__val[1] )
   );
 
-  MemEngine__07e21c4d4fa663e6 ME__2
+  MemEngine__7bb22bb10af9a0d4 ME__2
   (
     .clk( ME__clk[2] ),
     .id_cord( ME__id_cord[2] ),
@@ -8743,7 +8988,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
     .out__val( ME__out__val[2] )
   );
 
-  MemEngine__07e21c4d4fa663e6 ME__3
+  MemEngine__7bb22bb10af9a0d4 ME__3
   (
     .clk( ME__clk[3] ),
     .id_cord( ME__id_cord[3] ),
@@ -8769,7 +9014,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
     .out__val( ME__out__val[3] )
   );
 
-  MemEngine__07e21c4d4fa663e6 ME__4
+  MemEngine__7bb22bb10af9a0d4 ME__4
   (
     .clk( ME__clk[4] ),
     .id_cord( ME__id_cord[4] ),
@@ -8795,7 +9040,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
     .out__val( ME__out__val[4] )
   );
 
-  MemEngine__07e21c4d4fa663e6 ME__5
+  MemEngine__7bb22bb10af9a0d4 ME__5
   (
     .clk( ME__clk[5] ),
     .id_cord( ME__id_cord[5] ),
@@ -8821,7 +9066,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
     .out__val( ME__out__val[5] )
   );
 
-  MemEngine__07e21c4d4fa663e6 ME__6
+  MemEngine__7bb22bb10af9a0d4 ME__6
   (
     .clk( ME__clk[6] ),
     .id_cord( ME__id_cord[6] ),
@@ -8847,7 +9092,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
     .out__val( ME__out__val[6] )
   );
 
-  MemEngine__07e21c4d4fa663e6 ME__7
+  MemEngine__7bb22bb10af9a0d4 ME__7
   (
     .clk( ME__clk[7] ),
     .id_cord( ME__id_cord[7] ),
@@ -8873,7 +9118,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
     .out__val( ME__out__val[7] )
   );
 
-  MemEngine__07e21c4d4fa663e6 ME__8
+  MemEngine__7bb22bb10af9a0d4 ME__8
   (
     .clk( ME__clk[8] ),
     .id_cord( ME__id_cord[8] ),
@@ -8899,7 +9144,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
     .out__val( ME__out__val[8] )
   );
 
-  MemEngine__07e21c4d4fa663e6 ME__9
+  MemEngine__7bb22bb10af9a0d4 ME__9
   (
     .clk( ME__clk[9] ),
     .id_cord( ME__id_cord[9] ),
@@ -8925,7 +9170,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
     .out__val( ME__out__val[9] )
   );
 
-  MemEngine__07e21c4d4fa663e6 ME__10
+  MemEngine__7bb22bb10af9a0d4 ME__10
   (
     .clk( ME__clk[10] ),
     .id_cord( ME__id_cord[10] ),
@@ -8951,7 +9196,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
     .out__val( ME__out__val[10] )
   );
 
-  MemEngine__07e21c4d4fa663e6 ME__11
+  MemEngine__7bb22bb10af9a0d4 ME__11
   (
     .clk( ME__clk[11] ),
     .id_cord( ME__id_cord[11] ),
@@ -8977,7 +9222,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
     .out__val( ME__out__val[11] )
   );
 
-  MemEngine__07e21c4d4fa663e6 ME__12
+  MemEngine__7bb22bb10af9a0d4 ME__12
   (
     .clk( ME__clk[12] ),
     .id_cord( ME__id_cord[12] ),
@@ -9003,7 +9248,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
     .out__val( ME__out__val[12] )
   );
 
-  MemEngine__07e21c4d4fa663e6 ME__13
+  MemEngine__7bb22bb10af9a0d4 ME__13
   (
     .clk( ME__clk[13] ),
     .id_cord( ME__id_cord[13] ),
@@ -9029,7 +9274,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
     .out__val( ME__out__val[13] )
   );
 
-  MemEngine__07e21c4d4fa663e6 ME__14
+  MemEngine__7bb22bb10af9a0d4 ME__14
   (
     .clk( ME__clk[14] ),
     .id_cord( ME__id_cord[14] ),
@@ -9055,7 +9300,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
     .out__val( ME__out__val[14] )
   );
 
-  MemEngine__07e21c4d4fa663e6 ME__15
+  MemEngine__7bb22bb10af9a0d4 ME__15
   (
     .clk( ME__clk[15] ),
     .id_cord( ME__id_cord[15] ),
@@ -10421,19 +10666,19 @@ module CGRACoreDpath__07e21c4d4fa663e6
   logic [0:0] mem_muxes__reset [0:8];
   logic [0:0] mem_muxes__sel [0:8];
   logic [0:0] mem_muxes__in___req__en [0:8][0:1];
-  CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 mem_muxes__in___req__msg [0:8][0:1];
+  CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 mem_muxes__in___req__msg [0:8][0:1];
   logic [0:0] mem_muxes__in___req__rdy [0:8][0:1];
   logic [0:0] mem_muxes__in___resp__en [0:8][0:1];
   CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 mem_muxes__in___resp__msg [0:8][0:1];
   logic [0:0] mem_muxes__in___resp__rdy [0:8][0:1];
   logic [0:0] mem_muxes__out__req__en [0:8];
-  CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 mem_muxes__out__req__msg [0:8];
+  CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 mem_muxes__out__req__msg [0:8];
   logic [0:0] mem_muxes__out__req__rdy [0:8];
   logic [0:0] mem_muxes__out__resp__en [0:8];
   CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 mem_muxes__out__resp__msg [0:8];
   logic [0:0] mem_muxes__out__resp__rdy [0:8];
 
-  MemMasterIfcMux__a729082d09b6eb01 mem_muxes__0
+  MemMasterIfcMux__68b5082d058b71fb mem_muxes__0
   (
     .clk( mem_muxes__clk[0] ),
     .reset( mem_muxes__reset[0] ),
@@ -10452,7 +10697,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
     .out__resp__rdy( mem_muxes__out__resp__rdy[0] )
   );
 
-  MemMasterIfcMux__a729082d09b6eb01 mem_muxes__1
+  MemMasterIfcMux__68b5082d058b71fb mem_muxes__1
   (
     .clk( mem_muxes__clk[1] ),
     .reset( mem_muxes__reset[1] ),
@@ -10471,7 +10716,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
     .out__resp__rdy( mem_muxes__out__resp__rdy[1] )
   );
 
-  MemMasterIfcMux__a729082d09b6eb01 mem_muxes__2
+  MemMasterIfcMux__68b5082d058b71fb mem_muxes__2
   (
     .clk( mem_muxes__clk[2] ),
     .reset( mem_muxes__reset[2] ),
@@ -10490,7 +10735,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
     .out__resp__rdy( mem_muxes__out__resp__rdy[2] )
   );
 
-  MemMasterIfcMux__a729082d09b6eb01 mem_muxes__3
+  MemMasterIfcMux__68b5082d058b71fb mem_muxes__3
   (
     .clk( mem_muxes__clk[3] ),
     .reset( mem_muxes__reset[3] ),
@@ -10509,7 +10754,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
     .out__resp__rdy( mem_muxes__out__resp__rdy[3] )
   );
 
-  MemMasterIfcMux__a729082d09b6eb01 mem_muxes__4
+  MemMasterIfcMux__68b5082d058b71fb mem_muxes__4
   (
     .clk( mem_muxes__clk[4] ),
     .reset( mem_muxes__reset[4] ),
@@ -10528,7 +10773,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
     .out__resp__rdy( mem_muxes__out__resp__rdy[4] )
   );
 
-  MemMasterIfcMux__a729082d09b6eb01 mem_muxes__5
+  MemMasterIfcMux__68b5082d058b71fb mem_muxes__5
   (
     .clk( mem_muxes__clk[5] ),
     .reset( mem_muxes__reset[5] ),
@@ -10547,7 +10792,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
     .out__resp__rdy( mem_muxes__out__resp__rdy[5] )
   );
 
-  MemMasterIfcMux__a729082d09b6eb01 mem_muxes__6
+  MemMasterIfcMux__68b5082d058b71fb mem_muxes__6
   (
     .clk( mem_muxes__clk[6] ),
     .reset( mem_muxes__reset[6] ),
@@ -10566,7 +10811,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
     .out__resp__rdy( mem_muxes__out__resp__rdy[6] )
   );
 
-  MemMasterIfcMux__a729082d09b6eb01 mem_muxes__7
+  MemMasterIfcMux__68b5082d058b71fb mem_muxes__7
   (
     .clk( mem_muxes__clk[7] ),
     .reset( mem_muxes__reset[7] ),
@@ -10585,7 +10830,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
     .out__resp__rdy( mem_muxes__out__resp__rdy[7] )
   );
 
-  MemMasterIfcMux__a729082d09b6eb01 mem_muxes__8
+  MemMasterIfcMux__68b5082d058b71fb mem_muxes__8
   (
     .clk( mem_muxes__clk[8] ),
     .reset( mem_muxes__reset[8] ),
@@ -10609,7 +10854,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   //-------------------------------------------------------------
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/CGRACoreDpath.py:124
+  // At /work/global/pp482/test/cgra-src/src/cgra/CGRACoreDpath.py:124
   // s.CSRs_en[i] //= lambda: s.is_cfg_done | s.is_cfg_go | s.is_calc_go
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_CSRs_en_6_7_
@@ -10617,7 +10862,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/CGRACoreDpath.py:126
+  // At /work/global/pp482/test/cgra-src/src/cgra/CGRACoreDpath.py:126
   // s.CSRs_en[i] //= lambda: s.is_calc_done | s.is_cfg_go | s.is_calc_go
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_CSRs_en_7_8_
@@ -10625,7 +10870,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/CGRACoreDpath.py:132
+  // At /work/global/pp482/test/cgra-src/src/cgra/CGRACoreDpath.py:132
   // s.CSRs_in[i] //= lambda: 1 if s.is_cfg_done else \
   //                          0 if (s.is_cfg_go | s.is_calc_go) else \
   //                          s.CSRs[i].out
@@ -10635,7 +10880,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/CGRACoreDpath.py:136
+  // At /work/global/pp482/test/cgra-src/src/cgra/CGRACoreDpath.py:136
   // s.CSRs_in[i] //= lambda: 1 if s.is_calc_done else \
   //                          0 if (s.is_cfg_go | s.is_calc_go) else \
   //                          s.CSRs[i].out
@@ -10645,7 +10890,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/CGRACoreDpath.py:311
+  // At /work/global/pp482/test/cgra-src/src/cgra/CGRACoreDpath.py:311
   // s.delayed_all_CE_done.in_ //= lambda: reduce_and( s.all_CE_done )
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_delayed_all_CE_done_in_
@@ -10653,7 +10898,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/CGRACoreDpath.py:330
+  // At /work/global/pp482/test/cgra-src/src/cgra/CGRACoreDpath.py:330
   // s.is_calc_done //= lambda: reduce_and( s.all_ME_done ) & reduce_and( s.all_PE_occupancy )
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_is_calc_done
@@ -10661,7 +10906,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/CGRACoreDpath.py:337
+  // At /work/global/pp482/test/cgra-src/src/cgra/CGRACoreDpath.py:337
   // s.is_calc_go_transaction //= lambda: s.xminion_req_word_addr == GO_CALC
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_is_calc_go_transaction
@@ -10669,7 +10914,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/CGRACoreDpath.py:336
+  // At /work/global/pp482/test/cgra-src/src/cgra/CGRACoreDpath.py:336
   // s.is_cfg_go_transaction  //= lambda: s.xminion_req_word_addr == GO_CFG
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_is_cfg_go_transaction
@@ -10677,7 +10922,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/cgra/CGRACoreDpath.py:293
+  // At /work/global/pp482/test/cgra-src/src/cgra/CGRACoreDpath.py:293
   // s.xminion_resp_msg.data //= lambda: s.CSRs[ s.reg_CSR_raddr[bytes_offset:bytes_offset+num_registers_width] ].out
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_xminion_resp_msg_data
@@ -10685,7 +10930,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/CGRACoreDpath.py:142
+  // At /work/global/pp482/test/cgra-src/src/cgra/CGRACoreDpath.py:142
   // @update
   // def req_bits():
   //   for i in range( p.num_registers ):
@@ -10704,7 +10949,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/CGRACoreDpath.py:153
+  // At /work/global/pp482/test/cgra-src/src/cgra/CGRACoreDpath.py:153
   // @update_ff
   // def register_CSR_raddr():
   //   if s.reset:
@@ -12881,16 +13126,16 @@ endmodule
 
 
 // PyMTL Component CGRACore Definition
-// Full name: CGRACore__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
-// At /work/global/pp482/cgra/src/cgra/CGRACore.py
+// Full name: CGRACore__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, enable_debug_ports:False, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:4, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// At /work/global/pp482/test/cgra-src/src/cgra/CGRACore.py
 
-module CGRACore__07e21c4d4fa663e6
+module CGRACore__7bb22bb10af9a0d4
 (
   input  logic [0:0] clk ,
   output logic [0:0] is_calc_done ,
   input  logic [0:0] reset ,
   output logic [0:0] spad_masters__req__en [0:15],
-  output CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 spad_masters__req__msg [0:15],
+  output CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 spad_masters__req__msg [0:15],
   input logic [0:0] spad_masters__req__rdy [0:15],
   input logic [0:0] spad_masters__resp__en [0:15],
   input CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 spad_masters__resp__msg [0:15],
@@ -12924,7 +13169,7 @@ module CGRACore__07e21c4d4fa663e6
   logic [0:0] ctrl__xminion_resp_en;
   logic [0:0] ctrl__xminion_resp_rdy;
 
-  CGRACoreCtrl__07e21c4d4fa663e6 ctrl
+  CGRACoreCtrl__7bb22bb10af9a0d4 ctrl
   (
     .CSR_wen( ctrl__CSR_wen ),
     .cfg_init( ctrl__cfg_init ),
@@ -12969,13 +13214,13 @@ module CGRACore__07e21c4d4fa663e6
   CgraXcelReqMsg__wen_1__addr_14__data_32 dpath__xminion_req_msg;
   CgraXcelRespMsg__wen_1__addr_14__data_32 dpath__xminion_resp_msg;
   logic [0:0] dpath__spad_masters__req__en [0:15];
-  CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 dpath__spad_masters__req__msg [0:15];
+  CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 dpath__spad_masters__req__msg [0:15];
   logic [0:0] dpath__spad_masters__req__rdy [0:15];
   logic [0:0] dpath__spad_masters__resp__en [0:15];
   CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 dpath__spad_masters__resp__msg [0:15];
   logic [0:0] dpath__spad_masters__resp__rdy [0:15];
 
-  CGRACoreDpath__07e21c4d4fa663e6 dpath
+  CGRACoreDpath__7bb22bb10af9a0d4 dpath
   (
     .CSR_wen( dpath__CSR_wen ),
     .cfg_init( dpath__cfg_init ),
@@ -13128,7 +13373,7 @@ endmodule
 
 // PyMTL Component MemMasterToSramAdapter Definition
 // Full name: MemMasterToSramAdapter__Req_CgraPerBankMemReqMsg__wen_1__addr_10__data_32__opaque_7__Resp_CgraPerBankMemRespMsg__wen_1__addr_10__data_32__opaque_7__data_width_32__num_entries_1024__mask_size_0
-// At /work/global/pp482/cgra/src/misc/MemMasterToSramAdapter.py
+// At /work/global/pp482/test/cgra-src/src/misc/MemMasterToSramAdapter.py
 
 module MemMasterToSramAdapter__394405fa592d30bd
 (
@@ -13152,7 +13397,7 @@ module MemMasterToSramAdapter__394405fa592d30bd
   logic [0:0] resp_val;
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/misc/MemMasterToSramAdapter.py:49
+  // At /work/global/pp482/test/cgra-src/src/misc/MemMasterToSramAdapter.py:49
   // s.minion.resp.en //= lambda: s.minion.resp.rdy & s.resp_val
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_scratchpad_banks_0__adapter_minion_resp_en
@@ -13160,7 +13405,7 @@ module MemMasterToSramAdapter__394405fa592d30bd
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/misc/MemMasterToSramAdapter.py:54
+  // At /work/global/pp482/test/cgra-src/src/misc/MemMasterToSramAdapter.py:54
   // s.minion.resp.msg.data   //= lambda: s.rdata if ~s.reg_req_wen else 0
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_scratchpad_banks_0__adapter_minion_resp_msg_data
@@ -13168,7 +13413,7 @@ module MemMasterToSramAdapter__394405fa592d30bd
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/misc/MemMasterToSramAdapter.py:42
+  // At /work/global/pp482/test/cgra-src/src/misc/MemMasterToSramAdapter.py:42
   // s.val   //= lambda: s.minion.req.en & s.minion.req.rdy
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_scratchpad_banks_0__adapter_val
@@ -13176,7 +13421,7 @@ module MemMasterToSramAdapter__394405fa592d30bd
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/misc/MemMasterToSramAdapter.py:64
+  // At /work/global/pp482/test/cgra-src/src/misc/MemMasterToSramAdapter.py:64
   // @update_ff
   // def register_req():
   //   s.reg_req_wen <<= s.minion.req.msg.wen
@@ -13190,7 +13435,7 @@ module MemMasterToSramAdapter__394405fa592d30bd
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/misc/MemMasterToSramAdapter.py:56
+  // At /work/global/pp482/test/cgra-src/src/misc/MemMasterToSramAdapter.py:56
   // @update_ff
   // def resp_val_upblk():
   //   # Read response will come out in the next cycle
@@ -13219,8 +13464,9 @@ endmodule
 
 
 // PyMTL Component SramGenericPRTL Definition
-// At /work/global/pp482/cgra/src/sram/SramGenericPRTL.py
+// At /work/global/pp482/test/cgra-src/src/sram/SramGenericPRTL.py
 
+`ifndef SYNTHESIS
 `ifndef BRG_RTL_HARD_SIM
 module SramGenericPRTL__data_nbits_32__num_entries_1024
 (
@@ -13238,7 +13484,7 @@ module SramGenericPRTL__data_nbits_32__num_entries_1024
   logic [31:0] ram [0:1023];
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/sram/SramGenericPRTL.py:46
+  // At /work/global/pp482/test/cgra-src/src/sram/SramGenericPRTL.py:46
   // @update
   // def comb_logic():
   //   if ~s.OEB1:
@@ -13255,7 +13501,7 @@ module SramGenericPRTL__data_nbits_32__num_entries_1024
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/sram/SramGenericPRTL.py:39
+  // At /work/global/pp482/test/cgra-src/src/sram/SramGenericPRTL.py:39
   // @update_ff
   // def read_logic():
   //   if ~s.CSB1 & s.WEB1:
@@ -13272,7 +13518,7 @@ module SramGenericPRTL__data_nbits_32__num_entries_1024
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/sram/SramGenericPRTL.py:55
+  // At /work/global/pp482/test/cgra-src/src/sram/SramGenericPRTL.py:55
   // @update_ff
   // def write_logic():
   //   if (~s.CSB1) & (~s.WEB1):
@@ -13286,12 +13532,14 @@ module SramGenericPRTL__data_nbits_32__num_entries_1024
 
 endmodule
 `endif
+`endif
 
 
 // PyMTL Component SramRTL Definition
-// At /work/global/pp482/cgra/src/sram/SramRTL.py
+// Full name: SramRTL__data_nbits_32__num_entries_1024__mask_size_0
+// At /work/global/pp482/test/cgra-src/src/sram/SramRTL.py
 
-module SramRTL__data_nbits_32__num_entries_1024__mask_size_0
+module sram_SramRTL_mask0_32b_1024words
 (
   input  logic [0:0] clk ,
   input  logic [9:0] port0_idx ,
@@ -13335,7 +13583,7 @@ module SramRTL__data_nbits_32__num_entries_1024__mask_size_0
   //-------------------------------------------------------------
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/sram/SramPRTL.py:84
+  // At /work/global/pp482/test/cgra-src/src/sram/SramPRTL.py:84
   // s.port0_type_bar //= lambda: ~s.port0_type
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_scratchpad_banks_0__sram_port0_type_bar
@@ -13343,7 +13591,7 @@ module SramRTL__data_nbits_32__num_entries_1024__mask_size_0
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/sram/SramPRTL.py:58
+  // At /work/global/pp482/test/cgra-src/src/sram/SramPRTL.py:58
   // s.port0_val_bar  //= lambda: ~s.port0_val
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_scratchpad_banks_0__sram_port0_val_bar
@@ -13365,7 +13613,7 @@ endmodule
 
 // PyMTL Component ScratchpadBank Definition
 // Full name: ScratchpadBank__Req_CgraPerBankMemReqMsg__wen_1__addr_10__data_32__opaque_7__Resp_CgraPerBankMemRespMsg__wen_1__addr_10__data_32__opaque_7__data_width_32__num_entries_per_bank_1024__mask_size_0
-// At /work/global/pp482/cgra/src/scratchpad/ScratchpadBank.py
+// At /work/global/pp482/test/cgra-src/src/scratchpad/ScratchpadBank.py
 
 module ScratchpadBank__30b2d19dd8e6a420
 (
@@ -13429,7 +13677,7 @@ module ScratchpadBank__30b2d19dd8e6a420
   logic [31:0] sram__port0_wdata;
   logic [0:0] sram__reset;
 
-  SramRTL__data_nbits_32__num_entries_1024__mask_size_0 sram
+  sram_SramRTL_mask0_32b_1024words sram
   (
     .clk( sram__clk ),
     .port0_idx( sram__port0_idx ),
@@ -13464,15 +13712,15 @@ endmodule
 
 
 // PyMTL Component Scratchpad Definition
-// Full name: Scratchpad__num_mem_minions_4__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7__Resp_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__data_width_32__num_entries_per_bank_1024__mask_size_0
-// At /work/global/pp482/cgra/src/scratchpad/Scratchpad.py
+// Full name: Scratchpad__num_mem_minions_4__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7__Resp_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__data_width_32__num_entries_per_bank_1024__mask_size_0
+// At /work/global/pp482/test/cgra-src/src/scratchpad/Scratchpad.py
 
-module Scratchpad__c6176239b846ec0a
+module Scratchpad__e90e4476a839fef2
 (
   input  logic [0:0] clk ,
   input  logic [0:0] reset ,
   input logic [0:0] minion__req__en [0:3],
-  input CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 minion__req__msg [0:3],
+  input CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 minion__req__msg [0:3],
   output logic [0:0] minion__req__rdy [0:3],
   output logic [0:0] minion__resp__en [0:3],
   output CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 minion__resp__msg [0:3],
@@ -13612,13 +13860,13 @@ endmodule
 
 
 // PyMTL Component ScratchpadDstLogic Definition
-// Full name: ScratchpadDstLogic__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7__SrcT_Bits5__DstT_Bits2
-// At /work/global/pp482/cgra/src/cgra/CGRAXcelDpath.py
+// Full name: ScratchpadDstLogic__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7__SrcT_Bits5__DstT_Bits2
+// At /work/global/pp482/test/cgra-src/src/cgra/CGRAXcelDpath.py
 
-module ScratchpadDstLogic__1bc6dabd503ca2d2
+module ScratchpadDstLogic__6c01cd93d9bcbace
 (
   input  logic [0:0] clk ,
-  input  CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 in_req ,
+  input  CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 in_req ,
   input  logic [4:0] in_src_id ,
   output logic [1:0] out_dst ,
   input  logic [0:0] reset 
@@ -13630,7 +13878,7 @@ endmodule
 
 
 // PyMTL Component Table Definition
-// At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/Table.py
+// At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/Table.py
 
 module Table__EntryType_Bits7__num_entries_4
 (
@@ -13656,7 +13904,7 @@ module Table__EntryType_Bits7__num_entries_4
   logic [0:0] valid_r [0:3];
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/Table.py:89
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/Table.py:89
   // s.dealloc.ret //= lambda: s.entry_r[ s.dealloc.msg ] if s.valid_r[ s.dealloc.msg ] else EntryType(-1)
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_0__opq_table_dealloc_ret
@@ -13664,7 +13912,7 @@ module Table__EntryType_Bits7__num_entries_4
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/Table.py:72
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/Table.py:72
   // @update
   // def up_alloc_rdy():
   //   s.alloc.rdy @= 0
@@ -13681,7 +13929,7 @@ module Table__EntryType_Bits7__num_entries_4
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/Table.py:51
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/Table.py:51
   // @update
   // def up_avail_idx_next():
   //   s.avail_idx_next @= 0
@@ -13700,7 +13948,7 @@ module Table__EntryType_Bits7__num_entries_4
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/Table.py:79
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/Table.py:79
   // @update
   // def up_dealloc_rdy():
   //   s.dealloc.rdy @= 0
@@ -13717,7 +13965,7 @@ module Table__EntryType_Bits7__num_entries_4
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/Table.py:60
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/Table.py:60
   // @update_ff
   // def up_avail_idx_r():
   //   if s.reset:
@@ -13734,7 +13982,7 @@ module Table__EntryType_Bits7__num_entries_4
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/Table.py:37
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/Table.py:37
   // @update_ff
   // def up_entry_r_valid_r():
   //   if s.reset:
@@ -13771,21 +14019,21 @@ endmodule
 
 
 // PyMTL Component ReqAdapter Definition
-// Full name: ReqAdapter__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7__Resp_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__id_0__num_requesters_17__num_responders_4__max_req_in_flight_4__DstLogicT_ScratchpadDstLogic
-// At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py
+// Full name: ReqAdapter__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7__Resp_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__id_0__num_requesters_17__num_responders_4__max_req_in_flight_4__DstLogicT_ScratchpadDstLogic
+// At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py
 
-module ReqAdapter__fd54650417570394
+module ReqAdapter__50c428ee308b4e76
 (
   input  logic [0:0] clk ,
   input  logic [0:0] reset ,
   output logic [0:0] master__req__en ,
-  output mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd master__req__msg ,
+  output mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d master__req__msg ,
   input logic [0:0] master__req__rdy ,
   input logic [0:0] master__resp__en ,
   input mmxbar_resp_17_CgraLocalMemRespMsg__97a8fdbd88c53709 master__resp__msg ,
   output logic [0:0] master__resp__rdy ,
   input logic [0:0] minion__req__en ,
-  input CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 minion__req__msg ,
+  input CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 minion__req__msg ,
   output logic [0:0] minion__req__rdy ,
   output logic [0:0] minion__resp__en ,
   output CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 minion__resp__msg ,
@@ -13797,12 +14045,12 @@ module ReqAdapter__fd54650417570394
   //-------------------------------------------------------------
 
   logic [0:0] dst_logic__clk;
-  CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 dst_logic__in_req;
+  CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 dst_logic__in_req;
   logic [4:0] dst_logic__in_src_id;
   logic [1:0] dst_logic__out_dst;
   logic [0:0] dst_logic__reset;
 
-  ScratchpadDstLogic__1bc6dabd503ca2d2 dst_logic
+  ScratchpadDstLogic__6c01cd93d9bcbace dst_logic
   (
     .clk( dst_logic__clk ),
     .in_req( dst_logic__in_req ),
@@ -13849,7 +14097,7 @@ module ReqAdapter__fd54650417570394
   //-------------------------------------------------------------
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:91
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:91
   // s.master.req.en   //= lambda: s.minion.req.en
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_0__master_req_en
@@ -13857,7 +14105,7 @@ module ReqAdapter__fd54650417570394
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:92
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:92
   // s.master.resp.rdy //= lambda: s.minion.resp.rdy
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_0__master_resp_rdy
@@ -13865,7 +14113,7 @@ module ReqAdapter__fd54650417570394
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:88
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:88
   // s.minion.req.rdy //= lambda: s.opq_table.alloc.rdy & s.master.req.rdy
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_0__minion_req_rdy
@@ -13873,7 +14121,7 @@ module ReqAdapter__fd54650417570394
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:89
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:89
   // s.minion.resp.en //= lambda: s.master.resp.en
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_0__minion_resp_en
@@ -13881,7 +14129,7 @@ module ReqAdapter__fd54650417570394
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:94
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:94
   // @update
   // def up_master_req_msg():
   //   s.master.req.msg.dst @= s.dst_logic.out_dst
@@ -13897,7 +14145,7 @@ module ReqAdapter__fd54650417570394
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:101
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:101
   // @update
   // def up_minion_resp_msg():
   //   s.minion.resp.msg @= s.master.resp.msg.payload
@@ -13923,21 +14171,21 @@ endmodule
 
 
 // PyMTL Component ReqAdapter Definition
-// Full name: ReqAdapter__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7__Resp_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__id_10__num_requesters_17__num_responders_4__max_req_in_flight_4__DstLogicT_ScratchpadDstLogic
-// At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py
+// Full name: ReqAdapter__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7__Resp_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__id_10__num_requesters_17__num_responders_4__max_req_in_flight_4__DstLogicT_ScratchpadDstLogic
+// At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py
 
-module ReqAdapter__4aaa04dd88de17e9
+module ReqAdapter__c8f843e4690f1dd2
 (
   input  logic [0:0] clk ,
   input  logic [0:0] reset ,
   output logic [0:0] master__req__en ,
-  output mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd master__req__msg ,
+  output mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d master__req__msg ,
   input logic [0:0] master__req__rdy ,
   input logic [0:0] master__resp__en ,
   input mmxbar_resp_17_CgraLocalMemRespMsg__97a8fdbd88c53709 master__resp__msg ,
   output logic [0:0] master__resp__rdy ,
   input logic [0:0] minion__req__en ,
-  input CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 minion__req__msg ,
+  input CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 minion__req__msg ,
   output logic [0:0] minion__req__rdy ,
   output logic [0:0] minion__resp__en ,
   output CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 minion__resp__msg ,
@@ -13949,12 +14197,12 @@ module ReqAdapter__4aaa04dd88de17e9
   //-------------------------------------------------------------
 
   logic [0:0] dst_logic__clk;
-  CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 dst_logic__in_req;
+  CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 dst_logic__in_req;
   logic [4:0] dst_logic__in_src_id;
   logic [1:0] dst_logic__out_dst;
   logic [0:0] dst_logic__reset;
 
-  ScratchpadDstLogic__1bc6dabd503ca2d2 dst_logic
+  ScratchpadDstLogic__6c01cd93d9bcbace dst_logic
   (
     .clk( dst_logic__clk ),
     .in_req( dst_logic__in_req ),
@@ -14001,7 +14249,7 @@ module ReqAdapter__4aaa04dd88de17e9
   //-------------------------------------------------------------
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:91
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:91
   // s.master.req.en   //= lambda: s.minion.req.en
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_10__master_req_en
@@ -14009,7 +14257,7 @@ module ReqAdapter__4aaa04dd88de17e9
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:92
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:92
   // s.master.resp.rdy //= lambda: s.minion.resp.rdy
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_10__master_resp_rdy
@@ -14017,7 +14265,7 @@ module ReqAdapter__4aaa04dd88de17e9
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:88
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:88
   // s.minion.req.rdy //= lambda: s.opq_table.alloc.rdy & s.master.req.rdy
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_10__minion_req_rdy
@@ -14025,7 +14273,7 @@ module ReqAdapter__4aaa04dd88de17e9
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:89
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:89
   // s.minion.resp.en //= lambda: s.master.resp.en
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_10__minion_resp_en
@@ -14033,7 +14281,7 @@ module ReqAdapter__4aaa04dd88de17e9
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:94
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:94
   // @update
   // def up_master_req_msg():
   //   s.master.req.msg.dst @= s.dst_logic.out_dst
@@ -14049,7 +14297,7 @@ module ReqAdapter__4aaa04dd88de17e9
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:101
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:101
   // @update
   // def up_minion_resp_msg():
   //   s.minion.resp.msg @= s.master.resp.msg.payload
@@ -14075,21 +14323,21 @@ endmodule
 
 
 // PyMTL Component ReqAdapter Definition
-// Full name: ReqAdapter__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7__Resp_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__id_11__num_requesters_17__num_responders_4__max_req_in_flight_4__DstLogicT_ScratchpadDstLogic
-// At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py
+// Full name: ReqAdapter__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7__Resp_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__id_11__num_requesters_17__num_responders_4__max_req_in_flight_4__DstLogicT_ScratchpadDstLogic
+// At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py
 
-module ReqAdapter__b3a44120b57b6ffc
+module ReqAdapter__989052a7334b3ab8
 (
   input  logic [0:0] clk ,
   input  logic [0:0] reset ,
   output logic [0:0] master__req__en ,
-  output mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd master__req__msg ,
+  output mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d master__req__msg ,
   input logic [0:0] master__req__rdy ,
   input logic [0:0] master__resp__en ,
   input mmxbar_resp_17_CgraLocalMemRespMsg__97a8fdbd88c53709 master__resp__msg ,
   output logic [0:0] master__resp__rdy ,
   input logic [0:0] minion__req__en ,
-  input CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 minion__req__msg ,
+  input CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 minion__req__msg ,
   output logic [0:0] minion__req__rdy ,
   output logic [0:0] minion__resp__en ,
   output CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 minion__resp__msg ,
@@ -14101,12 +14349,12 @@ module ReqAdapter__b3a44120b57b6ffc
   //-------------------------------------------------------------
 
   logic [0:0] dst_logic__clk;
-  CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 dst_logic__in_req;
+  CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 dst_logic__in_req;
   logic [4:0] dst_logic__in_src_id;
   logic [1:0] dst_logic__out_dst;
   logic [0:0] dst_logic__reset;
 
-  ScratchpadDstLogic__1bc6dabd503ca2d2 dst_logic
+  ScratchpadDstLogic__6c01cd93d9bcbace dst_logic
   (
     .clk( dst_logic__clk ),
     .in_req( dst_logic__in_req ),
@@ -14153,7 +14401,7 @@ module ReqAdapter__b3a44120b57b6ffc
   //-------------------------------------------------------------
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:91
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:91
   // s.master.req.en   //= lambda: s.minion.req.en
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_11__master_req_en
@@ -14161,7 +14409,7 @@ module ReqAdapter__b3a44120b57b6ffc
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:92
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:92
   // s.master.resp.rdy //= lambda: s.minion.resp.rdy
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_11__master_resp_rdy
@@ -14169,7 +14417,7 @@ module ReqAdapter__b3a44120b57b6ffc
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:88
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:88
   // s.minion.req.rdy //= lambda: s.opq_table.alloc.rdy & s.master.req.rdy
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_11__minion_req_rdy
@@ -14177,7 +14425,7 @@ module ReqAdapter__b3a44120b57b6ffc
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:89
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:89
   // s.minion.resp.en //= lambda: s.master.resp.en
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_11__minion_resp_en
@@ -14185,7 +14433,7 @@ module ReqAdapter__b3a44120b57b6ffc
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:94
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:94
   // @update
   // def up_master_req_msg():
   //   s.master.req.msg.dst @= s.dst_logic.out_dst
@@ -14201,7 +14449,7 @@ module ReqAdapter__b3a44120b57b6ffc
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:101
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:101
   // @update
   // def up_minion_resp_msg():
   //   s.minion.resp.msg @= s.master.resp.msg.payload
@@ -14227,21 +14475,21 @@ endmodule
 
 
 // PyMTL Component ReqAdapter Definition
-// Full name: ReqAdapter__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7__Resp_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__id_12__num_requesters_17__num_responders_4__max_req_in_flight_4__DstLogicT_ScratchpadDstLogic
-// At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py
+// Full name: ReqAdapter__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7__Resp_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__id_12__num_requesters_17__num_responders_4__max_req_in_flight_4__DstLogicT_ScratchpadDstLogic
+// At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py
 
-module ReqAdapter__01becc7a5001b5c2
+module ReqAdapter__8042bed6ac87a63f
 (
   input  logic [0:0] clk ,
   input  logic [0:0] reset ,
   output logic [0:0] master__req__en ,
-  output mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd master__req__msg ,
+  output mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d master__req__msg ,
   input logic [0:0] master__req__rdy ,
   input logic [0:0] master__resp__en ,
   input mmxbar_resp_17_CgraLocalMemRespMsg__97a8fdbd88c53709 master__resp__msg ,
   output logic [0:0] master__resp__rdy ,
   input logic [0:0] minion__req__en ,
-  input CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 minion__req__msg ,
+  input CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 minion__req__msg ,
   output logic [0:0] minion__req__rdy ,
   output logic [0:0] minion__resp__en ,
   output CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 minion__resp__msg ,
@@ -14253,12 +14501,12 @@ module ReqAdapter__01becc7a5001b5c2
   //-------------------------------------------------------------
 
   logic [0:0] dst_logic__clk;
-  CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 dst_logic__in_req;
+  CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 dst_logic__in_req;
   logic [4:0] dst_logic__in_src_id;
   logic [1:0] dst_logic__out_dst;
   logic [0:0] dst_logic__reset;
 
-  ScratchpadDstLogic__1bc6dabd503ca2d2 dst_logic
+  ScratchpadDstLogic__6c01cd93d9bcbace dst_logic
   (
     .clk( dst_logic__clk ),
     .in_req( dst_logic__in_req ),
@@ -14305,7 +14553,7 @@ module ReqAdapter__01becc7a5001b5c2
   //-------------------------------------------------------------
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:91
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:91
   // s.master.req.en   //= lambda: s.minion.req.en
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_12__master_req_en
@@ -14313,7 +14561,7 @@ module ReqAdapter__01becc7a5001b5c2
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:92
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:92
   // s.master.resp.rdy //= lambda: s.minion.resp.rdy
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_12__master_resp_rdy
@@ -14321,7 +14569,7 @@ module ReqAdapter__01becc7a5001b5c2
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:88
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:88
   // s.minion.req.rdy //= lambda: s.opq_table.alloc.rdy & s.master.req.rdy
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_12__minion_req_rdy
@@ -14329,7 +14577,7 @@ module ReqAdapter__01becc7a5001b5c2
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:89
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:89
   // s.minion.resp.en //= lambda: s.master.resp.en
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_12__minion_resp_en
@@ -14337,7 +14585,7 @@ module ReqAdapter__01becc7a5001b5c2
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:94
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:94
   // @update
   // def up_master_req_msg():
   //   s.master.req.msg.dst @= s.dst_logic.out_dst
@@ -14353,7 +14601,7 @@ module ReqAdapter__01becc7a5001b5c2
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:101
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:101
   // @update
   // def up_minion_resp_msg():
   //   s.minion.resp.msg @= s.master.resp.msg.payload
@@ -14379,21 +14627,21 @@ endmodule
 
 
 // PyMTL Component ReqAdapter Definition
-// Full name: ReqAdapter__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7__Resp_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__id_13__num_requesters_17__num_responders_4__max_req_in_flight_4__DstLogicT_ScratchpadDstLogic
-// At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py
+// Full name: ReqAdapter__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7__Resp_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__id_13__num_requesters_17__num_responders_4__max_req_in_flight_4__DstLogicT_ScratchpadDstLogic
+// At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py
 
-module ReqAdapter__5fca60022a755d99
+module ReqAdapter__23b53b565c0c0476
 (
   input  logic [0:0] clk ,
   input  logic [0:0] reset ,
   output logic [0:0] master__req__en ,
-  output mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd master__req__msg ,
+  output mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d master__req__msg ,
   input logic [0:0] master__req__rdy ,
   input logic [0:0] master__resp__en ,
   input mmxbar_resp_17_CgraLocalMemRespMsg__97a8fdbd88c53709 master__resp__msg ,
   output logic [0:0] master__resp__rdy ,
   input logic [0:0] minion__req__en ,
-  input CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 minion__req__msg ,
+  input CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 minion__req__msg ,
   output logic [0:0] minion__req__rdy ,
   output logic [0:0] minion__resp__en ,
   output CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 minion__resp__msg ,
@@ -14405,12 +14653,12 @@ module ReqAdapter__5fca60022a755d99
   //-------------------------------------------------------------
 
   logic [0:0] dst_logic__clk;
-  CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 dst_logic__in_req;
+  CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 dst_logic__in_req;
   logic [4:0] dst_logic__in_src_id;
   logic [1:0] dst_logic__out_dst;
   logic [0:0] dst_logic__reset;
 
-  ScratchpadDstLogic__1bc6dabd503ca2d2 dst_logic
+  ScratchpadDstLogic__6c01cd93d9bcbace dst_logic
   (
     .clk( dst_logic__clk ),
     .in_req( dst_logic__in_req ),
@@ -14457,7 +14705,7 @@ module ReqAdapter__5fca60022a755d99
   //-------------------------------------------------------------
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:91
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:91
   // s.master.req.en   //= lambda: s.minion.req.en
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_13__master_req_en
@@ -14465,7 +14713,7 @@ module ReqAdapter__5fca60022a755d99
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:92
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:92
   // s.master.resp.rdy //= lambda: s.minion.resp.rdy
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_13__master_resp_rdy
@@ -14473,7 +14721,7 @@ module ReqAdapter__5fca60022a755d99
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:88
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:88
   // s.minion.req.rdy //= lambda: s.opq_table.alloc.rdy & s.master.req.rdy
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_13__minion_req_rdy
@@ -14481,7 +14729,7 @@ module ReqAdapter__5fca60022a755d99
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:89
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:89
   // s.minion.resp.en //= lambda: s.master.resp.en
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_13__minion_resp_en
@@ -14489,7 +14737,7 @@ module ReqAdapter__5fca60022a755d99
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:94
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:94
   // @update
   // def up_master_req_msg():
   //   s.master.req.msg.dst @= s.dst_logic.out_dst
@@ -14505,7 +14753,7 @@ module ReqAdapter__5fca60022a755d99
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:101
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:101
   // @update
   // def up_minion_resp_msg():
   //   s.minion.resp.msg @= s.master.resp.msg.payload
@@ -14531,21 +14779,21 @@ endmodule
 
 
 // PyMTL Component ReqAdapter Definition
-// Full name: ReqAdapter__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7__Resp_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__id_14__num_requesters_17__num_responders_4__max_req_in_flight_4__DstLogicT_ScratchpadDstLogic
-// At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py
+// Full name: ReqAdapter__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7__Resp_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__id_14__num_requesters_17__num_responders_4__max_req_in_flight_4__DstLogicT_ScratchpadDstLogic
+// At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py
 
-module ReqAdapter__80e5324b4a2f795e
+module ReqAdapter__f87e001abc48f1a4
 (
   input  logic [0:0] clk ,
   input  logic [0:0] reset ,
   output logic [0:0] master__req__en ,
-  output mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd master__req__msg ,
+  output mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d master__req__msg ,
   input logic [0:0] master__req__rdy ,
   input logic [0:0] master__resp__en ,
   input mmxbar_resp_17_CgraLocalMemRespMsg__97a8fdbd88c53709 master__resp__msg ,
   output logic [0:0] master__resp__rdy ,
   input logic [0:0] minion__req__en ,
-  input CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 minion__req__msg ,
+  input CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 minion__req__msg ,
   output logic [0:0] minion__req__rdy ,
   output logic [0:0] minion__resp__en ,
   output CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 minion__resp__msg ,
@@ -14557,12 +14805,12 @@ module ReqAdapter__80e5324b4a2f795e
   //-------------------------------------------------------------
 
   logic [0:0] dst_logic__clk;
-  CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 dst_logic__in_req;
+  CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 dst_logic__in_req;
   logic [4:0] dst_logic__in_src_id;
   logic [1:0] dst_logic__out_dst;
   logic [0:0] dst_logic__reset;
 
-  ScratchpadDstLogic__1bc6dabd503ca2d2 dst_logic
+  ScratchpadDstLogic__6c01cd93d9bcbace dst_logic
   (
     .clk( dst_logic__clk ),
     .in_req( dst_logic__in_req ),
@@ -14609,7 +14857,7 @@ module ReqAdapter__80e5324b4a2f795e
   //-------------------------------------------------------------
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:91
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:91
   // s.master.req.en   //= lambda: s.minion.req.en
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_14__master_req_en
@@ -14617,7 +14865,7 @@ module ReqAdapter__80e5324b4a2f795e
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:92
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:92
   // s.master.resp.rdy //= lambda: s.minion.resp.rdy
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_14__master_resp_rdy
@@ -14625,7 +14873,7 @@ module ReqAdapter__80e5324b4a2f795e
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:88
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:88
   // s.minion.req.rdy //= lambda: s.opq_table.alloc.rdy & s.master.req.rdy
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_14__minion_req_rdy
@@ -14633,7 +14881,7 @@ module ReqAdapter__80e5324b4a2f795e
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:89
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:89
   // s.minion.resp.en //= lambda: s.master.resp.en
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_14__minion_resp_en
@@ -14641,7 +14889,7 @@ module ReqAdapter__80e5324b4a2f795e
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:94
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:94
   // @update
   // def up_master_req_msg():
   //   s.master.req.msg.dst @= s.dst_logic.out_dst
@@ -14657,7 +14905,7 @@ module ReqAdapter__80e5324b4a2f795e
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:101
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:101
   // @update
   // def up_minion_resp_msg():
   //   s.minion.resp.msg @= s.master.resp.msg.payload
@@ -14683,21 +14931,21 @@ endmodule
 
 
 // PyMTL Component ReqAdapter Definition
-// Full name: ReqAdapter__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7__Resp_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__id_15__num_requesters_17__num_responders_4__max_req_in_flight_4__DstLogicT_ScratchpadDstLogic
-// At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py
+// Full name: ReqAdapter__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7__Resp_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__id_15__num_requesters_17__num_responders_4__max_req_in_flight_4__DstLogicT_ScratchpadDstLogic
+// At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py
 
-module ReqAdapter__db11fe7fced03363
+module ReqAdapter__186032fb4b47142b
 (
   input  logic [0:0] clk ,
   input  logic [0:0] reset ,
   output logic [0:0] master__req__en ,
-  output mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd master__req__msg ,
+  output mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d master__req__msg ,
   input logic [0:0] master__req__rdy ,
   input logic [0:0] master__resp__en ,
   input mmxbar_resp_17_CgraLocalMemRespMsg__97a8fdbd88c53709 master__resp__msg ,
   output logic [0:0] master__resp__rdy ,
   input logic [0:0] minion__req__en ,
-  input CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 minion__req__msg ,
+  input CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 minion__req__msg ,
   output logic [0:0] minion__req__rdy ,
   output logic [0:0] minion__resp__en ,
   output CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 minion__resp__msg ,
@@ -14709,12 +14957,12 @@ module ReqAdapter__db11fe7fced03363
   //-------------------------------------------------------------
 
   logic [0:0] dst_logic__clk;
-  CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 dst_logic__in_req;
+  CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 dst_logic__in_req;
   logic [4:0] dst_logic__in_src_id;
   logic [1:0] dst_logic__out_dst;
   logic [0:0] dst_logic__reset;
 
-  ScratchpadDstLogic__1bc6dabd503ca2d2 dst_logic
+  ScratchpadDstLogic__6c01cd93d9bcbace dst_logic
   (
     .clk( dst_logic__clk ),
     .in_req( dst_logic__in_req ),
@@ -14761,7 +15009,7 @@ module ReqAdapter__db11fe7fced03363
   //-------------------------------------------------------------
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:91
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:91
   // s.master.req.en   //= lambda: s.minion.req.en
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_15__master_req_en
@@ -14769,7 +15017,7 @@ module ReqAdapter__db11fe7fced03363
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:92
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:92
   // s.master.resp.rdy //= lambda: s.minion.resp.rdy
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_15__master_resp_rdy
@@ -14777,7 +15025,7 @@ module ReqAdapter__db11fe7fced03363
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:88
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:88
   // s.minion.req.rdy //= lambda: s.opq_table.alloc.rdy & s.master.req.rdy
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_15__minion_req_rdy
@@ -14785,7 +15033,7 @@ module ReqAdapter__db11fe7fced03363
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:89
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:89
   // s.minion.resp.en //= lambda: s.master.resp.en
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_15__minion_resp_en
@@ -14793,7 +15041,7 @@ module ReqAdapter__db11fe7fced03363
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:94
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:94
   // @update
   // def up_master_req_msg():
   //   s.master.req.msg.dst @= s.dst_logic.out_dst
@@ -14809,7 +15057,7 @@ module ReqAdapter__db11fe7fced03363
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:101
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:101
   // @update
   // def up_minion_resp_msg():
   //   s.minion.resp.msg @= s.master.resp.msg.payload
@@ -14835,21 +15083,21 @@ endmodule
 
 
 // PyMTL Component ReqAdapter Definition
-// Full name: ReqAdapter__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7__Resp_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__id_16__num_requesters_17__num_responders_4__max_req_in_flight_4__DstLogicT_ScratchpadDstLogic
-// At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py
+// Full name: ReqAdapter__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7__Resp_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__id_16__num_requesters_17__num_responders_4__max_req_in_flight_4__DstLogicT_ScratchpadDstLogic
+// At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py
 
-module ReqAdapter__78550895ef6730eb
+module ReqAdapter__e04ad17cb1fb8eb2
 (
   input  logic [0:0] clk ,
   input  logic [0:0] reset ,
   output logic [0:0] master__req__en ,
-  output mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd master__req__msg ,
+  output mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d master__req__msg ,
   input logic [0:0] master__req__rdy ,
   input logic [0:0] master__resp__en ,
   input mmxbar_resp_17_CgraLocalMemRespMsg__97a8fdbd88c53709 master__resp__msg ,
   output logic [0:0] master__resp__rdy ,
   input logic [0:0] minion__req__en ,
-  input CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 minion__req__msg ,
+  input CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 minion__req__msg ,
   output logic [0:0] minion__req__rdy ,
   output logic [0:0] minion__resp__en ,
   output CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 minion__resp__msg ,
@@ -14861,12 +15109,12 @@ module ReqAdapter__78550895ef6730eb
   //-------------------------------------------------------------
 
   logic [0:0] dst_logic__clk;
-  CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 dst_logic__in_req;
+  CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 dst_logic__in_req;
   logic [4:0] dst_logic__in_src_id;
   logic [1:0] dst_logic__out_dst;
   logic [0:0] dst_logic__reset;
 
-  ScratchpadDstLogic__1bc6dabd503ca2d2 dst_logic
+  ScratchpadDstLogic__6c01cd93d9bcbace dst_logic
   (
     .clk( dst_logic__clk ),
     .in_req( dst_logic__in_req ),
@@ -14913,7 +15161,7 @@ module ReqAdapter__78550895ef6730eb
   //-------------------------------------------------------------
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:91
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:91
   // s.master.req.en   //= lambda: s.minion.req.en
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_16__master_req_en
@@ -14921,7 +15169,7 @@ module ReqAdapter__78550895ef6730eb
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:92
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:92
   // s.master.resp.rdy //= lambda: s.minion.resp.rdy
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_16__master_resp_rdy
@@ -14929,7 +15177,7 @@ module ReqAdapter__78550895ef6730eb
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:88
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:88
   // s.minion.req.rdy //= lambda: s.opq_table.alloc.rdy & s.master.req.rdy
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_16__minion_req_rdy
@@ -14937,7 +15185,7 @@ module ReqAdapter__78550895ef6730eb
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:89
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:89
   // s.minion.resp.en //= lambda: s.master.resp.en
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_16__minion_resp_en
@@ -14945,7 +15193,7 @@ module ReqAdapter__78550895ef6730eb
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:94
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:94
   // @update
   // def up_master_req_msg():
   //   s.master.req.msg.dst @= s.dst_logic.out_dst
@@ -14961,7 +15209,7 @@ module ReqAdapter__78550895ef6730eb
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:101
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:101
   // @update
   // def up_minion_resp_msg():
   //   s.minion.resp.msg @= s.master.resp.msg.payload
@@ -14987,21 +15235,21 @@ endmodule
 
 
 // PyMTL Component ReqAdapter Definition
-// Full name: ReqAdapter__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7__Resp_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__id_1__num_requesters_17__num_responders_4__max_req_in_flight_4__DstLogicT_ScratchpadDstLogic
-// At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py
+// Full name: ReqAdapter__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7__Resp_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__id_1__num_requesters_17__num_responders_4__max_req_in_flight_4__DstLogicT_ScratchpadDstLogic
+// At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py
 
-module ReqAdapter__d35006938139cb70
+module ReqAdapter__bcd0861aabd9164c
 (
   input  logic [0:0] clk ,
   input  logic [0:0] reset ,
   output logic [0:0] master__req__en ,
-  output mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd master__req__msg ,
+  output mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d master__req__msg ,
   input logic [0:0] master__req__rdy ,
   input logic [0:0] master__resp__en ,
   input mmxbar_resp_17_CgraLocalMemRespMsg__97a8fdbd88c53709 master__resp__msg ,
   output logic [0:0] master__resp__rdy ,
   input logic [0:0] minion__req__en ,
-  input CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 minion__req__msg ,
+  input CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 minion__req__msg ,
   output logic [0:0] minion__req__rdy ,
   output logic [0:0] minion__resp__en ,
   output CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 minion__resp__msg ,
@@ -15013,12 +15261,12 @@ module ReqAdapter__d35006938139cb70
   //-------------------------------------------------------------
 
   logic [0:0] dst_logic__clk;
-  CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 dst_logic__in_req;
+  CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 dst_logic__in_req;
   logic [4:0] dst_logic__in_src_id;
   logic [1:0] dst_logic__out_dst;
   logic [0:0] dst_logic__reset;
 
-  ScratchpadDstLogic__1bc6dabd503ca2d2 dst_logic
+  ScratchpadDstLogic__6c01cd93d9bcbace dst_logic
   (
     .clk( dst_logic__clk ),
     .in_req( dst_logic__in_req ),
@@ -15065,7 +15313,7 @@ module ReqAdapter__d35006938139cb70
   //-------------------------------------------------------------
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:91
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:91
   // s.master.req.en   //= lambda: s.minion.req.en
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_1__master_req_en
@@ -15073,7 +15321,7 @@ module ReqAdapter__d35006938139cb70
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:92
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:92
   // s.master.resp.rdy //= lambda: s.minion.resp.rdy
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_1__master_resp_rdy
@@ -15081,7 +15329,7 @@ module ReqAdapter__d35006938139cb70
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:88
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:88
   // s.minion.req.rdy //= lambda: s.opq_table.alloc.rdy & s.master.req.rdy
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_1__minion_req_rdy
@@ -15089,7 +15337,7 @@ module ReqAdapter__d35006938139cb70
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:89
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:89
   // s.minion.resp.en //= lambda: s.master.resp.en
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_1__minion_resp_en
@@ -15097,7 +15345,7 @@ module ReqAdapter__d35006938139cb70
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:94
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:94
   // @update
   // def up_master_req_msg():
   //   s.master.req.msg.dst @= s.dst_logic.out_dst
@@ -15113,7 +15361,7 @@ module ReqAdapter__d35006938139cb70
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:101
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:101
   // @update
   // def up_minion_resp_msg():
   //   s.minion.resp.msg @= s.master.resp.msg.payload
@@ -15139,21 +15387,21 @@ endmodule
 
 
 // PyMTL Component ReqAdapter Definition
-// Full name: ReqAdapter__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7__Resp_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__id_2__num_requesters_17__num_responders_4__max_req_in_flight_4__DstLogicT_ScratchpadDstLogic
-// At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py
+// Full name: ReqAdapter__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7__Resp_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__id_2__num_requesters_17__num_responders_4__max_req_in_flight_4__DstLogicT_ScratchpadDstLogic
+// At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py
 
-module ReqAdapter__8af44fd2bb63f5ca
+module ReqAdapter__bb55d1914189545b
 (
   input  logic [0:0] clk ,
   input  logic [0:0] reset ,
   output logic [0:0] master__req__en ,
-  output mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd master__req__msg ,
+  output mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d master__req__msg ,
   input logic [0:0] master__req__rdy ,
   input logic [0:0] master__resp__en ,
   input mmxbar_resp_17_CgraLocalMemRespMsg__97a8fdbd88c53709 master__resp__msg ,
   output logic [0:0] master__resp__rdy ,
   input logic [0:0] minion__req__en ,
-  input CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 minion__req__msg ,
+  input CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 minion__req__msg ,
   output logic [0:0] minion__req__rdy ,
   output logic [0:0] minion__resp__en ,
   output CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 minion__resp__msg ,
@@ -15165,12 +15413,12 @@ module ReqAdapter__8af44fd2bb63f5ca
   //-------------------------------------------------------------
 
   logic [0:0] dst_logic__clk;
-  CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 dst_logic__in_req;
+  CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 dst_logic__in_req;
   logic [4:0] dst_logic__in_src_id;
   logic [1:0] dst_logic__out_dst;
   logic [0:0] dst_logic__reset;
 
-  ScratchpadDstLogic__1bc6dabd503ca2d2 dst_logic
+  ScratchpadDstLogic__6c01cd93d9bcbace dst_logic
   (
     .clk( dst_logic__clk ),
     .in_req( dst_logic__in_req ),
@@ -15217,7 +15465,7 @@ module ReqAdapter__8af44fd2bb63f5ca
   //-------------------------------------------------------------
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:91
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:91
   // s.master.req.en   //= lambda: s.minion.req.en
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_2__master_req_en
@@ -15225,7 +15473,7 @@ module ReqAdapter__8af44fd2bb63f5ca
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:92
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:92
   // s.master.resp.rdy //= lambda: s.minion.resp.rdy
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_2__master_resp_rdy
@@ -15233,7 +15481,7 @@ module ReqAdapter__8af44fd2bb63f5ca
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:88
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:88
   // s.minion.req.rdy //= lambda: s.opq_table.alloc.rdy & s.master.req.rdy
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_2__minion_req_rdy
@@ -15241,7 +15489,7 @@ module ReqAdapter__8af44fd2bb63f5ca
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:89
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:89
   // s.minion.resp.en //= lambda: s.master.resp.en
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_2__minion_resp_en
@@ -15249,7 +15497,7 @@ module ReqAdapter__8af44fd2bb63f5ca
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:94
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:94
   // @update
   // def up_master_req_msg():
   //   s.master.req.msg.dst @= s.dst_logic.out_dst
@@ -15265,7 +15513,7 @@ module ReqAdapter__8af44fd2bb63f5ca
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:101
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:101
   // @update
   // def up_minion_resp_msg():
   //   s.minion.resp.msg @= s.master.resp.msg.payload
@@ -15291,21 +15539,21 @@ endmodule
 
 
 // PyMTL Component ReqAdapter Definition
-// Full name: ReqAdapter__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7__Resp_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__id_3__num_requesters_17__num_responders_4__max_req_in_flight_4__DstLogicT_ScratchpadDstLogic
-// At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py
+// Full name: ReqAdapter__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7__Resp_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__id_3__num_requesters_17__num_responders_4__max_req_in_flight_4__DstLogicT_ScratchpadDstLogic
+// At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py
 
-module ReqAdapter__97e8a9cd31de8392
+module ReqAdapter__d8397a794663970a
 (
   input  logic [0:0] clk ,
   input  logic [0:0] reset ,
   output logic [0:0] master__req__en ,
-  output mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd master__req__msg ,
+  output mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d master__req__msg ,
   input logic [0:0] master__req__rdy ,
   input logic [0:0] master__resp__en ,
   input mmxbar_resp_17_CgraLocalMemRespMsg__97a8fdbd88c53709 master__resp__msg ,
   output logic [0:0] master__resp__rdy ,
   input logic [0:0] minion__req__en ,
-  input CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 minion__req__msg ,
+  input CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 minion__req__msg ,
   output logic [0:0] minion__req__rdy ,
   output logic [0:0] minion__resp__en ,
   output CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 minion__resp__msg ,
@@ -15317,12 +15565,12 @@ module ReqAdapter__97e8a9cd31de8392
   //-------------------------------------------------------------
 
   logic [0:0] dst_logic__clk;
-  CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 dst_logic__in_req;
+  CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 dst_logic__in_req;
   logic [4:0] dst_logic__in_src_id;
   logic [1:0] dst_logic__out_dst;
   logic [0:0] dst_logic__reset;
 
-  ScratchpadDstLogic__1bc6dabd503ca2d2 dst_logic
+  ScratchpadDstLogic__6c01cd93d9bcbace dst_logic
   (
     .clk( dst_logic__clk ),
     .in_req( dst_logic__in_req ),
@@ -15369,7 +15617,7 @@ module ReqAdapter__97e8a9cd31de8392
   //-------------------------------------------------------------
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:91
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:91
   // s.master.req.en   //= lambda: s.minion.req.en
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_3__master_req_en
@@ -15377,7 +15625,7 @@ module ReqAdapter__97e8a9cd31de8392
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:92
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:92
   // s.master.resp.rdy //= lambda: s.minion.resp.rdy
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_3__master_resp_rdy
@@ -15385,7 +15633,7 @@ module ReqAdapter__97e8a9cd31de8392
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:88
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:88
   // s.minion.req.rdy //= lambda: s.opq_table.alloc.rdy & s.master.req.rdy
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_3__minion_req_rdy
@@ -15393,7 +15641,7 @@ module ReqAdapter__97e8a9cd31de8392
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:89
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:89
   // s.minion.resp.en //= lambda: s.master.resp.en
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_3__minion_resp_en
@@ -15401,7 +15649,7 @@ module ReqAdapter__97e8a9cd31de8392
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:94
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:94
   // @update
   // def up_master_req_msg():
   //   s.master.req.msg.dst @= s.dst_logic.out_dst
@@ -15417,7 +15665,7 @@ module ReqAdapter__97e8a9cd31de8392
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:101
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:101
   // @update
   // def up_minion_resp_msg():
   //   s.minion.resp.msg @= s.master.resp.msg.payload
@@ -15443,21 +15691,21 @@ endmodule
 
 
 // PyMTL Component ReqAdapter Definition
-// Full name: ReqAdapter__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7__Resp_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__id_4__num_requesters_17__num_responders_4__max_req_in_flight_4__DstLogicT_ScratchpadDstLogic
-// At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py
+// Full name: ReqAdapter__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7__Resp_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__id_4__num_requesters_17__num_responders_4__max_req_in_flight_4__DstLogicT_ScratchpadDstLogic
+// At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py
 
-module ReqAdapter__00db4764a604ff63
+module ReqAdapter__256503550ce05b30
 (
   input  logic [0:0] clk ,
   input  logic [0:0] reset ,
   output logic [0:0] master__req__en ,
-  output mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd master__req__msg ,
+  output mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d master__req__msg ,
   input logic [0:0] master__req__rdy ,
   input logic [0:0] master__resp__en ,
   input mmxbar_resp_17_CgraLocalMemRespMsg__97a8fdbd88c53709 master__resp__msg ,
   output logic [0:0] master__resp__rdy ,
   input logic [0:0] minion__req__en ,
-  input CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 minion__req__msg ,
+  input CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 minion__req__msg ,
   output logic [0:0] minion__req__rdy ,
   output logic [0:0] minion__resp__en ,
   output CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 minion__resp__msg ,
@@ -15469,12 +15717,12 @@ module ReqAdapter__00db4764a604ff63
   //-------------------------------------------------------------
 
   logic [0:0] dst_logic__clk;
-  CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 dst_logic__in_req;
+  CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 dst_logic__in_req;
   logic [4:0] dst_logic__in_src_id;
   logic [1:0] dst_logic__out_dst;
   logic [0:0] dst_logic__reset;
 
-  ScratchpadDstLogic__1bc6dabd503ca2d2 dst_logic
+  ScratchpadDstLogic__6c01cd93d9bcbace dst_logic
   (
     .clk( dst_logic__clk ),
     .in_req( dst_logic__in_req ),
@@ -15521,7 +15769,7 @@ module ReqAdapter__00db4764a604ff63
   //-------------------------------------------------------------
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:91
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:91
   // s.master.req.en   //= lambda: s.minion.req.en
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_4__master_req_en
@@ -15529,7 +15777,7 @@ module ReqAdapter__00db4764a604ff63
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:92
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:92
   // s.master.resp.rdy //= lambda: s.minion.resp.rdy
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_4__master_resp_rdy
@@ -15537,7 +15785,7 @@ module ReqAdapter__00db4764a604ff63
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:88
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:88
   // s.minion.req.rdy //= lambda: s.opq_table.alloc.rdy & s.master.req.rdy
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_4__minion_req_rdy
@@ -15545,7 +15793,7 @@ module ReqAdapter__00db4764a604ff63
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:89
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:89
   // s.minion.resp.en //= lambda: s.master.resp.en
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_4__minion_resp_en
@@ -15553,7 +15801,7 @@ module ReqAdapter__00db4764a604ff63
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:94
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:94
   // @update
   // def up_master_req_msg():
   //   s.master.req.msg.dst @= s.dst_logic.out_dst
@@ -15569,7 +15817,7 @@ module ReqAdapter__00db4764a604ff63
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:101
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:101
   // @update
   // def up_minion_resp_msg():
   //   s.minion.resp.msg @= s.master.resp.msg.payload
@@ -15595,21 +15843,21 @@ endmodule
 
 
 // PyMTL Component ReqAdapter Definition
-// Full name: ReqAdapter__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7__Resp_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__id_5__num_requesters_17__num_responders_4__max_req_in_flight_4__DstLogicT_ScratchpadDstLogic
-// At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py
+// Full name: ReqAdapter__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7__Resp_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__id_5__num_requesters_17__num_responders_4__max_req_in_flight_4__DstLogicT_ScratchpadDstLogic
+// At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py
 
-module ReqAdapter__01da3b84d22e9b3f
+module ReqAdapter__a71898fa291f69ba
 (
   input  logic [0:0] clk ,
   input  logic [0:0] reset ,
   output logic [0:0] master__req__en ,
-  output mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd master__req__msg ,
+  output mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d master__req__msg ,
   input logic [0:0] master__req__rdy ,
   input logic [0:0] master__resp__en ,
   input mmxbar_resp_17_CgraLocalMemRespMsg__97a8fdbd88c53709 master__resp__msg ,
   output logic [0:0] master__resp__rdy ,
   input logic [0:0] minion__req__en ,
-  input CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 minion__req__msg ,
+  input CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 minion__req__msg ,
   output logic [0:0] minion__req__rdy ,
   output logic [0:0] minion__resp__en ,
   output CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 minion__resp__msg ,
@@ -15621,12 +15869,12 @@ module ReqAdapter__01da3b84d22e9b3f
   //-------------------------------------------------------------
 
   logic [0:0] dst_logic__clk;
-  CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 dst_logic__in_req;
+  CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 dst_logic__in_req;
   logic [4:0] dst_logic__in_src_id;
   logic [1:0] dst_logic__out_dst;
   logic [0:0] dst_logic__reset;
 
-  ScratchpadDstLogic__1bc6dabd503ca2d2 dst_logic
+  ScratchpadDstLogic__6c01cd93d9bcbace dst_logic
   (
     .clk( dst_logic__clk ),
     .in_req( dst_logic__in_req ),
@@ -15673,7 +15921,7 @@ module ReqAdapter__01da3b84d22e9b3f
   //-------------------------------------------------------------
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:91
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:91
   // s.master.req.en   //= lambda: s.minion.req.en
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_5__master_req_en
@@ -15681,7 +15929,7 @@ module ReqAdapter__01da3b84d22e9b3f
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:92
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:92
   // s.master.resp.rdy //= lambda: s.minion.resp.rdy
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_5__master_resp_rdy
@@ -15689,7 +15937,7 @@ module ReqAdapter__01da3b84d22e9b3f
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:88
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:88
   // s.minion.req.rdy //= lambda: s.opq_table.alloc.rdy & s.master.req.rdy
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_5__minion_req_rdy
@@ -15697,7 +15945,7 @@ module ReqAdapter__01da3b84d22e9b3f
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:89
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:89
   // s.minion.resp.en //= lambda: s.master.resp.en
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_5__minion_resp_en
@@ -15705,7 +15953,7 @@ module ReqAdapter__01da3b84d22e9b3f
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:94
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:94
   // @update
   // def up_master_req_msg():
   //   s.master.req.msg.dst @= s.dst_logic.out_dst
@@ -15721,7 +15969,7 @@ module ReqAdapter__01da3b84d22e9b3f
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:101
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:101
   // @update
   // def up_minion_resp_msg():
   //   s.minion.resp.msg @= s.master.resp.msg.payload
@@ -15747,21 +15995,21 @@ endmodule
 
 
 // PyMTL Component ReqAdapter Definition
-// Full name: ReqAdapter__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7__Resp_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__id_6__num_requesters_17__num_responders_4__max_req_in_flight_4__DstLogicT_ScratchpadDstLogic
-// At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py
+// Full name: ReqAdapter__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7__Resp_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__id_6__num_requesters_17__num_responders_4__max_req_in_flight_4__DstLogicT_ScratchpadDstLogic
+// At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py
 
-module ReqAdapter__529dea8e619fa0ea
+module ReqAdapter__205434149a915355
 (
   input  logic [0:0] clk ,
   input  logic [0:0] reset ,
   output logic [0:0] master__req__en ,
-  output mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd master__req__msg ,
+  output mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d master__req__msg ,
   input logic [0:0] master__req__rdy ,
   input logic [0:0] master__resp__en ,
   input mmxbar_resp_17_CgraLocalMemRespMsg__97a8fdbd88c53709 master__resp__msg ,
   output logic [0:0] master__resp__rdy ,
   input logic [0:0] minion__req__en ,
-  input CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 minion__req__msg ,
+  input CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 minion__req__msg ,
   output logic [0:0] minion__req__rdy ,
   output logic [0:0] minion__resp__en ,
   output CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 minion__resp__msg ,
@@ -15773,12 +16021,12 @@ module ReqAdapter__529dea8e619fa0ea
   //-------------------------------------------------------------
 
   logic [0:0] dst_logic__clk;
-  CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 dst_logic__in_req;
+  CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 dst_logic__in_req;
   logic [4:0] dst_logic__in_src_id;
   logic [1:0] dst_logic__out_dst;
   logic [0:0] dst_logic__reset;
 
-  ScratchpadDstLogic__1bc6dabd503ca2d2 dst_logic
+  ScratchpadDstLogic__6c01cd93d9bcbace dst_logic
   (
     .clk( dst_logic__clk ),
     .in_req( dst_logic__in_req ),
@@ -15825,7 +16073,7 @@ module ReqAdapter__529dea8e619fa0ea
   //-------------------------------------------------------------
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:91
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:91
   // s.master.req.en   //= lambda: s.minion.req.en
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_6__master_req_en
@@ -15833,7 +16081,7 @@ module ReqAdapter__529dea8e619fa0ea
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:92
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:92
   // s.master.resp.rdy //= lambda: s.minion.resp.rdy
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_6__master_resp_rdy
@@ -15841,7 +16089,7 @@ module ReqAdapter__529dea8e619fa0ea
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:88
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:88
   // s.minion.req.rdy //= lambda: s.opq_table.alloc.rdy & s.master.req.rdy
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_6__minion_req_rdy
@@ -15849,7 +16097,7 @@ module ReqAdapter__529dea8e619fa0ea
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:89
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:89
   // s.minion.resp.en //= lambda: s.master.resp.en
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_6__minion_resp_en
@@ -15857,7 +16105,7 @@ module ReqAdapter__529dea8e619fa0ea
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:94
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:94
   // @update
   // def up_master_req_msg():
   //   s.master.req.msg.dst @= s.dst_logic.out_dst
@@ -15873,7 +16121,7 @@ module ReqAdapter__529dea8e619fa0ea
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:101
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:101
   // @update
   // def up_minion_resp_msg():
   //   s.minion.resp.msg @= s.master.resp.msg.payload
@@ -15899,21 +16147,21 @@ endmodule
 
 
 // PyMTL Component ReqAdapter Definition
-// Full name: ReqAdapter__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7__Resp_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__id_7__num_requesters_17__num_responders_4__max_req_in_flight_4__DstLogicT_ScratchpadDstLogic
-// At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py
+// Full name: ReqAdapter__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7__Resp_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__id_7__num_requesters_17__num_responders_4__max_req_in_flight_4__DstLogicT_ScratchpadDstLogic
+// At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py
 
-module ReqAdapter__76ed7830b9e5ef5f
+module ReqAdapter__9fc41dafb916a2d9
 (
   input  logic [0:0] clk ,
   input  logic [0:0] reset ,
   output logic [0:0] master__req__en ,
-  output mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd master__req__msg ,
+  output mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d master__req__msg ,
   input logic [0:0] master__req__rdy ,
   input logic [0:0] master__resp__en ,
   input mmxbar_resp_17_CgraLocalMemRespMsg__97a8fdbd88c53709 master__resp__msg ,
   output logic [0:0] master__resp__rdy ,
   input logic [0:0] minion__req__en ,
-  input CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 minion__req__msg ,
+  input CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 minion__req__msg ,
   output logic [0:0] minion__req__rdy ,
   output logic [0:0] minion__resp__en ,
   output CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 minion__resp__msg ,
@@ -15925,12 +16173,12 @@ module ReqAdapter__76ed7830b9e5ef5f
   //-------------------------------------------------------------
 
   logic [0:0] dst_logic__clk;
-  CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 dst_logic__in_req;
+  CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 dst_logic__in_req;
   logic [4:0] dst_logic__in_src_id;
   logic [1:0] dst_logic__out_dst;
   logic [0:0] dst_logic__reset;
 
-  ScratchpadDstLogic__1bc6dabd503ca2d2 dst_logic
+  ScratchpadDstLogic__6c01cd93d9bcbace dst_logic
   (
     .clk( dst_logic__clk ),
     .in_req( dst_logic__in_req ),
@@ -15977,7 +16225,7 @@ module ReqAdapter__76ed7830b9e5ef5f
   //-------------------------------------------------------------
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:91
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:91
   // s.master.req.en   //= lambda: s.minion.req.en
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_7__master_req_en
@@ -15985,7 +16233,7 @@ module ReqAdapter__76ed7830b9e5ef5f
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:92
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:92
   // s.master.resp.rdy //= lambda: s.minion.resp.rdy
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_7__master_resp_rdy
@@ -15993,7 +16241,7 @@ module ReqAdapter__76ed7830b9e5ef5f
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:88
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:88
   // s.minion.req.rdy //= lambda: s.opq_table.alloc.rdy & s.master.req.rdy
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_7__minion_req_rdy
@@ -16001,7 +16249,7 @@ module ReqAdapter__76ed7830b9e5ef5f
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:89
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:89
   // s.minion.resp.en //= lambda: s.master.resp.en
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_7__minion_resp_en
@@ -16009,7 +16257,7 @@ module ReqAdapter__76ed7830b9e5ef5f
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:94
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:94
   // @update
   // def up_master_req_msg():
   //   s.master.req.msg.dst @= s.dst_logic.out_dst
@@ -16025,7 +16273,7 @@ module ReqAdapter__76ed7830b9e5ef5f
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:101
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:101
   // @update
   // def up_minion_resp_msg():
   //   s.minion.resp.msg @= s.master.resp.msg.payload
@@ -16051,21 +16299,21 @@ endmodule
 
 
 // PyMTL Component ReqAdapter Definition
-// Full name: ReqAdapter__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7__Resp_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__id_8__num_requesters_17__num_responders_4__max_req_in_flight_4__DstLogicT_ScratchpadDstLogic
-// At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py
+// Full name: ReqAdapter__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7__Resp_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__id_8__num_requesters_17__num_responders_4__max_req_in_flight_4__DstLogicT_ScratchpadDstLogic
+// At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py
 
-module ReqAdapter__6ab641fc601c91f5
+module ReqAdapter__f82c1bc7dafa9aad
 (
   input  logic [0:0] clk ,
   input  logic [0:0] reset ,
   output logic [0:0] master__req__en ,
-  output mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd master__req__msg ,
+  output mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d master__req__msg ,
   input logic [0:0] master__req__rdy ,
   input logic [0:0] master__resp__en ,
   input mmxbar_resp_17_CgraLocalMemRespMsg__97a8fdbd88c53709 master__resp__msg ,
   output logic [0:0] master__resp__rdy ,
   input logic [0:0] minion__req__en ,
-  input CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 minion__req__msg ,
+  input CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 minion__req__msg ,
   output logic [0:0] minion__req__rdy ,
   output logic [0:0] minion__resp__en ,
   output CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 minion__resp__msg ,
@@ -16077,12 +16325,12 @@ module ReqAdapter__6ab641fc601c91f5
   //-------------------------------------------------------------
 
   logic [0:0] dst_logic__clk;
-  CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 dst_logic__in_req;
+  CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 dst_logic__in_req;
   logic [4:0] dst_logic__in_src_id;
   logic [1:0] dst_logic__out_dst;
   logic [0:0] dst_logic__reset;
 
-  ScratchpadDstLogic__1bc6dabd503ca2d2 dst_logic
+  ScratchpadDstLogic__6c01cd93d9bcbace dst_logic
   (
     .clk( dst_logic__clk ),
     .in_req( dst_logic__in_req ),
@@ -16129,7 +16377,7 @@ module ReqAdapter__6ab641fc601c91f5
   //-------------------------------------------------------------
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:91
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:91
   // s.master.req.en   //= lambda: s.minion.req.en
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_8__master_req_en
@@ -16137,7 +16385,7 @@ module ReqAdapter__6ab641fc601c91f5
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:92
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:92
   // s.master.resp.rdy //= lambda: s.minion.resp.rdy
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_8__master_resp_rdy
@@ -16145,7 +16393,7 @@ module ReqAdapter__6ab641fc601c91f5
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:88
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:88
   // s.minion.req.rdy //= lambda: s.opq_table.alloc.rdy & s.master.req.rdy
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_8__minion_req_rdy
@@ -16153,7 +16401,7 @@ module ReqAdapter__6ab641fc601c91f5
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:89
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:89
   // s.minion.resp.en //= lambda: s.master.resp.en
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_8__minion_resp_en
@@ -16161,7 +16409,7 @@ module ReqAdapter__6ab641fc601c91f5
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:94
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:94
   // @update
   // def up_master_req_msg():
   //   s.master.req.msg.dst @= s.dst_logic.out_dst
@@ -16177,7 +16425,7 @@ module ReqAdapter__6ab641fc601c91f5
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:101
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:101
   // @update
   // def up_minion_resp_msg():
   //   s.minion.resp.msg @= s.master.resp.msg.payload
@@ -16203,21 +16451,21 @@ endmodule
 
 
 // PyMTL Component ReqAdapter Definition
-// Full name: ReqAdapter__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7__Resp_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__id_9__num_requesters_17__num_responders_4__max_req_in_flight_4__DstLogicT_ScratchpadDstLogic
-// At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py
+// Full name: ReqAdapter__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7__Resp_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__id_9__num_requesters_17__num_responders_4__max_req_in_flight_4__DstLogicT_ScratchpadDstLogic
+// At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py
 
-module ReqAdapter__4e7ae9506498f3cb
+module ReqAdapter__92348ec62f18a02a
 (
   input  logic [0:0] clk ,
   input  logic [0:0] reset ,
   output logic [0:0] master__req__en ,
-  output mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd master__req__msg ,
+  output mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d master__req__msg ,
   input logic [0:0] master__req__rdy ,
   input logic [0:0] master__resp__en ,
   input mmxbar_resp_17_CgraLocalMemRespMsg__97a8fdbd88c53709 master__resp__msg ,
   output logic [0:0] master__resp__rdy ,
   input logic [0:0] minion__req__en ,
-  input CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 minion__req__msg ,
+  input CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 minion__req__msg ,
   output logic [0:0] minion__req__rdy ,
   output logic [0:0] minion__resp__en ,
   output CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 minion__resp__msg ,
@@ -16229,12 +16477,12 @@ module ReqAdapter__4e7ae9506498f3cb
   //-------------------------------------------------------------
 
   logic [0:0] dst_logic__clk;
-  CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 dst_logic__in_req;
+  CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 dst_logic__in_req;
   logic [4:0] dst_logic__in_src_id;
   logic [1:0] dst_logic__out_dst;
   logic [0:0] dst_logic__reset;
 
-  ScratchpadDstLogic__1bc6dabd503ca2d2 dst_logic
+  ScratchpadDstLogic__6c01cd93d9bcbace dst_logic
   (
     .clk( dst_logic__clk ),
     .in_req( dst_logic__in_req ),
@@ -16281,7 +16529,7 @@ module ReqAdapter__4e7ae9506498f3cb
   //-------------------------------------------------------------
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:91
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:91
   // s.master.req.en   //= lambda: s.minion.req.en
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_9__master_req_en
@@ -16289,7 +16537,7 @@ module ReqAdapter__4e7ae9506498f3cb
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:92
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:92
   // s.master.resp.rdy //= lambda: s.minion.resp.rdy
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_9__master_resp_rdy
@@ -16297,7 +16545,7 @@ module ReqAdapter__4e7ae9506498f3cb
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:88
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:88
   // s.minion.req.rdy //= lambda: s.opq_table.alloc.rdy & s.master.req.rdy
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_9__minion_req_rdy
@@ -16305,7 +16553,7 @@ module ReqAdapter__4e7ae9506498f3cb
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:89
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:89
   // s.minion.resp.en //= lambda: s.master.resp.en
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_adapter_9__minion_resp_en
@@ -16313,7 +16561,7 @@ module ReqAdapter__4e7ae9506498f3cb
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:94
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:94
   // @update
   // def up_master_req_msg():
   //   s.master.req.msg.dst @= s.dst_logic.out_dst
@@ -16329,7 +16577,7 @@ module ReqAdapter__4e7ae9506498f3cb
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:101
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:101
   // @update
   // def up_minion_resp_msg():
   //   s.minion.resp.msg @= s.master.resp.msg.payload
@@ -16355,7 +16603,7 @@ endmodule
 
 
 // PyMTL Component NormalQueueCtrlRTL Definition
-// At /work/global/pp482/cgra/src/pymtl3_net/ocnlib/rtl/queues.py
+// At /work/global/pp482/test/cgra-src/src/pymtl3_net/ocnlib/rtl/queues.py
 
 module NormalQueueCtrlRTL__num_entries_2
 (
@@ -16376,7 +16624,7 @@ module NormalQueueCtrlRTL__num_entries_2
   logic [0:0] tail;
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/ocnlib/rtl/queues.py:86
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/ocnlib/rtl/queues.py:86
   // s.deq_rdy //= lambda: s.count > 0
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_net_input_units_0__queue_ctrl_deq_rdy
@@ -16384,7 +16632,7 @@ module NormalQueueCtrlRTL__num_entries_2
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/ocnlib/rtl/queues.py:89
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/ocnlib/rtl/queues.py:89
   // s.deq_xfer //= lambda: s.deq_en & s.deq_rdy
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_net_input_units_0__queue_ctrl_deq_xfer
@@ -16392,7 +16640,7 @@ module NormalQueueCtrlRTL__num_entries_2
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/ocnlib/rtl/queues.py:85
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/ocnlib/rtl/queues.py:85
   // s.enq_rdy //= lambda: s.count < s.num_entries
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_net_input_units_0__queue_ctrl_enq_rdy
@@ -16400,7 +16648,7 @@ module NormalQueueCtrlRTL__num_entries_2
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/ocnlib/rtl/queues.py:88
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/ocnlib/rtl/queues.py:88
   // s.enq_xfer //= lambda: s.enq_en & s.enq_rdy
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_net_input_units_0__queue_ctrl_enq_xfer
@@ -16408,7 +16656,7 @@ module NormalQueueCtrlRTL__num_entries_2
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/ocnlib/rtl/queues.py:91
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/ocnlib/rtl/queues.py:91
   // @update_ff
   // def up_reg():
   // 
@@ -16459,25 +16707,25 @@ endmodule
 
 
 // PyMTL Component RegisterFile Definition
-// Full name: RegisterFile__Type_mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd__nregs_2__rd_ports_1__wr_ports_1__const_zero_False
-// At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/register_files.py
+// Full name: RegisterFile__Type_mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d__nregs_2__rd_ports_1__wr_ports_1__const_zero_False
+// At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/register_files.py
 
-module RegisterFile__8f337ac113ad64d9
+module RegisterFile__a3ff693fcd39f8f1
 (
   input  logic [0:0] clk ,
   input  logic [0:0] raddr [0:0],
-  output mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd rdata [0:0],
+  output mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d rdata [0:0],
   input  logic [0:0] reset ,
   input  logic [0:0] waddr [0:0],
-  input  mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd wdata [0:0],
+  input  mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d wdata [0:0],
   input  logic [0:0] wen [0:0]
 );
   localparam logic [0:0] __const__rd_ports_at_up_rf_read  = 1'd1;
   localparam logic [0:0] __const__wr_ports_at_up_rf_write  = 1'd1;
-  mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd regs [0:1];
+  mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d regs [0:1];
 
   // PyMTL Update Block Source
-  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/register_files.py:20
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/register_files.py:20
   // @update
   // def up_rf_read():
   //   for i in range( rd_ports ):
@@ -16489,7 +16737,7 @@ module RegisterFile__8f337ac113ad64d9
   end
 
   // PyMTL Update Block Source
-  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/register_files.py:32
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/register_files.py:32
   // @update_ff
   // def up_rf_write():
   //   for i in range( wr_ports ):
@@ -16507,14 +16755,14 @@ endmodule
 
 
 // PyMTL Component NormalQueueDpathRTL Definition
-// Full name: NormalQueueDpathRTL__EntryType_mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd__num_entries_2
-// At /work/global/pp482/cgra/src/pymtl3_net/ocnlib/rtl/queues.py
+// Full name: NormalQueueDpathRTL__EntryType_mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d__num_entries_2
+// At /work/global/pp482/test/cgra-src/src/pymtl3_net/ocnlib/rtl/queues.py
 
-module NormalQueueDpathRTL__3497262bccd2acae
+module NormalQueueDpathRTL__1d4c1f8c7fa5ef57
 (
   input  logic [0:0] clk ,
-  output mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd deq_ret ,
-  input  mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd enq_msg ,
+  output mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d deq_ret ,
+  input  mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d enq_msg ,
   input  logic [0:0] raddr ,
   input  logic [0:0] reset ,
   input  logic [0:0] waddr ,
@@ -16526,13 +16774,13 @@ module NormalQueueDpathRTL__3497262bccd2acae
 
   logic [0:0] queue__clk;
   logic [0:0] queue__raddr [0:0];
-  mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd queue__rdata [0:0];
+  mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d queue__rdata [0:0];
   logic [0:0] queue__reset;
   logic [0:0] queue__waddr [0:0];
-  mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd queue__wdata [0:0];
+  mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d queue__wdata [0:0];
   logic [0:0] queue__wen [0:0];
 
-  RegisterFile__8f337ac113ad64d9 queue
+  RegisterFile__a3ff693fcd39f8f1 queue
   (
     .clk( queue__clk ),
     .raddr( queue__raddr ),
@@ -16559,19 +16807,19 @@ endmodule
 
 
 // PyMTL Component NormalQueueRTL Definition
-// Full name: NormalQueueRTL__EntryType_mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd__num_entries_2
-// At /work/global/pp482/cgra/src/pymtl3_net/ocnlib/rtl/queues.py
+// Full name: NormalQueueRTL__EntryType_mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d__num_entries_2
+// At /work/global/pp482/test/cgra-src/src/pymtl3_net/ocnlib/rtl/queues.py
 
-module NormalQueueRTL__3497262bccd2acae
+module NormalQueueRTL__1d4c1f8c7fa5ef57
 (
   input  logic [0:0] clk ,
   output logic [1:0] count ,
   input  logic [0:0] reset ,
   input logic [0:0] deq__en  ,
   output logic [0:0] deq__rdy  ,
-  output mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd deq__ret  ,
+  output mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d deq__ret  ,
   input logic [0:0] enq__en  ,
-  input mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd enq__msg  ,
+  input mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d enq__msg  ,
   output logic [0:0] enq__rdy  
 );
   //-------------------------------------------------------------
@@ -16612,14 +16860,14 @@ module NormalQueueRTL__3497262bccd2acae
   //-------------------------------------------------------------
 
   logic [0:0] dpath__clk;
-  mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd dpath__deq_ret;
-  mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd dpath__enq_msg;
+  mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d dpath__deq_ret;
+  mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d dpath__enq_msg;
   logic [0:0] dpath__raddr;
   logic [0:0] dpath__reset;
   logic [0:0] dpath__waddr;
   logic [0:0] dpath__wen;
 
-  NormalQueueDpathRTL__3497262bccd2acae dpath
+  NormalQueueDpathRTL__1d4c1f8c7fa5ef57 dpath
   (
     .clk( dpath__clk ),
     .deq_ret( dpath__deq_ret ),
@@ -16653,18 +16901,18 @@ endmodule
 
 
 // PyMTL Component InputUnitRTL Definition
-// Full name: InputUnitRTL__PacketType_mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd__QueueType_NormalQueueRTL
-// At /work/global/pp482/cgra/src/pymtl3_net/router/InputUnitRTL.py
+// Full name: InputUnitRTL__PacketType_mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d__QueueType_NormalQueueRTL
+// At /work/global/pp482/test/cgra-src/src/pymtl3_net/router/InputUnitRTL.py
 
-module InputUnitRTL__4d64fd7aa8b55c26
+module InputUnitRTL__85e5a36afc2abf63
 (
   input  logic [0:0] clk ,
   input  logic [0:0] reset ,
   input logic [0:0] give__en  ,
   output logic [0:0] give__rdy  ,
-  output mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd give__ret  ,
+  output mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d give__ret  ,
   input logic [0:0] recv__en  ,
-  input mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd recv__msg  ,
+  input mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d recv__msg  ,
   output logic [0:0] recv__rdy  
 );
   //-------------------------------------------------------------
@@ -16676,12 +16924,12 @@ module InputUnitRTL__4d64fd7aa8b55c26
   logic [0:0] queue__reset;
   logic [0:0] queue__deq__en;
   logic [0:0] queue__deq__rdy;
-  mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd queue__deq__ret;
+  mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d queue__deq__ret;
   logic [0:0] queue__enq__en;
-  mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd queue__enq__msg;
+  mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d queue__enq__msg;
   logic [0:0] queue__enq__rdy;
 
-  NormalQueueRTL__3497262bccd2acae queue
+  NormalQueueRTL__1d4c1f8c7fa5ef57 queue
   (
     .clk( queue__clk ),
     .count( queue__count ),
@@ -16711,32 +16959,32 @@ endmodule
 
 
 // PyMTL Component OutputUnitRTL Definition
-// Full name: OutputUnitRTL__PacketType_mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd__QueueType_None
-// At /work/global/pp482/cgra/src/pymtl3_net/router/OutputUnitRTL.py
+// Full name: OutputUnitRTL__PacketType_mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d__QueueType_None
+// At /work/global/pp482/test/cgra-src/src/pymtl3_net/router/OutputUnitRTL.py
 
-module OutputUnitRTL__2e1f8078310e6e31
+module OutputUnitRTL__e712da2bcfbb9e68
 (
   input  logic [0:0] clk ,
   input  logic [0:0] reset ,
   output logic [0:0] get__en  ,
   input logic [0:0] get__rdy  ,
-  input mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd get__ret  ,
+  input mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d get__ret  ,
   output logic [0:0] send__en  ,
-  output mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd send__msg  ,
+  output mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d send__msg  ,
   input logic [0:0] send__rdy  
 );
   logic [0:0] __tmpvar__up_get_send_both_rdy;
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/router/OutputUnitRTL.py:52
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/router/OutputUnitRTL.py:52
   // s.send.msg //= lambda: s.get.ret if s.send.en else PacketType()
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_req_net_output_units_0__send_msg
-    send__msg = send__en ? get__ret : { 2'd0, { 1'd0, 14'd0, 32'd0, 7'd0 } };
+    send__msg = send__en ? get__ret : { 2'd0, { 1'd0, 14'd0, 32'd0, 2'd0, 7'd0 } };
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/router/OutputUnitRTL.py:54
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/router/OutputUnitRTL.py:54
   // @update
   // def up_get_send():
   //   both_rdy = s.get.rdy & s.send.rdy
@@ -16753,26 +17001,26 @@ endmodule
 
 
 // PyMTL Component XbarRouteUnitRTL Definition
-// Full name: XbarRouteUnitRTL__PacketType_mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd__num_outports_4
-// At /work/global/pp482/cgra/src/pymtl3_net/xbar/XbarRouteUnitRTL.py
+// Full name: XbarRouteUnitRTL__PacketType_mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d__num_outports_4
+// At /work/global/pp482/test/cgra-src/src/pymtl3_net/xbar/XbarRouteUnitRTL.py
 
-module XbarRouteUnitRTL__3ab4e489d96abc6b
+module XbarRouteUnitRTL__c4c32963ee48b046
 (
   input  logic [0:0] clk ,
   input  logic [0:0] reset ,
   output logic [0:0] get__en  ,
   input logic [0:0] get__rdy  ,
-  input mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd get__ret  ,
+  input mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d get__ret  ,
   input logic [0:0] give__en [0:3] ,
   output logic [0:0] give__rdy [0:3] ,
-  output mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd give__ret [0:3] 
+  output mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d give__ret [0:3] 
 );
   localparam logic [2:0] __const__num_outports_at_up_ru_routing  = 3'd4;
   logic [3:0] give_ens;
   logic [1:0] out_dir;
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/xbar/XbarRouteUnitRTL.py:51
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/xbar/XbarRouteUnitRTL.py:51
   // @update
   // def up_ru_give_en():
   //   s.get.en @= s.give_ens > 0
@@ -16782,7 +17030,7 @@ module XbarRouteUnitRTL__3ab4e489d96abc6b
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/xbar/XbarRouteUnitRTL.py:41
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/xbar/XbarRouteUnitRTL.py:41
   // @update
   // def up_ru_routing():
   //   s.out_dir @= trunc( s.get.ret.dst, dir_nbits )
@@ -16815,7 +17063,7 @@ endmodule
 
 
 // PyMTL Component RegEnRst Definition
-// At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/registers.py
+// At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/registers.py
 
 module RegEnRst__Type_Bits17__reset_value_1
 (
@@ -16828,7 +17076,7 @@ module RegEnRst__Type_Bits17__reset_value_1
   localparam logic [0:0] __const__reset_value_at_up_regenrst  = 1'd1;
 
   // PyMTL Update Block Source
-  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/registers.py:55
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/registers.py:55
   // @update_ff
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
@@ -16847,7 +17095,7 @@ endmodule
 
 
 // PyMTL Component RoundRobinArbiterEn Definition
-// At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/arbiters.py
+// At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/arbiters.py
 
 module RoundRobinArbiterEn__nreqs_17
 (
@@ -16893,7 +17141,7 @@ module RoundRobinArbiterEn__nreqs_17
   //-------------------------------------------------------------
 
   // PyMTL Update Block Source
-  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/arbiters.py:118
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/arbiters.py:118
   // @update
   // def comb_grants():
   //   for i in range( nreqs ):
@@ -16905,7 +17153,7 @@ module RoundRobinArbiterEn__nreqs_17
   end
 
   // PyMTL Update Block Source
-  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/arbiters.py:141
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/arbiters.py:141
   // @update
   // def comb_grants_int():
   //   for i in range( nreqsX2 ):
@@ -16924,7 +17172,7 @@ module RoundRobinArbiterEn__nreqs_17
   end
 
   // PyMTL Update Block Source
-  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/arbiters.py:132
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/arbiters.py:132
   // @update
   // def comb_kills():
   //   s.kills[0] @= 1
@@ -16945,7 +17193,7 @@ module RoundRobinArbiterEn__nreqs_17
   end
 
   // PyMTL Update Block Source
-  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/arbiters.py:123
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/arbiters.py:123
   // @update
   // def comb_priority_en():
   //   s.priority_en @= ( s.grants != 0 ) & s.en
@@ -16955,7 +17203,7 @@ module RoundRobinArbiterEn__nreqs_17
   end
 
   // PyMTL Update Block Source
-  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/arbiters.py:127
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/arbiters.py:127
   // @update
   // def comb_priority_int():
   //   s.priority_int[    0:nreqs  ] @= s.priority_reg.out
@@ -16967,7 +17215,7 @@ module RoundRobinArbiterEn__nreqs_17
   end
 
   // PyMTL Update Block Source
-  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/arbiters.py:113
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/arbiters.py:113
   // @update
   // def comb_reqs_int():
   //   s.reqs_int [    0:nreqs  ] @= s.reqs
@@ -16988,7 +17236,7 @@ endmodule
 
 
 // PyMTL Component Encoder Definition
-// At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/encoders.py
+// At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/encoders.py
 
 module Encoder__in_nbits_17__out_nbits_5
 (
@@ -16999,7 +17247,7 @@ module Encoder__in_nbits_17__out_nbits_5
 );
 
   // PyMTL Update Block Source
-  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/encoders.py:28
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/encoders.py:28
   // @update
   // def encode():
   //   s.out @= 0
@@ -17019,20 +17267,20 @@ endmodule
 
 
 // PyMTL Component Mux Definition
-// Full name: Mux__Type_mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd__ninputs_17
-// At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/arithmetics.py
+// Full name: Mux__Type_mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d__ninputs_17
+// At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/arithmetics.py
 
-module Mux__8c0b3984e08c8eb1
+module Mux__35801dd7bf769251
 (
   input  logic [0:0] clk ,
-  input  mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd in_ [0:16],
-  output mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd out ,
+  input  mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d in_ [0:16],
+  output mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d out ,
   input  logic [0:0] reset ,
   input  logic [4:0] sel 
 );
 
   // PyMTL Update Block Source
-  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/arithmetics.py:13
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/arithmetics.py:13
   // @update
   // def up_mux():
   //   s.out @= s.in_[ s.sel ]
@@ -17045,20 +17293,20 @@ endmodule
 
 
 // PyMTL Component SwitchUnitRTL Definition
-// Full name: SwitchUnitRTL__PacketType_mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd__num_inports_17
-// At /work/global/pp482/cgra/src/pymtl3_net/router/SwitchUnitRTL.py
+// Full name: SwitchUnitRTL__PacketType_mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d__num_inports_17
+// At /work/global/pp482/test/cgra-src/src/pymtl3_net/router/SwitchUnitRTL.py
 
-module SwitchUnitRTL__f5f1dd767adb8768
+module SwitchUnitRTL__5d4698167699965a
 (
   input  logic [0:0] clk ,
   output logic [0:0] out_ocp ,
   input  logic [0:0] reset ,
   output logic [0:0] get__en [0:16] ,
   input logic [0:0] get__rdy [0:16] ,
-  input mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd get__ret [0:16] ,
+  input mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d get__ret [0:16] ,
   input logic [0:0] give__en  ,
   output logic [0:0] give__rdy  ,
-  output mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd give__ret  
+  output mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d give__ret  
 );
   localparam logic [4:0] __const__num_inports_at_up_get_en  = 5'd17;
   logic [0:0] get_en [0:16];
@@ -17112,12 +17360,12 @@ module SwitchUnitRTL__f5f1dd767adb8768
   //-------------------------------------------------------------
 
   logic [0:0] mux__clk;
-  mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd mux__in_ [0:16];
-  mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd mux__out;
+  mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d mux__in_ [0:16];
+  mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d mux__out;
   logic [0:0] mux__reset;
   logic [4:0] mux__sel;
 
-  Mux__8c0b3984e08c8eb1 mux
+  Mux__35801dd7bf769251 mux
   (
     .clk( mux__clk ),
     .in_( mux__in_ ),
@@ -17131,7 +17379,7 @@ module SwitchUnitRTL__f5f1dd767adb8768
   //-------------------------------------------------------------
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/router/SwitchUnitRTL.py:61
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/router/SwitchUnitRTL.py:61
   // @update
   // def up_get_en():
   //   for i in range( num_inports ):
@@ -17143,7 +17391,7 @@ module SwitchUnitRTL__f5f1dd767adb8768
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/router/SwitchUnitRTL.py:57
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/router/SwitchUnitRTL.py:57
   // @update
   // def up_give():
   //   s.give.rdy @= s.arbiter.grants > 0
@@ -17235,18 +17483,18 @@ endmodule
 
 
 // PyMTL Component XbarRTL Definition
-// Full name: XbarRTL__PacketType_mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd__num_inports_17__num_outports_4__InputUnitType_InputUnitRTL__RouteUnitType_XbarRouteUnitRTL__SwitchUnitType_SwitchUnitRTL__OutputUnitType_OutputUnitRTL
-// At /work/global/pp482/cgra/src/pymtl3_net/xbar/XbarRTL.py
+// Full name: XbarRTL__PacketType_mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d__num_inports_17__num_outports_4__InputUnitType_InputUnitRTL__RouteUnitType_XbarRouteUnitRTL__SwitchUnitType_SwitchUnitRTL__OutputUnitType_OutputUnitRTL
+// At /work/global/pp482/test/cgra-src/src/pymtl3_net/xbar/XbarRTL.py
 
-module XbarRTL__beeeaf37e1c2bdee
+module XbarRTL__74f5b9e2e35b7e90
 (
   input  logic [0:0] clk ,
   input  logic [0:0] reset ,
   input logic [0:0] recv__en [0:16] ,
-  input mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd recv__msg [0:16] ,
+  input mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d recv__msg [0:16] ,
   output logic [0:0] recv__rdy [0:16] ,
   output logic [0:0] send__en [0:3] ,
-  output mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd send__msg [0:3] ,
+  output mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d send__msg [0:3] ,
   input logic [0:0] send__rdy [0:3] 
 );
   //-------------------------------------------------------------
@@ -17257,12 +17505,12 @@ module XbarRTL__beeeaf37e1c2bdee
   logic [0:0] input_units__reset [0:16];
   logic [0:0] input_units__give__en [0:16];
   logic [0:0] input_units__give__rdy [0:16];
-  mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd input_units__give__ret [0:16];
+  mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d input_units__give__ret [0:16];
   logic [0:0] input_units__recv__en [0:16];
-  mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd input_units__recv__msg [0:16];
+  mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d input_units__recv__msg [0:16];
   logic [0:0] input_units__recv__rdy [0:16];
 
-  InputUnitRTL__4d64fd7aa8b55c26 input_units__0
+  InputUnitRTL__85e5a36afc2abf63 input_units__0
   (
     .clk( input_units__clk[0] ),
     .reset( input_units__reset[0] ),
@@ -17274,7 +17522,7 @@ module XbarRTL__beeeaf37e1c2bdee
     .recv__rdy( input_units__recv__rdy[0] )
   );
 
-  InputUnitRTL__4d64fd7aa8b55c26 input_units__1
+  InputUnitRTL__85e5a36afc2abf63 input_units__1
   (
     .clk( input_units__clk[1] ),
     .reset( input_units__reset[1] ),
@@ -17286,7 +17534,7 @@ module XbarRTL__beeeaf37e1c2bdee
     .recv__rdy( input_units__recv__rdy[1] )
   );
 
-  InputUnitRTL__4d64fd7aa8b55c26 input_units__2
+  InputUnitRTL__85e5a36afc2abf63 input_units__2
   (
     .clk( input_units__clk[2] ),
     .reset( input_units__reset[2] ),
@@ -17298,7 +17546,7 @@ module XbarRTL__beeeaf37e1c2bdee
     .recv__rdy( input_units__recv__rdy[2] )
   );
 
-  InputUnitRTL__4d64fd7aa8b55c26 input_units__3
+  InputUnitRTL__85e5a36afc2abf63 input_units__3
   (
     .clk( input_units__clk[3] ),
     .reset( input_units__reset[3] ),
@@ -17310,7 +17558,7 @@ module XbarRTL__beeeaf37e1c2bdee
     .recv__rdy( input_units__recv__rdy[3] )
   );
 
-  InputUnitRTL__4d64fd7aa8b55c26 input_units__4
+  InputUnitRTL__85e5a36afc2abf63 input_units__4
   (
     .clk( input_units__clk[4] ),
     .reset( input_units__reset[4] ),
@@ -17322,7 +17570,7 @@ module XbarRTL__beeeaf37e1c2bdee
     .recv__rdy( input_units__recv__rdy[4] )
   );
 
-  InputUnitRTL__4d64fd7aa8b55c26 input_units__5
+  InputUnitRTL__85e5a36afc2abf63 input_units__5
   (
     .clk( input_units__clk[5] ),
     .reset( input_units__reset[5] ),
@@ -17334,7 +17582,7 @@ module XbarRTL__beeeaf37e1c2bdee
     .recv__rdy( input_units__recv__rdy[5] )
   );
 
-  InputUnitRTL__4d64fd7aa8b55c26 input_units__6
+  InputUnitRTL__85e5a36afc2abf63 input_units__6
   (
     .clk( input_units__clk[6] ),
     .reset( input_units__reset[6] ),
@@ -17346,7 +17594,7 @@ module XbarRTL__beeeaf37e1c2bdee
     .recv__rdy( input_units__recv__rdy[6] )
   );
 
-  InputUnitRTL__4d64fd7aa8b55c26 input_units__7
+  InputUnitRTL__85e5a36afc2abf63 input_units__7
   (
     .clk( input_units__clk[7] ),
     .reset( input_units__reset[7] ),
@@ -17358,7 +17606,7 @@ module XbarRTL__beeeaf37e1c2bdee
     .recv__rdy( input_units__recv__rdy[7] )
   );
 
-  InputUnitRTL__4d64fd7aa8b55c26 input_units__8
+  InputUnitRTL__85e5a36afc2abf63 input_units__8
   (
     .clk( input_units__clk[8] ),
     .reset( input_units__reset[8] ),
@@ -17370,7 +17618,7 @@ module XbarRTL__beeeaf37e1c2bdee
     .recv__rdy( input_units__recv__rdy[8] )
   );
 
-  InputUnitRTL__4d64fd7aa8b55c26 input_units__9
+  InputUnitRTL__85e5a36afc2abf63 input_units__9
   (
     .clk( input_units__clk[9] ),
     .reset( input_units__reset[9] ),
@@ -17382,7 +17630,7 @@ module XbarRTL__beeeaf37e1c2bdee
     .recv__rdy( input_units__recv__rdy[9] )
   );
 
-  InputUnitRTL__4d64fd7aa8b55c26 input_units__10
+  InputUnitRTL__85e5a36afc2abf63 input_units__10
   (
     .clk( input_units__clk[10] ),
     .reset( input_units__reset[10] ),
@@ -17394,7 +17642,7 @@ module XbarRTL__beeeaf37e1c2bdee
     .recv__rdy( input_units__recv__rdy[10] )
   );
 
-  InputUnitRTL__4d64fd7aa8b55c26 input_units__11
+  InputUnitRTL__85e5a36afc2abf63 input_units__11
   (
     .clk( input_units__clk[11] ),
     .reset( input_units__reset[11] ),
@@ -17406,7 +17654,7 @@ module XbarRTL__beeeaf37e1c2bdee
     .recv__rdy( input_units__recv__rdy[11] )
   );
 
-  InputUnitRTL__4d64fd7aa8b55c26 input_units__12
+  InputUnitRTL__85e5a36afc2abf63 input_units__12
   (
     .clk( input_units__clk[12] ),
     .reset( input_units__reset[12] ),
@@ -17418,7 +17666,7 @@ module XbarRTL__beeeaf37e1c2bdee
     .recv__rdy( input_units__recv__rdy[12] )
   );
 
-  InputUnitRTL__4d64fd7aa8b55c26 input_units__13
+  InputUnitRTL__85e5a36afc2abf63 input_units__13
   (
     .clk( input_units__clk[13] ),
     .reset( input_units__reset[13] ),
@@ -17430,7 +17678,7 @@ module XbarRTL__beeeaf37e1c2bdee
     .recv__rdy( input_units__recv__rdy[13] )
   );
 
-  InputUnitRTL__4d64fd7aa8b55c26 input_units__14
+  InputUnitRTL__85e5a36afc2abf63 input_units__14
   (
     .clk( input_units__clk[14] ),
     .reset( input_units__reset[14] ),
@@ -17442,7 +17690,7 @@ module XbarRTL__beeeaf37e1c2bdee
     .recv__rdy( input_units__recv__rdy[14] )
   );
 
-  InputUnitRTL__4d64fd7aa8b55c26 input_units__15
+  InputUnitRTL__85e5a36afc2abf63 input_units__15
   (
     .clk( input_units__clk[15] ),
     .reset( input_units__reset[15] ),
@@ -17454,7 +17702,7 @@ module XbarRTL__beeeaf37e1c2bdee
     .recv__rdy( input_units__recv__rdy[15] )
   );
 
-  InputUnitRTL__4d64fd7aa8b55c26 input_units__16
+  InputUnitRTL__85e5a36afc2abf63 input_units__16
   (
     .clk( input_units__clk[16] ),
     .reset( input_units__reset[16] ),
@@ -17478,12 +17726,12 @@ module XbarRTL__beeeaf37e1c2bdee
   logic [0:0] output_units__reset [0:3];
   logic [0:0] output_units__get__en [0:3];
   logic [0:0] output_units__get__rdy [0:3];
-  mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd output_units__get__ret [0:3];
+  mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d output_units__get__ret [0:3];
   logic [0:0] output_units__send__en [0:3];
-  mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd output_units__send__msg [0:3];
+  mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d output_units__send__msg [0:3];
   logic [0:0] output_units__send__rdy [0:3];
 
-  OutputUnitRTL__2e1f8078310e6e31 output_units__0
+  OutputUnitRTL__e712da2bcfbb9e68 output_units__0
   (
     .clk( output_units__clk[0] ),
     .reset( output_units__reset[0] ),
@@ -17495,7 +17743,7 @@ module XbarRTL__beeeaf37e1c2bdee
     .send__rdy( output_units__send__rdy[0] )
   );
 
-  OutputUnitRTL__2e1f8078310e6e31 output_units__1
+  OutputUnitRTL__e712da2bcfbb9e68 output_units__1
   (
     .clk( output_units__clk[1] ),
     .reset( output_units__reset[1] ),
@@ -17507,7 +17755,7 @@ module XbarRTL__beeeaf37e1c2bdee
     .send__rdy( output_units__send__rdy[1] )
   );
 
-  OutputUnitRTL__2e1f8078310e6e31 output_units__2
+  OutputUnitRTL__e712da2bcfbb9e68 output_units__2
   (
     .clk( output_units__clk[2] ),
     .reset( output_units__reset[2] ),
@@ -17519,7 +17767,7 @@ module XbarRTL__beeeaf37e1c2bdee
     .send__rdy( output_units__send__rdy[2] )
   );
 
-  OutputUnitRTL__2e1f8078310e6e31 output_units__3
+  OutputUnitRTL__e712da2bcfbb9e68 output_units__3
   (
     .clk( output_units__clk[3] ),
     .reset( output_units__reset[3] ),
@@ -17543,12 +17791,12 @@ module XbarRTL__beeeaf37e1c2bdee
   logic [0:0] route_units__reset [0:16];
   logic [0:0] route_units__get__en [0:16];
   logic [0:0] route_units__get__rdy [0:16];
-  mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd route_units__get__ret [0:16];
+  mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d route_units__get__ret [0:16];
   logic [0:0] route_units__give__en [0:16][0:3];
   logic [0:0] route_units__give__rdy [0:16][0:3];
-  mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd route_units__give__ret [0:16][0:3];
+  mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d route_units__give__ret [0:16][0:3];
 
-  XbarRouteUnitRTL__3ab4e489d96abc6b route_units__0
+  XbarRouteUnitRTL__c4c32963ee48b046 route_units__0
   (
     .clk( route_units__clk[0] ),
     .reset( route_units__reset[0] ),
@@ -17560,7 +17808,7 @@ module XbarRTL__beeeaf37e1c2bdee
     .give__ret( route_units__give__ret[0] )
   );
 
-  XbarRouteUnitRTL__3ab4e489d96abc6b route_units__1
+  XbarRouteUnitRTL__c4c32963ee48b046 route_units__1
   (
     .clk( route_units__clk[1] ),
     .reset( route_units__reset[1] ),
@@ -17572,7 +17820,7 @@ module XbarRTL__beeeaf37e1c2bdee
     .give__ret( route_units__give__ret[1] )
   );
 
-  XbarRouteUnitRTL__3ab4e489d96abc6b route_units__2
+  XbarRouteUnitRTL__c4c32963ee48b046 route_units__2
   (
     .clk( route_units__clk[2] ),
     .reset( route_units__reset[2] ),
@@ -17584,7 +17832,7 @@ module XbarRTL__beeeaf37e1c2bdee
     .give__ret( route_units__give__ret[2] )
   );
 
-  XbarRouteUnitRTL__3ab4e489d96abc6b route_units__3
+  XbarRouteUnitRTL__c4c32963ee48b046 route_units__3
   (
     .clk( route_units__clk[3] ),
     .reset( route_units__reset[3] ),
@@ -17596,7 +17844,7 @@ module XbarRTL__beeeaf37e1c2bdee
     .give__ret( route_units__give__ret[3] )
   );
 
-  XbarRouteUnitRTL__3ab4e489d96abc6b route_units__4
+  XbarRouteUnitRTL__c4c32963ee48b046 route_units__4
   (
     .clk( route_units__clk[4] ),
     .reset( route_units__reset[4] ),
@@ -17608,7 +17856,7 @@ module XbarRTL__beeeaf37e1c2bdee
     .give__ret( route_units__give__ret[4] )
   );
 
-  XbarRouteUnitRTL__3ab4e489d96abc6b route_units__5
+  XbarRouteUnitRTL__c4c32963ee48b046 route_units__5
   (
     .clk( route_units__clk[5] ),
     .reset( route_units__reset[5] ),
@@ -17620,7 +17868,7 @@ module XbarRTL__beeeaf37e1c2bdee
     .give__ret( route_units__give__ret[5] )
   );
 
-  XbarRouteUnitRTL__3ab4e489d96abc6b route_units__6
+  XbarRouteUnitRTL__c4c32963ee48b046 route_units__6
   (
     .clk( route_units__clk[6] ),
     .reset( route_units__reset[6] ),
@@ -17632,7 +17880,7 @@ module XbarRTL__beeeaf37e1c2bdee
     .give__ret( route_units__give__ret[6] )
   );
 
-  XbarRouteUnitRTL__3ab4e489d96abc6b route_units__7
+  XbarRouteUnitRTL__c4c32963ee48b046 route_units__7
   (
     .clk( route_units__clk[7] ),
     .reset( route_units__reset[7] ),
@@ -17644,7 +17892,7 @@ module XbarRTL__beeeaf37e1c2bdee
     .give__ret( route_units__give__ret[7] )
   );
 
-  XbarRouteUnitRTL__3ab4e489d96abc6b route_units__8
+  XbarRouteUnitRTL__c4c32963ee48b046 route_units__8
   (
     .clk( route_units__clk[8] ),
     .reset( route_units__reset[8] ),
@@ -17656,7 +17904,7 @@ module XbarRTL__beeeaf37e1c2bdee
     .give__ret( route_units__give__ret[8] )
   );
 
-  XbarRouteUnitRTL__3ab4e489d96abc6b route_units__9
+  XbarRouteUnitRTL__c4c32963ee48b046 route_units__9
   (
     .clk( route_units__clk[9] ),
     .reset( route_units__reset[9] ),
@@ -17668,7 +17916,7 @@ module XbarRTL__beeeaf37e1c2bdee
     .give__ret( route_units__give__ret[9] )
   );
 
-  XbarRouteUnitRTL__3ab4e489d96abc6b route_units__10
+  XbarRouteUnitRTL__c4c32963ee48b046 route_units__10
   (
     .clk( route_units__clk[10] ),
     .reset( route_units__reset[10] ),
@@ -17680,7 +17928,7 @@ module XbarRTL__beeeaf37e1c2bdee
     .give__ret( route_units__give__ret[10] )
   );
 
-  XbarRouteUnitRTL__3ab4e489d96abc6b route_units__11
+  XbarRouteUnitRTL__c4c32963ee48b046 route_units__11
   (
     .clk( route_units__clk[11] ),
     .reset( route_units__reset[11] ),
@@ -17692,7 +17940,7 @@ module XbarRTL__beeeaf37e1c2bdee
     .give__ret( route_units__give__ret[11] )
   );
 
-  XbarRouteUnitRTL__3ab4e489d96abc6b route_units__12
+  XbarRouteUnitRTL__c4c32963ee48b046 route_units__12
   (
     .clk( route_units__clk[12] ),
     .reset( route_units__reset[12] ),
@@ -17704,7 +17952,7 @@ module XbarRTL__beeeaf37e1c2bdee
     .give__ret( route_units__give__ret[12] )
   );
 
-  XbarRouteUnitRTL__3ab4e489d96abc6b route_units__13
+  XbarRouteUnitRTL__c4c32963ee48b046 route_units__13
   (
     .clk( route_units__clk[13] ),
     .reset( route_units__reset[13] ),
@@ -17716,7 +17964,7 @@ module XbarRTL__beeeaf37e1c2bdee
     .give__ret( route_units__give__ret[13] )
   );
 
-  XbarRouteUnitRTL__3ab4e489d96abc6b route_units__14
+  XbarRouteUnitRTL__c4c32963ee48b046 route_units__14
   (
     .clk( route_units__clk[14] ),
     .reset( route_units__reset[14] ),
@@ -17728,7 +17976,7 @@ module XbarRTL__beeeaf37e1c2bdee
     .give__ret( route_units__give__ret[14] )
   );
 
-  XbarRouteUnitRTL__3ab4e489d96abc6b route_units__15
+  XbarRouteUnitRTL__c4c32963ee48b046 route_units__15
   (
     .clk( route_units__clk[15] ),
     .reset( route_units__reset[15] ),
@@ -17740,7 +17988,7 @@ module XbarRTL__beeeaf37e1c2bdee
     .give__ret( route_units__give__ret[15] )
   );
 
-  XbarRouteUnitRTL__3ab4e489d96abc6b route_units__16
+  XbarRouteUnitRTL__c4c32963ee48b046 route_units__16
   (
     .clk( route_units__clk[16] ),
     .reset( route_units__reset[16] ),
@@ -17765,12 +18013,12 @@ module XbarRTL__beeeaf37e1c2bdee
   logic [0:0] switch_units__reset [0:3];
   logic [0:0] switch_units__get__en [0:3][0:16];
   logic [0:0] switch_units__get__rdy [0:3][0:16];
-  mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd switch_units__get__ret [0:3][0:16];
+  mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d switch_units__get__ret [0:3][0:16];
   logic [0:0] switch_units__give__en [0:3];
   logic [0:0] switch_units__give__rdy [0:3];
-  mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd switch_units__give__ret [0:3];
+  mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d switch_units__give__ret [0:3];
 
-  SwitchUnitRTL__f5f1dd767adb8768 switch_units__0
+  SwitchUnitRTL__5d4698167699965a switch_units__0
   (
     .clk( switch_units__clk[0] ),
     .out_ocp( switch_units__out_ocp[0] ),
@@ -17783,7 +18031,7 @@ module XbarRTL__beeeaf37e1c2bdee
     .give__ret( switch_units__give__ret[0] )
   );
 
-  SwitchUnitRTL__f5f1dd767adb8768 switch_units__1
+  SwitchUnitRTL__5d4698167699965a switch_units__1
   (
     .clk( switch_units__clk[1] ),
     .out_ocp( switch_units__out_ocp[1] ),
@@ -17796,7 +18044,7 @@ module XbarRTL__beeeaf37e1c2bdee
     .give__ret( switch_units__give__ret[1] )
   );
 
-  SwitchUnitRTL__f5f1dd767adb8768 switch_units__2
+  SwitchUnitRTL__5d4698167699965a switch_units__2
   (
     .clk( switch_units__clk[2] ),
     .out_ocp( switch_units__out_ocp[2] ),
@@ -17809,7 +18057,7 @@ module XbarRTL__beeeaf37e1c2bdee
     .give__ret( switch_units__give__ret[2] )
   );
 
-  SwitchUnitRTL__f5f1dd767adb8768 switch_units__3
+  SwitchUnitRTL__5d4698167699965a switch_units__3
   (
     .clk( switch_units__clk[3] ),
     .out_ocp( switch_units__out_ocp[3] ),
@@ -18245,21 +18493,21 @@ endmodule
 
 
 // PyMTL Component RespAdapter Definition
-// Full name: RespAdapter__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7__Resp_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__id_0__num_requesters_17__num_responders_4
-// At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py
+// Full name: RespAdapter__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7__Resp_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__id_0__num_requesters_17__num_responders_4
+// At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py
 
-module RespAdapter__9114518d27c5302f
+module RespAdapter__d0216535dbef471b
 (
   input  logic [0:0] clk ,
   input  logic [0:0] reset ,
   output logic [0:0] master__req__en ,
-  output CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 master__req__msg ,
+  output CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 master__req__msg ,
   input logic [0:0] master__req__rdy ,
   input logic [0:0] master__resp__en ,
   input CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 master__resp__msg ,
   output logic [0:0] master__resp__rdy ,
   input logic [0:0] minion__req__en ,
-  input mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd minion__req__msg ,
+  input mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d minion__req__msg ,
   output logic [0:0] minion__req__rdy ,
   output logic [0:0] minion__resp__en ,
   output mmxbar_resp_17_CgraLocalMemRespMsg__97a8fdbd88c53709 minion__resp__msg ,
@@ -18267,7 +18515,7 @@ module RespAdapter__9114518d27c5302f
 );
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:153
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:153
   // @update
   // def up_master_req_msg():
   //   s.master.req.msg @= s.minion.req.msg.payload
@@ -18277,7 +18525,7 @@ module RespAdapter__9114518d27c5302f
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:157
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:157
   // @update
   // def up_minion_resp_msg():
   //   s.minion.resp.msg.dst @= s.master.resp.msg.opaque[ sl_src ]
@@ -18297,21 +18545,21 @@ endmodule
 
 
 // PyMTL Component RespAdapter Definition
-// Full name: RespAdapter__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7__Resp_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__id_1__num_requesters_17__num_responders_4
-// At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py
+// Full name: RespAdapter__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7__Resp_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__id_1__num_requesters_17__num_responders_4
+// At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py
 
-module RespAdapter__da25727616f3bfbb
+module RespAdapter__9ec735bc4d57225f
 (
   input  logic [0:0] clk ,
   input  logic [0:0] reset ,
   output logic [0:0] master__req__en ,
-  output CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 master__req__msg ,
+  output CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 master__req__msg ,
   input logic [0:0] master__req__rdy ,
   input logic [0:0] master__resp__en ,
   input CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 master__resp__msg ,
   output logic [0:0] master__resp__rdy ,
   input logic [0:0] minion__req__en ,
-  input mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd minion__req__msg ,
+  input mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d minion__req__msg ,
   output logic [0:0] minion__req__rdy ,
   output logic [0:0] minion__resp__en ,
   output mmxbar_resp_17_CgraLocalMemRespMsg__97a8fdbd88c53709 minion__resp__msg ,
@@ -18319,7 +18567,7 @@ module RespAdapter__da25727616f3bfbb
 );
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:153
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:153
   // @update
   // def up_master_req_msg():
   //   s.master.req.msg @= s.minion.req.msg.payload
@@ -18329,7 +18577,7 @@ module RespAdapter__da25727616f3bfbb
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:157
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:157
   // @update
   // def up_minion_resp_msg():
   //   s.minion.resp.msg.dst @= s.master.resp.msg.opaque[ sl_src ]
@@ -18349,21 +18597,21 @@ endmodule
 
 
 // PyMTL Component RespAdapter Definition
-// Full name: RespAdapter__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7__Resp_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__id_2__num_requesters_17__num_responders_4
-// At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py
+// Full name: RespAdapter__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7__Resp_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__id_2__num_requesters_17__num_responders_4
+// At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py
 
-module RespAdapter__6260c5f9948e1ac1
+module RespAdapter__12d805ca126213af
 (
   input  logic [0:0] clk ,
   input  logic [0:0] reset ,
   output logic [0:0] master__req__en ,
-  output CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 master__req__msg ,
+  output CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 master__req__msg ,
   input logic [0:0] master__req__rdy ,
   input logic [0:0] master__resp__en ,
   input CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 master__resp__msg ,
   output logic [0:0] master__resp__rdy ,
   input logic [0:0] minion__req__en ,
-  input mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd minion__req__msg ,
+  input mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d minion__req__msg ,
   output logic [0:0] minion__req__rdy ,
   output logic [0:0] minion__resp__en ,
   output mmxbar_resp_17_CgraLocalMemRespMsg__97a8fdbd88c53709 minion__resp__msg ,
@@ -18371,7 +18619,7 @@ module RespAdapter__6260c5f9948e1ac1
 );
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:153
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:153
   // @update
   // def up_master_req_msg():
   //   s.master.req.msg @= s.minion.req.msg.payload
@@ -18381,7 +18629,7 @@ module RespAdapter__6260c5f9948e1ac1
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:157
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:157
   // @update
   // def up_minion_resp_msg():
   //   s.minion.resp.msg.dst @= s.master.resp.msg.opaque[ sl_src ]
@@ -18401,21 +18649,21 @@ endmodule
 
 
 // PyMTL Component RespAdapter Definition
-// Full name: RespAdapter__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7__Resp_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__id_3__num_requesters_17__num_responders_4
-// At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py
+// Full name: RespAdapter__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7__Resp_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__id_3__num_requesters_17__num_responders_4
+// At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py
 
-module RespAdapter__27cecd8a1c68140b
+module RespAdapter__97e53f4700246ff4
 (
   input  logic [0:0] clk ,
   input  logic [0:0] reset ,
   output logic [0:0] master__req__en ,
-  output CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 master__req__msg ,
+  output CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 master__req__msg ,
   input logic [0:0] master__req__rdy ,
   input logic [0:0] master__resp__en ,
   input CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 master__resp__msg ,
   output logic [0:0] master__resp__rdy ,
   input logic [0:0] minion__req__en ,
-  input mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd minion__req__msg ,
+  input mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d minion__req__msg ,
   output logic [0:0] minion__req__rdy ,
   output logic [0:0] minion__resp__en ,
   output mmxbar_resp_17_CgraLocalMemRespMsg__97a8fdbd88c53709 minion__resp__msg ,
@@ -18423,7 +18671,7 @@ module RespAdapter__27cecd8a1c68140b
 );
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:153
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:153
   // @update
   // def up_master_req_msg():
   //   s.master.req.msg @= s.minion.req.msg.payload
@@ -18433,7 +18681,7 @@ module RespAdapter__27cecd8a1c68140b
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/adapters.py:157
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/adapters.py:157
   // @update
   // def up_minion_resp_msg():
   //   s.minion.resp.msg.dst @= s.master.resp.msg.opaque[ sl_src ]
@@ -18454,7 +18702,7 @@ endmodule
 
 // PyMTL Component RegisterFile Definition
 // Full name: RegisterFile__Type_mmxbar_resp_17_CgraLocalMemRespMsg__97a8fdbd88c53709__nregs_2__rd_ports_1__wr_ports_1__const_zero_False
-// At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/register_files.py
+// At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/register_files.py
 
 module RegisterFile__0e9bcf5aec3c75e3
 (
@@ -18471,7 +18719,7 @@ module RegisterFile__0e9bcf5aec3c75e3
   mmxbar_resp_17_CgraLocalMemRespMsg__97a8fdbd88c53709 regs [0:1];
 
   // PyMTL Update Block Source
-  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/register_files.py:20
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/register_files.py:20
   // @update
   // def up_rf_read():
   //   for i in range( rd_ports ):
@@ -18483,7 +18731,7 @@ module RegisterFile__0e9bcf5aec3c75e3
   end
 
   // PyMTL Update Block Source
-  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/register_files.py:32
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/register_files.py:32
   // @update_ff
   // def up_rf_write():
   //   for i in range( wr_ports ):
@@ -18502,7 +18750,7 @@ endmodule
 
 // PyMTL Component NormalQueueDpathRTL Definition
 // Full name: NormalQueueDpathRTL__EntryType_mmxbar_resp_17_CgraLocalMemRespMsg__97a8fdbd88c53709__num_entries_2
-// At /work/global/pp482/cgra/src/pymtl3_net/ocnlib/rtl/queues.py
+// At /work/global/pp482/test/cgra-src/src/pymtl3_net/ocnlib/rtl/queues.py
 
 module NormalQueueDpathRTL__1691c478f96b5a2b
 (
@@ -18554,7 +18802,7 @@ endmodule
 
 // PyMTL Component NormalQueueRTL Definition
 // Full name: NormalQueueRTL__EntryType_mmxbar_resp_17_CgraLocalMemRespMsg__97a8fdbd88c53709__num_entries_2
-// At /work/global/pp482/cgra/src/pymtl3_net/ocnlib/rtl/queues.py
+// At /work/global/pp482/test/cgra-src/src/pymtl3_net/ocnlib/rtl/queues.py
 
 module NormalQueueRTL__1691c478f96b5a2b
 (
@@ -18648,7 +18896,7 @@ endmodule
 
 // PyMTL Component InputUnitRTL Definition
 // Full name: InputUnitRTL__PacketType_mmxbar_resp_17_CgraLocalMemRespMsg__97a8fdbd88c53709__QueueType_NormalQueueRTL
-// At /work/global/pp482/cgra/src/pymtl3_net/router/InputUnitRTL.py
+// At /work/global/pp482/test/cgra-src/src/pymtl3_net/router/InputUnitRTL.py
 
 module InputUnitRTL__c6fcc71c398d4ddc
 (
@@ -18706,7 +18954,7 @@ endmodule
 
 // PyMTL Component OutputUnitRTL Definition
 // Full name: OutputUnitRTL__PacketType_mmxbar_resp_17_CgraLocalMemRespMsg__97a8fdbd88c53709__QueueType_None
-// At /work/global/pp482/cgra/src/pymtl3_net/router/OutputUnitRTL.py
+// At /work/global/pp482/test/cgra-src/src/pymtl3_net/router/OutputUnitRTL.py
 
 module OutputUnitRTL__57088be745a5c6d7
 (
@@ -18722,7 +18970,7 @@ module OutputUnitRTL__57088be745a5c6d7
   logic [0:0] __tmpvar__up_get_send_both_rdy;
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/router/OutputUnitRTL.py:52
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/router/OutputUnitRTL.py:52
   // s.send.msg //= lambda: s.get.ret if s.send.en else PacketType()
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_xbar_resp_net_output_units_0__send_msg
@@ -18730,7 +18978,7 @@ module OutputUnitRTL__57088be745a5c6d7
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/router/OutputUnitRTL.py:54
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/router/OutputUnitRTL.py:54
   // @update
   // def up_get_send():
   //   both_rdy = s.get.rdy & s.send.rdy
@@ -18748,7 +18996,7 @@ endmodule
 
 // PyMTL Component XbarRouteUnitRTL Definition
 // Full name: XbarRouteUnitRTL__PacketType_mmxbar_resp_17_CgraLocalMemRespMsg__97a8fdbd88c53709__num_outports_17
-// At /work/global/pp482/cgra/src/pymtl3_net/xbar/XbarRouteUnitRTL.py
+// At /work/global/pp482/test/cgra-src/src/pymtl3_net/xbar/XbarRouteUnitRTL.py
 
 module XbarRouteUnitRTL__c08e98d1fc89dc50
 (
@@ -18766,7 +19014,7 @@ module XbarRouteUnitRTL__c08e98d1fc89dc50
   logic [4:0] out_dir;
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/xbar/XbarRouteUnitRTL.py:51
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/xbar/XbarRouteUnitRTL.py:51
   // @update
   // def up_ru_give_en():
   //   s.get.en @= s.give_ens > 0
@@ -18776,7 +19024,7 @@ module XbarRouteUnitRTL__c08e98d1fc89dc50
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/xbar/XbarRouteUnitRTL.py:41
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/xbar/XbarRouteUnitRTL.py:41
   // @update
   // def up_ru_routing():
   //   s.out_dir @= trunc( s.get.ret.dst, dir_nbits )
@@ -18835,7 +19083,7 @@ endmodule
 
 
 // PyMTL Component RegEnRst Definition
-// At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/registers.py
+// At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/registers.py
 
 module RegEnRst__Type_Bits4__reset_value_1
 (
@@ -18848,7 +19096,7 @@ module RegEnRst__Type_Bits4__reset_value_1
   localparam logic [0:0] __const__reset_value_at_up_regenrst  = 1'd1;
 
   // PyMTL Update Block Source
-  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/registers.py:55
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/registers.py:55
   // @update_ff
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
@@ -18867,7 +19115,7 @@ endmodule
 
 
 // PyMTL Component RoundRobinArbiterEn Definition
-// At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/arbiters.py
+// At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/arbiters.py
 
 module RoundRobinArbiterEn__nreqs_4
 (
@@ -18913,7 +19161,7 @@ module RoundRobinArbiterEn__nreqs_4
   //-------------------------------------------------------------
 
   // PyMTL Update Block Source
-  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/arbiters.py:118
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/arbiters.py:118
   // @update
   // def comb_grants():
   //   for i in range( nreqs ):
@@ -18925,7 +19173,7 @@ module RoundRobinArbiterEn__nreqs_4
   end
 
   // PyMTL Update Block Source
-  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/arbiters.py:141
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/arbiters.py:141
   // @update
   // def comb_grants_int():
   //   for i in range( nreqsX2 ):
@@ -18944,7 +19192,7 @@ module RoundRobinArbiterEn__nreqs_4
   end
 
   // PyMTL Update Block Source
-  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/arbiters.py:132
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/arbiters.py:132
   // @update
   // def comb_kills():
   //   s.kills[0] @= 1
@@ -18965,7 +19213,7 @@ module RoundRobinArbiterEn__nreqs_4
   end
 
   // PyMTL Update Block Source
-  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/arbiters.py:123
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/arbiters.py:123
   // @update
   // def comb_priority_en():
   //   s.priority_en @= ( s.grants != 0 ) & s.en
@@ -18975,7 +19223,7 @@ module RoundRobinArbiterEn__nreqs_4
   end
 
   // PyMTL Update Block Source
-  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/arbiters.py:127
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/arbiters.py:127
   // @update
   // def comb_priority_int():
   //   s.priority_int[    0:nreqs  ] @= s.priority_reg.out
@@ -18987,7 +19235,7 @@ module RoundRobinArbiterEn__nreqs_4
   end
 
   // PyMTL Update Block Source
-  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/arbiters.py:113
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/arbiters.py:113
   // @update
   // def comb_reqs_int():
   //   s.reqs_int [    0:nreqs  ] @= s.reqs
@@ -19008,7 +19256,7 @@ endmodule
 
 
 // PyMTL Component Encoder Definition
-// At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/encoders.py
+// At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/encoders.py
 
 module Encoder__in_nbits_4__out_nbits_2
 (
@@ -19019,7 +19267,7 @@ module Encoder__in_nbits_4__out_nbits_2
 );
 
   // PyMTL Update Block Source
-  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/encoders.py:28
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/encoders.py:28
   // @update
   // def encode():
   //   s.out @= 0
@@ -19040,7 +19288,7 @@ endmodule
 
 // PyMTL Component Mux Definition
 // Full name: Mux__Type_mmxbar_resp_17_CgraLocalMemRespMsg__97a8fdbd88c53709__ninputs_4
-// At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/arithmetics.py
+// At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/arithmetics.py
 
 module Mux__c0a83474ea18d85a
 (
@@ -19052,7 +19300,7 @@ module Mux__c0a83474ea18d85a
 );
 
   // PyMTL Update Block Source
-  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/arithmetics.py:13
+  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/arithmetics.py:13
   // @update
   // def up_mux():
   //   s.out @= s.in_[ s.sel ]
@@ -19066,7 +19314,7 @@ endmodule
 
 // PyMTL Component SwitchUnitRTL Definition
 // Full name: SwitchUnitRTL__PacketType_mmxbar_resp_17_CgraLocalMemRespMsg__97a8fdbd88c53709__num_inports_4
-// At /work/global/pp482/cgra/src/pymtl3_net/router/SwitchUnitRTL.py
+// At /work/global/pp482/test/cgra-src/src/pymtl3_net/router/SwitchUnitRTL.py
 
 module SwitchUnitRTL__8397dd400a185cc5
 (
@@ -19151,7 +19399,7 @@ module SwitchUnitRTL__8397dd400a185cc5
   //-------------------------------------------------------------
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/router/SwitchUnitRTL.py:61
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/router/SwitchUnitRTL.py:61
   // @update
   // def up_get_en():
   //   for i in range( num_inports ):
@@ -19163,7 +19411,7 @@ module SwitchUnitRTL__8397dd400a185cc5
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/pymtl3_net/router/SwitchUnitRTL.py:57
+  // At /work/global/pp482/test/cgra-src/src/pymtl3_net/router/SwitchUnitRTL.py:57
   // @update
   // def up_give():
   //   s.give.rdy @= s.arbiter.grants > 0
@@ -19204,7 +19452,7 @@ endmodule
 
 // PyMTL Component XbarRTL Definition
 // Full name: XbarRTL__PacketType_mmxbar_resp_17_CgraLocalMemRespMsg__97a8fdbd88c53709__num_inports_4__num_outports_17__InputUnitType_InputUnitRTL__RouteUnitType_XbarRouteUnitRTL__SwitchUnitType_SwitchUnitRTL__OutputUnitType_OutputUnitRTL
-// At /work/global/pp482/cgra/src/pymtl3_net/xbar/XbarRTL.py
+// At /work/global/pp482/test/cgra-src/src/pymtl3_net/xbar/XbarRTL.py
 
 module XbarRTL__71ad38100e00b17b
 (
@@ -20226,21 +20474,21 @@ endmodule
 
 
 // PyMTL Component MasterMinionXbarGeneric Definition
-// Full name: MasterMinionXbarGeneric__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7__Resp_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__num_requesters_17__num_responders_4__max_req_in_flight_4__DstLogicT_ScratchpadDstLogic
-// At /work/global/pp482/cgra/src/pymtl3_net/mmxbar/MasterMinionXbarGeneric.py
+// Full name: MasterMinionXbarGeneric__Req_CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7__Resp_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__num_requesters_17__num_responders_4__max_req_in_flight_4__DstLogicT_ScratchpadDstLogic
+// At /work/global/pp482/test/cgra-src/src/pymtl3_net/mmxbar/MasterMinionXbarGeneric.py
 
-module MasterMinionXbarGeneric__748581449e74f4d5
+module MasterMinionXbarGeneric__84bc147ca5c4c3bc
 (
   input  logic [0:0] clk ,
   input  logic [0:0] reset ,
   output logic [0:0] master__req__en [0:3],
-  output CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 master__req__msg [0:3],
+  output CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 master__req__msg [0:3],
   input logic [0:0] master__req__rdy [0:3],
   input logic [0:0] master__resp__en [0:3],
   input CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 master__resp__msg [0:3],
   output logic [0:0] master__resp__rdy [0:3],
   input logic [0:0] minion__req__en [0:16],
-  input CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 minion__req__msg [0:16],
+  input CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 minion__req__msg [0:16],
   output logic [0:0] minion__req__rdy [0:16],
   output logic [0:0] minion__resp__en [0:16],
   output CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 minion__resp__msg [0:16],
@@ -20253,19 +20501,19 @@ module MasterMinionXbarGeneric__748581449e74f4d5
   logic [0:0] req_adapter__clk [0:16];
   logic [0:0] req_adapter__reset [0:16];
   logic [0:0] req_adapter__master__req__en [0:16];
-  mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd req_adapter__master__req__msg [0:16];
+  mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d req_adapter__master__req__msg [0:16];
   logic [0:0] req_adapter__master__req__rdy [0:16];
   logic [0:0] req_adapter__master__resp__en [0:16];
   mmxbar_resp_17_CgraLocalMemRespMsg__97a8fdbd88c53709 req_adapter__master__resp__msg [0:16];
   logic [0:0] req_adapter__master__resp__rdy [0:16];
   logic [0:0] req_adapter__minion__req__en [0:16];
-  CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 req_adapter__minion__req__msg [0:16];
+  CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 req_adapter__minion__req__msg [0:16];
   logic [0:0] req_adapter__minion__req__rdy [0:16];
   logic [0:0] req_adapter__minion__resp__en [0:16];
   CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 req_adapter__minion__resp__msg [0:16];
   logic [0:0] req_adapter__minion__resp__rdy [0:16];
 
-  ReqAdapter__fd54650417570394 req_adapter__0
+  ReqAdapter__50c428ee308b4e76 req_adapter__0
   (
     .clk( req_adapter__clk[0] ),
     .reset( req_adapter__reset[0] ),
@@ -20283,7 +20531,7 @@ module MasterMinionXbarGeneric__748581449e74f4d5
     .minion__resp__rdy( req_adapter__minion__resp__rdy[0] )
   );
 
-  ReqAdapter__d35006938139cb70 req_adapter__1
+  ReqAdapter__bcd0861aabd9164c req_adapter__1
   (
     .clk( req_adapter__clk[1] ),
     .reset( req_adapter__reset[1] ),
@@ -20301,7 +20549,7 @@ module MasterMinionXbarGeneric__748581449e74f4d5
     .minion__resp__rdy( req_adapter__minion__resp__rdy[1] )
   );
 
-  ReqAdapter__8af44fd2bb63f5ca req_adapter__2
+  ReqAdapter__bb55d1914189545b req_adapter__2
   (
     .clk( req_adapter__clk[2] ),
     .reset( req_adapter__reset[2] ),
@@ -20319,7 +20567,7 @@ module MasterMinionXbarGeneric__748581449e74f4d5
     .minion__resp__rdy( req_adapter__minion__resp__rdy[2] )
   );
 
-  ReqAdapter__97e8a9cd31de8392 req_adapter__3
+  ReqAdapter__d8397a794663970a req_adapter__3
   (
     .clk( req_adapter__clk[3] ),
     .reset( req_adapter__reset[3] ),
@@ -20337,7 +20585,7 @@ module MasterMinionXbarGeneric__748581449e74f4d5
     .minion__resp__rdy( req_adapter__minion__resp__rdy[3] )
   );
 
-  ReqAdapter__00db4764a604ff63 req_adapter__4
+  ReqAdapter__256503550ce05b30 req_adapter__4
   (
     .clk( req_adapter__clk[4] ),
     .reset( req_adapter__reset[4] ),
@@ -20355,7 +20603,7 @@ module MasterMinionXbarGeneric__748581449e74f4d5
     .minion__resp__rdy( req_adapter__minion__resp__rdy[4] )
   );
 
-  ReqAdapter__01da3b84d22e9b3f req_adapter__5
+  ReqAdapter__a71898fa291f69ba req_adapter__5
   (
     .clk( req_adapter__clk[5] ),
     .reset( req_adapter__reset[5] ),
@@ -20373,7 +20621,7 @@ module MasterMinionXbarGeneric__748581449e74f4d5
     .minion__resp__rdy( req_adapter__minion__resp__rdy[5] )
   );
 
-  ReqAdapter__529dea8e619fa0ea req_adapter__6
+  ReqAdapter__205434149a915355 req_adapter__6
   (
     .clk( req_adapter__clk[6] ),
     .reset( req_adapter__reset[6] ),
@@ -20391,7 +20639,7 @@ module MasterMinionXbarGeneric__748581449e74f4d5
     .minion__resp__rdy( req_adapter__minion__resp__rdy[6] )
   );
 
-  ReqAdapter__76ed7830b9e5ef5f req_adapter__7
+  ReqAdapter__9fc41dafb916a2d9 req_adapter__7
   (
     .clk( req_adapter__clk[7] ),
     .reset( req_adapter__reset[7] ),
@@ -20409,7 +20657,7 @@ module MasterMinionXbarGeneric__748581449e74f4d5
     .minion__resp__rdy( req_adapter__minion__resp__rdy[7] )
   );
 
-  ReqAdapter__6ab641fc601c91f5 req_adapter__8
+  ReqAdapter__f82c1bc7dafa9aad req_adapter__8
   (
     .clk( req_adapter__clk[8] ),
     .reset( req_adapter__reset[8] ),
@@ -20427,7 +20675,7 @@ module MasterMinionXbarGeneric__748581449e74f4d5
     .minion__resp__rdy( req_adapter__minion__resp__rdy[8] )
   );
 
-  ReqAdapter__4e7ae9506498f3cb req_adapter__9
+  ReqAdapter__92348ec62f18a02a req_adapter__9
   (
     .clk( req_adapter__clk[9] ),
     .reset( req_adapter__reset[9] ),
@@ -20445,7 +20693,7 @@ module MasterMinionXbarGeneric__748581449e74f4d5
     .minion__resp__rdy( req_adapter__minion__resp__rdy[9] )
   );
 
-  ReqAdapter__4aaa04dd88de17e9 req_adapter__10
+  ReqAdapter__c8f843e4690f1dd2 req_adapter__10
   (
     .clk( req_adapter__clk[10] ),
     .reset( req_adapter__reset[10] ),
@@ -20463,7 +20711,7 @@ module MasterMinionXbarGeneric__748581449e74f4d5
     .minion__resp__rdy( req_adapter__minion__resp__rdy[10] )
   );
 
-  ReqAdapter__b3a44120b57b6ffc req_adapter__11
+  ReqAdapter__989052a7334b3ab8 req_adapter__11
   (
     .clk( req_adapter__clk[11] ),
     .reset( req_adapter__reset[11] ),
@@ -20481,7 +20729,7 @@ module MasterMinionXbarGeneric__748581449e74f4d5
     .minion__resp__rdy( req_adapter__minion__resp__rdy[11] )
   );
 
-  ReqAdapter__01becc7a5001b5c2 req_adapter__12
+  ReqAdapter__8042bed6ac87a63f req_adapter__12
   (
     .clk( req_adapter__clk[12] ),
     .reset( req_adapter__reset[12] ),
@@ -20499,7 +20747,7 @@ module MasterMinionXbarGeneric__748581449e74f4d5
     .minion__resp__rdy( req_adapter__minion__resp__rdy[12] )
   );
 
-  ReqAdapter__5fca60022a755d99 req_adapter__13
+  ReqAdapter__23b53b565c0c0476 req_adapter__13
   (
     .clk( req_adapter__clk[13] ),
     .reset( req_adapter__reset[13] ),
@@ -20517,7 +20765,7 @@ module MasterMinionXbarGeneric__748581449e74f4d5
     .minion__resp__rdy( req_adapter__minion__resp__rdy[13] )
   );
 
-  ReqAdapter__80e5324b4a2f795e req_adapter__14
+  ReqAdapter__f87e001abc48f1a4 req_adapter__14
   (
     .clk( req_adapter__clk[14] ),
     .reset( req_adapter__reset[14] ),
@@ -20535,7 +20783,7 @@ module MasterMinionXbarGeneric__748581449e74f4d5
     .minion__resp__rdy( req_adapter__minion__resp__rdy[14] )
   );
 
-  ReqAdapter__db11fe7fced03363 req_adapter__15
+  ReqAdapter__186032fb4b47142b req_adapter__15
   (
     .clk( req_adapter__clk[15] ),
     .reset( req_adapter__reset[15] ),
@@ -20553,7 +20801,7 @@ module MasterMinionXbarGeneric__748581449e74f4d5
     .minion__resp__rdy( req_adapter__minion__resp__rdy[15] )
   );
 
-  ReqAdapter__78550895ef6730eb req_adapter__16
+  ReqAdapter__e04ad17cb1fb8eb2 req_adapter__16
   (
     .clk( req_adapter__clk[16] ),
     .reset( req_adapter__reset[16] ),
@@ -20582,13 +20830,13 @@ module MasterMinionXbarGeneric__748581449e74f4d5
   logic [0:0] req_net__clk;
   logic [0:0] req_net__reset;
   logic [0:0] req_net__recv__en [0:16];
-  mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd req_net__recv__msg [0:16];
+  mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d req_net__recv__msg [0:16];
   logic [0:0] req_net__recv__rdy [0:16];
   logic [0:0] req_net__send__en [0:3];
-  mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd req_net__send__msg [0:3];
+  mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d req_net__send__msg [0:3];
   logic [0:0] req_net__send__rdy [0:3];
 
-  XbarRTL__beeeaf37e1c2bdee req_net
+  XbarRTL__74f5b9e2e35b7e90 req_net
   (
     .clk( req_net__clk ),
     .reset( req_net__reset ),
@@ -20611,19 +20859,19 @@ module MasterMinionXbarGeneric__748581449e74f4d5
   logic [0:0] resp_adapter__clk [0:3];
   logic [0:0] resp_adapter__reset [0:3];
   logic [0:0] resp_adapter__master__req__en [0:3];
-  CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 resp_adapter__master__req__msg [0:3];
+  CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 resp_adapter__master__req__msg [0:3];
   logic [0:0] resp_adapter__master__req__rdy [0:3];
   logic [0:0] resp_adapter__master__resp__en [0:3];
   CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 resp_adapter__master__resp__msg [0:3];
   logic [0:0] resp_adapter__master__resp__rdy [0:3];
   logic [0:0] resp_adapter__minion__req__en [0:3];
-  mmxbar_req_4_CgraLocalMemReqMsg__e05355b0ca6fcfbd resp_adapter__minion__req__msg [0:3];
+  mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d resp_adapter__minion__req__msg [0:3];
   logic [0:0] resp_adapter__minion__req__rdy [0:3];
   logic [0:0] resp_adapter__minion__resp__en [0:3];
   mmxbar_resp_17_CgraLocalMemRespMsg__97a8fdbd88c53709 resp_adapter__minion__resp__msg [0:3];
   logic [0:0] resp_adapter__minion__resp__rdy [0:3];
 
-  RespAdapter__9114518d27c5302f resp_adapter__0
+  RespAdapter__d0216535dbef471b resp_adapter__0
   (
     .clk( resp_adapter__clk[0] ),
     .reset( resp_adapter__reset[0] ),
@@ -20641,7 +20889,7 @@ module MasterMinionXbarGeneric__748581449e74f4d5
     .minion__resp__rdy( resp_adapter__minion__resp__rdy[0] )
   );
 
-  RespAdapter__da25727616f3bfbb resp_adapter__1
+  RespAdapter__9ec735bc4d57225f resp_adapter__1
   (
     .clk( resp_adapter__clk[1] ),
     .reset( resp_adapter__reset[1] ),
@@ -20659,7 +20907,7 @@ module MasterMinionXbarGeneric__748581449e74f4d5
     .minion__resp__rdy( resp_adapter__minion__resp__rdy[1] )
   );
 
-  RespAdapter__6260c5f9948e1ac1 resp_adapter__2
+  RespAdapter__12d805ca126213af resp_adapter__2
   (
     .clk( resp_adapter__clk[2] ),
     .reset( resp_adapter__reset[2] ),
@@ -20677,7 +20925,7 @@ module MasterMinionXbarGeneric__748581449e74f4d5
     .minion__resp__rdy( resp_adapter__minion__resp__rdy[2] )
   );
 
-  RespAdapter__27cecd8a1c68140b resp_adapter__3
+  RespAdapter__97e53f4700246ff4 resp_adapter__3
   (
     .clk( resp_adapter__clk[3] ),
     .reset( resp_adapter__reset[3] ),
@@ -21031,10 +21279,10 @@ endmodule
 
 
 // PyMTL Component CGRAXcelDpath Definition
-// Full name: CGRAXcelDpath__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
-// At /work/global/pp482/cgra/src/cgra/CGRAXcelDpath.py
+// Full name: CGRAXcelDpath__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, enable_debug_ports:False, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:4, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// At /work/global/pp482/test/cgra-src/src/cgra/CGRAXcelDpath.py
 
-module CGRAXcelDpath__07e21c4d4fa663e6
+module CGRAXcelDpath__7bb22bb10af9a0d4
 (
   input  logic [0:0] cgra_xminion_req_en ,
   output logic [0:0] cgra_xminion_req_rdy ,
@@ -21071,7 +21319,7 @@ module CGRAXcelDpath__07e21c4d4fa663e6
   logic [0:0] cgra__is_calc_done;
   logic [0:0] cgra__reset;
   logic [0:0] cgra__spad_masters__req__en [0:15];
-  CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 cgra__spad_masters__req__msg [0:15];
+  CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 cgra__spad_masters__req__msg [0:15];
   logic [0:0] cgra__spad_masters__req__rdy [0:15];
   logic [0:0] cgra__spad_masters__resp__en [0:15];
   CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 cgra__spad_masters__resp__msg [0:15];
@@ -21083,7 +21331,7 @@ module CGRAXcelDpath__07e21c4d4fa663e6
   CgraXcelRespMsg__wen_1__addr_14__data_32 cgra__xcel_minion__resp__msg;
   logic [0:0] cgra__xcel_minion__resp__rdy;
 
-  CGRACore__07e21c4d4fa663e6 cgra
+  CGRACore__7bb22bb10af9a0d4 cgra
   (
     .clk( cgra__clk ),
     .is_calc_done( cgra__is_calc_done ),
@@ -21113,13 +21361,13 @@ module CGRAXcelDpath__07e21c4d4fa663e6
   logic [0:0] scratchpad__clk;
   logic [0:0] scratchpad__reset;
   logic [0:0] scratchpad__minion__req__en [0:3];
-  CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 scratchpad__minion__req__msg [0:3];
+  CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 scratchpad__minion__req__msg [0:3];
   logic [0:0] scratchpad__minion__req__rdy [0:3];
   logic [0:0] scratchpad__minion__resp__en [0:3];
   CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 scratchpad__minion__resp__msg [0:3];
   logic [0:0] scratchpad__minion__resp__rdy [0:3];
 
-  Scratchpad__c6176239b846ec0a scratchpad
+  Scratchpad__e90e4476a839fef2 scratchpad
   (
     .clk( scratchpad__clk ),
     .reset( scratchpad__reset ),
@@ -21142,19 +21390,19 @@ module CGRAXcelDpath__07e21c4d4fa663e6
   logic [0:0] xbar__clk;
   logic [0:0] xbar__reset;
   logic [0:0] xbar__master__req__en [0:3];
-  CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 xbar__master__req__msg [0:3];
+  CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 xbar__master__req__msg [0:3];
   logic [0:0] xbar__master__req__rdy [0:3];
   logic [0:0] xbar__master__resp__en [0:3];
   CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 xbar__master__resp__msg [0:3];
   logic [0:0] xbar__master__resp__rdy [0:3];
   logic [0:0] xbar__minion__req__en [0:16];
-  CgraLocalMemReqMsg__wen_1__addr_14__data_32__opaque_7 xbar__minion__req__msg [0:16];
+  CgraLocalMemReqMsg__wen_1__addr_14__data_32__len_2__opaque_7 xbar__minion__req__msg [0:16];
   logic [0:0] xbar__minion__req__rdy [0:16];
   logic [0:0] xbar__minion__resp__en [0:16];
   CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 xbar__minion__resp__msg [0:16];
   logic [0:0] xbar__minion__resp__rdy [0:16];
 
-  MasterMinionXbarGeneric__748581449e74f4d5 xbar
+  MasterMinionXbarGeneric__84bc147ca5c4c3bc xbar
   (
     .clk( xbar__clk ),
     .reset( xbar__reset ),
@@ -21177,7 +21425,7 @@ module CGRAXcelDpath__07e21c4d4fa663e6
   //-------------------------------------------------------------
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/CGRAXcelDpath.py:165
+  // At /work/global/pp482/test/cgra-src/src/cgra/CGRAXcelDpath.py:170
   // @update
   // def cgra_xcel_xminion_resp_msg():
   //   if s.is_xminion_resp_from_scratchpad:
@@ -21198,7 +21446,7 @@ module CGRAXcelDpath__07e21c4d4fa663e6
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/cgra/CGRAXcelDpath.py:180
+  // At /work/global/pp482/test/cgra-src/src/cgra/CGRAXcelDpath.py:185
   // @update
   // def gen_is_transactions():
   //   s.is_go_transaction         @= s.xminion_req_msg.wen & \
@@ -21339,6 +21587,8 @@ module CGRAXcelDpath__07e21c4d4fa663e6
   assign xbar__minion__req__msg[16].wen = xminion_req_msg.wen;
   assign xbar__minion__req__msg[16].addr = xminion_req_msg.addr;
   assign xbar__minion__req__msg[16].data = xminion_req_msg.data;
+  assign xbar__minion__req__msg[16].len = 2'd0;
+  assign xbar__minion__req__msg[16].opaque = 7'd16;
   assign scratchpad__minion__req__en[0] = xbar__master__req__en[0];
   assign scratchpad__minion__req__msg[0] = xbar__master__req__msg[0];
   assign xbar__master__req__rdy[0] = scratchpad__minion__req__rdy[0];
@@ -21373,10 +21623,10 @@ endmodule
 
 
 // PyMTL Component CGRAXcel Definition
-// Full name: CGRAXcel__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
-// At /work/global/pp482/cgra/src/cgra/CGRAXcel.py
+// Full name: CGRAXcel__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, enable_debug_ports:False, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:4, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// At /work/global/pp482/test/cgra-src/src/cgra/CGRAXcel.py
 
-module CGRAXcel__07e21c4d4fa663e6
+module CGRAXcel__7bb22bb10af9a0d4
 (
   input  logic [0:0] clk ,
   input  logic [0:0] reset ,
@@ -21424,7 +21674,7 @@ module CGRAXcel__07e21c4d4fa663e6
   logic [0:0] ctrl__xminion_resp_en;
   logic [0:0] ctrl__xminion_resp_rdy;
 
-  CGRAXcelCtrl__07e21c4d4fa663e6 ctrl
+  CGRAXcelCtrl__7bb22bb10af9a0d4 ctrl
   (
     .cgra_xminion_req_en( ctrl__cgra_xminion_req_en ),
     .cgra_xminion_req_rdy( ctrl__cgra_xminion_req_rdy ),
@@ -21489,7 +21739,7 @@ module CGRAXcel__07e21c4d4fa663e6
   CgraRemoteMemRespMsg__wen_1__addr_28__data_32 dpath__mem_master__resp__msg [0:3];
   logic [0:0] dpath__mem_master__resp__rdy [0:3];
 
-  CGRAXcelDpath__07e21c4d4fa663e6 dpath
+  CGRAXcelDpath__7bb22bb10af9a0d4 dpath
   (
     .cgra_xminion_req_en( dpath__cgra_xminion_req_en ),
     .cgra_xminion_req_rdy( dpath__cgra_xminion_req_rdy ),
@@ -21578,10 +21828,10 @@ endmodule
 
 
 // PyMTL Component HBEndpointRXAdapter Definition
-// Full name: HBEndpointRXAdapter__hb_params_<hammerblade.params.HBParams object at 0x7fdef7866090>__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
-// At /work/global/pp482/cgra/src/hammerblade/HBEndpointRXAdapter.py
+// Full name: HBEndpointRXAdapter__hb_params_<hammerblade.params.HBParams object at 0x7fe77625eb50>__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, enable_debug_ports:False, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:4, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// At /work/global/pp482/test/cgra-src/src/hammerblade/HBEndpointRXAdapter.py
 
-module HBEndpointRXAdapter__0eabfe82ed1d6f0c
+module HBEndpointRXAdapter__733cdf3d63234d9d
 (
   input  logic [0:0] clk ,
   input  logic [6:0] my_x ,
@@ -21612,7 +21862,7 @@ module HBEndpointRXAdapter__0eabfe82ed1d6f0c
   logic [0:0] is_xcel_addr;
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/hammerblade/HBEndpointRXAdapter.py:85
+  // At /work/global/pp482/test/cgra-src/src/hammerblade/HBEndpointRXAdapter.py:85
   // @update
   // def RX_word_addr_to_byte_addr():
   //   s.xcel_master.req.msg.addr[0:bytes_offset] @= 0
@@ -21625,7 +21875,7 @@ module HBEndpointRXAdapter__0eabfe82ed1d6f0c
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/hammerblade/HBEndpointRXAdapter.py:73
+  // At /work/global/pp482/test/cgra-src/src/hammerblade/HBEndpointRXAdapter.py:73
   // @update
   // def RX_yumi_req():
   //   s.req_yumi @= (s.is_xcel_addr & s.req_val & s.xcel_master.req.rdy) | \
@@ -21636,7 +21886,7 @@ module HBEndpointRXAdapter__0eabfe82ed1d6f0c
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/cgra/src/hammerblade/HBEndpointRXAdapter.py:78
+  // At /work/global/pp482/test/cgra-src/src/hammerblade/HBEndpointRXAdapter.py:78
   // s.xcel_master.req.en //= lambda: s.req_yumi & s.is_xcel_addr
   
   always_comb begin : _lambda__s_rx_xcel_master_req_en
@@ -21644,7 +21894,7 @@ module HBEndpointRXAdapter__0eabfe82ed1d6f0c
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/hammerblade/HBEndpointRXAdapter.py:55
+  // At /work/global/pp482/test/cgra-src/src/hammerblade/HBEndpointRXAdapter.py:55
   // @update
   // def check_RX_CSR_addr():
   //   s.is_socket_CSR_addr @= s.req_addr[hp.epa_word_addr_width-1] & \
@@ -21655,7 +21905,7 @@ module HBEndpointRXAdapter__0eabfe82ed1d6f0c
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/hammerblade/HBEndpointRXAdapter.py:61
+  // At /work/global/pp482/test/cgra-src/src/hammerblade/HBEndpointRXAdapter.py:61
   // @update
   // def check_RX_DRAM_enable_addr():
   //   s.is_DRAM_enable_addr @= s.is_socket_CSR_addr & \
@@ -21666,7 +21916,7 @@ module HBEndpointRXAdapter__0eabfe82ed1d6f0c
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/cgra/src/hammerblade/HBEndpointRXAdapter.py:66
+  // At /work/global/pp482/test/cgra-src/src/hammerblade/HBEndpointRXAdapter.py:66
   // @update
   // def check_RX_xcel_addr():
   //   s.is_xcel_addr @=s.req_addr[xp.addr_width:hp.addr_width] == 0
@@ -21685,10 +21935,10 @@ endmodule
 
 
 // PyMTL Component HBEndpointTXAdapter Definition
-// Full name: HBEndpointTXAdapter__hb_params_<hammerblade.params.HBParams object at 0x7fdef7866090>__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
-// At /work/global/pp482/cgra/src/hammerblade/HBEndpointTXAdapter.py
+// Full name: HBEndpointTXAdapter__hb_params_<hammerblade.params.HBParams object at 0x7fe77625eb50>__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, enable_debug_ports:False, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:4, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// At /work/global/pp482/test/cgra-src/src/hammerblade/HBEndpointTXAdapter.py
 
-module HBEndpointTXAdapter__0eabfe82ed1d6f0c
+module HBEndpointTXAdapter__733cdf3d63234d9d
 (
   input  logic [0:0] clk ,
   input  logic [6:0] my_x ,
@@ -21732,8 +21982,8 @@ endmodule
 
 
 // PyMTL Component HBEndpointCGRAXcel Definition
-// Full name: HBEndpointCGRAXcel__hb_params_<hammerblade.params.HBParams object at 0x7fdef7866090>__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
-// At /work/global/pp482/cgra/src/hammerblade/HBEndpointCGRAXcel.py
+// Full name: HBEndpointCGRAXcel__hb_params_<hammerblade.params.HBParams object at 0x7fe77625eb50>__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, enable_debug_ports:False, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:4, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// At /work/global/pp482/test/cgra-src/src/hammerblade/HBEndpointCGRAXcel.py
 
 module HBEndpointCGRAXcel_8x8Array_4x4KBSpads
 (
@@ -21782,7 +22032,7 @@ module HBEndpointCGRAXcel_8x8Array_4x4KBSpads
   CgraXcelRespMsg__wen_1__addr_14__data_32 cgra_xcel__xcel_minion__resp__msg;
   logic [0:0] cgra_xcel__xcel_minion__resp__rdy;
 
-  CGRAXcel__07e21c4d4fa663e6 cgra_xcel
+  CGRAXcel__7bb22bb10af9a0d4 cgra_xcel
   (
     .clk( cgra_xcel__clk ),
     .reset( cgra_xcel__reset ),
@@ -21830,7 +22080,7 @@ module HBEndpointCGRAXcel_8x8Array_4x4KBSpads
   CgraXcelRespMsg__wen_1__addr_14__data_32 rx__xcel_master__resp__msg;
   logic [0:0] rx__xcel_master__resp__rdy;
 
-  HBEndpointRXAdapter__0eabfe82ed1d6f0c rx
+  HBEndpointRXAdapter__733cdf3d63234d9d rx
   (
     .clk( rx__clk ),
     .my_x( rx__my_x ),
@@ -21884,7 +22134,7 @@ module HBEndpointCGRAXcel_8x8Array_4x4KBSpads
   CgraRemoteMemRespMsg__wen_1__addr_28__data_32 tx__mem_minion__resp__msg [0:3];
   logic [0:0] tx__mem_minion__resp__rdy [0:3];
 
-  HBEndpointTXAdapter__0eabfe82ed1d6f0c tx
+  HBEndpointTXAdapter__733cdf3d63234d9d tx
   (
     .clk( tx__clk ),
     .my_x( tx__my_x ),

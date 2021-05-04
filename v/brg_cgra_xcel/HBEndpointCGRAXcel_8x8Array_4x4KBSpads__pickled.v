@@ -871,7 +871,7 @@ endmodule
 
 
 // PyMTL Component RegEnRst Definition
-// At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/registers.py
+// At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/registers.py
 
 module RegEnRst__Type_Bits32__reset_value_0
 (
@@ -884,7 +884,7 @@ module RegEnRst__Type_Bits32__reset_value_0
   localparam logic [0:0] __const__reset_value_at_up_regenrst  = 1'd0;
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/registers.py:55
+  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/registers.py:55
   // @update_ff
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
@@ -1995,7 +1995,7 @@ endmodule
 
 
 // PyMTL Component RegEnRst Definition
-// At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/registers.py
+// At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/registers.py
 
 module RegEnRst__Type_32__reset_value_0
 (
@@ -2008,7 +2008,7 @@ module RegEnRst__Type_32__reset_value_0
   localparam logic [0:0] __const__reset_value_at_up_regenrst  = 1'd0;
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/registers.py:55
+  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/registers.py:55
   // @update_ff
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
@@ -2027,7 +2027,7 @@ endmodule
 
 
 // PyMTL Component RegEnRst Definition
-// At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/registers.py
+// At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/registers.py
 
 module RegEnRst__Type_Bits38__reset_value_0
 (
@@ -2040,7 +2040,7 @@ module RegEnRst__Type_Bits38__reset_value_0
   localparam logic [0:0] __const__reset_value_at_up_regenrst  = 1'd0;
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/registers.py:55
+  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/registers.py:55
   // @update_ff
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
@@ -2059,7 +2059,7 @@ endmodule
 
 
 // PyMTL Component RegRst Definition
-// At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/registers.py
+// At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/registers.py
 
 module RegRst__Type_Bits1__reset_value_0
 (
@@ -2071,7 +2071,7 @@ module RegRst__Type_Bits1__reset_value_0
   localparam logic [0:0] __const__reset_value_at_up_regrst  = 1'd0;
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/registers.py:39
+  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/registers.py:39
   // @update_ff
   // def up_regrst():
   //   if s.reset: s.out <<= reset_value
@@ -2316,7 +2316,7 @@ endmodule
 
 // PyMTL Component RegisterFile Definition
 // Full name: RegisterFile__Type_Bits33__nregs_2__rd_ports_1__wr_ports_1__const_zero_False
-// At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/register_files.py
+// At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/register_files.py
 
 module RegisterFile__20535936df5a8c95
 (
@@ -2333,7 +2333,7 @@ module RegisterFile__20535936df5a8c95
   logic [32:0] regs [0:1];
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/register_files.py:20
+  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/register_files.py:20
   // @update
   // def up_rf_read():
   //   for i in range( rd_ports ):
@@ -2345,7 +2345,7 @@ module RegisterFile__20535936df5a8c95
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/register_files.py:32
+  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/register_files.py:32
   // @update_ff
   // def up_rf_write():
   //   for i in range( wr_ports ):
@@ -2609,7 +2609,7 @@ endmodule
 
 // PyMTL Component RegisterFile Definition
 // Full name: RegisterFile__Type_CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7__nregs_4__rd_ports_1__wr_ports_1__const_zero_False
-// At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/register_files.py
+// At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/register_files.py
 
 module RegisterFile__83b02741e3660ddc
 (
@@ -2626,7 +2626,7 @@ module RegisterFile__83b02741e3660ddc
   CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 regs [0:3];
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/register_files.py:20
+  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/register_files.py:20
   // @update
   // def up_rf_read():
   //   for i in range( rd_ports ):
@@ -2638,7 +2638,7 @@ module RegisterFile__83b02741e3660ddc
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/register_files.py:32
+  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/register_files.py:32
   // @update_ff
   // def up_rf_write():
   //   for i in range( wr_ports ):
@@ -2894,7 +2894,6 @@ module MemEngine__7bb22bb10af9a0d4
   logic [0:0] no_pending_responses;
   logic [2:0] out_credit;
   logic [13:0] pending_response;
-  logic [0:0] resp_go_from_l0;
   logic [0:0] sel_FN2RecFN;
   logic [0:0] sel_RecFN2FN;
   logic [0:0] self_cfg_deq;
@@ -3027,7 +3026,7 @@ module MemEngine__7bb22bb10af9a0d4
   //-------------------------------------------------------------
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:287
+  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:286
   // s.fn_to_recfn.in_ //= lambda: s.l0_half_word if s.is_loading_bf16 else s.l0_data_r
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_ME_0__fn_to_recfn_in_
@@ -3035,7 +3034,7 @@ module MemEngine__7bb22bb10af9a0d4
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:129
+  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:128
   // s.is_cfg_incr_16 //= lambda: s.cfg_with_fields.incr_addr == 2
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_ME_0__is_cfg_incr_16
@@ -3043,7 +3042,7 @@ module MemEngine__7bb22bb10af9a0d4
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:131
+  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:130
   // s.is_cfg_incr_16_r //= lambda: s.cfg_with_fields_r.incr_addr == 2
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_ME_0__is_cfg_incr_16_r
@@ -3059,7 +3058,7 @@ module MemEngine__7bb22bb10af9a0d4
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:284
+  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:283
   // s.sel_FN2RecFN //= lambda: s.cfg_with_fields_r.is_fp & (~s.cfg_with_fields_r.wen)
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_ME_0__sel_FN2RecFN
@@ -3067,7 +3066,7 @@ module MemEngine__7bb22bb10af9a0d4
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:283
+  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:282
   // s.sel_RecFN2FN //= lambda: s.cfg_with_fields_r.is_fp & s.cfg_with_fields_r.wen
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_ME_0__sel_RecFN2FN
@@ -3075,7 +3074,7 @@ module MemEngine__7bb22bb10af9a0d4
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:304
+  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:303
   // @update
   // def up_ME_ctrl():
   //   # Helper signals
@@ -3128,7 +3127,7 @@ module MemEngine__7bb22bb10af9a0d4
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:340
+  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:339
   // @update
   // def up_ME_datapath():
   //   s.mem_ifc.req.msg.wen    @= s.cfg_wen
@@ -3159,7 +3158,7 @@ module MemEngine__7bb22bb10af9a0d4
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:263
+  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:262
   // @update
   // def up_l0_half_word():
   //   s.l0_half_word @= 0
@@ -3179,7 +3178,7 @@ module MemEngine__7bb22bb10af9a0d4
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:133
+  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:132
   // @update_ff
   // def up_configs_regs():
   //   if s.reset:
@@ -3196,22 +3195,22 @@ module MemEngine__7bb22bb10af9a0d4
   //         s.cfg_wen           <<= s.cfg_with_fields.wen
   //         s.cfg_incr_addr     <<= zext( 4 if s.is_cfg_incr_16 else s.cfg_with_fields.incr_addr, p.addr_width )
   //         s.cfg_addr          <<= s.cfg_with_fields.base_addr
-  //         s.cfg_count         <<= zext( s.cfg_with_fields.count >> 1 if s.is_cfg_incr_16 else s.cfg_with_fields.count, p.addr_width )
-  //         s.pending_response  <<= zext( s.cfg_with_fields.count >> 1 if s.is_cfg_incr_16 else s.cfg_with_fields.count, p.addr_width )
+  //         s.cfg_count         <<= zext( (s.cfg_with_fields.count >> 1) if s.is_cfg_incr_16 else s.cfg_with_fields.count, p.addr_width )
+  //         s.pending_response  <<= zext( (s.cfg_with_fields.count >> 1) if s.is_cfg_incr_16 else s.cfg_with_fields.count, p.addr_width )
   //         s.cfg_with_fields_r <<= s.cfg_with_fields
   //         s.tokens_per_line   <<= 0 if s.is_cfg_incr_16 else 1
   //       else:
   //         s.cfg_wen          <<= s.cfg_with_fields_r.wen
   //         s.cfg_incr_addr    <<= zext( 4 if s.is_cfg_incr_16_r else s.cfg_with_fields_r.incr_addr, p.addr_width )
   //         s.cfg_addr         <<= s.cfg_value[0:p.addr_width]
-  //         s.cfg_count        <<= zext( s.cfg_with_fields_r.count >> 1 if s.is_cfg_incr_16_r else s.cfg_with_fields_r.count, p.addr_width )
-  //         s.pending_response <<= zext( s.cfg_with_fields_r.count >> 1 if s.is_cfg_incr_16_r else s.cfg_with_fields_r.count, p.addr_width )
+  //         s.cfg_count        <<= zext( (s.cfg_with_fields_r.count >> 1) if s.is_cfg_incr_16_r else s.cfg_with_fields_r.count, p.addr_width )
+  //         s.pending_response <<= zext( (s.cfg_with_fields_r.count >> 1) if s.is_cfg_incr_16_r else s.cfg_with_fields_r.count, p.addr_width )
   //         s.tokens_per_line  <<= 0 if s.is_cfg_incr_16_r else 1
   //     else:
-  //       if s.mem_req_sent | s.resp_go_from_l0:
+  //       if s.mem_req_sent:
   //         s.cfg_addr <<= s.cfg_addr + s.cfg_incr_addr
   //         s.cfg_count <<= s.cfg_count - 1
-  //       if s.mem_resp_recved | s.resp_go_from_l0:
+  //       if s.mem_resp_recved:
   //         s.pending_response <<= s.pending_response - 1
   
   always_ff @(posedge clk) begin : up_configs_regs
@@ -3244,18 +3243,18 @@ module MemEngine__7bb22bb10af9a0d4
       end
     end
     else begin
-      if ( mem_req_sent | resp_go_from_l0 ) begin
+      if ( mem_req_sent ) begin
         cfg_addr <= cfg_addr + cfg_incr_addr;
         cfg_count <= cfg_count - 14'd1;
       end
-      if ( mem_resp_recved | resp_go_from_l0 ) begin
+      if ( mem_resp_recved ) begin
         pending_response <= pending_response - 14'd1;
       end
     end
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:209
+  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:208
   // @update_ff
   // def up_l0_read_fsm():
   //   if s.reset:
@@ -3380,7 +3379,7 @@ module MemEngine__7bb22bb10af9a0d4
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:196
+  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:195
   // @update_ff
   // def up_l0_regs():
   //   if s.reset:
@@ -3410,7 +3409,7 @@ module MemEngine__7bb22bb10af9a0d4
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:173
+  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:172
   // @update_ff
   // def up_out_credit_reg():
   //   if s.reset:
@@ -3532,7 +3531,7 @@ endmodule
 
 // PyMTL Component RegEnRst Definition
 // Full name: RegEnRst__Type_PEConfigMsg_8x8__69ed92dd9fa67f76__reset_value_0:00:0:0:0:0:0:0:0:0:0
-// At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/registers.py
+// At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/registers.py
 
 module RegEnRst__0fb4f3ed7b8ec906
 (
@@ -3545,7 +3544,7 @@ module RegEnRst__0fb4f3ed7b8ec906
   localparam PEConfigMsg_8x8__69ed92dd9fa67f76 __const__reset_value_at_up_regenrst  = { 1'd0, 6'd0, 3'd0, 3'd0, 3'd0, 3'd0, 3'd0, 3'd0, 2'd0, 3'd0, 2'd0 };
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/registers.py:55
+  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/registers.py:55
   // @update_ff
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
@@ -3952,7 +3951,7 @@ endmodule
 
 // PyMTL Component RegisterFile Definition
 // Full name: RegisterFile__Type_CgraFUMsg_33__bca7feb9182334d7__nregs_2__rd_ports_1__wr_ports_1__const_zero_False
-// At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/register_files.py
+// At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/register_files.py
 
 module RegisterFile__a9c31e768e5c5fbe
 (
@@ -3969,7 +3968,7 @@ module RegisterFile__a9c31e768e5c5fbe
   CgraFUMsg_33__bca7feb9182334d7 regs [0:1];
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/register_files.py:20
+  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/register_files.py:20
   // @update
   // def up_rf_read():
   //   for i in range( rd_ports ):
@@ -3981,7 +3980,7 @@ module RegisterFile__a9c31e768e5c5fbe
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/register_files.py:32
+  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/register_files.py:32
   // @update_ff
   // def up_rf_write():
   //   for i in range( wr_ports ):
@@ -4284,7 +4283,7 @@ endmodule
 
 
 // PyMTL Component RegEn Definition
-// At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/registers.py
+// At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/registers.py
 
 module RegEn__Type_CgraLLFUOutMsg_33__result_33__opd_b_33__opd_rf_33
 (
@@ -4296,7 +4295,7 @@ module RegEn__Type_CgraLLFUOutMsg_33__result_33__opd_b_33__opd_rf_33
 );
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/registers.py:25
+  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/registers.py:25
   // @update_ff
   // def up_regen():
   //   if s.en:
@@ -5131,7 +5130,7 @@ endmodule
 
 
 // PyMTL Component RegEnRst Definition
-// At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/registers.py
+// At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/registers.py
 
 module RegEnRst__Type_Bits33__reset_value_0
 (
@@ -5144,7 +5143,7 @@ module RegEnRst__Type_Bits33__reset_value_0
   localparam logic [0:0] __const__reset_value_at_up_regenrst  = 1'd0;
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/registers.py:55
+  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/registers.py:55
   // @update_ff
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
@@ -7848,7 +7847,7 @@ endmodule
 
 
 // PyMTL Component Reg Definition
-// At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/registers.py
+// At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/registers.py
 
 module Reg__Type_Bits1
 (
@@ -7859,7 +7858,7 @@ module Reg__Type_Bits1
 );
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/registers.py:10
+  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/registers.py:10
   // @update_ff
   // def up_reg():
   //   s.out <<= s.in_
@@ -16708,7 +16707,7 @@ endmodule
 
 // PyMTL Component RegisterFile Definition
 // Full name: RegisterFile__Type_mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d__nregs_2__rd_ports_1__wr_ports_1__const_zero_False
-// At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/register_files.py
+// At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/register_files.py
 
 module RegisterFile__a3ff693fcd39f8f1
 (
@@ -16725,7 +16724,7 @@ module RegisterFile__a3ff693fcd39f8f1
   mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d regs [0:1];
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/register_files.py:20
+  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/register_files.py:20
   // @update
   // def up_rf_read():
   //   for i in range( rd_ports ):
@@ -16737,7 +16736,7 @@ module RegisterFile__a3ff693fcd39f8f1
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/register_files.py:32
+  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/register_files.py:32
   // @update_ff
   // def up_rf_write():
   //   for i in range( wr_ports ):
@@ -17063,7 +17062,7 @@ endmodule
 
 
 // PyMTL Component RegEnRst Definition
-// At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/registers.py
+// At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/registers.py
 
 module RegEnRst__Type_Bits17__reset_value_1
 (
@@ -17076,7 +17075,7 @@ module RegEnRst__Type_Bits17__reset_value_1
   localparam logic [0:0] __const__reset_value_at_up_regenrst  = 1'd1;
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/registers.py:55
+  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/registers.py:55
   // @update_ff
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
@@ -17095,7 +17094,7 @@ endmodule
 
 
 // PyMTL Component RoundRobinArbiterEn Definition
-// At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/arbiters.py
+// At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/arbiters.py
 
 module RoundRobinArbiterEn__nreqs_17
 (
@@ -17141,7 +17140,7 @@ module RoundRobinArbiterEn__nreqs_17
   //-------------------------------------------------------------
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/arbiters.py:118
+  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/arbiters.py:118
   // @update
   // def comb_grants():
   //   for i in range( nreqs ):
@@ -17153,7 +17152,7 @@ module RoundRobinArbiterEn__nreqs_17
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/arbiters.py:141
+  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/arbiters.py:141
   // @update
   // def comb_grants_int():
   //   for i in range( nreqsX2 ):
@@ -17172,7 +17171,7 @@ module RoundRobinArbiterEn__nreqs_17
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/arbiters.py:132
+  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/arbiters.py:132
   // @update
   // def comb_kills():
   //   s.kills[0] @= 1
@@ -17193,7 +17192,7 @@ module RoundRobinArbiterEn__nreqs_17
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/arbiters.py:123
+  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/arbiters.py:123
   // @update
   // def comb_priority_en():
   //   s.priority_en @= ( s.grants != 0 ) & s.en
@@ -17203,7 +17202,7 @@ module RoundRobinArbiterEn__nreqs_17
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/arbiters.py:127
+  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/arbiters.py:127
   // @update
   // def comb_priority_int():
   //   s.priority_int[    0:nreqs  ] @= s.priority_reg.out
@@ -17215,7 +17214,7 @@ module RoundRobinArbiterEn__nreqs_17
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/arbiters.py:113
+  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/arbiters.py:113
   // @update
   // def comb_reqs_int():
   //   s.reqs_int [    0:nreqs  ] @= s.reqs
@@ -17236,7 +17235,7 @@ endmodule
 
 
 // PyMTL Component Encoder Definition
-// At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/encoders.py
+// At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/encoders.py
 
 module Encoder__in_nbits_17__out_nbits_5
 (
@@ -17247,7 +17246,7 @@ module Encoder__in_nbits_17__out_nbits_5
 );
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/encoders.py:28
+  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/encoders.py:28
   // @update
   // def encode():
   //   s.out @= 0
@@ -17268,7 +17267,7 @@ endmodule
 
 // PyMTL Component Mux Definition
 // Full name: Mux__Type_mmxbar_req_4_CgraLocalMemReqMsg__6b65a9073e62eb9d__ninputs_17
-// At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/arithmetics.py
+// At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/arithmetics.py
 
 module Mux__35801dd7bf769251
 (
@@ -17280,7 +17279,7 @@ module Mux__35801dd7bf769251
 );
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/arithmetics.py:13
+  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/arithmetics.py:13
   // @update
   // def up_mux():
   //   s.out @= s.in_[ s.sel ]
@@ -18702,7 +18701,7 @@ endmodule
 
 // PyMTL Component RegisterFile Definition
 // Full name: RegisterFile__Type_mmxbar_resp_17_CgraLocalMemRespMsg__97a8fdbd88c53709__nregs_2__rd_ports_1__wr_ports_1__const_zero_False
-// At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/register_files.py
+// At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/register_files.py
 
 module RegisterFile__0e9bcf5aec3c75e3
 (
@@ -18719,7 +18718,7 @@ module RegisterFile__0e9bcf5aec3c75e3
   mmxbar_resp_17_CgraLocalMemRespMsg__97a8fdbd88c53709 regs [0:1];
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/register_files.py:20
+  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/register_files.py:20
   // @update
   // def up_rf_read():
   //   for i in range( rd_ports ):
@@ -18731,7 +18730,7 @@ module RegisterFile__0e9bcf5aec3c75e3
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/register_files.py:32
+  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/register_files.py:32
   // @update_ff
   // def up_rf_write():
   //   for i in range( wr_ports ):
@@ -19083,7 +19082,7 @@ endmodule
 
 
 // PyMTL Component RegEnRst Definition
-// At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/registers.py
+// At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/registers.py
 
 module RegEnRst__Type_Bits4__reset_value_1
 (
@@ -19096,7 +19095,7 @@ module RegEnRst__Type_Bits4__reset_value_1
   localparam logic [0:0] __const__reset_value_at_up_regenrst  = 1'd1;
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/registers.py:55
+  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/registers.py:55
   // @update_ff
   // def up_regenrst():
   //   if s.reset: s.out <<= reset_value
@@ -19115,7 +19114,7 @@ endmodule
 
 
 // PyMTL Component RoundRobinArbiterEn Definition
-// At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/arbiters.py
+// At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/arbiters.py
 
 module RoundRobinArbiterEn__nreqs_4
 (
@@ -19161,7 +19160,7 @@ module RoundRobinArbiterEn__nreqs_4
   //-------------------------------------------------------------
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/arbiters.py:118
+  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/arbiters.py:118
   // @update
   // def comb_grants():
   //   for i in range( nreqs ):
@@ -19173,7 +19172,7 @@ module RoundRobinArbiterEn__nreqs_4
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/arbiters.py:141
+  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/arbiters.py:141
   // @update
   // def comb_grants_int():
   //   for i in range( nreqsX2 ):
@@ -19192,7 +19191,7 @@ module RoundRobinArbiterEn__nreqs_4
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/arbiters.py:132
+  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/arbiters.py:132
   // @update
   // def comb_kills():
   //   s.kills[0] @= 1
@@ -19213,7 +19212,7 @@ module RoundRobinArbiterEn__nreqs_4
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/arbiters.py:123
+  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/arbiters.py:123
   // @update
   // def comb_priority_en():
   //   s.priority_en @= ( s.grants != 0 ) & s.en
@@ -19223,7 +19222,7 @@ module RoundRobinArbiterEn__nreqs_4
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/arbiters.py:127
+  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/arbiters.py:127
   // @update
   // def comb_priority_int():
   //   s.priority_int[    0:nreqs  ] @= s.priority_reg.out
@@ -19235,7 +19234,7 @@ module RoundRobinArbiterEn__nreqs_4
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/arbiters.py:113
+  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/arbiters.py:113
   // @update
   // def comb_reqs_int():
   //   s.reqs_int [    0:nreqs  ] @= s.reqs
@@ -19256,7 +19255,7 @@ endmodule
 
 
 // PyMTL Component Encoder Definition
-// At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/encoders.py
+// At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/encoders.py
 
 module Encoder__in_nbits_4__out_nbits_2
 (
@@ -19267,7 +19266,7 @@ module Encoder__in_nbits_4__out_nbits_2
 );
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/encoders.py:28
+  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/encoders.py:28
   // @update
   // def encode():
   //   s.out @= 0
@@ -19288,7 +19287,7 @@ endmodule
 
 // PyMTL Component Mux Definition
 // Full name: Mux__Type_mmxbar_resp_17_CgraLocalMemRespMsg__97a8fdbd88c53709__ninputs_4
-// At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/arithmetics.py
+// At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/arithmetics.py
 
 module Mux__c0a83474ea18d85a
 (
@@ -19300,7 +19299,7 @@ module Mux__c0a83474ea18d85a
 );
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/clean/pymtl3/pymtl3/stdlib/basic_rtl/arithmetics.py:13
+  // At /work/global/brg/install/venv-pkgs/x86_64-centos7/python3.7.4/lib/python3.7/site-packages/pymtl3/stdlib/basic_rtl/arithmetics.py:13
   // @update
   // def up_mux():
   //   s.out @= s.in_[ s.sel ]
@@ -21828,10 +21827,10 @@ endmodule
 
 
 // PyMTL Component HBEndpointRXAdapter Definition
-// Full name: HBEndpointRXAdapter__hb_params_<hammerblade.params.HBParams object at 0x7fe77625eb50>__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, enable_debug_ports:False, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:4, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// Full name: HBEndpointRXAdapter__hb_params_<hammerblade.params.HBParams object at 0x7f1dcc7f22d0>__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, enable_debug_ports:False, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:4, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
 // At /work/global/pp482/test/cgra-src/src/hammerblade/HBEndpointRXAdapter.py
 
-module HBEndpointRXAdapter__733cdf3d63234d9d
+module HBEndpointRXAdapter__30bb6c721ed2fee2
 (
   input  logic [0:0] clk ,
   input  logic [6:0] my_x ,
@@ -21935,10 +21934,10 @@ endmodule
 
 
 // PyMTL Component HBEndpointTXAdapter Definition
-// Full name: HBEndpointTXAdapter__hb_params_<hammerblade.params.HBParams object at 0x7fe77625eb50>__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, enable_debug_ports:False, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:4, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// Full name: HBEndpointTXAdapter__hb_params_<hammerblade.params.HBParams object at 0x7f1dcc7f22d0>__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, enable_debug_ports:False, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:4, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
 // At /work/global/pp482/test/cgra-src/src/hammerblade/HBEndpointTXAdapter.py
 
-module HBEndpointTXAdapter__733cdf3d63234d9d
+module HBEndpointTXAdapter__30bb6c721ed2fee2
 (
   input  logic [0:0] clk ,
   input  logic [6:0] my_x ,
@@ -21982,7 +21981,7 @@ endmodule
 
 
 // PyMTL Component HBEndpointCGRAXcel Definition
-// Full name: HBEndpointCGRAXcel__hb_params_<hammerblade.params.HBParams object at 0x7fe77625eb50>__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, enable_debug_ports:False, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:4, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// Full name: HBEndpointCGRAXcel__hb_params_<hammerblade.params.HBParams object at 0x7f1dcc7f22d0>__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, enable_debug_ports:False, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:4, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
 // At /work/global/pp482/test/cgra-src/src/hammerblade/HBEndpointCGRAXcel.py
 
 module HBEndpointCGRAXcel_8x8Array_4x4KBSpads
@@ -22080,7 +22079,7 @@ module HBEndpointCGRAXcel_8x8Array_4x4KBSpads
   CgraXcelRespMsg__wen_1__addr_14__data_32 rx__xcel_master__resp__msg;
   logic [0:0] rx__xcel_master__resp__rdy;
 
-  HBEndpointRXAdapter__733cdf3d63234d9d rx
+  HBEndpointRXAdapter__30bb6c721ed2fee2 rx
   (
     .clk( rx__clk ),
     .my_x( rx__my_x ),
@@ -22134,7 +22133,7 @@ module HBEndpointCGRAXcel_8x8Array_4x4KBSpads
   CgraRemoteMemRespMsg__wen_1__addr_28__data_32 tx__mem_minion__resp__msg [0:3];
   logic [0:0] tx__mem_minion__resp__rdy [0:3];
 
-  HBEndpointTXAdapter__733cdf3d63234d9d tx
+  HBEndpointTXAdapter__30bb6c721ed2fee2 tx
   (
     .clk( tx__clk ),
     .my_x( tx__my_x ),

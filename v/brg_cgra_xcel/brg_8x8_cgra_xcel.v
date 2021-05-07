@@ -8,11 +8,11 @@
 module brg_8x8_cgra_xcel
   import bsg_manycore_pkg::*;
   #( 
-     x_cord_width_p               = "inv"
-    ,y_cord_width_p               = "inv"
-    ,data_width_p                 = "inv"
-    ,addr_width_p                 = "inv"
-    ,max_out_credits_p            = 32
+     x_cord_width_p         = "inv"
+    ,y_cord_width_p         = "inv"
+    ,data_width_p           = "inv"
+    ,addr_width_p           = "inv"
+    ,credit_counter_width_p = `BSG_WIDTH(32)
 
     // Derived local parameters
     ,packet_width_lp                = `bsg_manycore_packet_width(addr_width_p,data_width_p,x_cord_width_p,y_cord_width_p)
@@ -52,10 +52,10 @@ module brg_8x8_cgra_xcel
     logic [3:0]                             returning_v_li   ;
 
     // endpoint master interface ports
-    logic [3:0]                                  out_v_li              ;
-    logic [3:0][packet_width_lp-1:0]             out_packet_li         ;
-    logic [3:0]                                  out_credit_or_ready_lo;
-    logic [3:0][$clog2(max_out_credits_p+1)-1:0] out_credits_lo        ;
+    logic [3:0]                             out_v_li              ;
+    logic [3:0][packet_width_lp-1:0]        out_packet_li         ;
+    logic [3:0]                             out_credit_or_ready_lo;
+    logic [3:0][credit_counter_width_p-1:0] out_credits_used_lo   ;
 
     logic [3:0][data_width_p-1:0]           returned_data_lo     ;
     logic [3:0][4:0]                        returned_reg_id_lo   ;
@@ -71,12 +71,12 @@ module brg_8x8_cgra_xcel
 
       bsg_manycore_endpoint_standard
       #(
-         .x_cord_width_p        ( x_cord_width_p    )
-        ,.y_cord_width_p        ( y_cord_width_p    )
-        ,.fifo_els_p            ( 4                 )
-        ,.data_width_p          ( data_width_p      )
-        ,.addr_width_p          ( addr_width_p      )
-        ,.max_out_credits_p     ( max_out_credits_p )
+         .x_cord_width_p        ( x_cord_width_p         )
+        ,.y_cord_width_p        ( y_cord_width_p         )
+        ,.fifo_els_p            ( 4                      )
+        ,.data_width_p          ( data_width_p           )
+        ,.addr_width_p          ( addr_width_p           )
+        ,.credit_counter_width_p( credit_counter_width_p )
       ) endpoint_gs
       (  .clk_i ( clk_i )
         ,.reset_i ( reset_i )
@@ -108,7 +108,7 @@ module brg_8x8_cgra_xcel
         ,.out_v_i               ( out_v_li[i]               )
         ,.out_packet_i          ( out_packet_li[i]          )
         ,.out_credit_or_ready_o ( out_credit_or_ready_lo[i] )
-        ,.out_credits_o         ( out_credits_lo[i]         )
+        ,.out_credits_used_o    ( out_credits_used_lo[i]    )
 
         // local returned data interface
         // Like the memory interface, processor should always ready be to
@@ -151,7 +151,7 @@ module brg_8x8_cgra_xcel
       .returning_data_o      ( returning_data_li[0]      ),
       .returning_v_o         ( returning_v_li[0]         ),
 
-      .out_credits_i         ( out_credits_lo[0]         ),
+      .out_credits_used_i    ( out_credits_used_lo[0]    ),
       .out_packet_o          ( out_packet_li[0]          ),
       .out_credit_or_ready_i ( out_credit_or_ready_lo[0] ),
       .out_v_o               ( out_v_li[0]               ),

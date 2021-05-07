@@ -21750,7 +21750,7 @@ module HBEndpointCGRAXcel_8x8Array_4x4KBSpads
   input  logic [6:0] my_x_i ,
   input  logic [6:0] my_y_i ,
   input  logic [0:0] out_credit_or_ready_i ,
-  input  logic [5:0] out_credits_i ,
+  input  logic [5:0] out_credits_used_i ,
   output logic [96:0] out_packet_o ,
   output logic [0:0] out_v_o ,
   input  logic [0:0] reset ,
@@ -21964,7 +21964,7 @@ module HBEndpointCGRAXcel_8x8Array_4x4KBSpads
   assign out_v_o = tx__req_val;
   assign out_packet_o = tx__req_pkt;
   assign tx__req_rdy = out_credit_or_ready_i;
-  assign tx__req_credits = out_credits_i;
+  assign tx__req_credits = out_credits_used_i;
   assign tx__resp_data = returned_data_r_i;
   assign tx__resp_reg_id = returned_reg_id_r_i;
   assign tx__resp_val = returned_v_r_i;

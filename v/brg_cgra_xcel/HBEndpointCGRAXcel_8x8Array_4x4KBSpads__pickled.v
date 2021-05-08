@@ -128,6 +128,15 @@ typedef struct packed {
   CgraLocalMemRespMsg__wen_1__addr_14__data_32__opaque_7 payload;
 } mmxbar_resp_17_CgraLocalMemRespMsg__97a8fdbd88c53709;
 
+// BSG AND-reduce module that instantiates hardened cells from GF14 PDK
+// relative placement disabled
+module bsg_gf_14_reduce_and_b8 (input [7:0] i, output o);
+wire [1:0] lo;
+SC7P5T_ND4X2_SSC14SL b0123_DONT_TOUCH   (.A(i[0]),.B(i[1]),.C(i[2]),.D(i[3]),.Z(lo[0]));
+SC7P5T_NR2X4_SSC14SL b01234567_DONT_TOUCH (.A(lo[0]),.B(lo[1]),.Z(o));
+SC7P5T_ND4X2_SSC14SL b4567_DONT_TOUCH   (.A(i[4]),.B(i[5]),.C(i[6]),.D(i[7]),.Z(lo[1]));
+endmodule
+
 // PyMTL Component CGRAXcelCtrl Definition
 // Full name: CGRAXcelCtrl__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:1, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
 // At /work/global/pp482/cgra/src/cgra/CGRAXcelCtrl.py
@@ -7804,9 +7813,9 @@ module CGRACoreDpath__07e21c4d4fa663e6
   logic [31:0] CSRs_in [0:63];
   logic [8:0] all_CE_done;
   logic [15:0] all_ME_done;
-  logic [63:0] all_PE_occupancy;
   logic [13:0] reg_CSR_raddr;
   logic [11:0] xminion_req_word_addr;
+  logic all_PE_occupancy;
   //-------------------------------------------------------------
   // Component CE_e[0:7]
   //-------------------------------------------------------------
@@ -9090,8 +9099,6 @@ module CGRACoreDpath__07e21c4d4fa663e6
   //-------------------------------------------------------------
 
   logic [0:0] PE_rc__clk [0:63];
-  logic [0:0] PE_rc__is_calc [0:63];
-  logic [0:0] PE_rc__is_occupied [0:63];
   logic [0:0] PE_rc__reset [0:63];
   logic [3:0] PE_rc__x_cord [0:63];
   logic [3:0] PE_rc__y_cord [0:63];
@@ -9105,6 +9112,12 @@ module CGRACoreDpath__07e21c4d4fa663e6
   logic [32:0] PE_rc__out__msg [0:63][0:3];
   logic [0:0] PE_rc__out__rdy [0:63][0:3];
   logic [0:0] PE_rc__out__val [0:63][0:3];
+
+  logic [63:0] PE_rc__is_occupied;
+  logic [7:0] row_and_lo;
+  logic col_and_lo;
+
+  logic [63:0] PE_rc__is_calc;
 
   ProcElement PE_rc__0
   (
@@ -10391,6 +10404,54 @@ module CGRACoreDpath__07e21c4d4fa663e6
   //-------------------------------------------------------------
 
   //-------------------------------------------------------------
+  // Reduce tree
+  //-------------------------------------------------------------
+  // PP: Here we manually instantiate hardened cells in the
+  // reduce tree in order to regularize the connections in the
+  // CGRA pod.
+
+  generate
+    genvar i;
+    for(i = 0; i < 8; i=i+1) begin: row_reduce
+      bsg_gf_14_reduce_and_b8 rb8(
+        .i(PE_rc__is_occupied[(i*8) +: 8]),
+        .o(row_and_lo[i])
+      );
+    end
+    bsg_gf_14_reduce_and_b8 col_rb8(
+      .i(row_and_lo),
+      .o(col_and_lo)
+    );
+  endgenerate
+
+  //-------------------------------------------------------------
+  // Broadcast network
+  //-------------------------------------------------------------
+
+  wire center_buffered_is_calc;
+  wire [7:0] col_buffered_is_calc;
+
+  generate
+    genvar i, j;
+    SC7P5T_BUFX8_SSC14R cter_buf_DONT_TOUCH(
+      .A(is_calc),
+      .Z(center_buffered_is_calc)
+    );
+    for(i = 0; i < 8; i=i+1) begin: col_broadcast
+      SC7P5T_BUFX8_SSC14R c_buf_DONT_TOUCH(
+        .A(center_buffered_is_calc),
+        .Z(col_buffered_is_calc[i])
+      );
+      for(j = 0; j < 8; j=j+1) begin: row_broadcast
+        SC7P5T_BUFX8_SSC14R r_buf_DONT_TOUCH(
+          .A(col_buffered_is_calc[i]),
+          .Z(PE_rc__is_calc[8*i+j])
+        );
+      end
+    end
+  endgenerate
+
+  //-------------------------------------------------------------
   // Component delayed_all_CE_done
   //-------------------------------------------------------------
 
@@ -10657,7 +10718,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   // s.is_calc_done //= lambda: reduce_and( s.all_ME_done ) & reduce_and( s.all_PE_occupancy )
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_is_calc_done
-    is_calc_done = ( & all_ME_done ) & ( & all_PE_occupancy );
+    is_calc_done = ( & all_ME_done ) & col_and_lo;
   end
 
   // PyMTL Lambda Block Source
@@ -11772,7 +11833,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign ME__mem_ifc__resp__en[15] = spad_masters__resp__en[15];
   assign ME__mem_ifc__resp__msg[15] = spad_masters__resp__msg[15];
   assign spad_masters__resp__rdy[15] = ME__mem_ifc__resp__rdy[15];
-  assign PE_rc__is_calc[0] = is_calc;
+  /* assign PE_rc__is_calc[0] = is_calc; */
   assign PE_rc__y_cord[0] = 4'd1;
   assign PE_rc__x_cord[0] = 4'd1;
   assign PE_rc__in___msg[0][0] = PE_rc__out__msg[8][1];
@@ -11799,7 +11860,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign ME__in___msg[8] = PE_rc__out__msg[0][2];
   assign PE_rc__out__rdy[0][2] = ME__in___rdy[8];
   assign ME__in___val[8] = PE_rc__out__val[0][2];
-  assign PE_rc__is_calc[1] = is_calc;
+  /* assign PE_rc__is_calc[1] = is_calc; */
   assign PE_rc__y_cord[1] = 4'd1;
   assign PE_rc__x_cord[1] = 4'd2;
   assign PE_rc__in___msg[1][0] = PE_rc__out__msg[9][1];
@@ -11820,7 +11881,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[2][2] = PE_rc__out__msg[1][3];
   assign PE_rc__out__rdy[1][3] = PE_rc__in___rdy[2][2];
   assign PE_rc__in___val[2][2] = PE_rc__out__val[1][3];
-  assign PE_rc__is_calc[2] = is_calc;
+  /* assign PE_rc__is_calc[2] = is_calc; */
   assign PE_rc__y_cord[2] = 4'd1;
   assign PE_rc__x_cord[2] = 4'd3;
   assign PE_rc__in___msg[2][0] = PE_rc__out__msg[10][1];
@@ -11841,7 +11902,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[3][2] = PE_rc__out__msg[2][3];
   assign PE_rc__out__rdy[2][3] = PE_rc__in___rdy[3][2];
   assign PE_rc__in___val[3][2] = PE_rc__out__val[2][3];
-  assign PE_rc__is_calc[3] = is_calc;
+  /* assign PE_rc__is_calc[3] = is_calc; */
   assign PE_rc__y_cord[3] = 4'd1;
   assign PE_rc__x_cord[3] = 4'd4;
   assign PE_rc__in___msg[3][0] = PE_rc__out__msg[11][1];
@@ -11862,7 +11923,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[4][2] = PE_rc__out__msg[3][3];
   assign PE_rc__out__rdy[3][3] = PE_rc__in___rdy[4][2];
   assign PE_rc__in___val[4][2] = PE_rc__out__val[3][3];
-  assign PE_rc__is_calc[4] = is_calc;
+  /* assign PE_rc__is_calc[4] = is_calc; */
   assign PE_rc__y_cord[4] = 4'd1;
   assign PE_rc__x_cord[4] = 4'd5;
   assign PE_rc__in___msg[4][0] = PE_rc__out__msg[12][1];
@@ -11883,7 +11944,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[5][2] = PE_rc__out__msg[4][3];
   assign PE_rc__out__rdy[4][3] = PE_rc__in___rdy[5][2];
   assign PE_rc__in___val[5][2] = PE_rc__out__val[4][3];
-  assign PE_rc__is_calc[5] = is_calc;
+  /* assign PE_rc__is_calc[5] = is_calc; */
   assign PE_rc__y_cord[5] = 4'd1;
   assign PE_rc__x_cord[5] = 4'd6;
   assign PE_rc__in___msg[5][0] = PE_rc__out__msg[13][1];
@@ -11904,7 +11965,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[6][2] = PE_rc__out__msg[5][3];
   assign PE_rc__out__rdy[5][3] = PE_rc__in___rdy[6][2];
   assign PE_rc__in___val[6][2] = PE_rc__out__val[5][3];
-  assign PE_rc__is_calc[6] = is_calc;
+  /* assign PE_rc__is_calc[6] = is_calc; */
   assign PE_rc__y_cord[6] = 4'd1;
   assign PE_rc__x_cord[6] = 4'd7;
   assign PE_rc__in___msg[6][0] = PE_rc__out__msg[14][1];
@@ -11925,7 +11986,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[7][2] = PE_rc__out__msg[6][3];
   assign PE_rc__out__rdy[6][3] = PE_rc__in___rdy[7][2];
   assign PE_rc__in___val[7][2] = PE_rc__out__val[6][3];
-  assign PE_rc__is_calc[7] = is_calc;
+  /* assign PE_rc__is_calc[7] = is_calc; */
   assign PE_rc__y_cord[7] = 4'd1;
   assign PE_rc__x_cord[7] = 4'd8;
   assign PE_rc__in___msg[7][0] = PE_rc__out__msg[15][1];
@@ -11943,7 +12004,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___val[7][3] = 1'd0;
   assign PE_rc__in___msg[7][3] = 33'd0;
   assign PE_rc__out__rdy[7][3] = 1'd1;
-  assign PE_rc__is_calc[8] = is_calc;
+  /* assign PE_rc__is_calc[8] = is_calc; */
   assign PE_rc__y_cord[8] = 4'd2;
   assign PE_rc__x_cord[8] = 4'd1;
   assign PE_rc__in___msg[8][0] = PE_rc__out__msg[16][1];
@@ -11964,7 +12025,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign ME__in___msg[9] = PE_rc__out__msg[8][2];
   assign PE_rc__out__rdy[8][2] = ME__in___rdy[9];
   assign ME__in___val[9] = PE_rc__out__val[8][2];
-  assign PE_rc__is_calc[9] = is_calc;
+  /* assign PE_rc__is_calc[9] = is_calc; */
   assign PE_rc__y_cord[9] = 4'd2;
   assign PE_rc__x_cord[9] = 4'd2;
   assign PE_rc__in___msg[9][0] = PE_rc__out__msg[17][1];
@@ -11979,7 +12040,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[10][2] = PE_rc__out__msg[9][3];
   assign PE_rc__out__rdy[9][3] = PE_rc__in___rdy[10][2];
   assign PE_rc__in___val[10][2] = PE_rc__out__val[9][3];
-  assign PE_rc__is_calc[10] = is_calc;
+  /* assign PE_rc__is_calc[10] = is_calc; */
   assign PE_rc__y_cord[10] = 4'd2;
   assign PE_rc__x_cord[10] = 4'd3;
   assign PE_rc__in___msg[10][0] = PE_rc__out__msg[18][1];
@@ -11994,7 +12055,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[11][2] = PE_rc__out__msg[10][3];
   assign PE_rc__out__rdy[10][3] = PE_rc__in___rdy[11][2];
   assign PE_rc__in___val[11][2] = PE_rc__out__val[10][3];
-  assign PE_rc__is_calc[11] = is_calc;
+  /* assign PE_rc__is_calc[11] = is_calc; */
   assign PE_rc__y_cord[11] = 4'd2;
   assign PE_rc__x_cord[11] = 4'd4;
   assign PE_rc__in___msg[11][0] = PE_rc__out__msg[19][1];
@@ -12009,7 +12070,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[12][2] = PE_rc__out__msg[11][3];
   assign PE_rc__out__rdy[11][3] = PE_rc__in___rdy[12][2];
   assign PE_rc__in___val[12][2] = PE_rc__out__val[11][3];
-  assign PE_rc__is_calc[12] = is_calc;
+  /* assign PE_rc__is_calc[12] = is_calc; */
   assign PE_rc__y_cord[12] = 4'd2;
   assign PE_rc__x_cord[12] = 4'd5;
   assign PE_rc__in___msg[12][0] = PE_rc__out__msg[20][1];
@@ -12024,7 +12085,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[13][2] = PE_rc__out__msg[12][3];
   assign PE_rc__out__rdy[12][3] = PE_rc__in___rdy[13][2];
   assign PE_rc__in___val[13][2] = PE_rc__out__val[12][3];
-  assign PE_rc__is_calc[13] = is_calc;
+  /* assign PE_rc__is_calc[13] = is_calc; */
   assign PE_rc__y_cord[13] = 4'd2;
   assign PE_rc__x_cord[13] = 4'd6;
   assign PE_rc__in___msg[13][0] = PE_rc__out__msg[21][1];
@@ -12039,7 +12100,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[14][2] = PE_rc__out__msg[13][3];
   assign PE_rc__out__rdy[13][3] = PE_rc__in___rdy[14][2];
   assign PE_rc__in___val[14][2] = PE_rc__out__val[13][3];
-  assign PE_rc__is_calc[14] = is_calc;
+  /* assign PE_rc__is_calc[14] = is_calc; */
   assign PE_rc__y_cord[14] = 4'd2;
   assign PE_rc__x_cord[14] = 4'd7;
   assign PE_rc__in___msg[14][0] = PE_rc__out__msg[22][1];
@@ -12054,7 +12115,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[15][2] = PE_rc__out__msg[14][3];
   assign PE_rc__out__rdy[14][3] = PE_rc__in___rdy[15][2];
   assign PE_rc__in___val[15][2] = PE_rc__out__val[14][3];
-  assign PE_rc__is_calc[15] = is_calc;
+  /* assign PE_rc__is_calc[15] = is_calc; */
   assign PE_rc__y_cord[15] = 4'd2;
   assign PE_rc__x_cord[15] = 4'd8;
   assign PE_rc__in___msg[15][0] = PE_rc__out__msg[23][1];
@@ -12066,7 +12127,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___val[15][3] = 1'd0;
   assign PE_rc__in___msg[15][3] = 33'd0;
   assign PE_rc__out__rdy[15][3] = 1'd1;
-  assign PE_rc__is_calc[16] = is_calc;
+  /* assign PE_rc__is_calc[16] = is_calc; */
   assign PE_rc__y_cord[16] = 4'd3;
   assign PE_rc__x_cord[16] = 4'd1;
   assign PE_rc__in___msg[16][0] = PE_rc__out__msg[24][1];
@@ -12087,7 +12148,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign ME__in___msg[10] = PE_rc__out__msg[16][2];
   assign PE_rc__out__rdy[16][2] = ME__in___rdy[10];
   assign ME__in___val[10] = PE_rc__out__val[16][2];
-  assign PE_rc__is_calc[17] = is_calc;
+  /* assign PE_rc__is_calc[17] = is_calc; */
   assign PE_rc__y_cord[17] = 4'd3;
   assign PE_rc__x_cord[17] = 4'd2;
   assign PE_rc__in___msg[17][0] = PE_rc__out__msg[25][1];
@@ -12102,7 +12163,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[18][2] = PE_rc__out__msg[17][3];
   assign PE_rc__out__rdy[17][3] = PE_rc__in___rdy[18][2];
   assign PE_rc__in___val[18][2] = PE_rc__out__val[17][3];
-  assign PE_rc__is_calc[18] = is_calc;
+  /* assign PE_rc__is_calc[18] = is_calc; */
   assign PE_rc__y_cord[18] = 4'd3;
   assign PE_rc__x_cord[18] = 4'd3;
   assign PE_rc__in___msg[18][0] = PE_rc__out__msg[26][1];
@@ -12117,7 +12178,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[19][2] = PE_rc__out__msg[18][3];
   assign PE_rc__out__rdy[18][3] = PE_rc__in___rdy[19][2];
   assign PE_rc__in___val[19][2] = PE_rc__out__val[18][3];
-  assign PE_rc__is_calc[19] = is_calc;
+  /* assign PE_rc__is_calc[19] = is_calc; */
   assign PE_rc__y_cord[19] = 4'd3;
   assign PE_rc__x_cord[19] = 4'd4;
   assign PE_rc__in___msg[19][0] = PE_rc__out__msg[27][1];
@@ -12132,7 +12193,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[20][2] = PE_rc__out__msg[19][3];
   assign PE_rc__out__rdy[19][3] = PE_rc__in___rdy[20][2];
   assign PE_rc__in___val[20][2] = PE_rc__out__val[19][3];
-  assign PE_rc__is_calc[20] = is_calc;
+  /* assign PE_rc__is_calc[20] = is_calc; */
   assign PE_rc__y_cord[20] = 4'd3;
   assign PE_rc__x_cord[20] = 4'd5;
   assign PE_rc__in___msg[20][0] = PE_rc__out__msg[28][1];
@@ -12147,7 +12208,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[21][2] = PE_rc__out__msg[20][3];
   assign PE_rc__out__rdy[20][3] = PE_rc__in___rdy[21][2];
   assign PE_rc__in___val[21][2] = PE_rc__out__val[20][3];
-  assign PE_rc__is_calc[21] = is_calc;
+  /* assign PE_rc__is_calc[21] = is_calc; */
   assign PE_rc__y_cord[21] = 4'd3;
   assign PE_rc__x_cord[21] = 4'd6;
   assign PE_rc__in___msg[21][0] = PE_rc__out__msg[29][1];
@@ -12162,7 +12223,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[22][2] = PE_rc__out__msg[21][3];
   assign PE_rc__out__rdy[21][3] = PE_rc__in___rdy[22][2];
   assign PE_rc__in___val[22][2] = PE_rc__out__val[21][3];
-  assign PE_rc__is_calc[22] = is_calc;
+  /* assign PE_rc__is_calc[22] = is_calc; */
   assign PE_rc__y_cord[22] = 4'd3;
   assign PE_rc__x_cord[22] = 4'd7;
   assign PE_rc__in___msg[22][0] = PE_rc__out__msg[30][1];
@@ -12177,7 +12238,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[23][2] = PE_rc__out__msg[22][3];
   assign PE_rc__out__rdy[22][3] = PE_rc__in___rdy[23][2];
   assign PE_rc__in___val[23][2] = PE_rc__out__val[22][3];
-  assign PE_rc__is_calc[23] = is_calc;
+  /* assign PE_rc__is_calc[23] = is_calc; */
   assign PE_rc__y_cord[23] = 4'd3;
   assign PE_rc__x_cord[23] = 4'd8;
   assign PE_rc__in___msg[23][0] = PE_rc__out__msg[31][1];
@@ -12189,7 +12250,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___val[23][3] = 1'd0;
   assign PE_rc__in___msg[23][3] = 33'd0;
   assign PE_rc__out__rdy[23][3] = 1'd1;
-  assign PE_rc__is_calc[24] = is_calc;
+  /* assign PE_rc__is_calc[24] = is_calc; */
   assign PE_rc__y_cord[24] = 4'd4;
   assign PE_rc__x_cord[24] = 4'd1;
   assign PE_rc__in___msg[24][0] = PE_rc__out__msg[32][1];
@@ -12210,7 +12271,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign ME__in___msg[11] = PE_rc__out__msg[24][2];
   assign PE_rc__out__rdy[24][2] = ME__in___rdy[11];
   assign ME__in___val[11] = PE_rc__out__val[24][2];
-  assign PE_rc__is_calc[25] = is_calc;
+  /* assign PE_rc__is_calc[25] = is_calc; */
   assign PE_rc__y_cord[25] = 4'd4;
   assign PE_rc__x_cord[25] = 4'd2;
   assign PE_rc__in___msg[25][0] = PE_rc__out__msg[33][1];
@@ -12225,7 +12286,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[26][2] = PE_rc__out__msg[25][3];
   assign PE_rc__out__rdy[25][3] = PE_rc__in___rdy[26][2];
   assign PE_rc__in___val[26][2] = PE_rc__out__val[25][3];
-  assign PE_rc__is_calc[26] = is_calc;
+  /* assign PE_rc__is_calc[26] = is_calc; */
   assign PE_rc__y_cord[26] = 4'd4;
   assign PE_rc__x_cord[26] = 4'd3;
   assign PE_rc__in___msg[26][0] = PE_rc__out__msg[34][1];
@@ -12240,7 +12301,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[27][2] = PE_rc__out__msg[26][3];
   assign PE_rc__out__rdy[26][3] = PE_rc__in___rdy[27][2];
   assign PE_rc__in___val[27][2] = PE_rc__out__val[26][3];
-  assign PE_rc__is_calc[27] = is_calc;
+  /* assign PE_rc__is_calc[27] = is_calc; */
   assign PE_rc__y_cord[27] = 4'd4;
   assign PE_rc__x_cord[27] = 4'd4;
   assign PE_rc__in___msg[27][0] = PE_rc__out__msg[35][1];
@@ -12255,7 +12316,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[28][2] = PE_rc__out__msg[27][3];
   assign PE_rc__out__rdy[27][3] = PE_rc__in___rdy[28][2];
   assign PE_rc__in___val[28][2] = PE_rc__out__val[27][3];
-  assign PE_rc__is_calc[28] = is_calc;
+  /* assign PE_rc__is_calc[28] = is_calc; */
   assign PE_rc__y_cord[28] = 4'd4;
   assign PE_rc__x_cord[28] = 4'd5;
   assign PE_rc__in___msg[28][0] = PE_rc__out__msg[36][1];
@@ -12270,7 +12331,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[29][2] = PE_rc__out__msg[28][3];
   assign PE_rc__out__rdy[28][3] = PE_rc__in___rdy[29][2];
   assign PE_rc__in___val[29][2] = PE_rc__out__val[28][3];
-  assign PE_rc__is_calc[29] = is_calc;
+  /* assign PE_rc__is_calc[29] = is_calc; */
   assign PE_rc__y_cord[29] = 4'd4;
   assign PE_rc__x_cord[29] = 4'd6;
   assign PE_rc__in___msg[29][0] = PE_rc__out__msg[37][1];
@@ -12285,7 +12346,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[30][2] = PE_rc__out__msg[29][3];
   assign PE_rc__out__rdy[29][3] = PE_rc__in___rdy[30][2];
   assign PE_rc__in___val[30][2] = PE_rc__out__val[29][3];
-  assign PE_rc__is_calc[30] = is_calc;
+  /* assign PE_rc__is_calc[30] = is_calc; */
   assign PE_rc__y_cord[30] = 4'd4;
   assign PE_rc__x_cord[30] = 4'd7;
   assign PE_rc__in___msg[30][0] = PE_rc__out__msg[38][1];
@@ -12300,7 +12361,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[31][2] = PE_rc__out__msg[30][3];
   assign PE_rc__out__rdy[30][3] = PE_rc__in___rdy[31][2];
   assign PE_rc__in___val[31][2] = PE_rc__out__val[30][3];
-  assign PE_rc__is_calc[31] = is_calc;
+  /* assign PE_rc__is_calc[31] = is_calc; */
   assign PE_rc__y_cord[31] = 4'd4;
   assign PE_rc__x_cord[31] = 4'd8;
   assign PE_rc__in___msg[31][0] = PE_rc__out__msg[39][1];
@@ -12312,7 +12373,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___val[31][3] = 1'd0;
   assign PE_rc__in___msg[31][3] = 33'd0;
   assign PE_rc__out__rdy[31][3] = 1'd1;
-  assign PE_rc__is_calc[32] = is_calc;
+  /* assign PE_rc__is_calc[32] = is_calc; */
   assign PE_rc__y_cord[32] = 4'd5;
   assign PE_rc__x_cord[32] = 4'd1;
   assign PE_rc__in___msg[32][0] = PE_rc__out__msg[40][1];
@@ -12333,7 +12394,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign ME__in___msg[12] = PE_rc__out__msg[32][2];
   assign PE_rc__out__rdy[32][2] = ME__in___rdy[12];
   assign ME__in___val[12] = PE_rc__out__val[32][2];
-  assign PE_rc__is_calc[33] = is_calc;
+  /* assign PE_rc__is_calc[33] = is_calc; */
   assign PE_rc__y_cord[33] = 4'd5;
   assign PE_rc__x_cord[33] = 4'd2;
   assign PE_rc__in___msg[33][0] = PE_rc__out__msg[41][1];
@@ -12348,7 +12409,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[34][2] = PE_rc__out__msg[33][3];
   assign PE_rc__out__rdy[33][3] = PE_rc__in___rdy[34][2];
   assign PE_rc__in___val[34][2] = PE_rc__out__val[33][3];
-  assign PE_rc__is_calc[34] = is_calc;
+  /* assign PE_rc__is_calc[34] = is_calc; */
   assign PE_rc__y_cord[34] = 4'd5;
   assign PE_rc__x_cord[34] = 4'd3;
   assign PE_rc__in___msg[34][0] = PE_rc__out__msg[42][1];
@@ -12363,7 +12424,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[35][2] = PE_rc__out__msg[34][3];
   assign PE_rc__out__rdy[34][3] = PE_rc__in___rdy[35][2];
   assign PE_rc__in___val[35][2] = PE_rc__out__val[34][3];
-  assign PE_rc__is_calc[35] = is_calc;
+  /* assign PE_rc__is_calc[35] = is_calc; */
   assign PE_rc__y_cord[35] = 4'd5;
   assign PE_rc__x_cord[35] = 4'd4;
   assign PE_rc__in___msg[35][0] = PE_rc__out__msg[43][1];
@@ -12378,7 +12439,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[36][2] = PE_rc__out__msg[35][3];
   assign PE_rc__out__rdy[35][3] = PE_rc__in___rdy[36][2];
   assign PE_rc__in___val[36][2] = PE_rc__out__val[35][3];
-  assign PE_rc__is_calc[36] = is_calc;
+  /* assign PE_rc__is_calc[36] = is_calc; */
   assign PE_rc__y_cord[36] = 4'd5;
   assign PE_rc__x_cord[36] = 4'd5;
   assign PE_rc__in___msg[36][0] = PE_rc__out__msg[44][1];
@@ -12393,7 +12454,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[37][2] = PE_rc__out__msg[36][3];
   assign PE_rc__out__rdy[36][3] = PE_rc__in___rdy[37][2];
   assign PE_rc__in___val[37][2] = PE_rc__out__val[36][3];
-  assign PE_rc__is_calc[37] = is_calc;
+  /* assign PE_rc__is_calc[37] = is_calc; */
   assign PE_rc__y_cord[37] = 4'd5;
   assign PE_rc__x_cord[37] = 4'd6;
   assign PE_rc__in___msg[37][0] = PE_rc__out__msg[45][1];
@@ -12408,7 +12469,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[38][2] = PE_rc__out__msg[37][3];
   assign PE_rc__out__rdy[37][3] = PE_rc__in___rdy[38][2];
   assign PE_rc__in___val[38][2] = PE_rc__out__val[37][3];
-  assign PE_rc__is_calc[38] = is_calc;
+  /* assign PE_rc__is_calc[38] = is_calc; */
   assign PE_rc__y_cord[38] = 4'd5;
   assign PE_rc__x_cord[38] = 4'd7;
   assign PE_rc__in___msg[38][0] = PE_rc__out__msg[46][1];
@@ -12423,7 +12484,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[39][2] = PE_rc__out__msg[38][3];
   assign PE_rc__out__rdy[38][3] = PE_rc__in___rdy[39][2];
   assign PE_rc__in___val[39][2] = PE_rc__out__val[38][3];
-  assign PE_rc__is_calc[39] = is_calc;
+  /* assign PE_rc__is_calc[39] = is_calc; */
   assign PE_rc__y_cord[39] = 4'd5;
   assign PE_rc__x_cord[39] = 4'd8;
   assign PE_rc__in___msg[39][0] = PE_rc__out__msg[47][1];
@@ -12435,7 +12496,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___val[39][3] = 1'd0;
   assign PE_rc__in___msg[39][3] = 33'd0;
   assign PE_rc__out__rdy[39][3] = 1'd1;
-  assign PE_rc__is_calc[40] = is_calc;
+  /* assign PE_rc__is_calc[40] = is_calc; */
   assign PE_rc__y_cord[40] = 4'd6;
   assign PE_rc__x_cord[40] = 4'd1;
   assign PE_rc__in___msg[40][0] = PE_rc__out__msg[48][1];
@@ -12456,7 +12517,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign ME__in___msg[13] = PE_rc__out__msg[40][2];
   assign PE_rc__out__rdy[40][2] = ME__in___rdy[13];
   assign ME__in___val[13] = PE_rc__out__val[40][2];
-  assign PE_rc__is_calc[41] = is_calc;
+  /* assign PE_rc__is_calc[41] = is_calc; */
   assign PE_rc__y_cord[41] = 4'd6;
   assign PE_rc__x_cord[41] = 4'd2;
   assign PE_rc__in___msg[41][0] = PE_rc__out__msg[49][1];
@@ -12471,7 +12532,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[42][2] = PE_rc__out__msg[41][3];
   assign PE_rc__out__rdy[41][3] = PE_rc__in___rdy[42][2];
   assign PE_rc__in___val[42][2] = PE_rc__out__val[41][3];
-  assign PE_rc__is_calc[42] = is_calc;
+  /* assign PE_rc__is_calc[42] = is_calc; */
   assign PE_rc__y_cord[42] = 4'd6;
   assign PE_rc__x_cord[42] = 4'd3;
   assign PE_rc__in___msg[42][0] = PE_rc__out__msg[50][1];
@@ -12486,7 +12547,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[43][2] = PE_rc__out__msg[42][3];
   assign PE_rc__out__rdy[42][3] = PE_rc__in___rdy[43][2];
   assign PE_rc__in___val[43][2] = PE_rc__out__val[42][3];
-  assign PE_rc__is_calc[43] = is_calc;
+  /* assign PE_rc__is_calc[43] = is_calc; */
   assign PE_rc__y_cord[43] = 4'd6;
   assign PE_rc__x_cord[43] = 4'd4;
   assign PE_rc__in___msg[43][0] = PE_rc__out__msg[51][1];
@@ -12501,7 +12562,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[44][2] = PE_rc__out__msg[43][3];
   assign PE_rc__out__rdy[43][3] = PE_rc__in___rdy[44][2];
   assign PE_rc__in___val[44][2] = PE_rc__out__val[43][3];
-  assign PE_rc__is_calc[44] = is_calc;
+  /* assign PE_rc__is_calc[44] = is_calc; */
   assign PE_rc__y_cord[44] = 4'd6;
   assign PE_rc__x_cord[44] = 4'd5;
   assign PE_rc__in___msg[44][0] = PE_rc__out__msg[52][1];
@@ -12516,7 +12577,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[45][2] = PE_rc__out__msg[44][3];
   assign PE_rc__out__rdy[44][3] = PE_rc__in___rdy[45][2];
   assign PE_rc__in___val[45][2] = PE_rc__out__val[44][3];
-  assign PE_rc__is_calc[45] = is_calc;
+  /* assign PE_rc__is_calc[45] = is_calc; */
   assign PE_rc__y_cord[45] = 4'd6;
   assign PE_rc__x_cord[45] = 4'd6;
   assign PE_rc__in___msg[45][0] = PE_rc__out__msg[53][1];
@@ -12531,7 +12592,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[46][2] = PE_rc__out__msg[45][3];
   assign PE_rc__out__rdy[45][3] = PE_rc__in___rdy[46][2];
   assign PE_rc__in___val[46][2] = PE_rc__out__val[45][3];
-  assign PE_rc__is_calc[46] = is_calc;
+  /* assign PE_rc__is_calc[46] = is_calc; */
   assign PE_rc__y_cord[46] = 4'd6;
   assign PE_rc__x_cord[46] = 4'd7;
   assign PE_rc__in___msg[46][0] = PE_rc__out__msg[54][1];
@@ -12546,7 +12607,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[47][2] = PE_rc__out__msg[46][3];
   assign PE_rc__out__rdy[46][3] = PE_rc__in___rdy[47][2];
   assign PE_rc__in___val[47][2] = PE_rc__out__val[46][3];
-  assign PE_rc__is_calc[47] = is_calc;
+  /* assign PE_rc__is_calc[47] = is_calc; */
   assign PE_rc__y_cord[47] = 4'd6;
   assign PE_rc__x_cord[47] = 4'd8;
   assign PE_rc__in___msg[47][0] = PE_rc__out__msg[55][1];
@@ -12558,7 +12619,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___val[47][3] = 1'd0;
   assign PE_rc__in___msg[47][3] = 33'd0;
   assign PE_rc__out__rdy[47][3] = 1'd1;
-  assign PE_rc__is_calc[48] = is_calc;
+  /* assign PE_rc__is_calc[48] = is_calc; */
   assign PE_rc__y_cord[48] = 4'd7;
   assign PE_rc__x_cord[48] = 4'd1;
   assign PE_rc__in___msg[48][0] = PE_rc__out__msg[56][1];
@@ -12579,7 +12640,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign ME__in___msg[14] = PE_rc__out__msg[48][2];
   assign PE_rc__out__rdy[48][2] = ME__in___rdy[14];
   assign ME__in___val[14] = PE_rc__out__val[48][2];
-  assign PE_rc__is_calc[49] = is_calc;
+  /* assign PE_rc__is_calc[49] = is_calc; */
   assign PE_rc__y_cord[49] = 4'd7;
   assign PE_rc__x_cord[49] = 4'd2;
   assign PE_rc__in___msg[49][0] = PE_rc__out__msg[57][1];
@@ -12594,7 +12655,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[50][2] = PE_rc__out__msg[49][3];
   assign PE_rc__out__rdy[49][3] = PE_rc__in___rdy[50][2];
   assign PE_rc__in___val[50][2] = PE_rc__out__val[49][3];
-  assign PE_rc__is_calc[50] = is_calc;
+  /* assign PE_rc__is_calc[50] = is_calc; */
   assign PE_rc__y_cord[50] = 4'd7;
   assign PE_rc__x_cord[50] = 4'd3;
   assign PE_rc__in___msg[50][0] = PE_rc__out__msg[58][1];
@@ -12609,7 +12670,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[51][2] = PE_rc__out__msg[50][3];
   assign PE_rc__out__rdy[50][3] = PE_rc__in___rdy[51][2];
   assign PE_rc__in___val[51][2] = PE_rc__out__val[50][3];
-  assign PE_rc__is_calc[51] = is_calc;
+  /* assign PE_rc__is_calc[51] = is_calc; */
   assign PE_rc__y_cord[51] = 4'd7;
   assign PE_rc__x_cord[51] = 4'd4;
   assign PE_rc__in___msg[51][0] = PE_rc__out__msg[59][1];
@@ -12624,7 +12685,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[52][2] = PE_rc__out__msg[51][3];
   assign PE_rc__out__rdy[51][3] = PE_rc__in___rdy[52][2];
   assign PE_rc__in___val[52][2] = PE_rc__out__val[51][3];
-  assign PE_rc__is_calc[52] = is_calc;
+  /* assign PE_rc__is_calc[52] = is_calc; */
   assign PE_rc__y_cord[52] = 4'd7;
   assign PE_rc__x_cord[52] = 4'd5;
   assign PE_rc__in___msg[52][0] = PE_rc__out__msg[60][1];
@@ -12639,7 +12700,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[53][2] = PE_rc__out__msg[52][3];
   assign PE_rc__out__rdy[52][3] = PE_rc__in___rdy[53][2];
   assign PE_rc__in___val[53][2] = PE_rc__out__val[52][3];
-  assign PE_rc__is_calc[53] = is_calc;
+  /* assign PE_rc__is_calc[53] = is_calc; */
   assign PE_rc__y_cord[53] = 4'd7;
   assign PE_rc__x_cord[53] = 4'd6;
   assign PE_rc__in___msg[53][0] = PE_rc__out__msg[61][1];
@@ -12654,7 +12715,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[54][2] = PE_rc__out__msg[53][3];
   assign PE_rc__out__rdy[53][3] = PE_rc__in___rdy[54][2];
   assign PE_rc__in___val[54][2] = PE_rc__out__val[53][3];
-  assign PE_rc__is_calc[54] = is_calc;
+  /* assign PE_rc__is_calc[54] = is_calc; */
   assign PE_rc__y_cord[54] = 4'd7;
   assign PE_rc__x_cord[54] = 4'd7;
   assign PE_rc__in___msg[54][0] = PE_rc__out__msg[62][1];
@@ -12669,7 +12730,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[55][2] = PE_rc__out__msg[54][3];
   assign PE_rc__out__rdy[54][3] = PE_rc__in___rdy[55][2];
   assign PE_rc__in___val[55][2] = PE_rc__out__val[54][3];
-  assign PE_rc__is_calc[55] = is_calc;
+  /* assign PE_rc__is_calc[55] = is_calc; */
   assign PE_rc__y_cord[55] = 4'd7;
   assign PE_rc__x_cord[55] = 4'd8;
   assign PE_rc__in___msg[55][0] = PE_rc__out__msg[63][1];
@@ -12681,7 +12742,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___val[55][3] = 1'd0;
   assign PE_rc__in___msg[55][3] = 33'd0;
   assign PE_rc__out__rdy[55][3] = 1'd1;
-  assign PE_rc__is_calc[56] = is_calc;
+  /* assign PE_rc__is_calc[56] = is_calc; */
   assign PE_rc__y_cord[56] = 4'd8;
   assign PE_rc__x_cord[56] = 4'd1;
   assign PE_rc__in___val[56][0] = 1'd0;
@@ -12699,7 +12760,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign ME__in___msg[15] = PE_rc__out__msg[56][2];
   assign PE_rc__out__rdy[56][2] = ME__in___rdy[15];
   assign ME__in___val[15] = PE_rc__out__val[56][2];
-  assign PE_rc__is_calc[57] = is_calc;
+  /* assign PE_rc__is_calc[57] = is_calc; */
   assign PE_rc__y_cord[57] = 4'd8;
   assign PE_rc__x_cord[57] = 4'd2;
   assign PE_rc__in___val[57][0] = 1'd0;
@@ -12711,7 +12772,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[58][2] = PE_rc__out__msg[57][3];
   assign PE_rc__out__rdy[57][3] = PE_rc__in___rdy[58][2];
   assign PE_rc__in___val[58][2] = PE_rc__out__val[57][3];
-  assign PE_rc__is_calc[58] = is_calc;
+  /* assign PE_rc__is_calc[58] = is_calc; */
   assign PE_rc__y_cord[58] = 4'd8;
   assign PE_rc__x_cord[58] = 4'd3;
   assign PE_rc__in___val[58][0] = 1'd0;
@@ -12723,7 +12784,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[59][2] = PE_rc__out__msg[58][3];
   assign PE_rc__out__rdy[58][3] = PE_rc__in___rdy[59][2];
   assign PE_rc__in___val[59][2] = PE_rc__out__val[58][3];
-  assign PE_rc__is_calc[59] = is_calc;
+  /* assign PE_rc__is_calc[59] = is_calc; */
   assign PE_rc__y_cord[59] = 4'd8;
   assign PE_rc__x_cord[59] = 4'd4;
   assign PE_rc__in___val[59][0] = 1'd0;
@@ -12735,7 +12796,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[60][2] = PE_rc__out__msg[59][3];
   assign PE_rc__out__rdy[59][3] = PE_rc__in___rdy[60][2];
   assign PE_rc__in___val[60][2] = PE_rc__out__val[59][3];
-  assign PE_rc__is_calc[60] = is_calc;
+  /* assign PE_rc__is_calc[60] = is_calc; */
   assign PE_rc__y_cord[60] = 4'd8;
   assign PE_rc__x_cord[60] = 4'd5;
   assign PE_rc__in___val[60][0] = 1'd0;
@@ -12747,7 +12808,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[61][2] = PE_rc__out__msg[60][3];
   assign PE_rc__out__rdy[60][3] = PE_rc__in___rdy[61][2];
   assign PE_rc__in___val[61][2] = PE_rc__out__val[60][3];
-  assign PE_rc__is_calc[61] = is_calc;
+  /* assign PE_rc__is_calc[61] = is_calc; */
   assign PE_rc__y_cord[61] = 4'd8;
   assign PE_rc__x_cord[61] = 4'd6;
   assign PE_rc__in___val[61][0] = 1'd0;
@@ -12759,7 +12820,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[62][2] = PE_rc__out__msg[61][3];
   assign PE_rc__out__rdy[61][3] = PE_rc__in___rdy[62][2];
   assign PE_rc__in___val[62][2] = PE_rc__out__val[61][3];
-  assign PE_rc__is_calc[62] = is_calc;
+  /* assign PE_rc__is_calc[62] = is_calc; */
   assign PE_rc__y_cord[62] = 4'd8;
   assign PE_rc__x_cord[62] = 4'd7;
   assign PE_rc__in___val[62][0] = 1'd0;
@@ -12771,7 +12832,7 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign PE_rc__in___msg[63][2] = PE_rc__out__msg[62][3];
   assign PE_rc__out__rdy[62][3] = PE_rc__in___rdy[63][2];
   assign PE_rc__in___val[63][2] = PE_rc__out__val[62][3];
-  assign PE_rc__is_calc[63] = is_calc;
+  /* assign PE_rc__is_calc[63] = is_calc; */
   assign PE_rc__y_cord[63] = 4'd8;
   assign PE_rc__x_cord[63] = 4'd8;
   assign PE_rc__in___val[63][0] = 1'd0;
@@ -12810,70 +12871,70 @@ module CGRACoreDpath__07e21c4d4fa663e6
   assign all_ME_done[13:13] = ME__is_done[13];
   assign all_ME_done[14:14] = ME__is_done[14];
   assign all_ME_done[15:15] = ME__is_done[15];
-  assign all_PE_occupancy[0:0] = PE_rc__is_occupied[0];
-  assign all_PE_occupancy[1:1] = PE_rc__is_occupied[1];
-  assign all_PE_occupancy[2:2] = PE_rc__is_occupied[2];
-  assign all_PE_occupancy[3:3] = PE_rc__is_occupied[3];
-  assign all_PE_occupancy[4:4] = PE_rc__is_occupied[4];
-  assign all_PE_occupancy[5:5] = PE_rc__is_occupied[5];
-  assign all_PE_occupancy[6:6] = PE_rc__is_occupied[6];
-  assign all_PE_occupancy[7:7] = PE_rc__is_occupied[7];
-  assign all_PE_occupancy[8:8] = PE_rc__is_occupied[8];
-  assign all_PE_occupancy[9:9] = PE_rc__is_occupied[9];
-  assign all_PE_occupancy[10:10] = PE_rc__is_occupied[10];
-  assign all_PE_occupancy[11:11] = PE_rc__is_occupied[11];
-  assign all_PE_occupancy[12:12] = PE_rc__is_occupied[12];
-  assign all_PE_occupancy[13:13] = PE_rc__is_occupied[13];
-  assign all_PE_occupancy[14:14] = PE_rc__is_occupied[14];
-  assign all_PE_occupancy[15:15] = PE_rc__is_occupied[15];
-  assign all_PE_occupancy[16:16] = PE_rc__is_occupied[16];
-  assign all_PE_occupancy[17:17] = PE_rc__is_occupied[17];
-  assign all_PE_occupancy[18:18] = PE_rc__is_occupied[18];
-  assign all_PE_occupancy[19:19] = PE_rc__is_occupied[19];
-  assign all_PE_occupancy[20:20] = PE_rc__is_occupied[20];
-  assign all_PE_occupancy[21:21] = PE_rc__is_occupied[21];
-  assign all_PE_occupancy[22:22] = PE_rc__is_occupied[22];
-  assign all_PE_occupancy[23:23] = PE_rc__is_occupied[23];
-  assign all_PE_occupancy[24:24] = PE_rc__is_occupied[24];
-  assign all_PE_occupancy[25:25] = PE_rc__is_occupied[25];
-  assign all_PE_occupancy[26:26] = PE_rc__is_occupied[26];
-  assign all_PE_occupancy[27:27] = PE_rc__is_occupied[27];
-  assign all_PE_occupancy[28:28] = PE_rc__is_occupied[28];
-  assign all_PE_occupancy[29:29] = PE_rc__is_occupied[29];
-  assign all_PE_occupancy[30:30] = PE_rc__is_occupied[30];
-  assign all_PE_occupancy[31:31] = PE_rc__is_occupied[31];
-  assign all_PE_occupancy[32:32] = PE_rc__is_occupied[32];
-  assign all_PE_occupancy[33:33] = PE_rc__is_occupied[33];
-  assign all_PE_occupancy[34:34] = PE_rc__is_occupied[34];
-  assign all_PE_occupancy[35:35] = PE_rc__is_occupied[35];
-  assign all_PE_occupancy[36:36] = PE_rc__is_occupied[36];
-  assign all_PE_occupancy[37:37] = PE_rc__is_occupied[37];
-  assign all_PE_occupancy[38:38] = PE_rc__is_occupied[38];
-  assign all_PE_occupancy[39:39] = PE_rc__is_occupied[39];
-  assign all_PE_occupancy[40:40] = PE_rc__is_occupied[40];
-  assign all_PE_occupancy[41:41] = PE_rc__is_occupied[41];
-  assign all_PE_occupancy[42:42] = PE_rc__is_occupied[42];
-  assign all_PE_occupancy[43:43] = PE_rc__is_occupied[43];
-  assign all_PE_occupancy[44:44] = PE_rc__is_occupied[44];
-  assign all_PE_occupancy[45:45] = PE_rc__is_occupied[45];
-  assign all_PE_occupancy[46:46] = PE_rc__is_occupied[46];
-  assign all_PE_occupancy[47:47] = PE_rc__is_occupied[47];
-  assign all_PE_occupancy[48:48] = PE_rc__is_occupied[48];
-  assign all_PE_occupancy[49:49] = PE_rc__is_occupied[49];
-  assign all_PE_occupancy[50:50] = PE_rc__is_occupied[50];
-  assign all_PE_occupancy[51:51] = PE_rc__is_occupied[51];
-  assign all_PE_occupancy[52:52] = PE_rc__is_occupied[52];
-  assign all_PE_occupancy[53:53] = PE_rc__is_occupied[53];
-  assign all_PE_occupancy[54:54] = PE_rc__is_occupied[54];
-  assign all_PE_occupancy[55:55] = PE_rc__is_occupied[55];
-  assign all_PE_occupancy[56:56] = PE_rc__is_occupied[56];
-  assign all_PE_occupancy[57:57] = PE_rc__is_occupied[57];
-  assign all_PE_occupancy[58:58] = PE_rc__is_occupied[58];
-  assign all_PE_occupancy[59:59] = PE_rc__is_occupied[59];
-  assign all_PE_occupancy[60:60] = PE_rc__is_occupied[60];
-  assign all_PE_occupancy[61:61] = PE_rc__is_occupied[61];
-  assign all_PE_occupancy[62:62] = PE_rc__is_occupied[62];
-  assign all_PE_occupancy[63:63] = PE_rc__is_occupied[63];
+  /* assign all_PE_occupancy[0:0] = PE_rc__is_occupied[0]; */
+  /* assign all_PE_occupancy[1:1] = PE_rc__is_occupied[1]; */
+  /* assign all_PE_occupancy[2:2] = PE_rc__is_occupied[2]; */
+  /* assign all_PE_occupancy[3:3] = PE_rc__is_occupied[3]; */
+  /* assign all_PE_occupancy[4:4] = PE_rc__is_occupied[4]; */
+  /* assign all_PE_occupancy[5:5] = PE_rc__is_occupied[5]; */
+  /* assign all_PE_occupancy[6:6] = PE_rc__is_occupied[6]; */
+  /* assign all_PE_occupancy[7:7] = PE_rc__is_occupied[7]; */
+  /* assign all_PE_occupancy[8:8] = PE_rc__is_occupied[8]; */
+  /* assign all_PE_occupancy[9:9] = PE_rc__is_occupied[9]; */
+  /* assign all_PE_occupancy[10:10] = PE_rc__is_occupied[10]; */
+  /* assign all_PE_occupancy[11:11] = PE_rc__is_occupied[11]; */
+  /* assign all_PE_occupancy[12:12] = PE_rc__is_occupied[12]; */
+  /* assign all_PE_occupancy[13:13] = PE_rc__is_occupied[13]; */
+  /* assign all_PE_occupancy[14:14] = PE_rc__is_occupied[14]; */
+  /* assign all_PE_occupancy[15:15] = PE_rc__is_occupied[15]; */
+  /* assign all_PE_occupancy[16:16] = PE_rc__is_occupied[16]; */
+  /* assign all_PE_occupancy[17:17] = PE_rc__is_occupied[17]; */
+  /* assign all_PE_occupancy[18:18] = PE_rc__is_occupied[18]; */
+  /* assign all_PE_occupancy[19:19] = PE_rc__is_occupied[19]; */
+  /* assign all_PE_occupancy[20:20] = PE_rc__is_occupied[20]; */
+  /* assign all_PE_occupancy[21:21] = PE_rc__is_occupied[21]; */
+  /* assign all_PE_occupancy[22:22] = PE_rc__is_occupied[22]; */
+  /* assign all_PE_occupancy[23:23] = PE_rc__is_occupied[23]; */
+  /* assign all_PE_occupancy[24:24] = PE_rc__is_occupied[24]; */
+  /* assign all_PE_occupancy[25:25] = PE_rc__is_occupied[25]; */
+  /* assign all_PE_occupancy[26:26] = PE_rc__is_occupied[26]; */
+  /* assign all_PE_occupancy[27:27] = PE_rc__is_occupied[27]; */
+  /* assign all_PE_occupancy[28:28] = PE_rc__is_occupied[28]; */
+  /* assign all_PE_occupancy[29:29] = PE_rc__is_occupied[29]; */
+  /* assign all_PE_occupancy[30:30] = PE_rc__is_occupied[30]; */
+  /* assign all_PE_occupancy[31:31] = PE_rc__is_occupied[31]; */
+  /* assign all_PE_occupancy[32:32] = PE_rc__is_occupied[32]; */
+  /* assign all_PE_occupancy[33:33] = PE_rc__is_occupied[33]; */
+  /* assign all_PE_occupancy[34:34] = PE_rc__is_occupied[34]; */
+  /* assign all_PE_occupancy[35:35] = PE_rc__is_occupied[35]; */
+  /* assign all_PE_occupancy[36:36] = PE_rc__is_occupied[36]; */
+  /* assign all_PE_occupancy[37:37] = PE_rc__is_occupied[37]; */
+  /* assign all_PE_occupancy[38:38] = PE_rc__is_occupied[38]; */
+  /* assign all_PE_occupancy[39:39] = PE_rc__is_occupied[39]; */
+  /* assign all_PE_occupancy[40:40] = PE_rc__is_occupied[40]; */
+  /* assign all_PE_occupancy[41:41] = PE_rc__is_occupied[41]; */
+  /* assign all_PE_occupancy[42:42] = PE_rc__is_occupied[42]; */
+  /* assign all_PE_occupancy[43:43] = PE_rc__is_occupied[43]; */
+  /* assign all_PE_occupancy[44:44] = PE_rc__is_occupied[44]; */
+  /* assign all_PE_occupancy[45:45] = PE_rc__is_occupied[45]; */
+  /* assign all_PE_occupancy[46:46] = PE_rc__is_occupied[46]; */
+  /* assign all_PE_occupancy[47:47] = PE_rc__is_occupied[47]; */
+  /* assign all_PE_occupancy[48:48] = PE_rc__is_occupied[48]; */
+  /* assign all_PE_occupancy[49:49] = PE_rc__is_occupied[49]; */
+  /* assign all_PE_occupancy[50:50] = PE_rc__is_occupied[50]; */
+  /* assign all_PE_occupancy[51:51] = PE_rc__is_occupied[51]; */
+  /* assign all_PE_occupancy[52:52] = PE_rc__is_occupied[52]; */
+  /* assign all_PE_occupancy[53:53] = PE_rc__is_occupied[53]; */
+  /* assign all_PE_occupancy[54:54] = PE_rc__is_occupied[54]; */
+  /* assign all_PE_occupancy[55:55] = PE_rc__is_occupied[55]; */
+  /* assign all_PE_occupancy[56:56] = PE_rc__is_occupied[56]; */
+  /* assign all_PE_occupancy[57:57] = PE_rc__is_occupied[57]; */
+  /* assign all_PE_occupancy[58:58] = PE_rc__is_occupied[58]; */
+  /* assign all_PE_occupancy[59:59] = PE_rc__is_occupied[59]; */
+  /* assign all_PE_occupancy[60:60] = PE_rc__is_occupied[60]; */
+  /* assign all_PE_occupancy[61:61] = PE_rc__is_occupied[61]; */
+  /* assign all_PE_occupancy[62:62] = PE_rc__is_occupied[62]; */
+  /* assign all_PE_occupancy[63:63] = PE_rc__is_occupied[63]; */
   assign is_cfg_done = delayed_all_CE_done__out;
   assign is_wen = xminion_req_msg.wen;
 

@@ -29,7 +29,7 @@ module brg_cgra_pod
     input clk_i
     , input reset_i
 
-    , input [3:0][y_cord_width_p-1:0] global_y_cord_i
+    , input [y_cord_width_p-1:0] global_y_cord_i
 
     , input        async_uplink_reset_i
     , input        async_downlink_reset_i
@@ -189,7 +189,7 @@ module brg_cgra_pod
     ,.link_sif_o(proc_link_sif_lo)
     ,.my_x_i(global_x_cord_li)
     // TODO: use multiple endpoints
-    ,.my_y_i(global_y_cord_i[0])
+    ,.my_y_i(global_y_cord_i)
   );
 
 endmodule

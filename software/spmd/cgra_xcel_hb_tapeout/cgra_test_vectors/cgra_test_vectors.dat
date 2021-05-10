@@ -4,70 +4,84 @@
 
 #include "cgra_tv_sram_read_write_8x8.dat"
 #include "cgra_tv_vvadd_8x8.dat"
+#include "cgra_tv_peak_os_GEMM.dat"
 
-#define NUM_TEST_VECTORS 2
+#define NUM_TEST_VECTORS 3
 
 const char* test_name[NUM_TEST_VECTORS] __attribute__ ((section (".dram"))) = {
   sram_read_write_8x8_name,
-  vvadd_8x8_name
+  vvadd_8x8_name,
+  peak_os_GEMM_name
 };
 
 const int* bstrm_addr[NUM_TEST_VECTORS] __attribute__ ((section (".dram"))) = {
   sram_read_write_8x8_bstrm,
-  vvadd_8x8_bstrm
+  vvadd_8x8_bstrm,
+  peak_os_GEMM_bstrm
 };
 
 int bstrm_size[NUM_TEST_VECTORS] __attribute__ ((section (".dram"))) = {
   sram_read_write_8x8_bstrm_size,
-  vvadd_8x8_bstrm_size
+  vvadd_8x8_bstrm_size,
+  peak_os_GEMM_bstrm_size
 };
 
 const int* insts_addr[NUM_TEST_VECTORS] __attribute__ ((section (".dram"))) = {
   sram_read_write_8x8_instructions,
-  vvadd_8x8_instructions
+  vvadd_8x8_instructions,
+  peak_os_GEMM_instructions
 };
 
 const int* arg0_addr[NUM_TEST_VECTORS] __attribute__ ((section (".dram"))) = {
   sram_read_write_8x8_arg0,
-  vvadd_8x8_arg0
+  vvadd_8x8_arg0,
+  peak_os_GEMM_arg0
 };
 
 const int* arg1_addr[NUM_TEST_VECTORS] __attribute__ ((section (".dram"))) = {
   sram_read_write_8x8_arg1,
-  vvadd_8x8_arg1
+  vvadd_8x8_arg1,
+  peak_os_GEMM_arg1
 };
 
 const int* arg2_addr[NUM_TEST_VECTORS] __attribute__ ((section (".dram"))) = {
   sram_read_write_8x8_arg2,
-  vvadd_8x8_arg2
+  vvadd_8x8_arg2,
+  peak_os_GEMM_arg2
 };
 
 const int* arg3_addr[NUM_TEST_VECTORS] __attribute__ ((section (".dram"))) = {
   sram_read_write_8x8_arg3,
-  vvadd_8x8_arg3
+  vvadd_8x8_arg3,
+  peak_os_GEMM_arg3
 };
 
 int inst_size[NUM_TEST_VECTORS] __attribute__ ((section (".dram"))) = {
   sram_read_write_8x8_inst_size,
-  vvadd_8x8_inst_size
+  vvadd_8x8_inst_size,
+  peak_os_GEMM_inst_size
 };
 
 int verif_base[NUM_TEST_VECTORS] __attribute__ ((section (".dram"))) = {
   sram_read_write_8x8_verif_base,
-  vvadd_8x8_verif_base
+  vvadd_8x8_verif_base,
+  peak_os_GEMM_verif_base
 };
 
 int result_size[NUM_TEST_VECTORS] __attribute__ ((section (".dram"))) = {
   sram_read_write_8x8_result_size,
-  vvadd_8x8_result_size
+  vvadd_8x8_result_size,
+  peak_os_GEMM_result_size
 };
 
 const int* ref_addr[NUM_TEST_VECTORS] __attribute__ ((section (".dram"))) = {
   sram_read_write_8x8_reference,
-  vvadd_8x8_reference
+  vvadd_8x8_reference,
+  peak_os_GEMM_reference
 };
 
 int is_sram_test[NUM_TEST_VECTORS] __attribute__ ((section (".dram"))) = {
   sram_read_write_8x8_is_sram_test,
-  vvadd_8x8_is_sram_test
+  vvadd_8x8_is_sram_test,
+  peak_os_GEMM_is_sram_test
 };

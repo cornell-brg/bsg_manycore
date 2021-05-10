@@ -2863,10 +2863,12 @@ module MemEngine__7bb22bb10af9a0d4
   input logic [0:0] out__rdy  ,
   output logic [0:0] out__val  
 );
+  localparam logic [13:0] __const__PEAK_COUNT_at_up_configs_regs  = 14'd16383;
   localparam logic [0:0] __const__L0_READ_IDLE  = 1'd0;
   localparam logic [1:0] __const__L0_READ_SEND_HWORD0  = 2'd2;
   localparam logic [0:0] __const__L0_READ_SEND_WORD  = 1'd1;
   localparam logic [1:0] __const__L0_READ_SEND_HWORD1  = 2'd3;
+  localparam logic [32:0] __const__PEAK_TOKEN_at_up_ME_datapath  = 33'd2192048128;
   logic [13:0] cfg_addr;
   logic [1:0] cfg_cmd;
   logic [13:0] cfg_count;
@@ -2884,6 +2886,9 @@ module MemEngine__7bb22bb10af9a0d4
   logic [0:0] is_l0_read_done;
   logic [0:0] is_loading_bf16;
   logic [0:0] is_out_credit_zero;
+  logic [0:0] is_peak_mode;
+  logic [0:0] is_peak_mode_cfg;
+  logic [0:0] is_peak_mode_cfg_r;
   logic [0:0] is_reload_cmd;
   logic [13:0] l0_addr_r;
   logic [31:0] l0_data_r;
@@ -3026,7 +3031,7 @@ module MemEngine__7bb22bb10af9a0d4
   //-------------------------------------------------------------
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:286
+  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:314
   // s.fn_to_recfn.in_ //= lambda: s.l0_half_word if s.is_loading_bf16 else s.l0_data_r
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_ME_0__fn_to_recfn_in_
@@ -3034,7 +3039,7 @@ module MemEngine__7bb22bb10af9a0d4
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:128
+  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:131
   // s.is_cfg_incr_16 //= lambda: s.cfg_with_fields.incr_addr == 2
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_ME_0__is_cfg_incr_16
@@ -3042,7 +3047,7 @@ module MemEngine__7bb22bb10af9a0d4
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:130
+  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:133
   // s.is_cfg_incr_16_r //= lambda: s.cfg_with_fields_r.incr_addr == 2
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_ME_0__is_cfg_incr_16_r
@@ -3050,15 +3055,39 @@ module MemEngine__7bb22bb10af9a0d4
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:121
-  // s.is_loading_bf16 //= lambda: ~s.is_cfg_write & s.cfg_with_fields_r.is_fp & s.cfg_with_fields_r.is_bf16
+  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:124
+  // s.is_loading_bf16 //= lambda: ~s.is_cfg_write & s.cfg_with_fields_r.is_bf16
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_ME_0__is_loading_bf16
-    is_loading_bf16 = ( ( ~is_cfg_write ) & cfg_with_fields_r.is_fp ) & cfg_with_fields_r.is_bf16;
+    is_loading_bf16 = ( ~is_cfg_write ) & cfg_with_fields_r.is_bf16;
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:283
+  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:117
+  // s.is_peak_mode //= lambda: ~s.is_cfg_write & ~s.cfg_with_fields_r.is_fp & s.cfg_with_fields_r.is_bf16
+  
+  always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_ME_0__is_peak_mode
+    is_peak_mode = ( ( ~is_cfg_write ) & ( ~cfg_with_fields_r.is_fp ) ) & cfg_with_fields_r.is_bf16;
+  end
+
+  // PyMTL Lambda Block Source
+  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:136
+  // s.is_peak_mode_cfg //= lambda: ~s.cfg_with_fields.is_fp & s.cfg_with_fields.is_bf16
+  
+  always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_ME_0__is_peak_mode_cfg
+    is_peak_mode_cfg = ( ~cfg_with_fields.is_fp ) & cfg_with_fields.is_bf16;
+  end
+
+  // PyMTL Lambda Block Source
+  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:138
+  // s.is_peak_mode_cfg_r //= lambda: ~s.cfg_with_fields.is_fp & s.cfg_with_fields.is_bf16
+  
+  always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_ME_0__is_peak_mode_cfg_r
+    is_peak_mode_cfg_r = ( ~cfg_with_fields.is_fp ) & cfg_with_fields.is_bf16;
+  end
+
+  // PyMTL Lambda Block Source
+  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:311
   // s.sel_FN2RecFN //= lambda: s.cfg_with_fields_r.is_fp & (~s.cfg_with_fields_r.wen)
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_ME_0__sel_FN2RecFN
@@ -3066,7 +3095,7 @@ module MemEngine__7bb22bb10af9a0d4
   end
 
   // PyMTL Lambda Block Source
-  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:282
+  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:310
   // s.sel_RecFN2FN //= lambda: s.cfg_with_fields_r.is_fp & s.cfg_with_fields_r.wen
   
   always_comb begin : _lambda__s_cgra_xcel_dpath_cgra_dpath_ME_0__sel_RecFN2FN
@@ -3074,7 +3103,7 @@ module MemEngine__7bb22bb10af9a0d4
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:303
+  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:331
   // @update
   // def up_ME_ctrl():
   //   # Helper signals
@@ -3085,9 +3114,9 @@ module MemEngine__7bb22bb10af9a0d4
   //   s.is_reload_cmd        @= (s.cfg_cmd == CfgCmd.RF_LOAD_FP) | (s.cfg_cmd == CfgCmd.RF_LOAD_INT)
   //   s.is_out_credit_zero   @= s.out_credit == 0
   //   s.self_cfg_deq         @= s.is_cfg_target_self & s.cfg_q.deq.val
-  //   s.is_done              @= s.is_calc & s.no_pending_responses
+  //   s.is_done              @= s.is_calc & ( s.no_pending_responses | (s.is_peak_mode & (s.cfg_count == 0)))
   // 
-  //   s.out.val @= ~s.is_cfg_write & (s.l0_read_fsm != L0_READ_IDLE)
+  //   s.out.val @= ~s.is_cfg_write & ( (s.l0_read_fsm != L0_READ_IDLE) | (s.is_peak_mode & (s.cfg_count != 0)) )
   //   s.is_l0_read_done @= (((s.l0_read_fsm == L0_READ_SEND_WORD) | \
   //                         (s.l0_read_fsm == L0_READ_SEND_HWORD1) | \
   //                         ((s.l0_read_fsm == L0_READ_SEND_HWORD0) & (s.tokens_per_line == 1))) \
@@ -3098,7 +3127,7 @@ module MemEngine__7bb22bb10af9a0d4
   //   s.mem_ifc.req.en @= ( (s.is_cfg_write & s.in_q.deq.val) \
   //                     | (~s.is_cfg_write) ) \
   //                     & ~s.count_zero & ~s.is_out_credit_zero \
-  //                     & s.mem_ifc.req.rdy & s.is_calc
+  //                     & s.mem_ifc.req.rdy & s.is_calc & ~s.is_peak_mode
   //   s.mem_q.deq.en @= s.is_l0_read_done & s.mem_q.deq.rdy
   //   s.in_q.deq.rdy @= s.is_cfg_write & s.mem_ifc.req.rdy & ~s.is_out_credit_zero & s.is_calc
   //   s.cfg_out.val  @= ~s.is_cfg_target_self & s.cfg_q.deq.val
@@ -3115,10 +3144,10 @@ module MemEngine__7bb22bb10af9a0d4
     is_reload_cmd = ( cfg_cmd == 2'd2 ) | ( cfg_cmd == 2'd1 );
     is_out_credit_zero = out_credit == 3'd0;
     self_cfg_deq = is_cfg_target_self & cfg_q__deq__val;
-    is_done = is_calc & no_pending_responses;
-    out__val = ( ~is_cfg_write ) & ( l0_read_fsm != 2'( __const__L0_READ_IDLE ) );
+    is_done = is_calc & ( no_pending_responses | ( is_peak_mode & ( cfg_count == 14'd0 ) ) );
+    out__val = ( ~is_cfg_write ) & ( ( l0_read_fsm != 2'( __const__L0_READ_IDLE ) ) | ( is_peak_mode & ( cfg_count != 14'd0 ) ) );
     is_l0_read_done = ( ( ( ( ( l0_read_fsm == 2'( __const__L0_READ_SEND_WORD ) ) | ( l0_read_fsm == 2'( __const__L0_READ_SEND_HWORD1 ) ) ) | ( ( l0_read_fsm == 2'( __const__L0_READ_SEND_HWORD0 ) ) & ( tokens_per_line == 1'd1 ) ) ) & out__val ) & out__rdy ) | ( l0_read_fsm == 2'( __const__L0_READ_IDLE ) );
-    mem_ifc__req__en = ( ( ( ( ( is_cfg_write & in_q__deq__val ) | ( ~is_cfg_write ) ) & ( ~count_zero ) ) & ( ~is_out_credit_zero ) ) & mem_ifc__req__rdy ) & is_calc;
+    mem_ifc__req__en = ( ( ( ( ( ( is_cfg_write & in_q__deq__val ) | ( ~is_cfg_write ) ) & ( ~count_zero ) ) & ( ~is_out_credit_zero ) ) & mem_ifc__req__rdy ) & is_calc ) & ( ~is_peak_mode );
     mem_q__deq__en = is_l0_read_done & mem_q__deq__rdy;
     in_q__deq__rdy = ( ( is_cfg_write & mem_ifc__req__rdy ) & ( ~is_out_credit_zero ) ) & is_calc;
     cfg_out__val = ( ~is_cfg_target_self ) & cfg_q__deq__val;
@@ -3127,7 +3156,7 @@ module MemEngine__7bb22bb10af9a0d4
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:339
+  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:370
   // @update
   // def up_ME_datapath():
   //   s.mem_ifc.req.msg.wen    @= s.cfg_wen
@@ -3141,6 +3170,8 @@ module MemEngine__7bb22bb10af9a0d4
   //   s.out.msg @= sext( s.l0_data_r, p.dpath_width )
   //   if s.sel_FN2RecFN:
   //     s.out.msg @= s.fn_to_recfn.out
+  //   if s.is_peak_mode:
+  //     s.out.msg @= PEAK_TOKEN
   // 
   //   s.cfg_out.msg @= s.cfg_q.deq.msg
   
@@ -3154,11 +3185,14 @@ module MemEngine__7bb22bb10af9a0d4
     if ( sel_FN2RecFN ) begin
       out__msg = fn_to_recfn__out;
     end
+    if ( is_peak_mode ) begin
+      out__msg = 33'( __const__PEAK_TOKEN_at_up_ME_datapath );
+    end
     cfg_out__msg = cfg_q__deq__msg;
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:262
+  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:290
   // @update
   // def up_l0_half_word():
   //   s.l0_half_word @= 0
@@ -3178,7 +3212,7 @@ module MemEngine__7bb22bb10af9a0d4
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:132
+  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:145
   // @update_ff
   // def up_configs_regs():
   //   if s.reset:
@@ -3195,23 +3229,38 @@ module MemEngine__7bb22bb10af9a0d4
   //         s.cfg_wen           <<= s.cfg_with_fields.wen
   //         s.cfg_incr_addr     <<= zext( 4 if s.is_cfg_incr_16 else s.cfg_with_fields.incr_addr, p.addr_width )
   //         s.cfg_addr          <<= s.cfg_with_fields.base_addr
-  //         s.cfg_count         <<= zext( (s.cfg_with_fields.count >> 1) if s.is_cfg_incr_16 else s.cfg_with_fields.count, p.addr_width )
   //         s.pending_response  <<= zext( (s.cfg_with_fields.count >> 1) if s.is_cfg_incr_16 else s.cfg_with_fields.count, p.addr_width )
   //         s.cfg_with_fields_r <<= s.cfg_with_fields
   //         s.tokens_per_line   <<= 0 if s.is_cfg_incr_16 else 1
+  // 
+  //         if s.is_cfg_incr_16:
+  //           s.cfg_count <<= zext( s.cfg_with_fields.count >> 1, p.addr_width )
+  //         elif s.is_peak_mode_cfg:
+  //           s.cfg_count <<= PEAK_COUNT
+  //         else:
+  //           s.cfg_count <<= zext( s.cfg_with_fields.count, p.addr_width )
   //       else:
   //         s.cfg_wen          <<= s.cfg_with_fields_r.wen
   //         s.cfg_incr_addr    <<= zext( 4 if s.is_cfg_incr_16_r else s.cfg_with_fields_r.incr_addr, p.addr_width )
   //         s.cfg_addr         <<= s.cfg_value[0:p.addr_width]
-  //         s.cfg_count        <<= zext( (s.cfg_with_fields_r.count >> 1) if s.is_cfg_incr_16_r else s.cfg_with_fields_r.count, p.addr_width )
   //         s.pending_response <<= zext( (s.cfg_with_fields_r.count >> 1) if s.is_cfg_incr_16_r else s.cfg_with_fields_r.count, p.addr_width )
   //         s.tokens_per_line  <<= 0 if s.is_cfg_incr_16_r else 1
+  // 
+  //         if s.is_cfg_incr_16_r:
+  //           s.cfg_count <<= zext( s.cfg_with_fields_r.count >> 1, p.addr_width )
+  //         elif s.is_peak_mode_cfg_r:
+  //           s.cfg_count <<= PEAK_COUNT
+  //         else:
+  //           s.cfg_count <<= zext( s.cfg_with_fields_r.count, p.addr_width )
   //     else:
   //       if s.mem_req_sent:
   //         s.cfg_addr <<= s.cfg_addr + s.cfg_incr_addr
-  //         s.cfg_count <<= s.cfg_count - 1
   //       if s.mem_resp_recved:
   //         s.pending_response <<= s.pending_response - 1
+  //       if s.is_peak_mode & s.out.val & s.out.rdy:
+  //         s.cfg_count <<= s.cfg_count - 1
+  //       elif ~s.is_peak_mode & s.mem_req_sent:
+  //         s.cfg_count <<= s.cfg_count - 1
   
   always_ff @(posedge clk) begin : up_configs_regs
     if ( reset ) begin
@@ -3228,33 +3277,52 @@ module MemEngine__7bb22bb10af9a0d4
         cfg_wen <= cfg_with_fields.wen;
         cfg_incr_addr <= { { 6 { 1'b0 } }, is_cfg_incr_16 ? 8'd4 : cfg_with_fields.incr_addr };
         cfg_addr <= cfg_with_fields.base_addr;
-        cfg_count <= { { 7 { 1'b0 } }, is_cfg_incr_16 ? cfg_with_fields.count >> 1'd1 : cfg_with_fields.count };
         pending_response <= { { 7 { 1'b0 } }, is_cfg_incr_16 ? cfg_with_fields.count >> 1'd1 : cfg_with_fields.count };
         cfg_with_fields_r <= cfg_with_fields;
         tokens_per_line <= is_cfg_incr_16 ? 1'd0 : 1'd1;
+        if ( is_cfg_incr_16 ) begin
+          cfg_count <= { { 7 { 1'b0 } }, cfg_with_fields.count >> 1'd1 };
+        end
+        else if ( is_peak_mode_cfg ) begin
+          cfg_count <= 14'( __const__PEAK_COUNT_at_up_configs_regs );
+        end
+        else
+          cfg_count <= { { 7 { 1'b0 } }, cfg_with_fields.count };
       end
       else begin
         cfg_wen <= cfg_with_fields_r.wen;
         cfg_incr_addr <= { { 6 { 1'b0 } }, is_cfg_incr_16_r ? 8'd4 : cfg_with_fields_r.incr_addr };
         cfg_addr <= cfg_value[5'd13:5'd0];
-        cfg_count <= { { 7 { 1'b0 } }, is_cfg_incr_16_r ? cfg_with_fields_r.count >> 1'd1 : cfg_with_fields_r.count };
         pending_response <= { { 7 { 1'b0 } }, is_cfg_incr_16_r ? cfg_with_fields_r.count >> 1'd1 : cfg_with_fields_r.count };
         tokens_per_line <= is_cfg_incr_16_r ? 1'd0 : 1'd1;
+        if ( is_cfg_incr_16_r ) begin
+          cfg_count <= { { 7 { 1'b0 } }, cfg_with_fields_r.count >> 1'd1 };
+        end
+        else if ( is_peak_mode_cfg_r ) begin
+          cfg_count <= 14'( __const__PEAK_COUNT_at_up_configs_regs );
+        end
+        else
+          cfg_count <= { { 7 { 1'b0 } }, cfg_with_fields_r.count };
       end
     end
     else begin
       if ( mem_req_sent ) begin
         cfg_addr <= cfg_addr + cfg_incr_addr;
-        cfg_count <= cfg_count - 14'd1;
       end
       if ( mem_resp_recved ) begin
         pending_response <= pending_response - 14'd1;
+      end
+      if ( ( is_peak_mode & out__val ) & out__rdy ) begin
+        cfg_count <= cfg_count - 14'd1;
+      end
+      else if ( ( ~is_peak_mode ) & mem_req_sent ) begin
+        cfg_count <= cfg_count - 14'd1;
       end
     end
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:208
+  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:236
   // @update_ff
   // def up_l0_read_fsm():
   //   if s.reset:
@@ -3379,7 +3447,7 @@ module MemEngine__7bb22bb10af9a0d4
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:195
+  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:223
   // @update_ff
   // def up_l0_regs():
   //   if s.reset:
@@ -3409,7 +3477,7 @@ module MemEngine__7bb22bb10af9a0d4
   end
 
   // PyMTL Update Block Source
-  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:172
+  // At /work/global/pp482/test/cgra-src/src/cgra/MemEngine.py:200
   // @update_ff
   // def up_out_credit_reg():
   //   if s.reset:
@@ -21827,10 +21895,10 @@ endmodule
 
 
 // PyMTL Component HBEndpointRXAdapter Definition
-// Full name: HBEndpointRXAdapter__hb_params_<hammerblade.params.HBParams object at 0x7f1dcc7f22d0>__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, enable_debug_ports:False, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:4, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// Full name: HBEndpointRXAdapter__hb_params_<hammerblade.params.HBParams object at 0x7f8ddafc2f90>__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, enable_debug_ports:False, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:4, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
 // At /work/global/pp482/test/cgra-src/src/hammerblade/HBEndpointRXAdapter.py
 
-module HBEndpointRXAdapter__30bb6c721ed2fee2
+module HBEndpointRXAdapter__ee8220db883ac20e
 (
   input  logic [0:0] clk ,
   input  logic [6:0] my_x ,
@@ -21934,10 +22002,10 @@ endmodule
 
 
 // PyMTL Component HBEndpointTXAdapter Definition
-// Full name: HBEndpointTXAdapter__hb_params_<hammerblade.params.HBParams object at 0x7f1dcc7f22d0>__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, enable_debug_ports:False, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:4, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// Full name: HBEndpointTXAdapter__hb_params_<hammerblade.params.HBParams object at 0x7f8ddafc2f90>__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, enable_debug_ports:False, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:4, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
 // At /work/global/pp482/test/cgra-src/src/hammerblade/HBEndpointTXAdapter.py
 
-module HBEndpointTXAdapter__30bb6c721ed2fee2
+module HBEndpointTXAdapter__ee8220db883ac20e
 (
   input  logic [0:0] clk ,
   input  logic [6:0] my_x ,
@@ -21981,7 +22049,7 @@ endmodule
 
 
 // PyMTL Component HBEndpointCGRAXcel Definition
-// Full name: HBEndpointCGRAXcel__hb_params_<hammerblade.params.HBParams object at 0x7f1dcc7f22d0>__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, enable_debug_ports:False, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:4, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
+// Full name: HBEndpointCGRAXcel__hb_params_<hammerblade.params.HBParams object at 0x7f8ddafc2f90>__xcel_params_CGRAParams: base_addr_bound:16384, base_addr_register:0, base_addr_scratchpad:256, cfg_nwords:1, cfg_type:<class 'pymtl3.datatypes.bits_import.Bits32'>, data_width:32, enable_FP:True, enable_debug_ports:False, llfu_stages:4, me_cfg_type:<class 'types.MEConfigMsg_8x8'>, mul_cycles:0, ncols:8, nrows:8, nspads:4, num_remote_masters:4, pe_cfg_type:<class 'types.PEConfigMsg_8x8'>, remote_master_addr_width:28, remote_master_data_width_factor:1, rf_nregs:4, spad_data_width:32, spad_mask_size:0, spad_num_entries:1024, trace_verbosity:0
 // At /work/global/pp482/test/cgra-src/src/hammerblade/HBEndpointCGRAXcel.py
 
 module HBEndpointCGRAXcel_8x8Array_4x4KBSpads
@@ -22079,7 +22147,7 @@ module HBEndpointCGRAXcel_8x8Array_4x4KBSpads
   CgraXcelRespMsg__wen_1__addr_14__data_32 rx__xcel_master__resp__msg;
   logic [0:0] rx__xcel_master__resp__rdy;
 
-  HBEndpointRXAdapter__30bb6c721ed2fee2 rx
+  HBEndpointRXAdapter__ee8220db883ac20e rx
   (
     .clk( rx__clk ),
     .my_x( rx__my_x ),
@@ -22133,7 +22201,7 @@ module HBEndpointCGRAXcel_8x8Array_4x4KBSpads
   CgraRemoteMemRespMsg__wen_1__addr_28__data_32 tx__mem_minion__resp__msg [0:3];
   logic [0:0] tx__mem_minion__resp__rdy [0:3];
 
-  HBEndpointTXAdapter__30bb6c721ed2fee2 tx
+  HBEndpointTXAdapter__ee8220db883ac20e tx
   (
     .clk( tx__clk ),
     .my_x( tx__my_x ),

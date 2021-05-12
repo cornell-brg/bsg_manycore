@@ -233,4 +233,4 @@ VSOURCES += $(BSG_MANYCORE_DIR)/v/brg_cgra_xcel/brg_cgra_pod.v
 
 # PP: Include SRAM verilog model for RTL hard simulation
 VSOURCES += /work/global/secure/en-ec-brg-vip-gf-14nm-14lppxl-nda/hb-chip/sram/*.v
-VSOURCES += /work/global/brg/install/adk-pkgs/gf-14nm-14lppxl-nda/stdview-sc7p5t/stdcells*.v
+VSOURCES += /work/global/secure/en-ec-brg-vip-gf-14nm-14lppxl-nda/hb-chip/simple-cells/stdcells_no_delay.v

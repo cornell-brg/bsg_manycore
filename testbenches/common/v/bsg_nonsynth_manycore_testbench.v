@@ -868,7 +868,7 @@ module bsg_nonsynth_manycore_testbench
         assign ruche_link_li[E][i][j] = cs_ruche_link_sif_lo[j];
       end
 
-      brg_cgra_pod_sync #(
+      brg_cgra_pod_non_synth_sync #(
         .addr_width_p(addr_width_p)
         ,.data_width_p(data_width_p)
         ,.x_cord_width_p(x_cord_width_p)

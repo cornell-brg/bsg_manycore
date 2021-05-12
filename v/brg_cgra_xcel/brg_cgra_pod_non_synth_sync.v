@@ -1,5 +1,5 @@
 //====================================================================
-// brg_cgra_pod_sync.v
+// brg_cgra_pod_non_synth_sync.v
 // Author : Peitian Pan
 // Date   : Apr 20, 2021
 //====================================================================
@@ -7,7 +7,7 @@
 // simulation. The TB generation utility should target the interface
 // of this module.
 
-module brg_cgra_pod_sync
+module brg_cgra_pod_non_synth_sync
   import bsg_manycore_pkg::*;
   import bsg_noc_pkg::*; // {P=0, W, E, N, S}
   import bsg_tag_pkg::*;
@@ -216,11 +216,11 @@ module brg_cgra_pod_sync
   // CGRA half pod instantiation
   //-------------------------------------------------------------
 
-  logic [3:0][y_cord_width_p-1:0] c_global_y_cord_li;
-  assign c_global_y_cord_li[0] = { (pod_y_cord_width_p)'(1+pod_y_cord), (y_subcord_width_lp)'(0) };
-  assign c_global_y_cord_li[1] = { (pod_y_cord_width_p)'(1+pod_y_cord), (y_subcord_width_lp)'(1) };
-  assign c_global_y_cord_li[2] = { (pod_y_cord_width_p)'(1+pod_y_cord), (y_subcord_width_lp)'(2) };
-  assign c_global_y_cord_li[3] = { (pod_y_cord_width_p)'(1+pod_y_cord), (y_subcord_width_lp)'(3) };
+  logic [y_cord_width_p-1:0] c_global_y_cord_li;
+  assign c_global_y_cord_li = { (pod_y_cord_width_p)'(1+pod_y_cord), (y_subcord_width_lp)'(0) };
+  /* assign c_global_y_cord_li[1] = { (pod_y_cord_width_p)'(1+pod_y_cord), (y_subcord_width_lp)'(1) }; */
+  /* assign c_global_y_cord_li[2] = { (pod_y_cord_width_p)'(1+pod_y_cord), (y_subcord_width_lp)'(2) }; */
+  /* assign c_global_y_cord_li[3] = { (pod_y_cord_width_p)'(1+pod_y_cord), (y_subcord_width_lp)'(3) }; */
 
   brg_cgra_pod #(
     .addr_width_p(addr_width_p)

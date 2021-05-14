@@ -7,6 +7,7 @@ BASEJUMP_STL_DIR := $(abspath $(BSG_MANYCORE_DIR)/../basejump_stl)
 BP_TOP_DIR := $(abspath $(BSG_MANYCORE_DIR)/../black-parrot/bp_top/src)
 # PP: SDR stuff
 BIGBLADE_DIR := $(abspath $(BSG_MANYCORE_DIR)/../hb_bigblade)
+BIGBLADE_CGRA_DIR := $(abspath $(BSG_MANYCORE_DIR)/../hb_bigblade_cgra)
 
 # Sets "VCS" variable
 # include $(BSG_MANYCORE_DIR)/../bsg_cadenv/cadenv.mk

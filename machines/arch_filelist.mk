@@ -28,6 +28,7 @@ VHEADERS += $(BSG_MANYCORE_DIR)/v/bsg_manycore_pkg.v
 VHEADERS += $(BSG_MANYCORE_DIR)/v/vanilla_bean/bsg_vanilla_pkg.v
 VHEADERS += $(BSG_MANYCORE_DIR)/v/bsg_manycore_addr_pkg.v
 VHEADERS += $(BSG_MANYCORE_DIR)/imports/HardFloat/source/bsg_hardfloat_pkg.v
+VHEADERS += $(BIGBLADE_CGRA_DIR)/v/bsg_chip_pkg.v
 
 VSOURCES += $(BASEJUMP_STL_DIR)/bsg_misc/bsg_less_than.v
 VSOURCES += $(BASEJUMP_STL_DIR)/bsg_misc/bsg_reduce.v

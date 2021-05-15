@@ -16,8 +16,7 @@
 #define TILE_CORD_X_WIDTH 4
 #define TILE_CORD_Y_WIDTH 3
 
-// CGRA pod is at POD X=5,Y=(1~4?). Since we are only
-// simulating a single pod row we will use X=5,Y=1.
+// For single pod simulations CGRA pod is at POD X=2,Y=1
 #define XCEL_X_CORD ((2) << TILE_CORD_X_WIDTH | (0))
 #define XCEL_Y_CORD ((1) << TILE_CORD_Y_WIDTH | (0))
 

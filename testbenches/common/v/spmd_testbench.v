@@ -57,10 +57,14 @@ module spmd_testbench();
   // SDF GL sim. Currently we know 1500 ps works, but that number is far from
   // optimal.
   parameter cgra_xcel_clk_period_p = 1500;
+  // Tag clock
+  parameter tag_clk_period_p = 20000;
 
   bit core_clk;
   bit cgra_xcel_clk;
+  bit tag_clk;
   bit global_reset;
+  bit tag_reset;
 
   bsg_nonsynth_clock_gen #(
     .cycle_time_p(core_clk_period_p)
@@ -72,6 +76,11 @@ module spmd_testbench();
   ) cgra_xcel_clock_gen (
     .o(cgra_xcel_clk)
   );
+  bsg_nonsynth_clock_gen #(
+    .cycle_time_p(tag_clk_period_p)
+  ) tag_clock_gen (
+    .o(tag_clk)
+  );
 
   bsg_nonsynth_reset_gen #(
     .num_clocks_p(1)
@@ -80,6 +89,15 @@ module spmd_testbench();
   ) reset_gen (
     .clk_i(core_clk)
     ,.async_reset_o(global_reset)
+  );
+
+  bsg_nonsynth_reset_gen #(
+    .num_clocks_p(1)
+    ,.reset_cycles_lo_p(10)
+    ,.reset_cycles_hi_p(5)
+  ) tag_reset_gen (
+    .clk_i(tag_clk)
+    ,.async_reset_o(tag_reset)
   );
 
 
@@ -138,6 +156,8 @@ module spmd_testbench();
   ) tb (
     .clk_i(core_clk)
     ,.cgra_xcel_clk_i(cgra_xcel_clk)
+    ,.tag_clk_i(tag_clk)
+    ,.tag_reset_i(tag_reset)
     ,.reset_i(global_reset)
 
     ,.io_link_sif_i(io_link_sif_li)

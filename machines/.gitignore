@@ -14,3 +14,4 @@ stack.info.*
 */*.tr
 */bsg_tag_boot_rom.v
 */cgra_hpod_rom.v
+*/bsg_tag_sdr_reset_rom.v

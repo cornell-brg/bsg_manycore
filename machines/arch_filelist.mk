@@ -80,7 +80,9 @@ VSOURCES += $(BASEJUMP_STL_DIR)/bsg_misc/bsg_array_concentrate_static.v
 VSOURCES += $(BASEJUMP_STL_DIR)/bsg_misc/bsg_unconcentrate_static.v
 VSOURCES += $(BASEJUMP_STL_DIR)/bsg_misc/bsg_mux2_gatestack.v
 
+VHEADERS += $(BASEJUMP_STL_DIR)/bsg_tag/bsg_tag_master_decentralized.v
 VHEADERS += $(BASEJUMP_STL_DIR)/bsg_tag/bsg_tag_client.v
+VHEADERS += $(BASEJUMP_STL_DIR)/bsg_tag/bsg_tag_client_unsync.v
 
 # PP: use hard IPs instead
 # VSOURCES += $(BASEJUMP_STL_DIR)/bsg_async/bsg_launch_sync_sync.v

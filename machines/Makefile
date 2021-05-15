@@ -98,32 +98,32 @@ define set_machine_variables
 endef
 
 # boot tag rom gen
-CGRA_HPOD_TRACE_GEN_PY = $(BSG_MANYCORE_DIR)/testbenches/py/cgra_hpod_trace_gen.py
+SDR_RESET_TRACE_GEN_PY = $(BSG_MANYCORE_DIR)/testbenches/py/sdr_reset_trace_gen.py
 POD_TRACE_GEN_PY = $(BSG_MANYCORE_DIR)/testbenches/py/pod_trace_gen.py
 ASCII_TO_ROM_PY = $(BASEJUMP_STL_DIR)/bsg_mem/bsg_ascii_to_rom.py 
 # build simv
 # without debug option for faster simulation.
 %/simv : %/Makefile.machine.include $(VSOURCES) $(CSOURCES) $(VINCLUDES) $(VHEADERS)
 	$(call set_machine_variables,$<)
-	python3 $(CGRA_HPOD_TRACE_GEN_PY) $(BSG_MACHINE_PODS_X) $(BSG_MACHINE_PODS_Y) > $*/cgra_hpod_trace.tr
-	python2 $(ASCII_TO_ROM_PY) $*/cgra_hpod_trace.tr cgra_hpod_rom > $*/cgra_hpod_rom.v
+	python3 $(SDR_RESET_TRACE_GEN_PY) > $*/sdr_reset_trace.tr
+	python2 $(ASCII_TO_ROM_PY) $*/sdr_reset_trace.tr bsg_tag_sdr_reset_rom > $*/bsg_tag_sdr_reset_rom.v
 	python3 $(POD_TRACE_GEN_PY) $(BSG_MACHINE_PODS_X) $(BSG_MACHINE_PODS_Y) > $*/pod_trace.tr
 	python2 $(ASCII_TO_ROM_PY) $*/pod_trace.tr bsg_tag_boot_rom > $*/bsg_tag_boot_rom.v
 	$(VCS) $(VCS_FLAGS) $(VCS_CFLAGS) -o $@ \
-		$(VCS_INCLUDES) $(VCS_DEFINES) $(CSOURCES) $(VCS_SOURCES) $*/bsg_tag_boot_rom.v $*/cgra_hpod_rom.v \
+		$(VCS_INCLUDES) $(VCS_DEFINES) $(CSOURCES) $(VCS_SOURCES) $*/bsg_tag_boot_rom.v $*/bsg_tag_sdr_reset_rom.v \
 		-l $*/build.log -Mdir=$*/csrc
 
 # build simv-debug
 # with debug option for waveform generation.
 %/simv-debug : %/Makefile.machine.include $(VSOURCES) $(CSOURCES) $(VINCLUDES) $(VHEADERS) 
 	$(call set_machine_variables,$<)
-	python3 $(CGRA_HPOD_TRACE_GEN_PY) $(BSG_MACHINE_PODS_X) $(BSG_MACHINE_PODS_Y) > $*/cgra_hpod_trace.tr
-	python2 $(ASCII_TO_ROM_PY) $*/cgra_hpod_trace.tr cgra_hpod_rom > $*/cgra_hpod_rom.v
+	python3 $(SDR_RESET_TRACE_GEN_PY) > $*/sdr_reset_trace.tr
+	python2 $(ASCII_TO_ROM_PY) $*/sdr_reset_trace.tr bsg_tag_sdr_reset_rom > $*/bsg_tag_sdr_reset_rom.v
 	python3 $(POD_TRACE_GEN_PY) $(BSG_MACHINE_PODS_X) $(BSG_MACHINE_PODS_Y) > $*/pod_trace.tr
 	python2 $(ASCII_TO_ROM_PY) $*/pod_trace.tr bsg_tag_boot_rom > $*/bsg_tag_boot_rom.v
 	$(eval VCS_FLAGS += -debug_pp +vcs+vcdpluson) # Debug adds these two variables to generate waveforms
 	$(VCS) $(VCS_FLAGS) $(VCS_CFLAGS) -o $@ \
-		$(VCS_INCLUDES) $(VCS_DEFINES) $(CSOURCES) $(VCS_SOURCES) $*/bsg_tag_boot_rom.v $*/cgra_hpod_rom.v \
+		$(VCS_INCLUDES) $(VCS_DEFINES) $(CSOURCES) $(VCS_SOURCES) $*/bsg_tag_boot_rom.v $*/bsg_tag_sdr_reset_rom.v \
 		-l $*/build-debug.log -Mdir=$*/csrc-debug
 
 # building simv-profile
@@ -144,4 +144,4 @@ clean:
 	rm -rf */*.log */*.daidir */simv */simv-debug */simv-profile
 	rm -rf stack.info.*
 	rm -f */vc_hdrs.h
-	rm -f */*.tr */bsg_tag_boot_rom.v */cgra_hpod_rom.v
+	rm -f */*.tr */bsg_tag_boot_rom.v */bsg_tag_sdr_reset_rom.v

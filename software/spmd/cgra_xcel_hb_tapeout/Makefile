@@ -7,7 +7,6 @@ all: main.run
 # PP: you can override this by appending CGRA_TSET=vvadd_8x8 etc. to
 # your make command
 CGRA_TEST ?= vvadd_8x8
-MAX_CYCLES=200000
 
 RISCV_GCC_EXTRA_OPTS ?= -DTEST_SEL=$(CGRA_TEST)
 # VPD_FILENAME ?= $(CGRA_TEST).vpd

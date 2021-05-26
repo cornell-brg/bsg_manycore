@@ -7,6 +7,7 @@ VINCLUDES += $(BASEJUMP_STL_DIR)/bsg_cache
 VINCLUDES += $(BASEJUMP_STL_DIR)/bsg_noc
 VINCLUDES += $(BASEJUMP_STL_DIR)/bsg_tag
 # PP: SDR
+VINCLUDES += $(BASEJUMP_STL_DIR)/hard/gf_14/bsg_link
 VINCLUDES += $(BASEJUMP_STL_DIR)/bsg_link
 VINCLUDES += $(BIGBLADE_DIR)/common/sdr/sdr_horizontal/v
 VINCLUDES += $(BSG_MANYCORE_DIR)/v
@@ -27,6 +28,7 @@ VHEADERS += $(BSG_MANYCORE_DIR)/v/bsg_manycore_pkg.v
 VHEADERS += $(BSG_MANYCORE_DIR)/v/vanilla_bean/bsg_vanilla_pkg.v
 VHEADERS += $(BSG_MANYCORE_DIR)/v/bsg_manycore_addr_pkg.v
 VHEADERS += $(BSG_MANYCORE_DIR)/imports/HardFloat/source/bsg_hardfloat_pkg.v
+VHEADERS += $(BIGBLADE_CGRA_DIR)/v/bsg_chip_pkg.v
 
 VSOURCES += $(BASEJUMP_STL_DIR)/bsg_misc/bsg_less_than.v
 VSOURCES += $(BASEJUMP_STL_DIR)/bsg_misc/bsg_reduce.v
@@ -78,8 +80,15 @@ VSOURCES += $(BASEJUMP_STL_DIR)/bsg_misc/bsg_array_concentrate_static.v
 VSOURCES += $(BASEJUMP_STL_DIR)/bsg_misc/bsg_unconcentrate_static.v
 VSOURCES += $(BASEJUMP_STL_DIR)/bsg_misc/bsg_mux2_gatestack.v
 
-
+VHEADERS += $(BASEJUMP_STL_DIR)/bsg_tag/bsg_tag_master_decentralized.v
 VHEADERS += $(BASEJUMP_STL_DIR)/bsg_tag/bsg_tag_client.v
+VHEADERS += $(BASEJUMP_STL_DIR)/bsg_tag/bsg_tag_client_unsync.v
+
+# PP: use hard IPs instead
+# VSOURCES += $(BASEJUMP_STL_DIR)/bsg_async/bsg_launch_sync_sync.v
+# VSOURCES += $(BASEJUMP_STL_DIR)/bsg_async/bsg_sync_sync.v
+VSOURCES += $(BASEJUMP_STL_DIR)/hard/gf_14/bsg_async/bsg_sync_sync.v
+VSOURCES += $(BASEJUMP_STL_DIR)/hard/gf_14/bsg_async/bsg_launch_sync_sync.v
 
 VSOURCES += $(BASEJUMP_STL_DIR)/bsg_dataflow/bsg_fifo_1r1w_large.v
 VSOURCES += $(BASEJUMP_STL_DIR)/bsg_dataflow/bsg_fifo_1rw_large.v
@@ -121,8 +130,6 @@ VSOURCES += $(BASEJUMP_STL_DIR)/bsg_noc/bsg_wormhole_concentrator.v
 VSOURCES += $(BASEJUMP_STL_DIR)/bsg_noc/bsg_wormhole_concentrator_in.v
 VSOURCES += $(BASEJUMP_STL_DIR)/bsg_noc/bsg_wormhole_concentrator_out.v
 
-VSOURCES += $(BASEJUMP_STL_DIR)/bsg_async/bsg_launch_sync_sync.v
-VSOURCES += $(BASEJUMP_STL_DIR)/bsg_async/bsg_sync_sync.v
 VSOURCES += $(BASEJUMP_STL_DIR)/bsg_async/bsg_async_fifo.v
 VSOURCES += $(BASEJUMP_STL_DIR)/bsg_async/bsg_async_ptr_gray.v
 
@@ -212,11 +219,15 @@ VSOURCES += $(BASEJUMP_STL_DIR)/bsg_dataflow/bsg_1_to_n_tagged.v
 VSOURCES += $(BASEJUMP_STL_DIR)/bsg_dataflow/bsg_fifo_1r1w_pseudo_large.v
 # VSOURCES += $(BASEJUMP_STL_DIR)/bsg_dataflow/bsg_serial_in_parallel_out_full.v
 VSOURCES += $(BASEJUMP_STL_DIR)/bsg_fsb/bsg_fsb_pkg.v
-VSOURCES += $(BASEJUMP_STL_DIR)/bsg_link/bsg_link_sdr.v
+
+# PP: use hard IPs instead
+# VSOURCES += $(BASEJUMP_STL_DIR)/bsg_link/bsg_link_isdr_phy.v
+# VSOURCES += $(BASEJUMP_STL_DIR)/bsg_link/bsg_link_osdr_phy.v
+VSOURCES += $(BASEJUMP_STL_DIR)/hard/gf_14/bsg_link/bsg_link_isdr_phy.v
+VSOURCES += $(BASEJUMP_STL_DIR)/hard/gf_14/bsg_link/bsg_link_osdr_phy.v
 VSOURCES += $(BASEJUMP_STL_DIR)/bsg_link/bsg_link_sdr_downstream.v
 VSOURCES += $(BASEJUMP_STL_DIR)/bsg_link/bsg_link_sdr_upstream.v
-VSOURCES += $(BASEJUMP_STL_DIR)/bsg_link/bsg_link_isdr_phy.v
-VSOURCES += $(BASEJUMP_STL_DIR)/bsg_link/bsg_link_osdr_phy.v
+VSOURCES += $(BASEJUMP_STL_DIR)/bsg_link/bsg_link_sdr.v
 VSOURCES += $(BASEJUMP_STL_DIR)/bsg_link/bsg_link_osdr_phy_phase_align.v
 VSOURCES += $(BASEJUMP_STL_DIR)/bsg_link/bsg_link_source_sync_downstream.v
 VSOURCES += $(BASEJUMP_STL_DIR)/bsg_link/bsg_link_source_sync_upstream_sync.v
@@ -227,10 +238,9 @@ VSOURCES += $(BSG_MANYCORE_DIR)/v/bsg_manycore_hor_io_router.v
 VSOURCES += $(BSG_MANYCORE_DIR)/v/bsg_manycore_hor_io_router_column.v
 
 # PP: CGRAXcel sources
-VSOURCES += $(BSG_MANYCORE_DIR)/v/brg_cgra_xcel/HBEndpointCGRAXcel_8x8Array_4x4KBSpads__pickled.v
-VSOURCES += $(BSG_MANYCORE_DIR)/v/brg_cgra_xcel/brg_8x8_cgra_xcel.v
-VSOURCES += $(BSG_MANYCORE_DIR)/v/brg_cgra_xcel/brg_cgra_pod_sync.v
-VSOURCES += $(BSG_MANYCORE_DIR)/v/brg_cgra_xcel/brg_cgra_pod.v
+VSOURCES += $(BIGBLADE_CGRA_DIR)/v/HBEndpointCGRAXcel_8x8Array_4x4KBSpads__pickled.v
+VSOURCES += $(BIGBLADE_CGRA_DIR)/v/brg_8x8_cgra_xcel.v
+VSOURCES += $(BIGBLADE_CGRA_DIR)/v/brg_cgra_pod.v
 
 # PP: Include SRAM verilog model for RTL hard simulation
 VSOURCES += /work/global/secure/en-ec-brg-vip-gf-14nm-14lppxl-nda/hb-chip/sram/*.v

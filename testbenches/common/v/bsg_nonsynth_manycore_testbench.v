@@ -5,6 +5,7 @@
 
 
 module bsg_nonsynth_manycore_testbench
+  import bsg_chip_pkg::*;
   import bsg_noc_pkg::*; // {P=0, W, E, N, S}
   import bsg_tag_pkg::*;
   import bsg_manycore_pkg::*;
@@ -79,6 +80,8 @@ module bsg_nonsynth_manycore_testbench
     input clk_i
     , input cgra_xcel_clk_i
     , input reset_i
+    , input tag_clk_i
+    , input tag_reset_i
 
     , output tag_done_o
     
@@ -109,35 +112,7 @@ module bsg_nonsynth_manycore_testbench
     $display("[INFO][TESTBENCH] enable_cache_profiling_p             = %d", enable_cache_profiling_p);
   end
 
-  logic async_uplink_reset, async_downlink_reset, async_downstream_reset, async_token_reset;
-  logic reset_done;
-  initial
-    begin
-      @(negedge reset_i);
-
-      $display("[INFO][SDR-Reset] Start SDR reset sequence at time ", $stime);
-
-      async_uplink_reset     = 1'b1;
-      async_downlink_reset   = 1'b1;
-      async_downstream_reset = 1'b1;
-      async_token_reset      = 1'b0;
-      reset_done             = 1'b0;
-
-      #100000;
-      async_token_reset = 1'b1;
-      #100000;
-      async_token_reset = 1'b0;
-      #100000;
-      async_uplink_reset = 1'b0;
-      #100000;
-      async_downlink_reset = 1'b0;
-      #100000;
-      async_downstream_reset = 1'b0;
-      #100000;
-      reset_done = 1'b1;
-
-      $display("[INFO][SDR-Reset] SDR reset sequence finished at time ", $stime);
-    end
+  logic sdr_reset_done;
 
   // BSG TAG MASTER
   logic tag_done_lo;
@@ -150,17 +125,72 @@ module bsg_nonsynth_manycore_testbench
   ) mtm (
     .clk_i(clk_i)
     // PP: only start tag programming after SDR reset has finished
-    ,.reset_i(reset_i | ~reset_done)
+    ,.reset_i(reset_i | ~sdr_reset_done)
     
     ,.tag_done_o(tag_done_lo)
     ,.pod_tags_o(pod_tags_lo)
   );   
-  
-  assign tag_done_o = tag_done_lo;
 
   //---------------------------------------------------------------------
-  // BSG tag master for the CGRA half pod
+  // BSG trace replay to reset SDR links
   //---------------------------------------------------------------------
+
+  localparam tag_trace_rom_addr_width_lp = 32;
+  localparam tag_trace_rom_data_width_lp = 4+tag_num_masters_gp+tag_lg_els_gp+1+tag_lg_width_gp+tag_max_payload_width_gp;
+
+  logic [tag_trace_rom_addr_width_lp-1:0] rom_addr_li;
+  logic [tag_trace_rom_data_width_lp-1:0] rom_data_lo;
+
+  logic                          tag_trace_valid_lo;
+  logic [tag_num_masters_gp-1:0] tag_trace_en_r_lo;
+  logic                          tag_trace_done_lo;
+
+  logic p_tag_data_lo;
+
+  // TAG TRACE ROM
+  bsg_tag_sdr_reset_rom #(
+    .width_p( tag_trace_rom_data_width_lp )
+    ,.addr_width_p( tag_trace_rom_addr_width_lp )
+  ) tag_sdr_reset_trace_rom (
+    .addr_i( rom_addr_li )
+    ,.data_o( rom_data_lo )
+  );
+
+  // TAG TRACE REPLAY
+  bsg_tag_trace_replay #(
+    .rom_addr_width_p   ( tag_trace_rom_addr_width_lp )
+    ,.rom_data_width_p   ( tag_trace_rom_data_width_lp )
+    ,.num_masters_p      ( tag_num_masters_gp )
+    ,.num_clients_p      ( tag_els_gp )
+    ,.max_payload_width_p( tag_max_payload_width_gp )
+  ) tag_sdr_reset_trace_replay (
+    .clk_i   ( tag_clk_i )
+    ,.reset_i ( tag_reset_i    )
+    ,.en_i    ( 1'b1            )
+
+    ,.rom_addr_o( rom_addr_li )
+    ,.rom_data_i( rom_data_lo )
+
+    ,.valid_i ( 1'b0 )
+    ,.data_i  ( '0 )
+    ,.ready_o ()
+
+    ,.valid_o    ( tag_trace_valid_lo )
+    ,.en_r_o     ( tag_trace_en_r_lo )
+    ,.tag_data_o ( p_tag_data_lo )
+    ,.yumi_i     ( tag_trace_valid_lo )
+
+    ,.done_o  ( tag_trace_done_lo )
+    ,.error_o ()
+  ) ;
+
+  logic sdr_reset_tag_data;
+  logic [tag_lg_els_gp-1:0] sdr_reset_tag_node_id_offset;
+  assign sdr_reset_tag_data = tag_trace_en_r_lo[1] & tag_trace_valid_lo & p_tag_data_lo;
+  assign sdr_reset_tag_node_id_offset = '0;
+  
+  assign tag_done_o = tag_done_lo & tag_trace_done_lo;
+  assign sdr_reset_done = tag_trace_done_lo;
 
   // localparam cgra_tag_num_clients_lp = 4;
   // localparam cgra_tag_payload_width_lp = y_cord_width_p;
@@ -223,7 +253,7 @@ module bsg_nonsynth_manycore_testbench
 
   //---------------------------------------------------------------------
   // deassert reset when tag programming is done.
-  wire reset = ~tag_done_lo;
+  wire reset = ~tag_done_o;
   logic reset_r;
   bsg_dff_chain #(
     .width_p(1)
@@ -868,27 +898,16 @@ module bsg_nonsynth_manycore_testbench
         assign ruche_link_li[E][i][j] = cs_ruche_link_sif_lo[j];
       end
 
-      brg_cgra_pod_sync #(
-        .addr_width_p(addr_width_p)
-        ,.data_width_p(data_width_p)
-        ,.x_cord_width_p(x_cord_width_p)
-        ,.y_cord_width_p(y_cord_width_p)
-        ,.max_out_credits_p(32)
-        ,.pod_y_cord(i)
-        ,.ruche_factor_X_p(ruche_factor_X_p)
-        ,.num_pods_x_p(num_pods_x_p)
-        ,.num_tiles_x_p(num_tiles_x_p)
-        ,.num_tiles_y_p(num_tiles_y_p)
-        ,.pod_x_cord_width_p(pod_x_cord_width_p)
-        ,.pod_y_cord_width_p(pod_y_cord_width_p)
+      brg_cgra_pod_non_synth_sync #(
+        .pod_y_cord(i)
       ) cgra_pod_sync (
         .clk_i                     (clk_i)
         ,.cgra_xcel_clk_i          (cgra_xcel_clk_i)
         ,.reset_i                  (reset_r)
-        ,.async_uplink_reset_i     (async_uplink_reset)
-        ,.async_downlink_reset_i   (async_downlink_reset)
-        ,.async_downstream_reset_i (async_downstream_reset)
-        ,.async_token_reset_i      (async_token_reset)
+
+        ,.tag_clk_i(tag_clk_i)
+        ,.tag_data_i(sdr_reset_tag_data)
+        ,.tag_node_id_offset_i(sdr_reset_tag_node_id_offset)
 
         ,.hor_link_sif_i   (cs_hor_link_sif_li)
         ,.hor_link_sif_o   (cs_hor_link_sif_lo)

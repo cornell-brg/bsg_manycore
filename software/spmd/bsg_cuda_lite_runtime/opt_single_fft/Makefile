@@ -24,6 +24,8 @@ KERNEL_NAME ?=kernel_opt_single_fft
 
 OBJECT_FILES=main.o kernel_opt_single_fft.o
 
+INCS += -I..
+
 include ../../Makefile.include
 
 

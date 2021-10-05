@@ -69,10 +69,6 @@ fft() {
         }
         n = n * 2;
     }
-
-    for (int i = 0; i < NUM_POINTS; i++) {
-        output[i] = fft_workset[i];
-    }
 }
 
 extern "C" __attribute__ ((noinline))
@@ -103,6 +99,12 @@ kernel_unopt_single_fft(FP32Complex *in, FP32Complex *out, int N) {
         bsg_cuda_print_stat_start(2);
         fft();
         bsg_cuda_print_stat_end(2);
+
+        bsg_cuda_print_stat_start(3);
+        for (int i = 0; i < NUM_POINTS; i++) {
+            output[i] = fft_workset[i];
+        }
+        bsg_cuda_print_stat_end(3);
 
         bsg_cuda_print_stat_kernel_end();
         /* bsg_printf("\nResults:\n"); */

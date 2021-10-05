@@ -18,9 +18,9 @@
 all: main.run
 
 
-KERNEL_NAME ?=kernel_unopt_single_fft
+KERNEL_NAME ?=kernel_opt_single_fft
 
-OBJECT_FILES=main.o kernel_unopt_single_fft.o
+OBJECT_FILES=main.o kernel_opt_single_fft.o
 
 include ../../Makefile.include
 

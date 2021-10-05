@@ -14,6 +14,7 @@
 *******************************************************************************/
 // Return sin(-2*pi*x/NUM_POINTS) and cos(-2*pi*x/NUM_POINTS)
 
+// 65 elements = 260B
 float sinf_pi_over_2[(NUM_POINTS>>2)+1] = {
     0.0000000000000000f,
     0.0245412285229123f,
@@ -114,7 +115,6 @@ opt_fft_cosf(int x) {
 /* End of sinf and cosf implementation */
 
 typedef std::complex<float> FP32Complex;
-typedef volatile FP32Complex *bsg_remote_complex_ptr;
 
 FP32Complex *input;
 FP32Complex *output;
@@ -133,7 +133,7 @@ FP32Complex fft_workset[NUM_POINTS];
 inline void
 opt_data_transfer(FP32Complex *dst, const FP32Complex *src, const int N) {
     int i = 0;
-    for (; i < N-4; i += 4) {
+    for (; i < N-3; i += 4) {
         register FP32Complex tmp0 = src[i    ];
         register FP32Complex tmp1 = src[i + 1];
         register FP32Complex tmp2 = src[i + 2];

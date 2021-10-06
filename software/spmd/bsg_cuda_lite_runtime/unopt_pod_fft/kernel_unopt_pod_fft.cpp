@@ -84,13 +84,28 @@ fft() {
 
 extern "C" __attribute__ ((noinline))
 int
-kernel_unopt_pod_fft(FP32Complex *in, FP32Complex *out, int N, int block_size_x) {
+kernel_unopt_pod_fft(FP32Complex *in, FP32Complex *out, int N) {
     bsg_cuda_print_stat_kernel_start();
-    input = in;
-    output = out;
+    input = in+(__bsg_id*NUM_POINTS);
+    output = out+(__bsg_id*NUM_POINTS);
+
+    bsg_cuda_print_stat_start(1);
     fft_swizzle(0, 1);
+    bsg_cuda_print_stat_end(1);
+
+    bsg_cuda_print_stat_start(2);
     fft();
+    bsg_cuda_print_stat_end(2);
+
+    bsg_cuda_print_stat_start(3);
+    for (int i = 0; i < NUM_POINTS; i++) {
+        output[i] = fft_workset[i];
+    }
+    bsg_cuda_print_stat_end(3);
+
     bsg_cuda_print_stat_kernel_end();
+
     bsg_tile_group_barrier(&r_barrier, &c_barrier);
+
     return 0;
 }

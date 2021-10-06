@@ -105,7 +105,7 @@ opt_fft_cosf(int x) {
     }
     else if (x >= No2) {
         bsg_fail();
-        return 0.0;
+        return 0.0f;
     } else {
         return sinf_pi_over_2[No4-x];
     }

@@ -136,11 +136,50 @@ opt_data_transfer(FP32Complex *dst, const FP32Complex *src, const int N) {
         dst[i + 1] = tmp1;
         dst[i + 2] = tmp2;
         dst[i + 3] = tmp3;
-
     }
     // fixup
     for (; i < N; i++)
         dst[i] = src[i];
+}
+
+inline void
+opt_data_transfer_src_strided(FP32Complex *dst, const FP32Complex *src, const int stride, const int N) {
+    int i = 0, strided_i = 0;
+    for (; i < N-3; i += 4, strided_i += 4*stride) {
+        register FP32Complex tmp0 = src[strided_i           ];
+        register FP32Complex tmp1 = src[strided_i + stride  ];
+        register FP32Complex tmp2 = src[strided_i + stride*2];
+        register FP32Complex tmp3 = src[strided_i + stride*3];
+        asm volatile("": : :"memory");
+        dst[i    ] = tmp0;
+        dst[i + 1] = tmp1;
+        dst[i + 2] = tmp2;
+        dst[i + 3] = tmp3;
+    }
+    // fixup
+    for (; i < N; i++, strided_i += stride) {
+        dst[i] = src[strided_i];
+    }
+}
+
+inline void
+opt_data_transfer_dst_strided(FP32Complex *dst, const FP32Complex *src, const int stride, const int N) {
+    int i = 0, strided_i = 0;
+    for (; i < N-3; i += 4, strided_i += 4*stride) {
+        register FP32Complex tmp0 = src[i    ];
+        register FP32Complex tmp1 = src[i + 1];
+        register FP32Complex tmp2 = src[i + 2];
+        register FP32Complex tmp3 = src[i + 3];
+        asm volatile("": : :"memory");
+        dst[strided_i              ] = tmp0;
+        dst[strided_i + strided_i  ] = tmp1;
+        dst[strided_i + strided_i*2] = tmp2;
+        dst[strided_i + strided_i*3] = tmp3;
+    }
+    // fixup
+    for (; i < N; i++, strided_i += stride) {
+        dst[strided_i] = src[i];
+    }
 }
 
 inline void
@@ -188,4 +227,54 @@ fft_256(FP32Complex *list) {
         n = n * 2;
         lshift--;
     }
+}
+
+/*******************************************************************************
+ * Four-step method utilities
+*******************************************************************************/
+
+inline void
+load_fft_store(FP32Complex *lst,
+               FP32Complex *out,
+               FP32Complex *local_lst,
+               int start,
+               int stride,
+               int local_point,
+               int total_point,
+               int scaling)
+{
+    // Strided load into DMEM
+    opt_data_transfer_src_strided(local_lst, lst+start, stride, local_point);
+
+    // 256-point FFT
+    fft_256(local_lst);
+
+    // Optional twiddle scaling
+    // TODO: eliminate all remote loads due to newlib sinf/cosf
+    if (scaling) {
+        for (int c = 0; c < local_point; c++) {
+            FP32Complex w;
+            float ref_sinf = sinf(-2.0f*3.1415926535f*float(start*c)/float(total_point));
+            float ref_cosf = cosf(-2.0f*3.1415926535f*float(start*c)/float(total_point));
+            w = FP32Complex(ref_cosf, ref_sinf);
+            local_lst[c] = w*local_lst[c];
+        }
+    }
+
+    // Strided store into DRAM
+    opt_data_transfer_dst_strided(out+start, local_lst, stride, local_point);
+}
+
+// Unoptimized vector transposition: simply do remote loads and stores
+// NOTE: this in-place algorithm is trivial because lst is a square matrix.
+// In-place transposition for non-square matrices is possible but non-trivial.
+inline void
+square_transpose(FP32Complex *lst, int size) {
+    FP32Complex tmp;
+    for (int i = 0; i < size; i++)
+        for (int j = i+1; j < size; j++) {
+            tmp = lst[i+j*size];
+            lst[i+j*size] = lst[j+i*size];
+            lst[j+i*size] = tmp;
+        }
 }

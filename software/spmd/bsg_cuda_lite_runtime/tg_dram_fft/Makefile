@@ -11,8 +11,8 @@
 	bsg_tiles_org_Y ?= 1
 
 # If not configured, Will use default Values
-	bsg_tiles_X ?= 1
-	bsg_tiles_Y ?= 1
+	bsg_tiles_X ?= 16
+	bsg_tiles_Y ?= 8
 
 IGNORE_CADENV=1
 
@@ -20,9 +20,9 @@ IGNORE_CADENV=1
 all: main.run
 
 
-KERNEL_NAME ?=kernel_opt_single_fft
+KERNEL_NAME ?=kernel_tg_dram_fft
 
-OBJECT_FILES=main.o kernel_opt_single_fft.o
+OBJECT_FILES=main.o kernel_tg_dram_fft.o
 
 INCS += -I..
 

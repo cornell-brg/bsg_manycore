@@ -20,7 +20,7 @@ FP32Complex fft_workset[NUM_POINTS];
 
 extern "C" __attribute__ ((noinline))
 int
-kernel_tg_dram_fft(FP32Complex *in, FP32Complex *out, int N) {
+kernel_fft_256x256_parallel_trans(FP32Complex *in, FP32Complex *out, int N) {
     /* bsg_set_tile_x_y(); */
 
     bsg_cuda_print_stat_kernel_start();
@@ -35,9 +35,7 @@ kernel_tg_dram_fft(FP32Complex *in, FP32Complex *out, int N) {
     tg_barrier.sync();
 
     bsg_cuda_print_stat_start(2);
-    if (__bsg_id == 0) {
-        square_transpose(in, 256);
-    }
+    opt_square_transpose(in, 256);
     bsg_cuda_print_stat_end(2);
 
     asm volatile("": : :"memory");

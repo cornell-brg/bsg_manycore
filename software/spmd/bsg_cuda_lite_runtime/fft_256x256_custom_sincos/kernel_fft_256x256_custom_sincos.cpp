@@ -12,6 +12,7 @@
 // this dependency.
 #include <cmath>
 
+#define CUSTOM_SINCOS (1)
 #include "common_fft/common_fft.hpp"
 
 bsg_barrier<bsg_tiles_X, bsg_tiles_Y> tg_barrier;
@@ -20,7 +21,7 @@ FP32Complex fft_workset[NUM_POINTS];
 
 extern "C" __attribute__ ((noinline))
 int
-kernel_tg_dram_fft(FP32Complex *in, FP32Complex *out, int N) {
+kernel_fft_256x256_custom_sincos(FP32Complex *in, FP32Complex *out, int N) {
     /* bsg_set_tile_x_y(); */
 
     bsg_cuda_print_stat_kernel_start();

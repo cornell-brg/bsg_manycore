@@ -9,6 +9,7 @@
 typedef std::complex<float> FP32Complex;
 
 float minus_2pi = -6.283185307f;
+float zerof     = 0.0f;
 
 /*******************************************************************************
  * Efficient sinf and cosf implementation
@@ -107,7 +108,6 @@ opt_fft_cosf(int x) {
     }
     else if (x >= No2) {
         bsg_fail();
-        return 0.0f;
     } else {
         return sinf_pi_over_2[No4-x];
     }
@@ -258,6 +258,14 @@ fft_256(FP32Complex *list) {
    to the interval [-PI/4, +PI/4] and also returns the quadrant. It returns 
    -0.0f for an input of -0.0f 
 */
+
+// Force constants into DMEM to reduce remote DRAM loads
+float trig_red_F0    = 6.36619747e-1f;
+float trig_red_F1    = 1.57078552e+00f;
+float trig_red_F2    = 1.08043314e-05f;
+float trig_red_F3    = 2.56334407e-12f;
+float trig_red_DELTA = 1.25829120e+7f;
+
 // PP: calculation of j should NOT be optimized and therefore we declare
 // an optimization flag -O0 for this function. There is not much to optimize
 // anyway.
@@ -274,10 +282,10 @@ trig_red_f (float a, int *q)
     /* r = a - j * 0x1.921f00p+00f; // 1.57078552e+00 // pio2_high */
     /* r = r - j * 0x1.6a8880p-17f; // 1.08043314e-05 // pio2_mid */
     /* r = r - j * 0x1.68c234p-39f; // 2.56334407e-12 // pio2_low */
-    j = (a * 6.36619747e-1f + 1.25829120e+7f) - 1.25829120e+7f; // 6.36619747e-1, 1.25829120e+7
-    r = a - j * 1.57078552e+00f; // 1.57078552e+00 // pio2_high
-    r = r - j * 1.08043314e-05f; // 1.08043314e-05 // pio2_mid
-    r = r - j * 2.56334407e-12f; // 2.56334407e-12 // pio2_low
+    j = (a * trig_red_F0 + trig_red_DELTA) - trig_red_DELTA; // 6.36619747e-1, 1.25829120e+7
+    r = a - j * trig_red_F1; // 1.57078552e+00 // pio2_high
+    r = r - j * trig_red_F2; // 1.08043314e-05 // pio2_mid
+    r = r - j * trig_red_F3; // 2.56334407e-12 // pio2_low
     *q = (int)j;
 
     return r;
@@ -289,6 +297,13 @@ trig_red_f (float a, int *q)
    Horner form approximations to special functions in finite precision
    arithmetic", http://arxiv.org/abs/1508.03211, retrieved on 8/29/2016
 */
+
+// Force constants into DMEM to reduce remote DRAM loads
+float sinf_F0 =  2.86567956e-6f;
+float sinf_F1 = -1.98559923e-4f;
+float sinf_F2 =  8.33338592e-3f;
+float sinf_F3 = -1.66666672e-1f;
+
 inline float
 sinf_poly (float a, float s)
 {
@@ -297,16 +312,24 @@ sinf_poly (float a, float s)
     /* r = r * s - 0x1.a0690cp-13f; // -1.98559923e-4 */
     /* r = r * s + 0x1.111182p-07f; //  8.33338592e-3 */
     /* r = r * s - 0x1.555556p-03f; // -1.66666672e-1 */
-    r =         2.86567956e-6f; //  2.86567956e-6
-    r = r * s - 1.98559923e-4f; // -1.98559923e-4
-    r = r * s + 8.33338592e-3f; //  8.33338592e-3
-    r = r * s - 1.66666672e-1f; // -1.66666672e-1
-    t = a * s + 0.0f; // ensure -0 is passed through
+    r =         sinf_F0; //  2.86567956e-6
+    r = r * s + sinf_F1; // -1.98559923e-4
+    r = r * s + sinf_F2; //  8.33338592e-3
+    r = r * s + sinf_F3; // -1.66666672e-1
+    t = a * s + zerof; // ensure -0 is passed through
     r = r * t + a;
     return r;
 }
 
 /* Approximate cosine on [-PI/4,+PI/4]. Maximum ulp error with USE_FMA = 0.87444 */
+
+// Force constants into DMEM to reduce remote DRAM loads
+float cosf_F0 =  2.44677067e-5f;
+float cosf_F1 = -1.38877297e-3f;
+float cosf_F2 =  4.16666567e-2f;
+float cosf_F3 = -5.00000000e-1f;
+float cosf_F4 =  1.00000000e+0f;
+
 inline float
 cosf_poly (float s)
 {
@@ -316,11 +339,11 @@ cosf_poly (float s)
     /* r = r * s + 0x1.555550p-05f; //  4.16666567e-2 */
     /* r = r * s - 0x1.000000p-01f; // -5.00000000e-1 */
     /* r = r * s + 0x1.000000p+00f; //  1.00000000e+0 */
-    r =         2.44677067e-5f; //  2.44677067e-5
-    r = r * s - 1.38877297e-3f; // -1.38877297e-3
-    r = r * s + 4.16666567e-2f; //  4.16666567e-2
-    r = r * s - 5.00000000e-1f; // -5.00000000e-1
-    r = r * s + 1.00000000e+0f; //  1.00000000e+0
+    r =         cosf_F0; //  2.44677067e-5
+    r = r * s + cosf_F1; // -1.38877297e-3
+    r = r * s + cosf_F2; //  4.16666567e-2
+    r = r * s + cosf_F3; // -5.00000000e-1
+    r = r * s + cosf_F4; //  1.00000000e+0
     return r;
 }
 
@@ -333,7 +356,7 @@ sinf_cosf_core (float a, int i)
     s = a * a;
     r = (i & 1) ? cosf_poly (s) : sinf_poly (a, s);
     if (i & 2) {
-        r = 0.0f - r; // don't change "sign" of NaNs
+        r = zerof - r; // don't change "sign" of NaNs
     }
     return r;
 }
@@ -344,7 +367,7 @@ float my_sinf (float a)
     float r, p;
     int i;
 
-    a = a * 0.0f + a; // inf -> NaN
+    /* a = a * zerof + a; // inf -> NaN */
     r = trig_red_f (a, &i);
     p = sinf_cosf_core (r, i);
     /* if (__bsg_id == 1) { */
@@ -360,7 +383,7 @@ float my_cosf (float a)
     float r, p;
     int i;
 
-    a = a * 0.0f + a; // inf -> NaN
+    /* a = a * zerof + a; // inf -> NaN */
     r = trig_red_f (a, &i);
     p = sinf_cosf_core (r, i + 1);
     /* if (__bsg_id == 1) { */

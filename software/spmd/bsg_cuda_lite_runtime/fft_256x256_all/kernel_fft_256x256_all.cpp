@@ -42,8 +42,6 @@ kernel_fft_256x256_all(FP32Complex *in, FP32Complex *out, int N) {
     asm volatile("": : :"memory");
     tg_barrier.sync();
 
-    /* debug_print_complex(fft_workset, NUM_POINTS, "After bit reverse"); */
-
     bsg_cuda_print_stat_start(3);
     for (int iter = 0; iter < 2; iter++) {
         load_fft_store(in, out, fft_workset, iter*128+__bsg_id, 256, 256, N, 0);

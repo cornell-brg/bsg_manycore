@@ -8,6 +8,8 @@
 
 typedef std::complex<float> FP32Complex;
 
+float minus_2pi = -6.283185307f;
+
 /*******************************************************************************
  * Efficient sinf and cosf implementation
 *******************************************************************************/
@@ -115,12 +117,26 @@ opt_fft_cosf(int x) {
 
 inline void
 debug_print_complex(const FP32Complex *list, const int N, const char *msg) {
-    bsg_printf("%s\n", msg);
+    if (__bsg_id == 0) {
+        bsg_printf("%s\n", msg, list);
+        for(int i = 0; i < N; i++) {
+            float rr = list[i].real();
+            float ii = list[i].imag();
+            bsg_printf("(0x%08X)+(0x%08X)i ", *(int*)&rr, *(int*)&ii);
+        }
+        bsg_printf("\n");
+    }
+}
+
+inline void
+debug_print_complex_per_tile(const FP32Complex *list, const int N, const char *msg) {
+    bsg_printf("[ID:%d] %s\n", __bsg_id, msg);
     for(int i = 0; i < N; i++) {
         float rr = list[i].real();
         float ii = list[i].imag();
-        bsg_printf("(%08X)+(%08X)i ", *(int*)&rr, *(int*)&ii);
+        bsg_printf("[ID:%d] (0x%08X)+(0x%08X)i ", __bsg_id, *(int*)&rr, *(int*)&ii);
     }
+    bsg_printf("\n");
 }
 
 inline void
@@ -172,9 +188,9 @@ opt_data_transfer_dst_strided(FP32Complex *dst, const FP32Complex *src, const in
         register FP32Complex tmp3 = src[i + 3];
         asm volatile("": : :"memory");
         dst[strided_i              ] = tmp0;
-        dst[strided_i + strided_i  ] = tmp1;
-        dst[strided_i + strided_i*2] = tmp2;
-        dst[strided_i + strided_i*3] = tmp3;
+        dst[strided_i + stride  ] = tmp1;
+        dst[strided_i + stride*2] = tmp2;
+        dst[strided_i + stride*3] = tmp3;
     }
     // fixup
     for (; i < N; i++, strided_i += stride) {
@@ -206,6 +222,8 @@ fft_256(FP32Complex *list) {
     int even_idx, odd_idx, n = 2, lshift = LOG2_NUM_POINTS-1;
     FP32Complex exp_val, tw_val, even_val, odd_val;
 
+    opt_bit_reverse(list, 256);
+
     while (n <= NUM_POINTS) {
         for (int i = 0; i < NUM_POINTS; i += n) {
             for (int k = 0; k < n/2; k++) {
@@ -230,8 +248,169 @@ fft_256(FP32Complex *list) {
 }
 
 /*******************************************************************************
+ * Custom sinf/cosf utilities
+*******************************************************************************/
+
+#ifdef CUSTOM_SINCOS
+// https://stackoverflow.com/a/64063765
+
+/* Argument reduction for trigonometric functions that reduces the argument
+   to the interval [-PI/4, +PI/4] and also returns the quadrant. It returns 
+   -0.0f for an input of -0.0f 
+*/
+// PP: calculation of j should NOT be optimized and therefore we declare
+// an optimization flag -O0 for this function. There is not much to optimize
+// anyway.
+inline float
+__attribute__((optimize("O0")))
+trig_red_f (float a, int *q)
+{    
+    float j, r;
+
+    /* Cody-Waite style reduction. W. J. Cody and W. Waite, "Software Manual
+       for the Elementary Functions", Prentice-Hall 1980
+    */
+    /* j = (a * 0x1.45f306p-1f + 0x1.8p+23f) - 0x1.8p+23f; // 6.36619747e-1, 1.25829120e+7 */
+    /* r = a - j * 0x1.921f00p+00f; // 1.57078552e+00 // pio2_high */
+    /* r = r - j * 0x1.6a8880p-17f; // 1.08043314e-05 // pio2_mid */
+    /* r = r - j * 0x1.68c234p-39f; // 2.56334407e-12 // pio2_low */
+    j = (a * 6.36619747e-1f + 1.25829120e+7f) - 1.25829120e+7f; // 6.36619747e-1, 1.25829120e+7
+    r = a - j * 1.57078552e+00f; // 1.57078552e+00 // pio2_high
+    r = r - j * 1.08043314e-05f; // 1.08043314e-05 // pio2_mid
+    r = r - j * 2.56334407e-12f; // 2.56334407e-12 // pio2_low
+    *q = (int)j;
+
+    return r;
+}
+
+/* Approximate sine on [-PI/4,+PI/4]. Maximum ulp error with USE_FMA = 0.64196
+   Returns -0.0f for an argument of -0.0f
+   Polynomial approximation based on T. Myklebust, "Computing accurate 
+   Horner form approximations to special functions in finite precision
+   arithmetic", http://arxiv.org/abs/1508.03211, retrieved on 8/29/2016
+*/
+inline float
+sinf_poly (float a, float s)
+{
+    float r, t;
+    /* r =         0x1.80a000p-19f; //  2.86567956e-6 */
+    /* r = r * s - 0x1.a0690cp-13f; // -1.98559923e-4 */
+    /* r = r * s + 0x1.111182p-07f; //  8.33338592e-3 */
+    /* r = r * s - 0x1.555556p-03f; // -1.66666672e-1 */
+    r =         2.86567956e-6f; //  2.86567956e-6
+    r = r * s - 1.98559923e-4f; // -1.98559923e-4
+    r = r * s + 8.33338592e-3f; //  8.33338592e-3
+    r = r * s - 1.66666672e-1f; // -1.66666672e-1
+    t = a * s + 0.0f; // ensure -0 is passed through
+    r = r * t + a;
+    return r;
+}
+
+/* Approximate cosine on [-PI/4,+PI/4]. Maximum ulp error with USE_FMA = 0.87444 */
+inline float
+cosf_poly (float s)
+{
+    float r;
+    /* r =         0x1.9a8000p-16f; //  2.44677067e-5 */
+    /* r = r * s - 0x1.6c0efap-10f; // -1.38877297e-3 */
+    /* r = r * s + 0x1.555550p-05f; //  4.16666567e-2 */
+    /* r = r * s - 0x1.000000p-01f; // -5.00000000e-1 */
+    /* r = r * s + 0x1.000000p+00f; //  1.00000000e+0 */
+    r =         2.44677067e-5f; //  2.44677067e-5
+    r = r * s - 1.38877297e-3f; // -1.38877297e-3
+    r = r * s + 4.16666567e-2f; //  4.16666567e-2
+    r = r * s - 5.00000000e-1f; // -5.00000000e-1
+    r = r * s + 1.00000000e+0f; //  1.00000000e+0
+    return r;
+}
+
+/* Map sine or cosine value based on quadrant */
+inline float
+sinf_cosf_core (float a, int i)
+{
+    float r, s;
+
+    s = a * a;
+    r = (i & 1) ? cosf_poly (s) : sinf_poly (a, s);
+    if (i & 2) {
+        r = 0.0f - r; // don't change "sign" of NaNs
+    }
+    return r;
+}
+
+/* maximum ulp error with USE_FMA = 1: 1.495098  */
+float my_sinf (float a)
+{
+    float r, p;
+    int i;
+
+    a = a * 0.0f + a; // inf -> NaN
+    r = trig_red_f (a, &i);
+    p = sinf_cosf_core (r, i);
+    /* if (__bsg_id == 1) { */
+    /*     bsg_printf("my_sinf(%08X) is %08X (i=%d, r=%08X)\n", *(int*)&a, *(int*)&p, i, *(int*)&r); */
+    /*     asm volatile("": : :"memory"); */
+    /* } */
+    return p;
+}
+
+/* maximum ulp error with USE_FMA = 1: 1.493253 */
+float my_cosf (float a)
+{
+    float r, p;
+    int i;
+
+    a = a * 0.0f + a; // inf -> NaN
+    r = trig_red_f (a, &i);
+    p = sinf_cosf_core (r, i + 1);
+    /* if (__bsg_id == 1) { */
+    /*     bsg_printf("my_cosf(%08X) is %08X (i=%d, r=%08X)\n", *(int*)&a, *(int*)&p, i, *(int*)&r); */
+    /*     asm volatile("": : :"memory"); */
+    /* } */
+    return p;
+}
+#endif // CUSTOM_SINCOS
+
+/*******************************************************************************
  * Four-step method utilities
 *******************************************************************************/
+
+// In-place implementation
+void
+fft_N(FP32Complex *list, int N) {
+    int even_idx, odd_idx, n = 2;
+    FP32Complex exp_val, tw_val, even_val, odd_val;
+
+    opt_bit_reverse(list, N);
+
+    while (n <= N) {
+        for (int i = 0; i < N; i += n) {
+            for (int k = 0; k < n/2; k++) {
+                even_idx = i+k;
+                odd_idx  = even_idx + n/2;
+
+#ifdef CUSTOM_SINCOS
+                float ref_cosf = my_cosf(minus_2pi*(float)(k)/(float)(n));
+                float ref_sinf = my_sinf(minus_2pi*(float)(k)/(float)(n));
+#else
+                float ref_sinf = sinf(minus_2pi*float(k)/float(n));
+                float ref_cosf = cosf(minus_2pi*float(k)/float(n));
+#endif
+
+                exp_val = FP32Complex(ref_cosf, ref_sinf);
+
+                even_val = list[even_idx];
+                odd_val  = list[odd_idx];
+
+                tw_val = exp_val*odd_val;
+
+                list[even_idx] = even_val + tw_val;
+                list[odd_idx]  = even_val - tw_val;
+            }
+        }
+        n = n * 2;
+    }
+}
 
 inline void
 load_fft_store(FP32Complex *lst,
@@ -246,19 +425,32 @@ load_fft_store(FP32Complex *lst,
     // Strided load into DMEM
     opt_data_transfer_src_strided(local_lst, lst+start, stride, local_point);
 
+    /* debug_print_complex_per_tile(local_lst, local_point, "Loaded into DMEM"); */
+
     // 256-point FFT
-    fft_256(local_lst);
+    if (local_point == 256)
+        fft_256(local_lst);
+    else
+        fft_N(local_lst, local_point);
+
+    /* debug_print_complex_per_tile(local_lst, local_point, "After uFFT"); */
 
     // Optional twiddle scaling
     // TODO: eliminate all remote loads due to newlib sinf/cosf
     if (scaling) {
         for (int c = 0; c < local_point; c++) {
             FP32Complex w;
-            float ref_sinf = sinf(-2.0f*3.1415926535f*float(start*c)/float(total_point));
-            float ref_cosf = cosf(-2.0f*3.1415926535f*float(start*c)/float(total_point));
+#ifdef CUSTOM_SINCOS
+            float ref_sinf = my_sinf(minus_2pi*float(start*c)/float(total_point));
+            float ref_cosf = my_cosf(minus_2pi*float(start*c)/float(total_point));
+#else
+            float ref_sinf = sinf(minus_2pi*float(start*c)/float(total_point));
+            float ref_cosf = cosf(minus_2pi*float(start*c)/float(total_point));
+#endif
             w = FP32Complex(ref_cosf, ref_sinf);
             local_lst[c] = w*local_lst[c];
         }
+        /* debug_print_complex_per_tile(local_lst, local_point, "After scaling"); */
     }
 
     // Strided store into DRAM
@@ -277,4 +469,21 @@ square_transpose(FP32Complex *lst, int size) {
             lst[i+j*size] = lst[j+i*size];
             lst[j+i*size] = tmp;
         }
+}
+
+inline void
+opt_square_transpose(FP32Complex *lst, int size) {
+    FP32Complex tmp;
+    int i = __bsg_id;
+    for (int j = i+1; j < size; j++) {
+        tmp = lst[i+j*size];
+        lst[i+j*size] = lst[j+i*size];
+        lst[j+i*size] = tmp;
+    }
+    for (int j = size-i; j < size; j++) {
+        int ii = size-1-i;
+        tmp = lst[ii+j*size];
+        lst[ii+j*size] = lst[j+ii*size];
+        lst[j+ii*size] = tmp;
+    }
 }

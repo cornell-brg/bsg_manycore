@@ -480,6 +480,44 @@ load_fft_store(FP32Complex *lst,
     opt_data_transfer_dst_strided(out+start, local_lst, stride, local_point);
 }
 
+inline void
+load_fft_store_no_twiddle(FP32Complex *lst,
+                          FP32Complex *out,
+                          FP32Complex *local_lst,
+                          FP32Complex *tw,
+                          int start,
+                          int stride,
+                          int local_point,
+                          int total_point,
+                          int scaling)
+{
+    // Strided load into DMEM
+    opt_data_transfer_src_strided(local_lst, lst+start, stride, local_point);
+
+    /* debug_print_complex_per_tile(local_lst, local_point, "Loaded into DMEM"); */
+
+    // 256-point FFT
+    if (local_point == 256)
+        fft_256(local_lst);
+    else
+        fft_N(local_lst, local_point);
+
+    /* debug_print_complex_per_tile(local_lst, local_point, "After uFFT"); */
+
+    // Optional twiddle scaling
+    if (scaling) {
+        tw = tw+local_point*start;
+        for (int c = 0; c < local_point; c++, tw++) {
+            FP32Complex w = *tw;
+            local_lst[c] = w*local_lst[c];
+        }
+        /* debug_print_complex_per_tile(local_lst, local_point, "After scaling"); */
+    }
+
+    // Strided store into DRAM
+    opt_data_transfer_dst_strided(out+start, local_lst, stride, local_point);
+}
+
 // Unoptimized vector transposition: simply do remote loads and stores
 // NOTE: this in-place algorithm is trivial because lst is a square matrix.
 // In-place transposition for non-square matrices is possible but non-trivial.

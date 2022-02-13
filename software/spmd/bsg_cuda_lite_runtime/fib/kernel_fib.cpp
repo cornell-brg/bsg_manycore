@@ -125,6 +125,7 @@ void wait_loop(volatile uint32_t* cond_i) {
       }
       t = steal(vid);
       if (t.val >= 0) {
+        bsg_print_int(3154);
         // execute stolen task
         *t.ref_count = fib(t.val);
       }
@@ -155,6 +156,17 @@ int32_t fib(int32_t n) {
 extern "C" __attribute__ ((noinline))
 int kernel_fib(int n) {
 
+  if (__bsg_id == 0) {
+    // try unfreeze other tiles
+    uint32_t* ptr;
+    ptr = (uint32_t*)(intptr_t)(1 << 27 | 0 << 22 | 1 << 16 | 0b10000000000000 << 2 | 0);
+    *ptr = 0;
+    ptr = (uint32_t*)(intptr_t)(1 << 27 | 1 << 22 | 0 << 16 | 0b10000000000000 << 2 | 0);
+    *ptr = 0;
+    ptr = (uint32_t*)(intptr_t)(1 << 27 | 1 << 22 | 1 << 16 | 0b10000000000000 << 2 | 0);
+    *ptr = 0;
+  }
+
   // init random seed to bsg_id
   seed = __bsg_id;
 
@@ -166,7 +178,7 @@ int kernel_fib(int n) {
     int r = fib(n);
     done = 1;
     bsg_fence();
-    bsg_print_int(n);
+    bsg_print_int(r);
   } else {
     wait_loop(&done);
   }

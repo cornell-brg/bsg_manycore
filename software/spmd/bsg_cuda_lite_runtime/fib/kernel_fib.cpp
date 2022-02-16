@@ -12,6 +12,8 @@
 
 bsg_barrier<bsg_tiles_X, bsg_tiles_Y> barrier;
 
+#define HB_L2_CACHE_LINE_WORDS 16
+
 #define FIB_BASE 3
 
 #define QUEUE_SIZE 32
@@ -25,8 +27,8 @@ bsg_barrier<bsg_tiles_X, bsg_tiles_Y> barrier;
 #define GROUP_Y_CORD_SHIFT (GROUP_X_CORD_SHIFT+GROUP_X_CORD_WIDTH)
 #define GROUP_PREFIX_SHIFT (GROUP_Y_CORD_SHIFT+GROUP_Y_CORD_WIDTH)
 
-// put locks in the dram space
-int locks[MAX_WORKERS] __attribute__ ((section (".dram"))) = {0};
+// put locks in the dram space -- padded to distribute across banks
+int locks[MAX_WORKERS * HB_L2_CACHE_LINE_WORDS] __attribute__ ((section (".dram"))) = {0};
 volatile uint32_t done __attribute__ ((section (".dram"))) = 0;
 
 uint32_t seed = 0;
@@ -53,13 +55,13 @@ struct Task {
 void lock(int tid) {
   int lock_val = 1;
   do {
-    lock_val = bsg_amoswap_aq(&(locks[tid]), 1);
+    lock_val = bsg_amoswap_aq(&(locks[tid * HB_L2_CACHE_LINE_WORDS]), 1);
   } while (lock_val != 0);
   return;
 }
 
 void unlock(int tid) {
-  bsg_amoswap_rl(&(locks[tid]), 0);
+  bsg_amoswap_rl(&(locks[tid * HB_L2_CACHE_LINE_WORDS]), 0);
 }
 
 struct Task queue[QUEUE_SIZE];

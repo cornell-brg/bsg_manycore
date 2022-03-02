@@ -164,6 +164,8 @@
 `define RV32_CSR_BARCFG_ADDR       12'hfc1
 `define RV32_CSR_BAR_PI_ADDR       12'hfc2
 `define RV32_CSR_BAR_PO_ADDR       12'hfc3
+`define RV32_CSR_TG_X_CORD_ADDR    12'hfc4
+`define RV32_CSR_TG_Y_CORD_ADDR    12'hfc5
 
 // mret
 // used for returning from the interrupt

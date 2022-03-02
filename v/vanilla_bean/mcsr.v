@@ -21,6 +21,8 @@ module mcsr
     , parameter credit_limit_default_val_p = 32
     , credit_counter_width_p=`BSG_WIDTH(32)
     , cfg_pod_width_p=32
+    , max_tile_group_x_cord_width_p = 6
+    , max_tile_group_y_cord_width_p = 5
   )
   (
     input clk_i
@@ -63,6 +65,8 @@ module mcsr
     , output logic [credit_counter_width_p-1:0] credit_limit_o
     , output logic [barrier_dirs_p-1:0] barrier_src_r_o
     , output logic [barrier_lg_dirs_lp-1:0] barrier_dest_r_o
+    , output logic [max_tile_group_x_cord_width_p-1:0] tg_x_cord_o
+    , output logic [max_tile_group_y_cord_width_p-1:0] tg_y_cord_o
     
   );
 
@@ -74,6 +78,8 @@ module mcsr
   logic [cfg_pod_width_p-1:0] 	     cfg_pod_r;
   logic [barrier_dirs_p-1:0] barrier_src_r;
   logic [barrier_lg_dirs_lp-1:0] barrier_dest_r;
+  logic [max_tile_group_x_cord_width_p-1:0] tg_x_cord_r, tg_x_cord_n;
+  logic [max_tile_group_y_cord_width_p-1:0] tg_y_cord_r, tg_y_cord_n;
 
 
   assign mstatus_r_o = mstatus_r;
@@ -83,7 +89,9 @@ module mcsr
   assign credit_limit_o = credit_limit_r;
   assign cfg_pod_r_o = cfg_pod_r;
   assign barrier_src_r_o = barrier_src_r;
-  assign barrier_dest_r_o = barrier_dest_r;  
+  assign barrier_dest_r_o = barrier_dest_r;
+  assign tg_x_cord_o = tg_x_cord_r;
+  assign tg_y_cord_o = tg_y_cord_r;
 
 
   // mstatus
@@ -279,6 +287,22 @@ module mcsr
     end
   end
 
+  // tile group x and y
+  always_comb begin
+    tg_x_cord_n = tg_x_cord_r;
+
+    if (we_i & (addr_i == `RV32_CSR_TG_X_CORD_ADDR) & (funct3_i == `RV32_CSRRW_FUN3)) begin
+      tg_x_cord_n = data_i[0+:max_tile_group_x_cord_width_p];
+    end
+  end
+
+  always_comb begin
+    tg_y_cord_n = tg_y_cord_r;
+
+    if (we_i & (addr_i == `RV32_CSR_TG_Y_CORD_ADDR) & (funct3_i == `RV32_CSRRW_FUN3)) begin
+      tg_y_cord_n = data_i[0+:max_tile_group_y_cord_width_p];
+    end
+  end
 
   // pod config
   always_ff @(posedge clk_i) begin
@@ -369,6 +393,12 @@ module mcsr
       `RV32_CSR_BAR_PI_ADDR: begin
         data_o[0] = barrier_data_r;
       end
+      `RV32_CSR_TG_X_CORD_ADDR: begin
+        data_o[0+:max_tile_group_x_cord_width_p] = tg_x_cord_r;
+      end
+      `RV32_CSR_TG_Y_CORD_ADDR: begin
+        data_o[0+:max_tile_group_y_cord_width_p] = tg_y_cord_r;
+      end
 
       default: data_o = '0;
     endcase
@@ -383,6 +413,8 @@ module mcsr
       mip_r <= '0;
       mepc_r <= '0;
       credit_limit_r <= (credit_counter_width_p)'(credit_limit_default_val_p);
+      tg_x_cord_r <= '0;
+      tg_y_cord_r <= '0;
     end
     else begin
       mstatus_r <= mstatus_n;
@@ -390,6 +422,8 @@ module mcsr
       mip_r <= mip_n;
       mepc_r <= mepc_n;
       credit_limit_r <= credit_limit_n;
+      tg_x_cord_r <= tg_x_cord_n;
+      tg_y_cord_r <= tg_y_cord_n;
     end
   end
 

@@ -41,6 +41,8 @@ module vanilla_core
     , data_mask_width_lp=(data_width_p>>3)
 
     , parameter debug_p=0
+    , localparam max_tile_group_x_cord_width_gp = 6
+    , localparam max_tile_group_y_cord_width_gp = 5
   )
   (
     input clk_i
@@ -370,6 +372,8 @@ module vanilla_core
   csr_interrupt_vector_s mie_r;
   logic [pc_width_lp-1:0] mepc_r;
   logic [credit_counter_width_p-1:0] credit_limit_r;
+  logic [max_tile_group_x_cord_width_gp-1:0] tg_x_cord_r;
+  logic [max_tile_group_y_cord_width_gp-1:0] tg_y_cord_r;
    
   logic mcsr_barsend_li;
 
@@ -378,6 +382,8 @@ module vanilla_core
     ,.credit_counter_width_p(credit_counter_width_p)
     ,.cfg_pod_width_p(pod_y_cord_width_p+pod_x_cord_width_p)
     ,.barrier_dirs_p(barrier_dirs_p)
+    ,.max_tile_group_x_cord_width_p(max_tile_group_x_cord_width_gp)
+    ,.max_tile_group_y_cord_width_p(max_tile_group_y_cord_width_gp)
   ) mcsr0 (
     .clk_i(clk_i)
     ,.reset_i(reset_i)
@@ -412,6 +418,8 @@ module vanilla_core
     ,.credit_limit_o(credit_limit_r)
     ,.barrier_src_r_o(barrier_src_r_o)
     ,.barrier_dest_r_o(barrier_dest_r_o)
+    ,.tg_x_cord_o(tg_x_cord_r)
+    ,.tg_y_cord_o(tg_y_cord_r)
   );
 
   // Sensitivity list like this is disliked by Verilator 4.213

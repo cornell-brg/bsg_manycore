@@ -24,6 +24,8 @@ module lsu
     , localparam dmem_addr_width_lp=`BSG_SAFE_CLOG2(dmem_size_p)
     , data_mask_width_lp=(data_width_p>>3)
     , reg_addr_width_lp=RV32_reg_addr_width_gp
+    , max_tile_group_x_cord_width_p = 6
+    , max_tile_group_y_cord_width_p = 5
   )
   (
     input clk_i
@@ -37,6 +39,10 @@ module lsu
     , input [data_width_p-1:0] mem_offset_i
     , input [data_width_p-1:0] pc_plus4_i
     , input icache_miss_i
+
+    // from MCSR
+    , input [max_tile_group_x_cord_width_p-1:0] tg_x_cord_i
+    , input [max_tile_group_y_cord_width_p-1:0] tg_y_cord_i
 
     // to network TX
     , output remote_req_s remote_req_o
@@ -91,10 +97,18 @@ module lsu
     end
   end
 
+  // check local addr in remote format
+  bsg_manycore_tile_group_addr_s tile_group_addr;
+  assign tile_group_addr = mem_addr;
+  wire is_tile_group_addr = tile_group_addr.remote == 3'b001;
+  wire is_my_x_addr = tile_group_addr.x_cord == tg_x_cord_i;
+  wire is_my_y_addr = tile_group_addr.y_cord == tg_y_cord_i;
+  wire is_remote_local_dmem_addr = (is_tile_group_addr & is_my_x_addr & is_my_y_addr);
 
   // to local DMEM
   //
-  wire is_local_dmem_addr = (mem_addr ==? 32'b00000000_00000000_0000????_????????);
+  wire is_plain_local_dmem_addr = (mem_addr ==? 32'b00000000_00000000_0000????_????????);
+  wire is_local_dmem_addr = (is_remote_local_dmem_addr | is_plain_local_dmem_addr);
 
   assign dmem_v_o = is_local_dmem_addr &
     (exe_decode_i.is_load_op | exe_decode_i.is_store_op |

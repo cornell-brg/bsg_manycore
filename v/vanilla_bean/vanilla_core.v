@@ -693,6 +693,8 @@ module vanilla_core
     .data_width_p(data_width_p)
     ,.pc_width_p(pc_width_lp)
     ,.dmem_size_p(dmem_size_p)
+    ,.max_tile_group_x_cord_width_p(max_tile_group_x_cord_width_gp)
+    ,.max_tile_group_y_cord_width_p(max_tile_group_y_cord_width_gp)
   ) lsu0 (
     .clk_i(clk_i)
     ,.reset_i(reset_i)
@@ -703,6 +705,9 @@ module vanilla_core
     ,.mem_offset_i(exe_r.mem_addr_op2)
     ,.pc_plus4_i(exe_r.pc_plus4)
     ,.icache_miss_i(exe_r.icache_miss)
+
+    ,.tg_x_cord_i(tg_x_cord_r)
+    ,.tg_y_cord_i(tg_y_cord_r)
 
     ,.remote_req_o(remote_req_o)
     ,.remote_req_v_o(lsu_remote_req_v_lo)

@@ -35,10 +35,11 @@ uint32_t seed = 0;
 
 template<typename T>
 T remote_ptr(T ptr, uint32_t x, uint32_t y) {
+  unsigned int local_ptr = ((1 << GROUP_EPA_WIDTH) - 1) & ((unsigned int) ptr);
   T r_ptr = (T)( ((1 << GROUP_PREFIX_SHIFT)
                     | (y << GROUP_Y_CORD_SHIFT)
                     | (x << GROUP_X_CORD_SHIFT)
-                    | ((unsigned int) ptr)));
+                    | (local_ptr)));
   return r_ptr;
 }
 
@@ -104,7 +105,8 @@ struct Task steal(int v_tid) {
   }
   unlock(v_tid);
   // patch retval if it contains pointers
-  retval.ref_count = remote_ptr<volatile uint32_t*>(retval.ref_count, remote_x, remote_y);
+  // retval.ref_count = remote_ptr<volatile uint32_t*>(retval.ref_count, remote_x, remote_y);
+  // XXX: this is no longer needed as we do real PGAS -- stack pointers are in global format
   return retval;
 }
 

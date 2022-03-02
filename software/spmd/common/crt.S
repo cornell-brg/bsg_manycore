@@ -101,7 +101,18 @@ _start:
 
   # mbt: put stack at top of local memory
   # mbt fix for 4KB IMEM / 4KB DMEM
-  la sp, _sp
+  # Lin: hack sp to use remote pointer format
+  # la sp, _sp
+  la t0, _sp
+  lw t1, 40(zero) #0x28 bsg_y
+  lw t2, 44(zero) #0x2c bsg_x
+  slli t1, t1, 0x18
+  slli t2, t2, 0x12
+  or t3, t1, t2
+  or t3, t3, t0
+  lui t0, 0x20000
+  or t3, t3, t0
+  addi sp, t3, 0
 
 #ifdef __bsg_newlib
   call dramfs_init

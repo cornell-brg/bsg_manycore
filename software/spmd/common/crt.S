@@ -42,6 +42,12 @@ _start:
   li  x30,0
   li  x31,0
 
+  # write tile group x and y into csr
+  lw  t0, 44(zero) #0x2c bsg_x
+  csrw 0xfc4, t0   #set tg_x_cord
+  lw  t0, 40(zero) #0x28 bsg_y
+  csrw 0xfc5, t0   #set tg_y_cord
+
   # Enable FPU and clear fcsr.
   #
   # These are ignored by manycore hardware but might be

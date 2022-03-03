@@ -8,6 +8,13 @@
 #ifndef APPL_TASK_H
 #define APPL_TASK_H
 
+#include "bsg_manycore.h"
+#include "bsg_manycore_atomic.h"
+
+// ref_count stack. This needs to be in the DRAM for AMO
+extern volatile int ref_counts[MAX_WORKERS * HB_L2_CACHE_LINE_WORDS] __attribute__ ((section (".dram")));
+extern uint32_t ref_count_stack_idx = 0;
+
 namespace appl {
 class Task {
 public:
@@ -20,8 +27,8 @@ public:
   // Construct with ready_count
   Task( int ready_count );
 
-  // Move constructor
-  Task( Task&& t );
+  // Move constructor is not allowed
+  Task( Task&& t ) = delete;
 
   // Copy is not allowed
   Task( const Task& t ) = delete;
@@ -57,8 +64,10 @@ public:
   int increment_ready_count();
 
 private:
-  int32_t m_ready_count;
-  Task*   m_successor_ptr;
+  // this needs to be a pointer so we can
+  // allocate space in DRAM
+  int*  m_ready_count_ptr;
+  Task* m_successor_ptr;
 };
 
 } // namespace appl

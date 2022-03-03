@@ -2,30 +2,42 @@
 // Task.inl
 //========================================================================
 
+#include "appl-Task.h"
+
+volatile int ref_counts[MAX_WORKERS * HB_L2_CACHE_LINE_WORDS] __attribute__ ((section (".dram"))) = {0};
+uint32_t ref_count_stack_idx = 0;
+
 namespace appl {
 
 inline Task::Task()
-    : m_ready_count( 0 ), m_successor_ptr( nullptr ),
+    : m_successor_ptr( nullptr ),
 {
+  m_ready_count_ptr =
+    &( ref_counts[__bsg_id * HB_L2_CACHE_LINE_WORDS + ref_count_stack_idx++] );
+  set_ready_count( 0 );
 }
 
 inline Task::Task( int ready_count )
-    : m_ready_count( ready_count ), m_successor_ptr( nullptr ),
+    : m_successor_ptr( nullptr ),
 {
+  m_ready_count_ptr =
+    &( ref_counts[__bsg_id * HB_L2_CACHE_LINE_WORDS + ref_count_stack_idx++] );
+  set_ready_count( ready_count );
 }
 
 inline Task::Task( int ready_count, Task* succ_p )
-    : m_ready_count( ready_count ), m_successor_ptr( succ_p ),
+    : m_successor_ptr( succ_p ),
 {
+  m_ready_count_ptr =
+    &( ref_counts[__bsg_id * HB_L2_CACHE_LINE_WORDS + ref_count_stack_idx++] );
+  set_ready_count( ready_count );
   if ( succ_p )
     succ_p->increment_ready_count();
 }
 
-inline Task::Task( Task&& t )
-{
-  m_successor_ptr = t.m_successor_ptr;
-  m_destroy_flag = t.m_destroy_flag;
-  // XXX: handle m_ready_count
+inline Task::~Task() {
+  // remove an active task from ref_count_stack
+  ref_count_stack_idx--;
 }
 
 inline Task* Task::execute()
@@ -35,10 +47,15 @@ inline Task* Task::execute()
 
 inline int Task::get_ready_count()
 {
+  // memory order relaxed
+  return bsg_amoadd(m_ready_count_ptr, 0);
 }
 
 inline void Task::set_ready_count( int ready_count )
 {
+  // this one has to be SC? I'm not certain.
+  // need to see where this set_ready_count is called
+  bsg_amoswap_aqrl(m_ready_count_ptr, ready_count);
 }
 
 inline void Task::set_successor( Task* task_p )
@@ -53,10 +70,14 @@ inline Task* Task::get_successor() const
 
 inline int Task::decrement_ready_count()
 {
+  // XXX: use SC for now. I'm reason about it later
+  return bsg_amoadd_aqrl(m_ready_count_ptr, -1);
 }
 
 inline int Task::increment_ready_count()
 {
+  // XXX: use SC for now. I'm reason about it later
+  return bsg_amoadd_aqrl(m_ready_count_ptr, 1);
 }
 
 } // namespace appl

@@ -7,24 +7,21 @@ namespace appl {
 inline Task::Task()
     : m_successor_ptr( nullptr )
 {
-  m_ready_count_ptr =
-    &( ref_counts[__bsg_id * HB_L2_CACHE_LINE_WORDS + ref_count_stack_idx++] );
+  m_ready_count_ptr = brg_malloc();
   set_ready_count( 0 );
 }
 
 inline Task::Task( int ready_count )
     : m_successor_ptr( nullptr )
 {
-  m_ready_count_ptr =
-    &( ref_counts[__bsg_id * HB_L2_CACHE_LINE_WORDS + ref_count_stack_idx++] );
+  m_ready_count_ptr = brg_malloc();
   set_ready_count( ready_count );
 }
 
 inline Task::Task( int ready_count, Task* succ_p )
     : m_successor_ptr( succ_p )
 {
-  m_ready_count_ptr =
-    &( ref_counts[__bsg_id * HB_L2_CACHE_LINE_WORDS + ref_count_stack_idx++] );
+  m_ready_count_ptr = brg_malloc();
   set_ready_count( ready_count );
   if ( succ_p )
     succ_p->increment_ready_count();

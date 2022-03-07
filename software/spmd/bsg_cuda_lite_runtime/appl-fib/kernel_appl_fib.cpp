@@ -31,6 +31,12 @@ int32_t fib(int32_t n, int32_t gsize = 2) {
 extern "C" __attribute__ ((noinline))
 int kernel_appl_fib(int n, int grain_size) {
 
+  // debug print
+  if (__bsg_id == 0) {
+    bsg_print_int(n);
+    bsg_print_int(grain_size);
+  }
+
   // sync
   barrier.sync();
 

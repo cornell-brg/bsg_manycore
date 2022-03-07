@@ -1,6 +1,6 @@
 #include <stdint.h>
 #include "bsg_manycore.h"
-#include "appl.h"
+#include "appl.hpp"
 
 #include "bsg_tile_group_barrier.hpp"
 

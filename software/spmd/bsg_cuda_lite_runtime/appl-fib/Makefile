@@ -20,11 +20,12 @@ all: main.run
 
 KERNEL_NAME ?=kernel_appl_fib
 
-OBJECT_FILES=main.o kernel_appl_fib.o appl-Task.o appl-config.o
+OBJECT_FILES=main.o kernel_appl_fib.o appl-config.o
 
 include ../../Makefile.include
 
 
+RISCV_GXX_OPTS += -fno-rtti
 main.riscv: $(LINK_SCRIPT) $(OBJECT_FILES) $(SPMD_COMMON_OBJECTS) $(BSG_MANYCORE_LIB) ../../common/crt.o
 	$(RISCV_LINK) $(OBJECT_FILES) $(SPMD_COMMON_OBJECTS) -L. "-l:$(BSG_MANYCORE_LIB)" -o $@ $(RISCV_LINK_OPTS)
 

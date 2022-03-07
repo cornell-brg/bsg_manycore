@@ -2,11 +2,6 @@
 // Task.inl
 //========================================================================
 
-#include "appl-Task.h"
-
-int ref_counts[MAX_WORKERS * HB_L2_CACHE_LINE_WORDS] __attribute__ ((section (".dram"))) = {0};
-uint32_t ref_count_stack_idx = 0;
-
 namespace appl {
 
 inline Task::Task()
@@ -41,11 +36,13 @@ inline Task::Task( Task&& t )
   m_ready_count_ptr = t.m_ready_count_ptr;
 }
 
+/*
 inline Task::~Task() {
   // remove an active task from ref_count_stack
   // XXX: disable for now -- it may not have stack behavior
   // ref_count_stack_idx--;
 }
+*/
 
 inline Task* Task::execute()
 {

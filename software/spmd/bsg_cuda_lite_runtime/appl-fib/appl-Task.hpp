@@ -12,11 +12,7 @@
 #include "bsg_manycore.h"
 #include "bsg_manycore_atomic.h"
 #include "bsg_set_tile_x_y.h"
-#include "appl-config.h"
-
-// ref_count stack. This needs to be in the DRAM for AMO
-extern int ref_counts[MAX_WORKERS * HB_L2_CACHE_LINE_WORDS] __attribute__ ((section (".dram")));
-extern uint32_t ref_count_stack_idx;
+#include "appl-config.hpp"
 
 namespace appl {
 class Task {
@@ -42,7 +38,7 @@ public:
 
   virtual Task* execute();
 
-  virtual ~Task();
+  ~Task() {};
 
   // ready_count is generally be used to count the number of tasks that
   // points to this task as successor. If a task's ready_count() is
@@ -74,5 +70,7 @@ private:
 };
 
 } // namespace appl
+
+#include "appl-Task.inl"
 
 #endif

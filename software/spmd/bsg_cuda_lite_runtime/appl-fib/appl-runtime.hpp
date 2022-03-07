@@ -9,6 +9,7 @@
 #include <stdint.h>
 #include "bsg_manycore.h"
 #include "bsg_set_tile_x_y.h"
+#include "appl-config.hpp"
 
 namespace appl {
 

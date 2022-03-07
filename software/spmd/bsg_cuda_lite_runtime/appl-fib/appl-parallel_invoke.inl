@@ -2,6 +2,8 @@
 // parallel_invoke.inl
 //========================================================================
 
+#include "appl-FunctorTask.h"
+#include "appl-scheduler.h"
 #include "appl-Task.h"
 
 namespace appl {

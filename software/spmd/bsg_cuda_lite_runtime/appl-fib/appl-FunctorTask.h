@@ -11,6 +11,7 @@
 #ifndef APPL_FUNCTOR_TASK_H
 #define APPL_FUNCTOR_TASK_H
 
+#include <utility>
 #include "appl-Task.h"
 
 namespace appl {

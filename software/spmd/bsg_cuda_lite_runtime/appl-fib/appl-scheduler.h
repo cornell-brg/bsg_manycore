@@ -6,7 +6,7 @@
 #ifndef APPL_WORK_STEALING_SCHEDULER_H
 #define APPL_WORK_STEALING_SCHEDULER_H
 
-#incldue "appl-Task.h"
+#include "appl-Task.h"
 
 namespace appl {
 

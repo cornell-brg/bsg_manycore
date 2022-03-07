@@ -2,7 +2,6 @@
 // parallel_invoke.inl
 //========================================================================
 
-#include "appl-parallel_invoke.h"
 #include "appl-Task.h"
 
 namespace appl {

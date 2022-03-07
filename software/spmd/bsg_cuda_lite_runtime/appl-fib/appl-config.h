@@ -7,7 +7,7 @@
 #define HB_L2_CACHE_LINE_WORDS 16
 
 // per-tile thread local variable to hold fast rand seed
-extern int seed
+extern int seed;
 // parallel for grain size
 extern size_t g_pfor_grain_size;
 

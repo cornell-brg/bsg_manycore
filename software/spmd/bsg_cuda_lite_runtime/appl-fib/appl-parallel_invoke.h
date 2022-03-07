@@ -31,4 +31,6 @@ void parallel_invoke( const Func0& func0, const Func1& func1,
 
 } // namespace appl
 
+#include "appl-parallel_invoke.inl"
+
 #endif

@@ -20,7 +20,7 @@ int32_t fib(int32_t n, int32_t gsize = 2) {
 
   int32_t x, y;
 
-  appl::parallel(
+  appl::parallel_invoke(
       [&] { x = fib(n-1, gsize); },
       [&] { y = fib(n-2, gsize); }
       );

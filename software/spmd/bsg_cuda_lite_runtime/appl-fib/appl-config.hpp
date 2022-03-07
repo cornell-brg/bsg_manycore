@@ -13,7 +13,7 @@ extern int seed;
 extern size_t g_pfor_grain_size;
 
 // ref_count stack. This needs to be in the DRAM for AMO
-extern int ref_counts[MAX_WORKERS * HB_L2_CACHE_LINE_WORDS] __attribute__ ((section (".dram")));
 extern uint32_t ref_count_stack_idx;
+extern int ref_counts[MAX_WORKERS * HB_L2_CACHE_LINE_WORDS] __attribute__ ((section (".dram")));
 
 #endif

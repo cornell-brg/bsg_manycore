@@ -7,6 +7,7 @@
 #define APPL_WORK_STEALING_SCHEDULER_H
 
 #include "appl-Task.hpp"
+#include "appl-SimpleDeque.hpp"
 
 namespace appl {
 

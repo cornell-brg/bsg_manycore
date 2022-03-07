@@ -10,10 +10,11 @@
 
 #include "bsg_manycore.h"
 #include "bsg_manycore_atomic.h"
+#include "appl-config.h"
 
 // ref_count stack. This needs to be in the DRAM for AMO
 extern volatile int ref_counts[MAX_WORKERS * HB_L2_CACHE_LINE_WORDS] __attribute__ ((section (".dram")));
-extern uint32_t ref_count_stack_idx = 0;
+extern uint32_t ref_count_stack_idx;
 
 namespace appl {
 class Task {

@@ -43,6 +43,8 @@ int kernel_appl_fib(int n, int grain_size) {
   appl::runtime_end();
   // --------------------- end of kernel -----------------
 
+  bsg_print_int(result);
+
   barrier.sync();
   return 0;
 }

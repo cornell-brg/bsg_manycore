@@ -50,6 +50,9 @@ int kernel_appl_fib(int n, int grain_size) {
   if (__bsg_id == 0) {
     result = fib(n, grain_size);
   } else {
+    appl::work_stealing_loop([&]() -> bool {
+        return bsg_amoadd(&appl::global::g_stop_flag, 0);
+        } );
   }
   appl::runtime_end();
   // --------------------- end of kernel -----------------

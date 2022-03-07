@@ -18,6 +18,7 @@ void wait( Task* wait_task_p ) {
 
 void execute_task( Task* task_p, bool stolen ) {
   while ( task_p ) {
+    bsg_print_int(12306);
     Task* prev_task_p = task_p;
     task_p = task_p->execute();
 

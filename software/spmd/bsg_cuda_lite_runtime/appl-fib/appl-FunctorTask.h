@@ -30,8 +30,8 @@ public:
   // of the sucessor (if available)
   FunctorTask( Func&& func, Task* succ_p );
 
-  // Move constructor is not allowed
-  FunctorTask( FunctorTask&& t ) = delete;
+  // Move constructor is provided
+  FunctorTask( FunctorTask&& t );
 
   // Copying is not allowed
   FunctorTask( const FunctorTask& t ) = delete;
@@ -63,5 +63,7 @@ FunctorTask<Func> mk_task( Func&& func, Task* successor_p )
 }
 
 } // namespace appl
+
+#include "appl-FunctorTask.inl"
 
 #endif

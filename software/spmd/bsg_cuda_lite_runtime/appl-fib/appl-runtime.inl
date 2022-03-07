@@ -2,11 +2,9 @@
 // runtime.c
 //========================================================================
 
-#include "appl-runtime.h"
-
 namespace appl {
 
-void runtime_init( size_t pfor_grain_size = 1 ) {
+void runtime_init( size_t pfor_grain_size ) {
   // set parallel for grain size
   g_pfor_grain_size = pfor_grain_size;
 

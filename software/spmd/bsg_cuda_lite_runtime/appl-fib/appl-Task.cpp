@@ -4,13 +4,13 @@
 
 #include "appl-Task.h"
 
-volatile int ref_counts[MAX_WORKERS * HB_L2_CACHE_LINE_WORDS] __attribute__ ((section (".dram"))) = {0};
+int ref_counts[MAX_WORKERS * HB_L2_CACHE_LINE_WORDS] __attribute__ ((section (".dram"))) = {0};
 uint32_t ref_count_stack_idx = 0;
 
 namespace appl {
 
 inline Task::Task()
-    : m_successor_ptr( nullptr ),
+    : m_successor_ptr( nullptr )
 {
   m_ready_count_ptr =
     &( ref_counts[__bsg_id * HB_L2_CACHE_LINE_WORDS + ref_count_stack_idx++] );
@@ -18,7 +18,7 @@ inline Task::Task()
 }
 
 inline Task::Task( int ready_count )
-    : m_successor_ptr( nullptr ),
+    : m_successor_ptr( nullptr )
 {
   m_ready_count_ptr =
     &( ref_counts[__bsg_id * HB_L2_CACHE_LINE_WORDS + ref_count_stack_idx++] );
@@ -26,7 +26,7 @@ inline Task::Task( int ready_count )
 }
 
 inline Task::Task( int ready_count, Task* succ_p )
-    : m_successor_ptr( succ_p ),
+    : m_successor_ptr( succ_p )
 {
   m_ready_count_ptr =
     &( ref_counts[__bsg_id * HB_L2_CACHE_LINE_WORDS + ref_count_stack_idx++] );
@@ -35,9 +35,16 @@ inline Task::Task( int ready_count, Task* succ_p )
     succ_p->increment_ready_count();
 }
 
+inline Task::Task( Task&& t )
+{
+  m_successor_ptr = t.m_successor_ptr;
+  m_ready_count_ptr = t.m_ready_count_ptr;
+}
+
 inline Task::~Task() {
   // remove an active task from ref_count_stack
-  ref_count_stack_idx--;
+  // XXX: disable for now -- it may not have stack behavior
+  // ref_count_stack_idx--;
 }
 
 inline Task* Task::execute()

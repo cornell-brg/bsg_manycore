@@ -15,4 +15,6 @@ void wait( Task* wait_task_p );
 
 } // namespace appl
 
+#include "appl-scheduler.inl"
+
 #endif

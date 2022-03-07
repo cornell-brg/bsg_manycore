@@ -8,12 +8,14 @@
 #ifndef APPL_TASK_H
 #define APPL_TASK_H
 
+#include <stdint.h>
 #include "bsg_manycore.h"
 #include "bsg_manycore_atomic.h"
+#include "bsg_set_tile_x_y.h"
 #include "appl-config.h"
 
 // ref_count stack. This needs to be in the DRAM for AMO
-extern volatile int ref_counts[MAX_WORKERS * HB_L2_CACHE_LINE_WORDS] __attribute__ ((section (".dram")));
+extern int ref_counts[MAX_WORKERS * HB_L2_CACHE_LINE_WORDS] __attribute__ ((section (".dram")));
 extern uint32_t ref_count_stack_idx;
 
 namespace appl {
@@ -28,8 +30,8 @@ public:
   // Construct with ready_count
   Task( int ready_count );
 
-  // Move constructor is not allowed
-  Task( Task&& t ) = delete;
+  // Move constructor
+  Task( Task&& t );
 
   // Copy is not allowed
   Task( const Task& t ) = delete;
@@ -40,7 +42,7 @@ public:
 
   virtual Task* execute();
 
-  virtual ~Task() {}
+  virtual ~Task();
 
   // ready_count is generally be used to count the number of tasks that
   // points to this task as successor. If a task's ready_count() is

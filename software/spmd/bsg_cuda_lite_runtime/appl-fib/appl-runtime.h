@@ -6,6 +6,9 @@
 #define APPL_GLOBAL_H
 
 #include <cstddef>
+#include <stdint.h>
+#include "bsg_manycore.h"
+#include "bsg_set_tile_x_y.h"
 
 namespace appl {
 
@@ -19,5 +22,7 @@ void runtime_end();
 size_t get_nthreads();
 
 }
+
+#include "appl-runtime.inl"
 
 #endif

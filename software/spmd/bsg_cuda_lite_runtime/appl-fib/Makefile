@@ -20,7 +20,7 @@ all: main.run
 
 KERNEL_NAME ?=kernel_appl_fib
 
-OBJECT_FILES=main.o kernel_appl_fib.o
+OBJECT_FILES=main.o kernel_appl_fib.o appl-Task.o appl-config.o
 
 include ../../Makefile.include
 

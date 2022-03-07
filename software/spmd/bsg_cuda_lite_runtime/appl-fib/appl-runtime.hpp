@@ -10,11 +10,12 @@
 #include "bsg_manycore.h"
 #include "bsg_set_tile_x_y.h"
 #include "appl-config.hpp"
+#include "appl-SimpleDeque.hpp"
 
 namespace appl {
 
 // Initialize the runtime with a default scheduler and a thread pool
-void runtime_init( size_t pfor_grain_size = 1 );
+void runtime_init( SimpleDeque<Task*>* p_taskq_p, size_t pfor_grain_size = 1 );
 
 // Terminate runtime by destructing the scheduler and thread pool.
 void runtime_end();

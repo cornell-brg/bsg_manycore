@@ -3,11 +3,16 @@
 
 #include <cstddef>
 #include <stdint.h>
+#include "bsg_manycore.h"
 #include "bsg_set_tile_x_y.h"
 
 #define MAX_WORKERS (bsg_tiles_X * bsg_tiles_Y)
 #define HB_L2_CACHE_LINE_WORDS 16
 #define BUF_FACTOR 33
+
+// utils
+namespace appl {
+namespace local {
 
 // per-tile thread local variable to hold fast rand seed
 extern int seed;
@@ -18,13 +23,14 @@ extern size_t g_pfor_grain_size;
 extern uint32_t dram_buffer_idx;
 extern int dram_buffer[MAX_WORKERS * BUF_FACTOR * HB_L2_CACHE_LINE_WORDS] __attribute__ ((section (".dram")));
 
-// utils
-namespace appl {
+} // namespace local
 
-  // linear allocator in DRAM
-  inline int* brg_malloc() {
-    return &(dram_buffer[__bsg_id * BUF_FACTOR * HB_L2_CACHE_LINE_WORDS + dram_buffer_idx++]);
-  }
+// linear allocator in DRAM
+inline int* brg_malloc() {
+  int* val = &(local::dram_buffer[__bsg_id * BUF_FACTOR * HB_L2_CACHE_LINE_WORDS + local::dram_buffer_idx++]);
+  bsg_print_int((intptr_t)val);
+  return val;
+}
 
 } // namespace appl
 

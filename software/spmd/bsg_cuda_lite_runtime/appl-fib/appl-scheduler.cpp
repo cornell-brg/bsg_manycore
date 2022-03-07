@@ -1,13 +1,15 @@
 //========================================================================
 // Scheduler.cpp
 //========================================================================
+// A standard work-stealing scheduler.
+
+#include "appl-scheduler.hpp"
 
 namespace appl {
+namespace local {
 
-inline void spawn( Task* task_p ) {
-}
+SimpleDeque<Task*>* g_taskq_p;
 
-inline void wait( Task* wait_task_p ) {
-}
-
+} // namespace local
 } // namespace appl
+

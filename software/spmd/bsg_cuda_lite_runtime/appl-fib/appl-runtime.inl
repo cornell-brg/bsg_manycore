@@ -4,12 +4,15 @@
 
 namespace appl {
 
-void runtime_init( size_t pfor_grain_size ) {
+void runtime_init( SimpleDeque<Task*>* p_taskq_p, size_t pfor_grain_size ) {
   // set parallel for grain size
-  g_pfor_grain_size = pfor_grain_size;
+  local::g_pfor_grain_size = pfor_grain_size;
 
   // set fast random seed
-  seed = __bsg_id;
+  local::seed = __bsg_id;
+
+  // alloc per tile task queue
+  local::g_taskq_p = p_taskq_p;
 
   return;
 }

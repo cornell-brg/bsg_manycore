@@ -10,6 +10,9 @@
 #include "appl-SimpleDeque.hpp"
 
 namespace appl {
+namespace local {
+extern SimpleDeque<Task*>* g_taskq_p;
+}
 
 void spawn( Task* task_p );
 void wait( Task* wait_task_p );

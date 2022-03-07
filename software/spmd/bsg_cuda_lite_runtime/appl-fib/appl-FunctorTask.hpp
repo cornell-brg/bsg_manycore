@@ -12,7 +12,7 @@
 #define APPL_FUNCTOR_TASK_H
 
 #include <utility>
-#include "appl-Task.h"
+#include "appl-Task.hpp"
 
 namespace appl {
 

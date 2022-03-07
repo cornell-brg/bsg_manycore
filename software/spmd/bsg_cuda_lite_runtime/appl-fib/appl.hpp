@@ -6,9 +6,9 @@
 #define APPL_H
 
 // Parallel Patterns
-#include "appl-parallel_invoke.h"
+#include "appl-parallel_invoke.hpp"
 
 // Utils
-#include "appl-runtime.h"
+#include "appl-runtime.hpp"
 
 #endif

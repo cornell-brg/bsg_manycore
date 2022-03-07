@@ -39,7 +39,9 @@ int kernel_appl_fib(int n, int grain_size) {
 
   // --------------------- kernel ------------------------
   appl::runtime_init();
-  result = fib(n, grain_size);
+  if (__bsg_id == 0) {
+    result = fib(n, grain_size);
+  }
   appl::runtime_end();
   // --------------------- end of kernel -----------------
 

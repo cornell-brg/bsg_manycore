@@ -10,6 +10,14 @@
 #define HB_L2_CACHE_LINE_WORDS 16
 #define BUF_FACTOR 33
 
+// remote pointer calculation
+#define GROUP_EPA_WIDTH 18
+#define GROUP_X_CORD_WIDTH 6
+#define GROUP_Y_CORD_WIDTH 5
+#define GROUP_X_CORD_SHIFT (GROUP_EPA_WIDTH)
+#define GROUP_Y_CORD_SHIFT (GROUP_X_CORD_SHIFT+GROUP_X_CORD_WIDTH)
+#define GROUP_PREFIX_SHIFT (GROUP_Y_CORD_SHIFT+GROUP_Y_CORD_WIDTH)
+
 // utils
 namespace appl {
 namespace local {

@@ -6,10 +6,31 @@
 #include "appl-scheduler.hpp"
 
 namespace appl {
-namespace local {
 
-SimpleDeque<Task*>* g_taskq_p;
+void spawn( Task* task_p ) {
+  local::g_taskq_p->push_back(task_p);
+}
 
-} // namespace local
+void wait( Task* wait_task_p ) {
+  work_stealing_loop(
+      [&]() -> bool { return wait_task_p->get_ready_count() <= 1; } );
+}
+
+void execute_task( Task* task_p, bool stolen ) {
+  while ( task_p ) {
+    Task* prev_task_p = task_p;
+    task_p = task_p->execute();
+
+    Task* successor = prev_task_p->get_successor();
+
+    if ( successor ) {
+      int old_val = successor->decrement_ready_count();
+      if ( old_val == 1 ) {
+        spawn( successor );
+      }
+    }
+  }
+}
+
 } // namespace appl
 

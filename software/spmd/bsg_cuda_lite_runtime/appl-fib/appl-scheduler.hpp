@@ -8,14 +8,23 @@
 
 #include "appl-Task.hpp"
 #include "appl-SimpleDeque.hpp"
+#include "appl-runtime.hpp"
 
 namespace appl {
-namespace local {
-extern SimpleDeque<Task*>* g_taskq_p;
-}
 
 void spawn( Task* task_p );
 void wait( Task* wait_task_p );
+
+// Returns a pseudo-random number using the per-thread seed
+int fast_rand( void );
+
+// Enter into the work-stealing loop until the condition is met
+// cond is a functor returns a bool
+template <typename Func>
+void work_stealing_loop( Func&& cond );
+
+// Execute the task
+void execute_task( Task* task_p, bool stolen );
 
 } // namespace appl
 

@@ -44,7 +44,9 @@ int kernel_appl_fib(int n, int grain_size) {
   int32_t result     = -1;
 
   // --------------------- kernel ------------------------
-  appl::runtime_init();
+  // we need to manually create a task queue for now ...
+  appl::SimpleDeque<appl::Task*> taskq = appl::SimpleDeque<appl::Task*>();
+  appl::runtime_init(&taskq, 2);
   if (__bsg_id == 0) {
     result = fib(n, grain_size);
   }

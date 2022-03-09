@@ -71,6 +71,7 @@ TRACE_PP_SCRIPT = $(BSG_MANYCORE_DIR)/software/py/post_process_trace.py
 LINK_GEN        = $(BSG_MANYCORE_DIR)/software/py/bsg_manycore_link_gen.py
 
 COMMON_SRC_DIRS = $(BSG_MANYCORE_DIR)/software/spmd/common \
+									$(BSG_MANYCORE_DIR)/software/spmd/appl \
                   $(BSG_MANYCORE_DIR)/software/bsg_manycore_lib
 
 CURR_DIR := $(shell pwd)
@@ -85,7 +86,7 @@ OPT_LEVEL ?= -O2
 RISCV_GCC_EXTRA_OPTS ?=
 RISCV_GCC_OPTS  =-march=$(ARCH_OP) -static -std=gnu99 -ffast-math -fno-common -mtune=bsg_vanilla_2020
 
-RISCV_GCC_OPTS +=$(RISCV_GCC_EXTRA_OPTS) -I$(BSG_MANYCORE_DIR)/software/spmd/common/ -I$(BSG_MANYCORE_DIR)/software/bsg_manycore_lib
+RISCV_GCC_OPTS +=$(RISCV_GCC_EXTRA_OPTS) -I$(BSG_MANYCORE_DIR)/software/spmd/common/ -I$(BSG_MANYCORE_DIR)/software/spmd/appl/ -I$(BSG_MANYCORE_DIR)/software/bsg_manycore_lib
 RISCV_GCC_OPTS +=-Dbsg_tiles_X=$(bsg_tiles_X) -Dbsg_tiles_Y=$(bsg_tiles_Y)
 RISCV_GCC_OPTS +=-Dbsg_global_X=$(bsg_global_X) -Dbsg_global_Y=$(bsg_global_Y)
 RISCV_GCC_OPTS +=-Dbsg_group_size=$(bsg_group_size)
@@ -173,7 +174,7 @@ ifneq ($(BSG_NEWLIB), 1)
 endif
 
 RISCV_LINK_OPTS += -march=$(ARCH_OP) -nostartfiles -ffast-math -lc -lm -lgcc -l:$(CRT_OBJ)\
-                   -L $(BSG_MANYCORE_DIR)/software/spmd/common $(RISCV_LINK_EXTRA_OPTS)
+                   -L $(BSG_MANYCORE_DIR)/software/spmd/common -L $(BSG_MANYCORE_DIR)/software/spmd/appl $(RISCV_LINK_EXTRA_OPTS)
 
 RISCV_LINK_SYMS += -Wl,--defsym,bsg_group_size=$(bsg_group_size) \
                    -Wl,--defsym,_bsg_elf_dram_size=$(BSG_ELF_DRAM_SIZE) \

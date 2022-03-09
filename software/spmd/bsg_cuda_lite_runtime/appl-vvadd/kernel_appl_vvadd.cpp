@@ -21,7 +21,7 @@ int kernel_appl_vvadd(int *A, int *B, int *C, int size, int grain_size) {
 
   // debug print
   if (__bsg_id == 0) {
-    bsg_print_int(n);
+    bsg_print_int(size);
     bsg_print_int(grain_size);
   }
 
@@ -33,7 +33,7 @@ int kernel_appl_vvadd(int *A, int *B, int *C, int size, int grain_size) {
   appl::SimpleDeque<appl::Task*> taskq = appl::SimpleDeque<appl::Task*>();
   appl::runtime_init(&taskq, grain_size);
   if (__bsg_id == 0) {
-    vvadd_appl_pfor(C, A, B, size);
+    // vvadd_appl_pfor(C, A, B, size);
   } else {
     appl::work_stealing_loop([&]() -> bool {
         return bsg_amoadd(&appl::global::g_stop_flag, 0);
@@ -41,8 +41,6 @@ int kernel_appl_vvadd(int *A, int *B, int *C, int size, int grain_size) {
   }
   appl::runtime_end();
   // --------------------- end of kernel -----------------
-
-  bsg_print_int(result);
 
   barrier.sync();
   return 0;

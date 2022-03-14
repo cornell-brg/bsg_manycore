@@ -45,6 +45,23 @@ inline int* brg_malloc() {
   return val;
 }
 
+template<typename T>
+inline T remote_ptr(T ptr, uint32_t x, uint32_t y) {
+  unsigned int local_ptr = ((1 << GROUP_EPA_WIDTH) - 1) & ((unsigned int) ptr);
+  T r_ptr = (T)( ((1 << GROUP_PREFIX_SHIFT)
+                    | (y << GROUP_Y_CORD_SHIFT)
+                    | (x << GROUP_X_CORD_SHIFT)
+                    | (local_ptr)));
+  return r_ptr;
+}
+
+template<typename T>
+inline T remote_ptr(T ptr, size_t remote_id) {
+  uint32_t remote_x = remote_id % bsg_tiles_X;
+  uint32_t remote_y = remote_id / bsg_tiles_X;
+  return remote_ptr<T>(ptr, remote_x, remote_y);
+}
+
 } // namespace appl
 
 #endif

@@ -52,9 +52,7 @@ int kernel_appl_parallel_fib(int n, int grain_size) {
   int32_t dest[4] = {-1};
 
   // --------------------- kernel ------------------------
-  // we need to manually create a task queue for now ...
-  appl::SimpleDeque<appl::Task*> taskq = appl::SimpleDeque<appl::Task*>();
-  appl::runtime_init(&taskq, 1);
+  appl::runtime_init(1);
   if (__bsg_id == 0) {
     outter_loop(dest, n, grain_size);
   } else {

@@ -8,7 +8,7 @@
 namespace appl {
 
 void spawn( Task* task_p ) {
-  local::g_taskq_p->push_back(task_p);
+  local::g_taskq.push_back(task_p);
 }
 
 void wait( Task* wait_task_p ) {

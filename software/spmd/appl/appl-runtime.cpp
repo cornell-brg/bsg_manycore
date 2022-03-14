@@ -8,7 +8,7 @@ namespace appl {
 
 namespace local {
 
-SimpleDeque<Task*>* g_taskq_p = nullptr;
+SimpleDeque<Task*> g_taskq = SimpleDeque<Task*>();
 
 } // namespace local
 

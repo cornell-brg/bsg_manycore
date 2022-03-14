@@ -19,7 +19,7 @@ inline void work_stealing_loop( Func&& cond ) {
 
   // wait until cond() == true
   while ( !cond() ) {
-    Task* task_p = local::g_taskq_p->pop_back();
+    Task* task_p = local::g_taskq.pop_back();
     // execute this task
     if ( task_p ) {
       execute_task( task_p, false );
@@ -33,7 +33,7 @@ inline void work_stealing_loop( Func&& cond ) {
 
       // now found a victim, steal...
 
-      SimpleDeque<Task*>* victim_queue = remote_ptr(local::g_taskq_p, victim_id);
+      SimpleDeque<Task*>* victim_queue = remote_ptr(&local::g_taskq, victim_id);
       Task* task_p = victim_queue->pop_front();
 
       if ( task_p ) {

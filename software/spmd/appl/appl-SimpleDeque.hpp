@@ -32,6 +32,7 @@ class SimpleDeque {
 public:
   SimpleDeque();
   ~SimpleDeque() {};
+  void reset();
   void push_back( const T& item );
   T pop_back();
   T pop_front();
@@ -40,6 +41,7 @@ public:
 
 private:
   T  m_array[QUEUE_SIZE];
+  T* m_array_rp; // this is a pointer to m_array in remote format
   T* m_head_ptr;
   T* m_tail_ptr;
   T* m_array_end;

@@ -6,9 +6,14 @@ namespace appl {
 
 template <typename T>
 SimpleDeque<T>::SimpleDeque() {
-  m_head_ptr  = m_array;
-  m_tail_ptr  = m_array;
-  m_array_end = m_array + QUEUE_SIZE;
+}
+
+template <typename T>
+void SimpleDeque<T>::reset() {
+  m_array_rp  = remote_ptr(m_array, bsg_x, bsg_y);
+  m_head_ptr  = m_array_rp;
+  m_tail_ptr  = m_array_rp;
+  m_array_end = m_array_rp + QUEUE_SIZE;
 
   m_mutex_ptr = brg_malloc();
   m_size_ptr  = brg_malloc();
@@ -16,6 +21,11 @@ SimpleDeque<T>::SimpleDeque() {
   // this does not order anything
   bsg_amoswap(m_mutex_ptr, 0);
   bsg_amoswap(m_size_ptr, 0);
+
+  bsg_print_int((intptr_t)m_head_ptr);
+  bsg_print_int((intptr_t)m_tail_ptr);
+  bsg_print_int((intptr_t)m_array_end);
+  bsg_print_int((intptr_t)m_array_rp);
 }
 
 template <typename T>
@@ -30,6 +40,7 @@ void SimpleDeque<T>::push_back( const T& item )
   else {
     // we ran out of queue ... fatal error
     bsg_print_int(7700);
+
   }
   unlock( m_mutex_ptr );
 }
@@ -42,7 +53,7 @@ T SimpleDeque<T>::pop_back()
     T* tmp = --m_tail_ptr;
     // reset pointer
     if ( m_tail_ptr == m_head_ptr ) {
-      m_tail_ptr = m_head_ptr = m_array;
+      m_tail_ptr = m_head_ptr = m_array_rp;
     }
     bsg_amoadd(m_size_ptr, -1);
     unlock( m_mutex_ptr );
@@ -62,7 +73,7 @@ T SimpleDeque<T>::pop_front()
     T* tmp = m_head_ptr++;
     // reset pointer
     if ( m_tail_ptr == m_head_ptr ) {
-      m_tail_ptr = m_head_ptr = m_array;
+      m_tail_ptr = m_head_ptr = m_array_rp;
     }
     bsg_amoadd(m_size_ptr, -1);
     unlock( m_mutex_ptr );

@@ -29,9 +29,7 @@ int kernel_appl_vvadd(int *A, int *B, int *C, int size, int grain_size) {
   barrier.sync();
 
   // --------------------- kernel ------------------------
-  // we need to manually create a task queue for now ...
-  appl::SimpleDeque<appl::Task*> taskq = appl::SimpleDeque<appl::Task*>();
-  appl::runtime_init(&taskq, grain_size);
+  appl::runtime_init(grain_size);
   if (__bsg_id == 0) {
     vvadd_appl_pfor(C, A, B, size);
   } else {

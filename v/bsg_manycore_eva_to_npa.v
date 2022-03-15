@@ -152,17 +152,22 @@ module bsg_manycore_eva_to_npa
       epa_o = {{(addr_width_p-global_epa_word_addr_width_gp){1'b0}}, global_addr.addr};
     end
     else if (is_tile_group_addr) begin
-      // tile-group addr
-      // tile-coordinate in the EVA is added to the tile-group origin register.
-      y_cord_o = {pod_y_i, y_subcord_width_lp'(tile_group_addr.y_cord + tgo_y_i)};
-      x_cord_o = {pod_x_i, x_subcord_width_lp'(tile_group_addr.x_cord + tgo_x_i)};
-      // here we do an and with 0x03FF to make sure the addr is a valid physical dmem addr
-      epa_o = {{(addr_width_p-tile_group_epa_word_addr_width_gp){1'b0}}, (tile_group_addr.addr & 16'h03FF)};
       // DRAM overflowed DMEM Hack:
       // we check if the dmem is in overflowed range or not
       // this is a dmem access made to an addr actually in DRAM
       if (tile_group_addr.addr inside {[16'h0100:16'h04FF]}) begin
+        y_cord_o = overflowed_dram_y_cord_lo;
+        x_cord_o = overflowed_dram_x_cord_lo;
+        epa_o = overflowed_dram_epa_lo;
         $display("[INFO][LC] possible overflowed DMEM access t=%0t; x=%d, y=%d; addr=%h; overflowed addr=%h", $time, x_cord_o, y_cord_o, tile_group_addr.addr, eva_overflowed_l);
+      end
+      else begin
+        // tile-group addr
+        // tile-coordinate in the EVA is added to the tile-group origin register.
+        y_cord_o = {pod_y_i, y_subcord_width_lp'(tile_group_addr.y_cord + tgo_y_i)};
+        x_cord_o = {pod_x_i, x_subcord_width_lp'(tile_group_addr.x_cord + tgo_x_i)};
+        // here we do an and with 0x03FF to make sure the addr is a valid physical dmem addr
+        epa_o = {{(addr_width_p-tile_group_epa_word_addr_width_gp){1'b0}}, (tile_group_addr.addr & 16'h03FF)};
       end
     end
     else begin

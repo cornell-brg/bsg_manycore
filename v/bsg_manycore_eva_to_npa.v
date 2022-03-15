@@ -128,7 +128,15 @@ module bsg_manycore_eva_to_npa
       // tile-coordinate in the EVA is added to the tile-group origin register.
       y_cord_o = {pod_y_i, y_subcord_width_lp'(tile_group_addr.y_cord + tgo_y_i)};
       x_cord_o = {pod_x_i, x_subcord_width_lp'(tile_group_addr.x_cord + tgo_x_i)};
-      epa_o = {{(addr_width_p-tile_group_epa_word_addr_width_gp){1'b0}}, tile_group_addr.addr};
+      // here we do an and with 0x03FF to make sure the addr is a valid physical dmem addr
+      epa_o = {{(addr_width_p-tile_group_epa_word_addr_width_gp){1'b0}}, (tile_group_addr.addr & 16'h03FF)};
+      // Logical DMEM Hack:
+      // we check if the dmem is in logic range or not
+      // this is a dmem access made to an addr actually in DRAM
+      if (tile_group_addr.addr inside {[16'h0100:16'h04FF]}) begin
+        $display("[INFO][LC] possible Logical DMEM access t=%0t; x=%d, y=%d; addr=%h", $time, x_cord_o, y_cord_o, tile_group_addr.addr);
+        // $fatal(1, "Logical DMEM access unimplmented");
+      end
     end
     else begin
       // should never happen

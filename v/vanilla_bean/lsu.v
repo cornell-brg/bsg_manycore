@@ -107,8 +107,22 @@ module lsu
 
   // to local DMEM
   //
-  wire is_plain_local_dmem_addr = (mem_addr ==? 32'b00000000_00000000_0000????_????????);
-  wire is_local_dmem_addr = (is_remote_local_dmem_addr | is_plain_local_dmem_addr);
+  // wire is_plain_local_dmem_addr = (mem_addr ==? 32'b00000000_00000000_0000????_????????);
+  // wire is_local_dmem_addr = (is_remote_local_dmem_addr | is_plain_local_dmem_addr);
+
+  // check if the "local addr" is really in SPM
+  // 0x1FFF - 0x1400    0x13FF - 0x0400    0x03FF - 0x0000
+  //      SPM                DRAM                SPM
+  //      3k                 4k                  1k
+  // handle plain local addr
+  wire is_plain_low_dmem_addr  = mem_addr inside {[32'h0000:32'h03FF]} ? 1 : 0;
+  wire is_plain_high_dmem_addr = mem_addr inside {[32'h1400:32'h1FFF]} ? 1 : 0;
+  // handle remote format local addr
+  wire is_low_dmem_addr  = tile_group_addr.addr inside {[16'h0000:16'h00FF]} ? 1 : 0;
+  wire is_high_dmem_addr = tile_group_addr.addr inside {[16'h0500:16'h07FF]} ? 1 : 0;
+  // combine
+  wire is_local_dmem_addr = (is_plain_low_dmem_addr | is_plain_high_dmem_addr |
+                            (is_remote_local_dmem_addr & (is_low_dmem_addr | is_high_dmem_addr)));
 
   assign dmem_v_o = is_local_dmem_addr &
     (exe_decode_i.is_load_op | exe_decode_i.is_store_op |

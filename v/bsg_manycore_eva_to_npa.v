@@ -105,7 +105,35 @@ module bsg_manycore_eva_to_npa
     ,.epa_o(dram_epa_lo)
   );
 
+  // we need a second DRAM hash function
+  // just in case that we are accessing a DRAM overlowed DEM addr
+  logic [data_width_p-1:0]   eva_overflowed_l;
+  logic [x_cord_width_p-1:0] overflowed_dram_x_cord_lo;
+  logic [y_cord_width_p-1:0] overflowed_dram_y_cord_lo;
+  logic [addr_width_p-1:0]   overflowed_dram_epa_lo;
+  assign eva_overflowed_l[data_width_p-1] = 1'b1;
+  assign eva_overflowed_l[data_width_p-2:0] = eva_i[data_width_p-2:0];
 
+  bsg_manycore_dram_hash_function #(
+    .data_width_p(data_width_p)
+    ,.addr_width_p(addr_width_p)
+    ,.x_cord_width_p(x_cord_width_p)
+    ,.y_cord_width_p(y_cord_width_p)
+    ,.pod_x_cord_width_p(pod_x_cord_width_p)
+    ,.pod_y_cord_width_p(pod_y_cord_width_p)
+    ,.x_subcord_width_p(x_subcord_width_lp)
+    ,.y_subcord_width_p(y_subcord_width_lp)
+    ,.num_vcache_rows_p(num_vcache_rows_p)
+    ,.vcache_block_size_in_words_p(vcache_block_size_in_words_p)
+  ) overflowed_dram_hash (
+    .eva_i(eva_overflowed_l)
+    ,.pod_x_i(pod_x_i)
+    ,.pod_y_i(pod_y_i)
+
+    ,.x_cord_o(overflowed_dram_x_cord_lo)
+    ,.y_cord_o(overflowed_dram_y_cord_lo)
+    ,.epa_o(overflowed_dram_epa_lo)
+  );
 
   // EVA->NPA table
   always_comb begin
@@ -130,12 +158,11 @@ module bsg_manycore_eva_to_npa
       x_cord_o = {pod_x_i, x_subcord_width_lp'(tile_group_addr.x_cord + tgo_x_i)};
       // here we do an and with 0x03FF to make sure the addr is a valid physical dmem addr
       epa_o = {{(addr_width_p-tile_group_epa_word_addr_width_gp){1'b0}}, (tile_group_addr.addr & 16'h03FF)};
-      // Logical DMEM Hack:
-      // we check if the dmem is in logic range or not
+      // DRAM overflowed DMEM Hack:
+      // we check if the dmem is in overflowed range or not
       // this is a dmem access made to an addr actually in DRAM
       if (tile_group_addr.addr inside {[16'h0100:16'h04FF]}) begin
-        $display("[INFO][LC] possible Logical DMEM access t=%0t; x=%d, y=%d; addr=%h", $time, x_cord_o, y_cord_o, tile_group_addr.addr);
-        // $fatal(1, "Logical DMEM access unimplmented");
+        $display("[INFO][LC] possible overflowed DMEM access t=%0t; x=%d, y=%d; addr=%h; overflowed addr=%h", $time, x_cord_o, y_cord_o, tile_group_addr.addr, eva_overflowed_l);
       end
     end
     else begin

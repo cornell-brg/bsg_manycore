@@ -167,6 +167,7 @@ module bsg_manycore_eva_to_npa
         y_cord_o = {pod_y_i, y_subcord_width_lp'(tile_group_addr.y_cord + tgo_y_i)};
         x_cord_o = {pod_x_i, x_subcord_width_lp'(tile_group_addr.x_cord + tgo_x_i)};
         // here we do an and with 0x03FF to make sure the addr is a valid physical dmem addr
+        // XXX: LC - make sure this mask is correct!
         epa_o = {{(addr_width_p-tile_group_epa_word_addr_width_gp){1'b0}}, (tile_group_addr.addr & 16'h03FF)};
       end
     end

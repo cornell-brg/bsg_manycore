@@ -159,7 +159,7 @@ module bsg_manycore_eva_to_npa
         y_cord_o = overflowed_dram_y_cord_lo;
         x_cord_o = overflowed_dram_x_cord_lo;
         epa_o = overflowed_dram_epa_lo;
-        $display("[INFO][LC] possible overflowed DMEM access t=%0t; x=%d, y=%d; addr=%h; overflowed addr=%h", $time, x_cord_o, y_cord_o, tile_group_addr.addr, eva_overflowed_l);
+        $display("[INFO][LC] possible overflowed DMEM access t=%0t; x=%d, y=%d; addr=%h; overflowed addr=%h", $time, tile_group_addr.x_cord, tile_group_addr.y_cord, tile_group_addr.addr, eva_overflowed_l);
       end
       else begin
         // tile-group addr

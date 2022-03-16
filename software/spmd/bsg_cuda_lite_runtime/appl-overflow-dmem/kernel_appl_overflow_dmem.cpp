@@ -33,8 +33,13 @@ int kernel_appl_overflow_dmem(int *A, int *B, int *C, int size, int grain_size) 
   appl::runtime_init(grain_size);
   if (__bsg_id == 0) {
     vvadd_appl_pfor(buf, A, B, size);
-    vvadd_appl_pfor(C, A, buf, size);
   }
+  barrier.sync();
+  if (__bsg_id == 1) {
+    int* remote_buf = appl::remote_ptr(buf, 0);
+    vvadd_appl_pfor(C, A, remote_buf, size);
+  }
+  barrier.sync();
   appl::runtime_end();
   // --------------------- end of kernel -----------------
 

@@ -14,7 +14,7 @@ int32_t fib_base(int32_t n) {
 }
 
 int32_t fib(int32_t n, int32_t gsize = 2) {
-  if (n < gsize) {
+  if (n <= gsize) {
     return fib_base(n);
   }
 

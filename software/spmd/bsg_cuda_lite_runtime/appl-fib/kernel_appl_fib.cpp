@@ -29,7 +29,7 @@ int32_t fib(int32_t n, int32_t gsize = 2) {
 }
 
 extern "C" __attribute__ ((noinline))
-int kernel_appl_fib(int n, int grain_size) {
+int kernel_appl_fib(int* results, int n, int grain_size) {
 
   // debug print
   if (__bsg_id == 0) {
@@ -47,6 +47,7 @@ int kernel_appl_fib(int n, int grain_size) {
   appl::runtime_init(2);
   if (__bsg_id == 0) {
     result = fib(n, grain_size);
+    results[0] = result;
   } else {
     appl::work_stealing_loop([&]() -> bool {
         return bsg_amoadd(&appl::global::g_stop_flag, 0);

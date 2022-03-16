@@ -37,7 +37,7 @@ void outter_loop(int32_t dest[], int32_t n, int32_t gsize) {
 }
 
 extern "C" __attribute__ ((noinline))
-int kernel_appl_parallel_fib(int n, int grain_size) {
+int kernel_appl_parallel_fib(int32_t* dest, int n, int grain_size) {
 
   // debug print
   if (__bsg_id == 0) {
@@ -47,9 +47,6 @@ int kernel_appl_parallel_fib(int n, int grain_size) {
 
   // sync
   barrier.sync();
-
-  // output
-  int32_t dest[4] = {-1};
 
   // --------------------- kernel ------------------------
   appl::runtime_init(1);

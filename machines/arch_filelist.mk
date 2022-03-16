@@ -74,6 +74,8 @@ VSOURCES += $(BASEJUMP_STL_DIR)/bsg_misc/bsg_concentrate_static.v
 VSOURCES += $(BASEJUMP_STL_DIR)/bsg_misc/bsg_array_concentrate_static.v
 VSOURCES += $(BASEJUMP_STL_DIR)/bsg_misc/bsg_unconcentrate_static.v
 VSOURCES += $(BASEJUMP_STL_DIR)/bsg_misc/bsg_mux2_gatestack.v
+VSOURCES += $(BASEJUMP_STL_DIR)/bsg_misc/bsg_counting_leading_zeros.v
+VSOURCES += $(BASEJUMP_STL_DIR)/bsg_misc/bsg_mul_add_unsigned.v
 
 
 VHEADERS += $(BASEJUMP_STL_DIR)/bsg_tag/bsg_tag_client.v
@@ -127,6 +129,7 @@ VSOURCES += $(BASEJUMP_STL_DIR)/bsg_async/bsg_async_ptr_gray.v
 VSOURCES += $(BASEJUMP_STL_DIR)/bsg_cache/bsg_cache.v
 VSOURCES += $(BASEJUMP_STL_DIR)/bsg_cache/bsg_cache_decode.v
 VSOURCES += $(BASEJUMP_STL_DIR)/bsg_cache/bsg_cache_dma.v
+VSOURCES += $(BASEJUMP_STL_DIR)/bsg_cache/bsg_cache_dma_to_wormhole.v
 VSOURCES += $(BASEJUMP_STL_DIR)/bsg_cache/bsg_cache_miss.v
 VSOURCES += $(BASEJUMP_STL_DIR)/bsg_cache/bsg_cache_sbuf.v
 VSOURCES += $(BASEJUMP_STL_DIR)/bsg_cache/bsg_cache_sbuf_queue.v
@@ -179,7 +182,6 @@ VSOURCES += $(BSG_MANYCORE_DIR)/v/bsg_manycore_tile_compute_array_ruche.v
 VSOURCES += $(BSG_MANYCORE_DIR)/v/bsg_manycore_tile_compute_ruche.v
 VSOURCES += $(BSG_MANYCORE_DIR)/v/bsg_manycore_tile_vcache_array.v
 VSOURCES += $(BSG_MANYCORE_DIR)/v/bsg_manycore_tile_vcache.v
-VSOURCES += $(BSG_MANYCORE_DIR)/v/bsg_cache_dma_to_wormhole.v
 VSOURCES += $(BSG_MANYCORE_DIR)/v/bsg_manycore_hetero_socket.v
 VSOURCES += $(BSG_MANYCORE_DIR)/v/bsg_manycore_mesh_node.v
 VSOURCES += $(BSG_MANYCORE_DIR)/v/bsg_manycore_endpoint.v

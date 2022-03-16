@@ -22,8 +22,8 @@ module lsu
     , `BSG_INV_PARAM(dmem_size_p)
 
     , localparam dmem_addr_width_lp=`BSG_SAFE_CLOG2(dmem_size_p)
-    , localparam data_mask_width_lp=(data_width_p>>3)
-    , localparam reg_addr_width_lp=RV32_reg_addr_width_gp
+    , data_mask_width_lp=(data_width_p>>3)
+    , reg_addr_width_lp=RV32_reg_addr_width_gp
   )
   (
     input clk_i
@@ -34,7 +34,7 @@ module lsu
     , input [data_width_p-1:0] exe_rs1_i
     , input [data_width_p-1:0] exe_rs2_i
     , input [reg_addr_width_lp-1:0] exe_rd_i
-    , input [data_width_p-1:0] mem_offset_i
+    , input [RV32_Iimm_width_gp-1:0] mem_offset_i
     , input [data_width_p-1:0] pc_plus4_i
     , input icache_miss_i
 
@@ -50,7 +50,7 @@ module lsu
     , output logic [data_mask_width_lp-1:0] dmem_mask_o 
 
     , output logic reserve_o
-    , output logic [data_width_p-1:0] mem_addr_sent_o
+    , output logic [1:0] byte_sel_o 
 
   );
 
@@ -59,7 +59,7 @@ module lsu
   logic [data_width_p-1:0] mem_addr;
   logic [data_width_p-1:0] miss_addr;
 
-  assign mem_addr = exe_rs1_i + mem_offset_i;
+  assign mem_addr = exe_rs1_i + `BSG_SIGN_EXTEND(mem_offset_i, data_width_p);
   assign miss_addr = (pc_plus4_i - 'h4) | bsg_dram_npa_prefix_gp;
 
   // store data mask
@@ -104,9 +104,7 @@ module lsu
   assign dmem_data_o = store_data;
   assign dmem_mask_o = store_mask;
 
-  assign mem_addr_sent_o = icache_miss_i
-    ? miss_addr
-    : mem_addr;
+  assign byte_sel_o = mem_addr[1:0];
 
   // remote request
   // 1) icache fetch

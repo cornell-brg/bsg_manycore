@@ -15,16 +15,17 @@ module bsg_manycore_tile_vcache_array
     , `BSG_INV_PARAM(y_cord_width_p)
     , `BSG_INV_PARAM(pod_x_cord_width_p)
     , `BSG_INV_PARAM(pod_y_cord_width_p)
+    , `BSG_INV_PARAM(icache_block_size_in_words_p)
 
     // Number of tiles in a pod
     , `BSG_INV_PARAM(num_tiles_x_p)
     , `BSG_INV_PARAM(num_tiles_y_p)
     
-    , parameter x_subcord_width_lp=`BSG_SAFE_CLOG2(num_tiles_x_p)
-    , parameter y_subcord_width_lp=`BSG_SAFE_CLOG2(num_tiles_y_p)
+    , localparam x_subcord_width_lp=`BSG_SAFE_CLOG2(num_tiles_x_p)
+    , localparam y_subcord_width_lp=`BSG_SAFE_CLOG2(num_tiles_y_p)
 
     // Number of tiles in a subarray 
-    , `BSG_INV_PARAM(subarray_num_tiles_x_p)
+    , parameter `BSG_INV_PARAM(subarray_num_tiles_x_p)
 
     , `BSG_INV_PARAM(num_vcache_rows_p )
     , `BSG_INV_PARAM(vcache_addr_width_p )
@@ -40,13 +41,13 @@ module bsg_manycore_tile_vcache_array
     , `BSG_INV_PARAM(wh_len_width_p)
     , `BSG_INV_PARAM(wh_cord_width_p)
 
-    , parameter num_clk_ports_p=1
+    , num_clk_ports_p=1
     //, parameter reset_depth_p = 3
 
-    , parameter manycore_link_sif_width_lp =
+    , localparam manycore_link_sif_width_lp =
       `bsg_manycore_link_sif_width(addr_width_p,data_width_p,x_cord_width_p,y_cord_width_p)
 
-    , parameter wh_link_sif_width_lp = 
+    , wh_link_sif_width_lp = 
       `bsg_ready_and_link_sif_width(wh_flit_width_p)
   )
   (
@@ -86,7 +87,7 @@ module bsg_manycore_tile_vcache_array
         ,.x_cord_width_p(x_cord_width_p)
         ,.y_cord_width_p(y_cord_width_p)
         ,.num_tiles_y_p(num_tiles_y_p)  
-
+        ,.icache_block_size_in_words_p(icache_block_size_in_words_p)
         ,.vcache_addr_width_p(vcache_addr_width_p)
         ,.vcache_data_width_p(vcache_data_width_p)
         ,.vcache_ways_p(vcache_ways_p)

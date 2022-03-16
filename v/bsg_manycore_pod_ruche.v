@@ -26,17 +26,18 @@ module bsg_manycore_pod_ruche
     , `BSG_INV_PARAM(num_subarray_x_p)
     , `BSG_INV_PARAM(num_subarray_y_p)
     // Number of tiles in a subarray
-    , parameter subarray_num_tiles_x_lp = (num_tiles_x_p/num_subarray_x_p)
-    , parameter subarray_num_tiles_y_lp = (num_tiles_y_p/num_subarray_y_p)
+    , localparam subarray_num_tiles_x_lp = (num_tiles_x_p/num_subarray_x_p)
+    , subarray_num_tiles_y_lp = (num_tiles_y_p/num_subarray_y_p)
     
     // coordinate width within a pod
-    , parameter x_subcord_width_lp=`BSG_SAFE_CLOG2(num_tiles_x_p)
-    , parameter y_subcord_width_lp=`BSG_SAFE_CLOG2(num_tiles_y_p)
+    , x_subcord_width_lp=`BSG_SAFE_CLOG2(num_tiles_x_p)
+    , y_subcord_width_lp=`BSG_SAFE_CLOG2(num_tiles_y_p)
   
-    , `BSG_INV_PARAM(dmem_size_p)
+    , parameter `BSG_INV_PARAM(dmem_size_p)
     , `BSG_INV_PARAM(icache_entries_p)
     , `BSG_INV_PARAM(icache_tag_width_p)
- 
+    , `BSG_INV_PARAM(icache_block_size_in_words_p)
+
     , `BSG_INV_PARAM(num_vcache_rows_p)  
     , `BSG_INV_PARAM(vcache_addr_width_p) 
     , `BSG_INV_PARAM(vcache_data_width_p) 
@@ -56,15 +57,15 @@ module bsg_manycore_pod_ruche
     , `BSG_INV_PARAM(wh_len_width_p)
     
     // number of clock ports on vcache/tile subarray
-    , parameter num_clk_ports_p=1
+    , num_clk_ports_p=1
 
-    , parameter manycore_link_sif_width_lp =
+    , localparam manycore_link_sif_width_lp =
       `bsg_manycore_link_sif_width(addr_width_p,data_width_p,x_cord_width_p,y_cord_width_p)
 
-    , parameter manycore_ruche_link_sif_width_lp =
+    , manycore_ruche_link_sif_width_lp =
       `bsg_manycore_ruche_x_link_sif_width(addr_width_p,data_width_p,x_cord_width_p,y_cord_width_p)
 
-    , parameter wh_link_sif_width_lp = 
+    , wh_link_sif_width_lp = 
       `bsg_ready_and_link_sif_width(wh_flit_width_p)
 
     // This is used to define heterogeneous arrays. Each index defines
@@ -138,6 +139,7 @@ module bsg_manycore_pod_ruche
       ,.num_tiles_y_p(num_tiles_y_p)
 
       ,.subarray_num_tiles_x_p(subarray_num_tiles_x_lp)
+      ,.icache_block_size_in_words_p(icache_block_size_in_words_p)
 
       ,.num_vcache_rows_p(num_vcache_rows_p)
       ,.vcache_addr_width_p(vcache_addr_width_p)
@@ -253,6 +255,7 @@ module bsg_manycore_pod_ruche
 
         ,.subarray_num_tiles_x_p(subarray_num_tiles_x_lp)
         ,.subarray_num_tiles_y_p(subarray_num_tiles_y_lp)
+        ,.icache_block_size_in_words_p(icache_block_size_in_words_p)
 
         ,.pod_x_cord_width_p(pod_x_cord_width_p)
         ,.pod_y_cord_width_p(pod_y_cord_width_p)
@@ -402,6 +405,7 @@ module bsg_manycore_pod_ruche
       ,.num_tiles_y_p(num_tiles_y_p)
 
       ,.subarray_num_tiles_x_p(subarray_num_tiles_x_lp)
+      ,.icache_block_size_in_words_p(icache_block_size_in_words_p)
 
       ,.num_vcache_rows_p(num_vcache_rows_p)
       ,.vcache_addr_width_p(vcache_addr_width_p)

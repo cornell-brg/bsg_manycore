@@ -76,7 +76,7 @@ module vanilla_core_profiler
     , input remote_req_s remote_req_o
 
     , input [data_width_p-1:0] rs1_val_to_exe
-    , input [data_width_p-1:0] mem_addr_op2
+    , input [RV32_Iimm_width_gp-1:0] mem_addr_op2
 
     , input int_sb_clear
     , input float_sb_clear
@@ -266,7 +266,7 @@ module vanilla_core_profiler
   logic [reg_els_lp-1:0][3:0] int_sb_r;
   logic [reg_els_lp-1:0][3:0] float_sb_r;
 
-  wire [data_width_p-1:0] id_mem_addr = rs1_val_to_exe + mem_addr_op2;
+  wire [data_width_p-1:0] id_mem_addr = rs1_val_to_exe + `BSG_SIGN_EXTEND(mem_addr_op2,data_width_p);
   wire remote_ld_dram_in_id = ((id_r.decode.is_load_op & id_r.decode.write_rd) | id_r.decode.is_amo_op) & id_mem_addr[data_width_p-1];
   wire remote_ld_global_in_id = ((id_r.decode.is_load_op & id_r.decode.write_rd) | id_r.decode.is_amo_op) & (id_mem_addr[data_width_p-1-:2] == 2'b01);
   wire remote_ld_group_in_id = ((id_r.decode.is_load_op & id_r.decode.write_rd) | id_r.decode.is_amo_op) & (id_mem_addr[data_width_p-1-:3] == 3'b001);
@@ -1354,6 +1354,13 @@ module vanilla_core_profiler
           else if (barsend_inc) print_operation_trace(fd2, "barsend", exe_pc);
           else if (barrecv_inc) print_operation_trace(fd2, "barrecv", exe_pc);
 
+          // Traces that can be attributed to stall_all should have higher priority of being printed
+          // than stall_id, flush traces.
+          else if (stall_remote_ld_wb) print_operation_trace(fd2, "stall_remote_ld_wb", exe_pc);
+          else if (stall_ifetch_wait) print_operation_trace(fd2, "stall_ifetch_wait", exe_pc);
+          else if (stall_remote_flw_wb) print_operation_trace(fd2, "stall_remote_flw_wb", exe_pc);
+
+          // flush/bubble, stall_id traces
           else if (branch_miss_bubble_inc) print_operation_trace(fd2, "bubble_branch_miss", exe_bubble_pc_r);
           else if (jalr_miss_bubble_inc) print_operation_trace(fd2, "bubble_jalr_miss", exe_bubble_pc_r);
           else if (icache_miss_bubble_inc) print_operation_trace(fd2, "bubble_icache_miss", exe_bubble_pc_r);
@@ -1375,10 +1382,6 @@ module vanilla_core_profiler
           else if (stall_idiv_busy_inc) print_operation_trace(fd2, "stall_idiv_busy", exe_bubble_pc_r);
           else if (stall_fcsr_inc) print_operation_trace(fd2, "stall_fcsr", exe_bubble_pc_r);
           else if (stall_barrier_inc) print_operation_trace(fd2, "stall_barrier", exe_bubble_pc_r);
-
-          else if (stall_remote_ld_wb) print_operation_trace(fd2, "stall_remote_ld", exe_pc);
-          else if (stall_ifetch_wait) print_operation_trace(fd2, "stall_ifetch_wait", exe_pc);
-          else if (stall_remote_flw_wb) print_operation_trace(fd2, "stall_remote_flw_wb", exe_pc);
           else print_operation_trace(fd2, "unknown", 0);
 
           $fclose(fd2);

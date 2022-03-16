@@ -71,6 +71,7 @@ class BloodGraph:
                       "stall_remote_ld",
                       "stall_ifetch_wait",
                       "stall_remote_flw_wb",
+                      "stall_remote_ld_wb",
                       "bubble_branch_miss",
                       "bubble_jalr_miss",
                       "bubble_icache_miss"]
@@ -150,6 +151,8 @@ class BloodGraph:
                        "csrrwi",
                        "csrrsi",
                        "csrrci",
+                       "barsend",
+                       "barrecv",
                        "unknown"]
 
 
@@ -203,6 +206,7 @@ class BloodGraph:
                                      "stall_lr_aq"               : (0x40, 0x40, 0x40), ## dark gray
                                      "stall_fence"               : (0x00, 0x00, 0x80), ## navy blue
                                      "stall_remote_req"          : (0xff, 0xff, 0x00), ## yellow
+                                     "stall_barrier"             : (0x00, 0x11, 0xff), ## blue
                                      "stall_remote_credit"       : (0x80, 0x00, 0x00), ## maroon
                                      
                                      
@@ -210,6 +214,7 @@ class BloodGraph:
                                      "stall_remote_ld"           : (0xaa, 0x00, 0x00), ## dark red
 
                                      "stall_remote_flw_wb"       : (0xff, 0xff, 0x80), ## light yellow
+                                     "stall_remote_ld_wb"       : (0xff, 0xff, 0x40), ## light-ish yellow
                                      
                                      "bubble_branch_miss"        : (0x80, 0x00, 0x80), ## purple
                                      "bubble_jalr_miss"          : (0xff, 0xa5, 0x00), ## orange
@@ -245,12 +250,14 @@ class BloodGraph:
                                      "stall_lr_aq"               : (0x40, 0x40, 0x40), ## dark gray
                                      "stall_fence"               : (0x00, 0x00, 0x00), ## black
                                      "stall_remote_req"          : (0x00, 0x00, 0x00), ## black
+                                     "stall_barrier"             : (0x00, 0x11, 0xff), ## blue
                                      "stall_remote_credit"       : (0x00, 0x00, 0x00), ## black
                                      
                                      "stall_fcsr"                : (0x00, 0x00, 0x00), ## black
                                      "stall_remote_ld"           : (0x00, 0x00, 0x00), ## black
 
                                      "stall_remote_flw_wb"       : (0x00, 0x00, 0x00), ## black
+                                     "stall_remote_ld_wb"       : (0x00, 0x00, 0x00), ## black
                                      
                                      "bubble_branch_miss"        : (0x00, 0x00, 0x00), ## black
                                      "bubble_jalr_miss"          : (0x00, 0x00, 0x00), ## black

@@ -221,6 +221,7 @@ typedef struct packed
     fp_decode_s                        fp_decode;
     logic                              icache_miss;
     logic                              valid;             // valid instruction in ID
+    logic                              branch_predicted_taken;
 } id_signals_s;
 
 // Execute stage signals
@@ -233,10 +234,11 @@ typedef struct packed
     logic [RV32_reg_data_width_gp-1:0] rs1_val;           // RF output data from RS1 address
     logic [RV32_reg_data_width_gp-1:0] rs2_val;           // RF output data from RS2 address
                                                           // CSR instructions use this register for loading CSR vals
-    logic [RV32_reg_data_width_gp-1:0] mem_addr_op2;      // the second operands to compute
+    logic [RV32_Iimm_width_gp-1:0]     mem_addr_op2;      // the second operands to compute
                                                           // memory address
     logic                              icache_miss;
     logic                              valid;             // valid instruction in EXE
+    logic                              branch_predicted_taken;
 } exe_signals_s;
 
 
@@ -249,7 +251,7 @@ typedef struct packed {
     logic is_hex_op;
     logic is_load_unsigned;
     logic local_load;
-    logic [RV32_reg_data_width_gp-1:0] mem_addr_sent;
+    logic [1:0] byte_sel;
     logic icache_miss;
 } mem_ctrl_signals_s;
 
@@ -262,7 +264,6 @@ typedef struct packed {
     logic                              write_rd;
     logic [RV32_reg_addr_width_gp-1:0] rd_addr;
     logic                              icache_miss;
-    logic [RV32_reg_data_width_gp-1:0] icache_miss_pc;
     logic clear_sb;
 } wb_ctrl_signals_s;
 

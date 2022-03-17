@@ -8,7 +8,7 @@
 
 #define MAX_WORKERS (bsg_tiles_X * bsg_tiles_Y)
 #define HB_L2_CACHE_LINE_WORDS 16
-#define BUF_FACTOR 33
+#define BUF_FACTOR 129
 
 // remote pointer calculation
 #define GROUP_EPA_WIDTH 18
@@ -42,6 +42,7 @@ extern int dram_buffer[MAX_WORKERS * BUF_FACTOR * HB_L2_CACHE_LINE_WORDS] __attr
 inline int* brg_malloc() {
   int* val = &(global::dram_buffer[__bsg_id * BUF_FACTOR * HB_L2_CACHE_LINE_WORDS + local::dram_buffer_idx++]);
   bsg_print_int((intptr_t)val);
+  bsg_print_int(local::dram_buffer_idx);
   return val;
 }
 

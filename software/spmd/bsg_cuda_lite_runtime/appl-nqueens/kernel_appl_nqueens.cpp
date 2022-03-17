@@ -14,7 +14,7 @@ int nsolutions __attribute__ ((section (".dram")));
  * <a> contains array of <n> queen positions.  Returns 1
  * if none of the queens conflict, and returns 0 otherwise.
  */
-int ok(int n, int *a) {
+int ok(int n, char *a) {
   int i, j;
   int p, q;
 
@@ -37,7 +37,7 @@ int ok(int n, int *a) {
  * settings (allocated from the heap).  Otherwise, returns NULL.
  * Does not side-effect <a>.
  */
-void nqueens(int n, int j, int *a) {
+void nqueens(int n, int j, char *a) {
 
   if (n == j) {
     if ( VERIFY ) {
@@ -49,7 +49,7 @@ void nqueens(int n, int j, int *a) {
   appl::parallel_for( 0, n, 1, [&]( int i ) {
       /* allocate a temporary array and copy <a> into it */
       // char* b = (char*)malloc((j + 1) * sizeof(char));
-      int b[j+1];
+      char b[j+1];
       for ( int k = 0; k < j; k++ ) {
         b[k] = a[k];
       }
@@ -78,7 +78,7 @@ int kernel_appl_nqueens(int* results, int n, int grain_size) {
   // --------------------- kernel ------------------------
   appl::runtime_init(grain_size);
   if (__bsg_id == 0) {
-    int a[n];
+    char a[n];
     nqueens(n, 0, a);
     result     = bsg_amoadd(&nsolutions, 0);
     results[0] = result;

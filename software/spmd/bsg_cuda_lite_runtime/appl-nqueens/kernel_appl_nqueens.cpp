@@ -69,14 +69,15 @@ int kernel_appl_nqueens(int* results, int n, int grain_size) {
     bsg_print_int(grain_size);
   }
 
-  // sync
-  barrier.sync();
-
   // output
   int32_t result     = -1;
 
   // --------------------- kernel ------------------------
   appl::runtime_init(grain_size);
+
+  // sync
+  barrier.sync();
+
   if (__bsg_id == 0) {
     char a[n];
     nqueens(n, 0, a);

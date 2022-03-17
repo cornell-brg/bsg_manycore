@@ -25,11 +25,12 @@ int kernel_appl_vvadd(int *A, int *B, int *C, int size, int grain_size) {
     bsg_print_int(grain_size);
   }
 
+  // --------------------- kernel ------------------------
+  appl::runtime_init(grain_size);
+
   // sync
   barrier.sync();
 
-  // --------------------- kernel ------------------------
-  appl::runtime_init(grain_size);
   if (__bsg_id == 0) {
     vvadd_appl_pfor(C, A, B, size);
   } else {

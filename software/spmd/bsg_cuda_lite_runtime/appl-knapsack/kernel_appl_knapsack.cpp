@@ -78,11 +78,12 @@ int kernel_appl_knapsack(int *results, struct item* items, int n, int capacity) 
     bsg_print_int(capacity);
   }
 
+  // --------------------- kernel ------------------------
+  appl::runtime_init(1);
+
   // sync
   barrier.sync();
 
-  // --------------------- kernel ------------------------
-  appl::runtime_init(1);
   if (__bsg_id == 0) {
     sol = knapsack( items, capacity, n, 0 );
     results[0] = sol;

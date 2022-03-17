@@ -24,13 +24,14 @@ int kernel_appl_overflow_dmem(int *A, int *B, int *C, int size, int grain_size) 
     bsg_print_int(grain_size);
   }
 
-  // sync
-  barrier.sync();
-
   int buf[N];
 
   // --------------------- kernel ------------------------
   appl::runtime_init(grain_size);
+
+  // sync
+  barrier.sync();
+
   if (__bsg_id == 0) {
     vvadd_appl_pfor(buf, A, B, size);
   }

@@ -45,11 +45,12 @@ int kernel_appl_parallel_fib(int32_t* dest, int n, int grain_size) {
     bsg_print_int(grain_size);
   }
 
+  // --------------------- kernel ------------------------
+  appl::runtime_init(1);
+
   // sync
   barrier.sync();
 
-  // --------------------- kernel ------------------------
-  appl::runtime_init(1);
   if (__bsg_id == 0) {
     outter_loop(dest, n, grain_size);
   } else {

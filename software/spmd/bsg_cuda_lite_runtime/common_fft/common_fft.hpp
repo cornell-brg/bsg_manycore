@@ -1,10 +1,24 @@
 // common_fft.hpp
 // FFT utilities and an optimized 256-point radix-2 DIT implementation
 
+#include "bsg_manycore.h"
+#include "bsg_set_tile_x_y.h"
+
 #include <complex>
 
+// This library has sinf/cosf functions specialized for the following
+// number of points
+#define MAX_NUM_POINTS      256
+#define MAX_LOG2_NUM_POINTS 8
+
+#ifdef FFT128
+#define NUM_POINTS      128
+#define LOG2_NUM_POINTS 7
+#else
+// By default we provide utilities for 256-point FFT
 #define NUM_POINTS      256
 #define LOG2_NUM_POINTS 8
+#endif
 
 typedef std::complex<float> FP32Complex;
 
@@ -14,10 +28,11 @@ float zerof     = 0.0f;
 /*******************************************************************************
  * Efficient sinf and cosf implementation
 *******************************************************************************/
+// NOTE: both sinf and cosf here are specialized for a specific input size
 // Return sin(-2*pi*x/NUM_POINTS) and cos(-2*pi*x/NUM_POINTS)
 
 // 65 elements = 260B
-float sinf_pi_over_2[(NUM_POINTS>>2)+1] = {
+float sinf_pi_over_2[(MAX_NUM_POINTS>>2)+1] = {
     0.0000000000000000f,
     0.0245412285229123f,
     0.0490676743274180f,
@@ -87,8 +102,8 @@ float sinf_pi_over_2[(NUM_POINTS>>2)+1] = {
 
 inline float
 opt_fft_sinf(int x) {
-    const int No2 = NUM_POINTS >> 1;
-    const int No4 = NUM_POINTS >> 2;
+    const int No2 = MAX_NUM_POINTS >> 1;
+    const int No4 = MAX_NUM_POINTS >> 2;
     if ((x >= No4) && (x < No2)) {
         x = No2 - x;
     }
@@ -101,8 +116,8 @@ opt_fft_sinf(int x) {
 
 inline float
 opt_fft_cosf(int x) {
-    const int No2 = NUM_POINTS >> 1;
-    const int No4 = NUM_POINTS >> 2;
+    const int No2 = MAX_NUM_POINTS >> 1;
+    const int No4 = MAX_NUM_POINTS >> 2;
     if ((x >= No4) && (x < No2)) {
         return -sinf_pi_over_2[x-No4];
     }
@@ -218,11 +233,11 @@ opt_bit_reverse(FP32Complex *list, const int N) {
 
 // In-place implementation
 inline void
-fft_256(FP32Complex *list) {
-    int even_idx, odd_idx, n = 2, lshift = LOG2_NUM_POINTS-1;
+fft_specialized(FP32Complex *list) {
+    int even_idx, odd_idx, n = 2, lshift = MAX_LOG2_NUM_POINTS-1;
     FP32Complex exp_val, tw_val, even_val, odd_val;
 
-    opt_bit_reverse(list, 256);
+    opt_bit_reverse(list, NUM_POINTS);
 
     while (n <= NUM_POINTS) {
         for (int i = 0; i < NUM_POINTS; i += n) {
@@ -250,6 +265,8 @@ fft_256(FP32Complex *list) {
 /*******************************************************************************
  * Custom sinf/cosf utilities
 *******************************************************************************/
+// NOTE: the custom sinf/cosf functions should only be used for input sizes
+// other than 128 and 256.
 
 #ifdef CUSTOM_SINCOS
 // https://stackoverflow.com/a/64063765
@@ -400,7 +417,7 @@ float my_cosf (float a)
 
 // In-place implementation
 void
-fft_N(FP32Complex *list, int N) {
+fft_generic(FP32Complex *list, int N) {
     int even_idx, odd_idx, n = 2;
     FP32Complex exp_val, tw_val, even_val, odd_val;
 
@@ -450,11 +467,11 @@ load_fft_store(FP32Complex *lst,
 
     /* debug_print_complex_per_tile(local_lst, local_point, "Loaded into DMEM"); */
 
-    // 256-point FFT
-    if (local_point == 256)
-        fft_256(local_lst);
+    // 256-point or 128-point FFT
+    if (local_point == NUM_POINTS)
+        fft_specialized(local_lst);
     else
-        fft_N(local_lst, local_point);
+        fft_generic(local_lst, local_point);
 
     /* debug_print_complex_per_tile(local_lst, local_point, "After uFFT"); */
 
@@ -494,15 +511,15 @@ load_fft_store_no_twiddle(FP32Complex *lst,
     // Strided load into DMEM
     opt_data_transfer_src_strided(local_lst, lst+start, stride, local_point);
 
-    /* debug_print_complex_per_tile(local_lst, local_point, "Loaded into DMEM"); */
+    /* debug_print_complex(local_lst, local_point, "Loaded into DMEM"); */
 
-    // 256-point FFT
-    if (local_point == 256)
-        fft_256(local_lst);
+    // 256-point or 128-point FFT
+    if (local_point == NUM_POINTS)
+        fft_specialized(local_lst);
     else
-        fft_N(local_lst, local_point);
+        fft_generic(local_lst, local_point);
 
-    /* debug_print_complex_per_tile(local_lst, local_point, "After uFFT"); */
+    /* debug_print_complex(local_lst, local_point, "After uFFT"); */
 
     // Optional twiddle scaling
     if (scaling) {
@@ -511,8 +528,62 @@ load_fft_store_no_twiddle(FP32Complex *lst,
             FP32Complex w = *tw;
             local_lst[c] = w*local_lst[c];
         }
-        /* debug_print_complex_per_tile(local_lst, local_point, "After scaling"); */
+        /* debug_print_complex(local_lst, local_point, "After scaling"); */
     }
+
+    // Strided store into DRAM
+    opt_data_transfer_dst_strided(out+start, local_lst, stride, local_point);
+}
+
+inline void
+load_fft_scale_no_twiddle(FP32Complex *lst,
+                          FP32Complex *local_lst,
+                          FP32Complex *tw,
+                          int start,
+                          int stride,
+                          int local_point,
+                          int total_point)
+{
+    // Strided load into DMEM
+    opt_data_transfer_src_strided(local_lst, lst+start, stride, local_point);
+
+    /* debug_print_complex(local_lst, local_point, "Loaded into DMEM"); */
+
+    // 256-point or 128-point FFT
+    if (local_point == NUM_POINTS)
+        fft_specialized(local_lst);
+    else
+        fft_generic(local_lst, local_point);
+
+    /* debug_print_complex(local_lst, local_point, "After uFFT"); */
+
+    // Twiddle scaling
+    tw = tw+local_point*start;
+    for (int c = 0; c < local_point; c++, tw++) {
+        FP32Complex w = *tw;
+        local_lst[c] = w*local_lst[c];
+    }
+
+    /* debug_print_complex(local_lst, local_point, "After scaling"); */
+}
+
+inline void
+fft_store(FP32Complex *local_lst,
+          FP32Complex *out,
+          int start,
+          int stride,
+          int local_point,
+          int total_point)
+{
+    /* debug_print_complex(local_lst, local_point, "Loaded into DMEM"); */
+
+    // 256-point or 128-point FFT
+    if (local_point == NUM_POINTS)
+        fft_specialized(local_lst);
+    else
+        fft_generic(local_lst, local_point);
+
+    /* debug_print_complex(local_lst, local_point, "After uFFT"); */
 
     // Strided store into DRAM
     opt_data_transfer_dst_strided(out+start, local_lst, stride, local_point);
@@ -532,19 +603,131 @@ square_transpose(FP32Complex *lst, int size) {
         }
 }
 
+// Only works for size 128 or 256!
 inline void
 opt_square_transpose(FP32Complex *lst, int size) {
     FP32Complex tmp;
     int i = __bsg_id;
-    for (int j = i+1; j < size; j++) {
-        tmp = lst[i+j*size];
-        lst[i+j*size] = lst[j+i*size];
-        lst[j+i*size] = tmp;
+    if (size == 128) {
+        if (i >= 64) {
+            for (int j = 0; j < 64; j++) {
+                tmp = lst[i+j*size];
+                lst[i+j*size] = lst[j+i*size];
+                lst[j+i*size] = tmp;
+            }
+        } else {
+            for (int j = i+1; j < 64; j++) {
+                tmp = lst[i+j*size];
+                lst[i+j*size] = lst[j+i*size];
+                lst[j+i*size] = tmp;
+            }
+            for (int j = size-i; j < 128; j++) {
+                int ii = size-1-i;
+                tmp = lst[ii+j*size];
+                lst[ii+j*size] = lst[j+ii*size];
+                lst[j+ii*size] = tmp;
+            }
+        }
+    } else {
+        for (int j = i+1; j < size; j++) {
+            tmp = lst[i+j*size];
+            lst[i+j*size] = lst[j+i*size];
+            lst[j+i*size] = tmp;
+        }
+        for (int j = size-i; j < size; j++) {
+            int ii = size-1-i;
+            tmp = lst[ii+j*size];
+            lst[ii+j*size] = lst[j+ii*size];
+            lst[j+ii*size] = tmp;
+        }
     }
-    for (int j = size-i; j < size; j++) {
-        int ii = size-1-i;
-        tmp = lst[ii+j*size];
-        lst[ii+j*size] = lst[j+ii*size];
-        lst[j+ii*size] = tmp;
+}
+
+/*******************************************************************************
+ * Tile-group shared memory utilities
+*******************************************************************************/
+
+typedef FP32Complex *bsg_remote_complex_ptr;
+
+#define bsg_remote_complex(x, y, local_addr) \
+    ((bsg_remote_complex_ptr)                \
+        (                                    \
+            (1 << REMOTE_PREFIX_SHIFT)       \
+            | ((y) << REMOTE_Y_CORD_SHIFT)   \
+            | ((x) << REMOTE_X_CORD_SHIFT)   \
+            | ((int) (local_addr))           \
+        )                                    \
+    )
+
+#define bsg_complex_store(x,y,local_addr,val)         \
+    do {                                              \
+        *(bsg_remote_complex((x),(y),(local_addr))) = \
+            (FP32Complex) (val);                      \
+    } while (0)
+
+#define bsg_complex_load(x,y,local_addr,val)              \
+    do {                                                  \
+        val =                                             \
+            *(bsg_remote_complex((x),(y),(local_addr)));  \
+    } while (0)
+
+// Out-of-place transposition using tile-group shared memory
+// Only works for 128 tiles and 128x128-point FFT
+inline void
+tg_mem_square_transpose_oop(FP32Complex *dst, FP32Complex *src, int size) {
+    FP32Complex *addr = dst+__bsg_id;
+    for (int x = 0; x < bsg_tiles_X; x++)
+        for (int y = 0; y < bsg_tiles_Y; y++) {
+            bsg_complex_store(x, y, addr, *src);
+            src++;
+        }
+}
+
+// In-place transposition using tile-group shared memory
+// Only works for 128 tiles and 128x128-point FFT
+inline void
+tg_mem_square_transpose_inp(FP32Complex *src, int size) {
+    FP32Complex remote1, remote2;
+    FP32Complex *addr = src;
+    int i  = __bsg_id;
+    int ix = __bsg_id & 0xF;
+    int iy = __bsg_id >> 4;
+    int j  = 0;
+    int jx = 0;
+    int jy = 0;
+
+    if (i >= 64) {
+        addr = src;
+        for (j = 0; j < 64; j++) {
+            jx = j & 0xF;
+            jy = j >> 4;
+            bsg_complex_load(jx, jy, src+i, remote1);
+            bsg_complex_store(jx, jy, src+i, *addr);
+            *addr = remote1;
+            addr++;
+        }
+    } else {
+        addr = src+(__bsg_id+1);
+        for (j = __bsg_id+1; j < 64; j++) {
+            jx = j & 0xF;
+            jy = j >> 4;
+            bsg_complex_load(jx, jy, src+i, remote1);
+            bsg_complex_store(jx, jy, src+i, *addr);
+            *addr = remote1;
+            addr++;
+        }
+        i  = 127-__bsg_id;
+        ix = i & 0xF;
+        iy = i >> 4;
+        addr = src+(128-__bsg_id);
+        for (j = 128-__bsg_id; j < 128; j++) {
+            jx = j & 0xF;
+            jy = j >> 4;
+            bsg_complex_load(jx, jy, src+i, remote1);
+            bsg_complex_load(ix, iy, addr, remote2);
+            bsg_complex_store(jx, jy, src+i, remote2);
+            bsg_complex_store(ix, iy, addr, remote1);
+            addr++;
+        }
     }
 }

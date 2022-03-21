@@ -8,6 +8,7 @@
 namespace appl {
 
 void spawn( Task* task_p ) {
+  bsg_print_int(12395);
   local::g_taskq.push_back(task_p);
 }
 

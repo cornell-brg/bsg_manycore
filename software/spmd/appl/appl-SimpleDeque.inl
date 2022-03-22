@@ -15,7 +15,8 @@ void SimpleDeque<T>::reset() {
   m_tail_ptr  = m_array_rp;
   m_array_end = m_array_rp + QUEUE_SIZE;
 
-  m_mutex_ptr = brg_malloc();
+  m_mutex_ptr = remote_ptr((int*)0, bsg_x, bsg_y);;
+  bsg_print_hexadecimal((intptr_t)m_mutex_ptr);
   m_size_ptr  = brg_malloc();
 
   // this does not order anything

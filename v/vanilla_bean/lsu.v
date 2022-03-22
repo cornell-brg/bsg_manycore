@@ -103,7 +103,7 @@ module lsu
   wire is_tile_group_addr = tile_group_addr.remote == 3'b001;
   wire is_my_x_addr = tile_group_addr.x_cord == tg_x_cord_i;
   wire is_my_y_addr = tile_group_addr.y_cord == tg_y_cord_i;
-  wire is_remote_local_dmem_addr = (is_tile_group_addr & is_my_x_addr & is_my_y_addr);
+  wire is_remote_local_dmem_addr = (is_tile_group_addr & is_my_x_addr & is_my_y_addr & ~exe_decode_i.is_amo_op);
 
   // to local DMEM
   //

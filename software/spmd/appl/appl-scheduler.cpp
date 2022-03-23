@@ -21,6 +21,7 @@ void execute_task( Task* task_p, bool stolen ) {
     bsg_print_int(12306);
     Task* prev_task_p = task_p;
     task_p = task_p->execute();
+    bsg_print_int(60321);
 
     Task* successor = prev_task_p->get_successor();
 

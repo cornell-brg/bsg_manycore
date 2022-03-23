@@ -30,19 +30,18 @@ extern size_t g_pfor_grain_size;
 // ref_count stack. This needs to be in the DRAM for AMO
 extern uint32_t dram_buffer_idx;
 
+extern int* dram_buffer;
+
 } // namespace local
-
-namespace global {
-
-extern int dram_buffer[MAX_WORKERS * BUF_FACTOR * HB_L2_CACHE_LINE_WORDS] __attribute__ ((section (".dram")));
-
-} // namespace global
 
 // linear allocator in DRAM
 inline int* brg_malloc() {
-  int* val = &(global::dram_buffer[__bsg_id * BUF_FACTOR * HB_L2_CACHE_LINE_WORDS + local::dram_buffer_idx++]);
-  bsg_print_int((intptr_t)val);
+  int* val = &(local::dram_buffer[local::dram_buffer_idx++]);
+  bsg_print_hexadecimal((intptr_t)val);
   bsg_print_int(local::dram_buffer_idx);
+  if (local::dram_buffer_idx > HB_L2_CACHE_LINE_WORDS * BUF_FACTOR) {
+    bsg_print_int(7600);
+  }
   return val;
 }
 

@@ -29,7 +29,7 @@ int32_t fib(int32_t n, int32_t gsize = 2) {
 }
 
 extern "C" __attribute__ ((noinline))
-int kernel_appl_fib(int* results, int n, int grain_size) {
+int kernel_appl_fib(int* results, int n, int grain_size, int* dram_buffer) {
 
   // debug print
   if (__bsg_id == 0) {
@@ -41,7 +41,7 @@ int kernel_appl_fib(int* results, int n, int grain_size) {
   int32_t result     = -1;
 
   // --------------------- kernel ------------------------
-  appl::runtime_init(2);
+  appl::runtime_init(dram_buffer, 2);
 
   // sync
   barrier.sync();

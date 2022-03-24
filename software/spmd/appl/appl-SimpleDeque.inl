@@ -33,6 +33,7 @@ template <typename T>
 void SimpleDeque<T>::push_back( const T& item )
 {
   lock( m_mutex_ptr );
+  asm volatile("": : :"memory");
   if ( m_tail_ptr < m_array_end ) {
     *m_tail_ptr = item;
     m_tail_ptr++;
@@ -43,6 +44,7 @@ void SimpleDeque<T>::push_back( const T& item )
     bsg_print_int(7700);
 
   }
+  asm volatile("": : :"memory");
   unlock( m_mutex_ptr );
 }
 
@@ -50,6 +52,8 @@ template <typename T>
 T SimpleDeque<T>::pop_back()
 {
   lock( m_mutex_ptr );
+  asm volatile("": : :"memory");
+  T ret_val = nullptr;
   if ( m_tail_ptr - m_head_ptr > 0 ) {
     T* tmp = --m_tail_ptr;
     // reset pointer
@@ -57,19 +61,19 @@ T SimpleDeque<T>::pop_back()
       m_tail_ptr = m_head_ptr = m_array_rp;
     }
     bsg_amoadd(m_size_ptr, -1);
-    unlock( m_mutex_ptr );
-    return *tmp;
+    ret_val = *tmp;
   }
-  else {
-    unlock( m_mutex_ptr );
-    return nullptr;
-  }
+  asm volatile("": : :"memory");
+  unlock( m_mutex_ptr );
+  return ret_val;
 }
 
 template <typename T>
 T SimpleDeque<T>::pop_front()
 {
   lock( m_mutex_ptr );
+  asm volatile("": : :"memory");
+  T ret_val = nullptr;
   if ( m_tail_ptr - m_head_ptr > 0 ) {
     T* tmp = m_head_ptr++;
     // reset pointer
@@ -77,13 +81,11 @@ T SimpleDeque<T>::pop_front()
       m_tail_ptr = m_head_ptr = m_array_rp;
     }
     bsg_amoadd(m_size_ptr, -1);
-    unlock( m_mutex_ptr );
-    return *tmp;
+    ret_val = *tmp;
   }
-  else {
-    unlock( m_mutex_ptr );
-    return nullptr;
-  }
+  asm volatile("": : :"memory");
+  unlock( m_mutex_ptr );
+  return ret_val;
 }
 
 template <typename T>

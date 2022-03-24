@@ -18,6 +18,8 @@
 #define GROUP_Y_CORD_SHIFT (GROUP_X_CORD_SHIFT+GROUP_X_CORD_WIDTH)
 #define GROUP_PREFIX_SHIFT (GROUP_Y_CORD_SHIFT+GROUP_Y_CORD_WIDTH)
 
+#define APPL_DEBUG 1
+
 // utils
 namespace appl {
 namespace local {
@@ -37,8 +39,10 @@ extern int* dram_buffer;
 // linear allocator in DRAM
 inline int* brg_malloc() {
   int* val = &(local::dram_buffer[local::dram_buffer_idx++]);
+#ifdef APPL_DEBUG
   bsg_print_hexadecimal((intptr_t)val);
   bsg_print_int(local::dram_buffer_idx);
+#endif
   if (local::dram_buffer_idx > HB_L2_CACHE_LINE_WORDS * BUF_FACTOR) {
     bsg_print_int(7600);
   }

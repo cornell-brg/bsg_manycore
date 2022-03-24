@@ -660,6 +660,14 @@ module vanilla_core
     ,.jump_now_o(alu_jump_now)
   );
 
+  // synopsys translate_off
+  // always_ff @ (negedge clk_i) begin
+  //   if (~reset_i) begin
+  //     if ((exe_pc != 'hfffffffc) && (global_x_i === 'd18) && (global_y_i === 'd13))
+  //       $display("[LC] exe pc = %h @ t=%0t @ (%d,%d) w/ rs1=%h rs2=%h result=%h jalr_addr=%h, jump=%h", exe_pc, $time, global_x_i, global_y_i, exe_r.rs1_val, exe_r.rs2_val, alu_result, alu_jalr_addr, alu_jump_now);
+  //   end
+  // end
+  // synopsys translate_on
 
 
   // save pc+4 of jalr/jal for predicting jalr branch target

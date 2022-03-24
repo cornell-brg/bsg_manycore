@@ -68,7 +68,7 @@ int knapsack( struct item* e, int c, int n, int v )
 }
 
 extern "C" __attribute__ ((noinline))
-int kernel_appl_knapsack(int *results, struct item* items, int n, int capacity) {
+int kernel_appl_knapsack(int *results, struct item* items, int n, int capacity, int* dram_buffer) {
 
   int sol;
 
@@ -79,7 +79,7 @@ int kernel_appl_knapsack(int *results, struct item* items, int n, int capacity) 
   }
 
   // --------------------- kernel ------------------------
-  appl::runtime_init(1);
+  appl::runtime_init(dram_buffer, 1);
 
   // sync
   barrier.sync();

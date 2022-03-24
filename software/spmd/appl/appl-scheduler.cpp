@@ -18,10 +18,14 @@ void wait( Task* wait_task_p ) {
 
 void execute_task( Task* task_p, bool stolen ) {
   while ( task_p ) {
+#ifdef APPL_DEBUG
     bsg_print_int(12306);
+#endif
     Task* prev_task_p = task_p;
     task_p = task_p->execute();
+#ifdef APPL_DEBUG
     bsg_print_int(60321);
+#endif
 
     Task* successor = prev_task_p->get_successor();
 

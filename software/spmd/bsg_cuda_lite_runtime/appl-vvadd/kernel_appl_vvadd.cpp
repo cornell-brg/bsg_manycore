@@ -17,7 +17,7 @@ void vvadd_appl_pfor( int dest[], int src0[],
 }
 
 extern "C" __attribute__ ((noinline))
-int kernel_appl_vvadd(int *A, int *B, int *C, int size, int grain_size) {
+int kernel_appl_vvadd(int *A, int *B, int *C, int size, int grain_size, int* dram_buffer) {
 
   // debug print
   if (__bsg_id == 0) {
@@ -26,7 +26,7 @@ int kernel_appl_vvadd(int *A, int *B, int *C, int size, int grain_size) {
   }
 
   // --------------------- kernel ------------------------
-  appl::runtime_init(grain_size);
+  appl::runtime_init(dram_buffer, grain_size);
 
   // sync
   barrier.sync();

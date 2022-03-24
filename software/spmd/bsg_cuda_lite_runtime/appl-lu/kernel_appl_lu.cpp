@@ -295,7 +295,7 @@ void lu(Matrix M, int nb)
 }
 
 extern "C" __attribute__ ((noinline))
-int kernel_appl_lu(Matrix M, int n) {
+int kernel_appl_lu(Matrix M, int n, int* dram_buffer) {
 
   nBlocks = n / BLOCK_SIZE;
 
@@ -306,7 +306,7 @@ int kernel_appl_lu(Matrix M, int n) {
   }
 
   // --------------------- kernel ------------------------
-  appl::runtime_init(1);
+  appl::runtime_init(dram_buffer, 1);
 
   // sync
   barrier.sync();

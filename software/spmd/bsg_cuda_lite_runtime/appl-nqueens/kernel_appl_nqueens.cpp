@@ -61,7 +61,7 @@ void nqueens(int n, int j, char *a) {
 }
 
 extern "C" __attribute__ ((noinline))
-int kernel_appl_nqueens(int* results, int n, int grain_size) {
+int kernel_appl_nqueens(int* results, int n, int grain_size, int* dram_buffer) {
 
   // debug print
   if (__bsg_id == 0) {
@@ -73,7 +73,7 @@ int kernel_appl_nqueens(int* results, int n, int grain_size) {
   int32_t result     = -1;
 
   // --------------------- kernel ------------------------
-  appl::runtime_init(grain_size);
+  appl::runtime_init(dram_buffer, grain_size);
 
   // sync
   barrier.sync();

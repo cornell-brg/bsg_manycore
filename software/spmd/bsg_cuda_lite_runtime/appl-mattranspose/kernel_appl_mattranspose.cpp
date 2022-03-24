@@ -43,7 +43,7 @@ void mat_transpose( REAL *A, REAL *B, const int size, int m, int n, int r_off, i
 }
 
 extern "C" __attribute__ ((noinline))
-int kernel_appl_mattranspose(REAL *A, REAL *B, int size, int gbase) {
+int kernel_appl_mattranspose(REAL *A, REAL *B, int size, int gbase, int* dram_buffer) {
 
   // debug print
   if (__bsg_id == 0) {
@@ -52,7 +52,7 @@ int kernel_appl_mattranspose(REAL *A, REAL *B, int size, int gbase) {
   }
 
   // --------------------- kernel ------------------------
-  appl::runtime_init(1);
+  appl::runtime_init(dram_buffer, 1);
   g_base = gbase;
 
   // sync

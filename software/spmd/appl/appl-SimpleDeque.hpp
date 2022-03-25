@@ -11,7 +11,7 @@
 #include "bsg_set_tile_x_y.h"
 #include "appl-config.hpp"
 
-#define QUEUE_SIZE 192
+#define QUEUE_SIZE 160
 
 namespace appl {
 

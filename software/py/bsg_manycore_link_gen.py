@@ -136,7 +136,7 @@ class bsg_manycore_link_gen:
     # VMA (Virtual Memory Address) => Logical address used by linker for
     #                                 symbol resolutions
     _DMEM_VMA_START   = 0x0000
-    _DMEM_VMA_SIZE    = 0x1000
+    _DMEM_VMA_SIZE    = 0x0400
     _DRAM_T_LMA_START = 0x80000000
     _DRAM_T_LMA_SIZE  = self._imem_size
     _DRAM_D_LMA_START = 0x80000000 + self._imem_size

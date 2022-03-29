@@ -3,8 +3,10 @@ package vanilla_scoreboard_tracker_pkg;
   // integer scoreboard
   typedef struct packed {
     logic remote_group_load;
+    logic remote_group_amo;
     logic remote_global_load;
     logic remote_dram_load;
+    logic remote_dram_amo;
     logic idiv;
   } vanilla_isb_info_s;
 

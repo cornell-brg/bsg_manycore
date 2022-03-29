@@ -46,9 +46,17 @@ module vanilla_scoreboard_tracker
   vanilla_fsb_info_s [RV32_reg_els_gp-1:0] float_sb_r;
 
   wire [data_width_p-1:0] id_mem_addr = rs1_val_to_exe + `BSG_SIGN_EXTEND(mem_addr_op2,data_width_p);
+    // LC: check if ld_group is actualy made to local DMEM
+  bsg_manycore_tile_group_addr_s tile_group_addr;
+  assign tile_group_addr = id_mem_addr;
+  wire is_my_x_addr = tile_group_addr.x_cord == (global_x_i - origin_x_cord_p);
+  wire is_my_y_addr = tile_group_addr.y_cord == (global_y_i - origin_y_cord_p);
+  wire is_true_remote_group_addr = (tile_group_addr.remote == 3'b001) & (~is_my_x_addr | ~is_my_y_addr);
+
+
   wire remote_ld_dram_in_id = ((id_r.decode.is_load_op & id_r.decode.write_rd) | id_r.decode.is_amo_op) & id_mem_addr[data_width_p-1];
   wire remote_ld_global_in_id = ((id_r.decode.is_load_op & id_r.decode.write_rd) | id_r.decode.is_amo_op) & (id_mem_addr[data_width_p-1-:2] == 2'b01);
-  wire remote_ld_group_in_id = ((id_r.decode.is_load_op & id_r.decode.write_rd) | id_r.decode.is_amo_op) & (id_mem_addr[data_width_p-1-:3] == 3'b001);
+  wire remote_ld_group_in_id = ((id_r.decode.is_load_op & id_r.decode.write_rd) | id_r.decode.is_amo_op) & is_true_remote_group_addr;
 
   wire remote_flw_dram_in_id = (id_r.decode.is_load_op & id_r.decode.write_frd) & id_mem_addr[data_width_p-1];
   wire remote_flw_global_in_id = (id_r.decode.is_load_op & id_r.decode.write_frd) & (id_mem_addr[data_width_p-1-:2] == 2'b01);

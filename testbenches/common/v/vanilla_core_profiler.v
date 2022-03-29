@@ -273,7 +273,8 @@ module vanilla_core_profiler
   assign tile_group_addr = id_mem_addr;
   wire is_my_x_addr = tile_group_addr.x_cord == (global_x_i - origin_x_cord_p);
   wire is_my_y_addr = tile_group_addr.y_cord == (global_y_i - origin_y_cord_p);
-  wire is_true_remote_group_addr = (tile_group_addr.remote == 3'b001) & (~is_my_x_addr | ~is_my_y_addr);
+  wire is_my_addr   = is_my_x_addr & is_my_y_addr;
+  wire is_true_remote_group_addr = (tile_group_addr.remote == 3'b001) & (~is_my_addr | id_r.decode.is_amo_op);
 
   wire remote_ld_dram_in_id = ((id_r.decode.is_load_op & id_r.decode.write_rd) | id_r.decode.is_amo_op) & id_mem_addr[data_width_p-1];
   wire remote_ld_global_in_id = ((id_r.decode.is_load_op & id_r.decode.write_rd) | id_r.decode.is_amo_op) & (id_mem_addr[data_width_p-1-:2] == 2'b01);
@@ -303,23 +304,29 @@ module vanilla_core_profiler
         end
         // remote ld dram
         if (~stall_id & ~stall_all & ~flush & remote_ld_dram_in_id & (id_rd == i)) begin
+          $display("%0t remote ld dram in id for addr %h @ %h set int_sb_r[%h][2] @ %d,%d", $time, id_mem_addr, id_pc, id_r.instruction.rd, global_x_i, global_y_i);
           int_sb_r[i][2] <= 1'b1;
         end
         else if (int_sb_clear & (int_sb_clear_id == i)) begin
+          $display("%0t reset int_sb_r[%h][2] @ %d,%d", $time, int_sb_clear_id, global_x_i, global_y_i);
           int_sb_r[i][2] <= 1'b0;
         end
         // remote ld global
         if (~stall_id & ~stall_all & ~flush & remote_ld_global_in_id & (id_rd == i)) begin
+          $display("%0t remote ld global in id for addr %h @ %h set int_sb_r[%h][1] @ %d,%d", $time, id_mem_addr, id_pc, id_r.instruction.rd, global_x_i, global_y_i);
           int_sb_r[i][1] <= 1'b1;
         end
         else if (int_sb_clear & (int_sb_clear_id == i)) begin
+          $display("%0t reset int_sb_r[%h][1] @ %d,%d", $time, int_sb_clear_id, global_x_i, global_y_i);
           int_sb_r[i][1] <= 1'b0;
         end
         // remote ld group
         if (~stall_id & ~stall_all & ~flush & remote_ld_group_in_id & (id_rd == i)) begin
+          $display("%0t remote ld group in id for addr %h @ %h set int_sb_r[%h][0] @ %d,%d", $time, id_mem_addr, id_pc, id_r.instruction.rd, global_x_i, global_y_i);
           int_sb_r[i][0] <= 1'b1;
         end
         else if (int_sb_clear & (int_sb_clear_id == i)) begin
+          $display("%0t reset int_sb_r[%h][0] @ %d,%d", $time, int_sb_clear_id, global_x_i, global_y_i);
           int_sb_r[i][0] <= 1'b0;
         end
       end

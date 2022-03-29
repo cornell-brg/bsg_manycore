@@ -63,7 +63,7 @@ module vanilla_scoreboard_tracker
 
   wire remote_flw_dram_in_id = (id_r.decode.is_load_op & id_r.decode.write_frd) & id_mem_addr[data_width_p-1];
   wire remote_flw_global_in_id = (id_r.decode.is_load_op & id_r.decode.write_frd) & (id_mem_addr[data_width_p-1-:2] == 2'b01);
-  wire remote_flw_group_in_id = (id_r.decode.is_load_op & id_r.decode.write_frd) & (id_mem_addr[data_width_p-1-:3] == 3'b001);
+  wire remote_flw_group_in_id = (id_r.decode.is_load_op & id_r.decode.write_frd) & ((id_mem_addr[data_width_p-1-:3] == 3'b001) & ~is_my_addr);
 
   wire [reg_addr_width_lp-1:0] id_rd = id_r.instruction.rd;
 

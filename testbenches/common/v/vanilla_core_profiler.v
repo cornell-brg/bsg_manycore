@@ -340,7 +340,7 @@ module vanilla_core_profiler
           $display("%0t reset int_sb_r[%h][1] @ %d,%d", $time, int_sb_clear_id, global_x_i, global_y_i);
           int_sb_r[i][1] <= 1'b0;
         end
-        // remote ld group
+        // remote amo group
         if (~stall_id & ~stall_all & ~flush & remote_amo_group_in_id & (id_rd == i)) begin
           $display("%0t remote amo group in id for addr %h @ %h set int_sb_r[%h][0] @ %d,%d", $time, id_mem_addr, id_pc, id_r.instruction.rd, global_x_i, global_y_i);
           int_sb_r[i][0] <= 1'b1;
@@ -385,34 +385,44 @@ module vanilla_core_profiler
     end
   end
 
-  wire stall_depend_group_load = stall_depend_long_op
+  wire stall_depend_group_amo = stall_depend_long_op
     & ((id_r.decode.read_rs1 & int_sb_r[id_r.instruction.rs1][0]) |
        (id_r.decode.read_rs2 & int_sb_r[id_r.instruction.rs2][0]) |
-       (id_r.decode.write_rd & int_sb_r[id_r.instruction.rd][0]) |
+       (id_r.decode.write_rd & int_sb_r[id_r.instruction.rd][0]));
+
+  wire stall_depend_group_load = stall_depend_long_op
+    & ((id_r.decode.read_rs1 & int_sb_r[id_r.instruction.rs1][1]) |
+       (id_r.decode.read_rs2 & int_sb_r[id_r.instruction.rs2][1]) |
+       (id_r.decode.write_rd & int_sb_r[id_r.instruction.rd][1]) |
        (id_r.decode.read_frs1 & float_sb_r[id_r.instruction.rs1][0]) |
        (id_r.decode.read_frs2 & float_sb_r[id_r.instruction.rs2][0]) |
        (id_r.decode.write_frd & float_sb_r[id_r.instruction.rd][0]));
 
   wire stall_depend_global_load = stall_depend_long_op
-    & ((id_r.decode.read_rs1 & int_sb_r[id_r.instruction.rs1][1]) |
-       (id_r.decode.read_rs2 & int_sb_r[id_r.instruction.rs2][1]) |
-       (id_r.decode.write_rd & int_sb_r[id_r.instruction.rd][1]) |
+    & ((id_r.decode.read_rs1 & int_sb_r[id_r.instruction.rs1][2]) |
+       (id_r.decode.read_rs2 & int_sb_r[id_r.instruction.rs2][2]) |
+       (id_r.decode.write_rd & int_sb_r[id_r.instruction.rd][2]) |
        (id_r.decode.read_frs1 & float_sb_r[id_r.instruction.rs1][1]) |
        (id_r.decode.read_frs2 & float_sb_r[id_r.instruction.rs2][1]) |
        (id_r.decode.write_frd & float_sb_r[id_r.instruction.rd][1]));
 
+  wire stall_depend_dram_amo = stall_depend_long_op
+    & ((id_r.decode.read_rs1 & int_sb_r[id_r.instruction.rs1][3]) |
+       (id_r.decode.read_rs2 & int_sb_r[id_r.instruction.rs2][3]) |
+       (id_r.decode.write_rd & int_sb_r[id_r.instruction.rd][3]));
+
   wire stall_depend_dram_load = stall_depend_long_op
-    & ((id_r.decode.read_rs1 & int_sb_r[id_r.instruction.rs1][2]) |
-       (id_r.decode.read_rs2 & int_sb_r[id_r.instruction.rs2][2]) |
-       (id_r.decode.write_rd & int_sb_r[id_r.instruction.rd][2]) |
+    & ((id_r.decode.read_rs1 & int_sb_r[id_r.instruction.rs1][4]) |
+       (id_r.decode.read_rs2 & int_sb_r[id_r.instruction.rs2][4]) |
+       (id_r.decode.write_rd & int_sb_r[id_r.instruction.rd][4]) |
        (id_r.decode.read_frs1 & float_sb_r[id_r.instruction.rs1][2]) |
        (id_r.decode.read_frs2 & float_sb_r[id_r.instruction.rs2][2]) |
        (id_r.decode.write_frd & float_sb_r[id_r.instruction.rd][2]));
 
   wire stall_depend_idiv = stall_depend_long_op
-    & ((id_r.decode.read_rs1 & int_sb_r[id_r.instruction.rs1][3]) |
-       (id_r.decode.read_rs2 & int_sb_r[id_r.instruction.rs2][3]) |
-       (id_r.decode.write_rd & int_sb_r[id_r.instruction.rd][3]));
+    & ((id_r.decode.read_rs1 & int_sb_r[id_r.instruction.rs1][5]) |
+       (id_r.decode.read_rs2 & int_sb_r[id_r.instruction.rs2][5]) |
+       (id_r.decode.write_rd & int_sb_r[id_r.instruction.rd][5]));
 
   wire stall_depend_fdiv = stall_depend_long_op
     & ((id_r.decode.read_frs1 & float_sb_r[id_r.instruction.rs1][3]) |
@@ -494,8 +504,10 @@ module vanilla_core_profiler
     e_exe_bubble_icache_miss,
     
     e_exe_bubble_stall_depend_dram,
+    e_exe_bubble_stall_depend_dram_amo,
     e_exe_bubble_stall_depend_global,
     e_exe_bubble_stall_depend_group,
+    e_exe_bubble_stall_depend_group_amo,
     e_exe_bubble_stall_depend_fdiv,
     e_exe_bubble_stall_depend_idiv,
 
@@ -554,8 +566,16 @@ module vanilla_core_profiler
           exe_bubble_r <= e_exe_bubble_stall_depend_dram;
           exe_bubble_pc_r <= id_pc;
         end
+        else if (stall_depend_dram_amo) begin
+          exe_bubble_r <= e_exe_bubble_stall_depend_dram_amo;
+          exe_bubble_pc_r <= id_pc;
+        end
         else if (stall_depend_group_load) begin
           exe_bubble_r <= e_exe_bubble_stall_depend_group;
+          exe_bubble_pc_r <= id_pc;
+        end
+        else if (stall_depend_group_amo) begin
+          exe_bubble_r <= e_exe_bubble_stall_depend_group_amo;
           exe_bubble_pc_r <= id_pc;
         end
         else if (stall_depend_global_load) begin
@@ -635,7 +655,9 @@ module vanilla_core_profiler
   wire jalr_miss_bubble_inc = (exe_bubble_r == e_exe_bubble_jalr_miss);
   wire icache_miss_bubble_inc = (exe_bubble_r == e_exe_bubble_icache_miss);
   wire stall_depend_dram_load_inc = (exe_bubble_r == e_exe_bubble_stall_depend_dram);
+  wire stall_depend_dram_amo_inc = (exe_bubble_r == e_exe_bubble_stall_depend_dram_amo);
   wire stall_depend_group_load_inc = (exe_bubble_r == e_exe_bubble_stall_depend_group);
+  wire stall_depend_group_amo_inc = (exe_bubble_r == e_exe_bubble_stall_depend_group_amo);
   wire stall_depend_global_load_inc = (exe_bubble_r == e_exe_bubble_stall_depend_global);
   wire stall_depend_idiv_inc = (exe_bubble_r == e_exe_bubble_stall_depend_idiv);
   wire stall_depend_fdiv_inc = (exe_bubble_r == e_exe_bubble_stall_depend_fdiv);
@@ -775,7 +797,9 @@ module vanilla_core_profiler
     integer jalr_miss_bubble;
     integer icache_miss_bubble;
     integer stall_depend_dram_load;
+    integer stall_depend_dram_amo;
     integer stall_depend_group_load;
+    integer stall_depend_group_amo;
     integer stall_depend_global_load;
     integer stall_depend_idiv;
     integer stall_depend_fdiv;
@@ -944,7 +968,9 @@ module vanilla_core_profiler
         else if (jalr_miss_bubble_inc) stat_r.jalr_miss_bubble++;
         else if (icache_miss_bubble_inc) stat_r.icache_miss_bubble++;
         else if (stall_depend_dram_load_inc) stat_r.stall_depend_dram_load++;
+        else if (stall_depend_dram_amo_inc) stat_r.stall_depend_dram_amo++;
         else if (stall_depend_group_load_inc) stat_r.stall_depend_group_load++;
+        else if (stall_depend_group_amo_inc) stat_r.stall_depend_group_amo++;
         else if (stall_depend_global_load_inc) stat_r.stall_depend_global_load++;
         else if (stall_depend_idiv_inc) stat_r.stall_depend_idiv++;
         else if (stall_depend_fdiv_inc) stat_r.stall_depend_fdiv++;
@@ -1111,7 +1137,9 @@ module vanilla_core_profiler
       $fwrite(fd, "bubble_jalr_miss,");
       $fwrite(fd, "bubble_icache_miss,");
       $fwrite(fd, "stall_depend_dram_load,");
+      $fwrite(fd, "stall_depend_dram_amo,");
       $fwrite(fd, "stall_depend_group_load,");
+      $fwrite(fd, "stall_depend_group_amo,");
       $fwrite(fd, "stall_depend_global_load,");
       $fwrite(fd, "stall_depend_idiv,");
       $fwrite(fd, "stall_depend_fdiv,");
@@ -1270,12 +1298,14 @@ module vanilla_core_profiler
           $fwrite(fd, "%0d,", stat_r.barsend);
           $fwrite(fd, "%0d,", stat_r.barrecv);
    
-          $fwrite(fd, "%0d,", stat_r.branch_miss_bubble);   
-          $fwrite(fd, "%0d,", stat_r.jalr_miss_bubble);   
-          $fwrite(fd, "%0d,", stat_r.icache_miss_bubble);   
-          $fwrite(fd, "%0d,", stat_r.stall_depend_dram_load);   
-          $fwrite(fd, "%0d,", stat_r.stall_depend_group_load);   
-          $fwrite(fd, "%0d,", stat_r.stall_depend_global_load);   
+          $fwrite(fd, "%0d,", stat_r.branch_miss_bubble);
+          $fwrite(fd, "%0d,", stat_r.jalr_miss_bubble);
+          $fwrite(fd, "%0d,", stat_r.icache_miss_bubble);
+          $fwrite(fd, "%0d,", stat_r.stall_depend_dram_load);
+          $fwrite(fd, "%0d,", stat_r.stall_depend_dram_amo);
+          $fwrite(fd, "%0d,", stat_r.stall_depend_group_load);
+          $fwrite(fd, "%0d,", stat_r.stall_depend_group_amo);
+          $fwrite(fd, "%0d,", stat_r.stall_depend_global_load);
           $fwrite(fd, "%0d,", stat_r.stall_depend_idiv);
           $fwrite(fd, "%0d,", stat_r.stall_depend_fdiv);
           $fwrite(fd, "%0d,", stat_r.stall_depend_local_load);
@@ -1426,7 +1456,9 @@ module vanilla_core_profiler
           else if (jalr_miss_bubble_inc) print_operation_trace(fd2, "bubble_jalr_miss", exe_bubble_pc_r);
           else if (icache_miss_bubble_inc) print_operation_trace(fd2, "bubble_icache_miss", exe_bubble_pc_r);
           else if (stall_depend_dram_load_inc) print_operation_trace(fd2, "stall_depend_dram_load", exe_bubble_pc_r);
+          else if (stall_depend_dram_amo_inc) print_operation_trace(fd2, "stall_depend_dram_amo", exe_bubble_pc_r);
           else if (stall_depend_group_load_inc) print_operation_trace(fd2, "stall_depend_group_load", exe_bubble_pc_r);
+          else if (stall_depend_group_amo_inc) print_operation_trace(fd2, "stall_depend_group_amo", exe_bubble_pc_r);
           else if (stall_depend_global_load_inc) print_operation_trace(fd2, "stall_depend_global_load", exe_bubble_pc_r);
           else if (stall_depend_idiv_inc) print_operation_trace(fd2, "stall_depend_idiv", exe_bubble_pc_r);
           else if (stall_depend_fdiv_inc) print_operation_trace(fd2, "stall_depend_fdiv", exe_bubble_pc_r);

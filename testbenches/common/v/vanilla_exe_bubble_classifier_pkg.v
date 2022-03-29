@@ -6,8 +6,10 @@ package vanilla_exe_bubble_classifier_pkg;
     e_exe_bubble_icache_miss,
 
     e_exe_bubble_stall_depend_dram,
+    e_exe_bubble_stall_depend_dram_amo,
     e_exe_bubble_stall_depend_global,
     e_exe_bubble_stall_depend_group,
+    e_exe_bubble_stall_depend_group_amo,
     e_exe_bubble_stall_depend_fdiv,
     e_exe_bubble_stall_depend_idiv,
 

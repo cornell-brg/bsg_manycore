@@ -127,6 +127,11 @@ module vanilla_exe_bubble_classifier
      ,.float_sb_o(float_sb)
      );
 
+  wire stall_depend_group_amo = stall_depend_long_op
+       & ((id_r.decode.read_rs1 & int_sb_r[id_r.instruction.rs1].remote_group_amo) |
+          (id_r.decode.read_rs2 & int_sb_r[id_r.instruction.rs2].remote_group_amo) |
+          (id_r.decode.write_rd & int_sb_r[id_r.instruction.rd].remote_group_amo));
+
   wire stall_depend_group_load = stall_depend_long_op
        & ((id_r.decode.read_rs1 & int_sb[id_r.instruction.rs1].remote_group_load) |
           (id_r.decode.read_rs2 & int_sb[id_r.instruction.rs2].remote_group_load) |
@@ -142,6 +147,11 @@ module vanilla_exe_bubble_classifier
           (id_r.decode.read_frs1 & float_sb[id_r.instruction.rs1].remote_global_load) |
           (id_r.decode.read_frs2 & float_sb[id_r.instruction.rs2].remote_global_load) |
           (id_r.decode.write_frd & float_sb[id_r.instruction.rd].remote_global_load));
+
+  wire stall_depend_dram_amo = stall_depend_long_op
+       & ((id_r.decode.read_rs1 & int_sb_r[id_r.instruction.rs1].remote_dram_amo) |
+          (id_r.decode.read_rs2 & int_sb_r[id_r.instruction.rs2].remote_dram_amo) |
+          (id_r.decode.write_rd & int_sb_r[id_r.instruction.rd].remote_dram_amo));
 
   wire stall_depend_dram_load = stall_depend_long_op
        & ((id_r.decode.read_rs1 & int_sb[id_r.instruction.rs1].remote_dram_load) |
@@ -192,8 +202,16 @@ module vanilla_exe_bubble_classifier
           exe_bubble_r <= e_exe_bubble_stall_depend_dram;
           exe_bubble_pc_r <= id_pc;
         end
+        else if (stall_depend_dram_amo) begin
+          exe_bubble_r <= e_exe_bubble_stall_depend_dram_amo;
+          exe_bubble_pc_r <= id_pc;
+        end
         else if (stall_depend_group_load) begin
           exe_bubble_r <= e_exe_bubble_stall_depend_group;
+          exe_bubble_pc_r <= id_pc;
+        end
+        else if (stall_depend_group_amo) begin
+          exe_bubble_r <= e_exe_bubble_stall_depend_group_amo;
           exe_bubble_pc_r <= id_pc;
         end
         else if (stall_depend_global_load) begin

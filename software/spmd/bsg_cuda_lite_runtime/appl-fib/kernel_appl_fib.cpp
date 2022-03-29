@@ -45,6 +45,7 @@ int kernel_appl_fib(int* results, int n, int grain_size, int* dram_buffer) {
 
   // sync
   barrier.sync();
+  bsg_cuda_print_stat_kernel_start();
 
   if (__bsg_id == 0) {
     result = fib(n, grain_size);
@@ -57,6 +58,7 @@ int kernel_appl_fib(int* results, int n, int grain_size, int* dram_buffer) {
   appl::runtime_end();
   // --------------------- end of kernel -----------------
 
+  bsg_cuda_print_stat_kernel_end();
   bsg_print_int(result);
 
   barrier.sync();

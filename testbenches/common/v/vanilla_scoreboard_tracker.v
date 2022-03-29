@@ -51,7 +51,8 @@ module vanilla_scoreboard_tracker
   assign tile_group_addr = id_mem_addr;
   wire is_my_x_addr = tile_group_addr.x_cord == (global_x_i - origin_x_cord_p);
   wire is_my_y_addr = tile_group_addr.y_cord == (global_y_i - origin_y_cord_p);
-  wire is_true_remote_group_addr = (tile_group_addr.remote == 3'b001) & (~is_my_x_addr | ~is_my_y_addr);
+  wire is_my_addr   = is_my_x_addr & is_my_y_addr;
+  wire is_true_remote_group_addr = (tile_group_addr.remote == 3'b001) & (~is_my_addr | id_r.decode.is_amo_op);
 
 
   wire remote_ld_dram_in_id = ((id_r.decode.is_load_op & id_r.decode.write_rd) | id_r.decode.is_amo_op) & id_mem_addr[data_width_p-1];

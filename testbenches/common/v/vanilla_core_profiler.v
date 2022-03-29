@@ -306,47 +306,43 @@ module vanilla_core_profiler
         end
         // remote ld dram
         if (~stall_id & ~stall_all & ~flush & remote_ld_dram_in_id & (id_rd == i)) begin
-          $display("%0t remote ld dram in id for addr %h @ %h set int_sb_r[%h][4] @ %d,%d", $time, id_mem_addr, id_pc, id_r.instruction.rd, global_x_i, global_y_i);
+          // $display("%0t remote ld dram in id for addr %h @ %h set int_sb_r[%h][4] @ %d,%d", $time, id_mem_addr, id_pc, id_r.instruction.rd, global_x_i, global_y_i);
           int_sb_r[i][4] <= 1'b1;
         end
         else if (int_sb_clear & (int_sb_clear_id == i)) begin
-          $display("%0t reset int_sb_r[%h][4] @ %d,%d", $time, int_sb_clear_id, global_x_i, global_y_i);
           int_sb_r[i][4] <= 1'b0;
         end
         // remote amo dram
         if (~stall_id & ~stall_all & ~flush & remote_amo_dram_in_id & (id_rd == i)) begin
-          $display("%0t remote amo dram in id for addr %h @ %h set int_sb_r[%h][3] @ %d,%d", $time, id_mem_addr, id_pc, id_r.instruction.rd, global_x_i, global_y_i);
+          // $display("%0t remote amo dram in id for addr %h @ %h set int_sb_r[%h][3] @ %d,%d", $time, id_mem_addr, id_pc, id_r.instruction.rd, global_x_i, global_y_i);
           int_sb_r[i][3] <= 1'b1;
         end
         else if (int_sb_clear & (int_sb_clear_id == i)) begin
-          $display("%0t reset int_sb_r[%h][3] @ %d,%d", $time, int_sb_clear_id, global_x_i, global_y_i);
           int_sb_r[i][3] <= 1'b0;
         end
         // remote ld global
         if (~stall_id & ~stall_all & ~flush & remote_ld_global_in_id & (id_rd == i)) begin
-          $display("%0t remote ld global in id for addr %h @ %h set int_sb_r[%h][2] @ %d,%d", $time, id_mem_addr, id_pc, id_r.instruction.rd, global_x_i, global_y_i);
+          // $display("%0t remote ld global in id for addr %h @ %h set int_sb_r[%h][2] @ %d,%d", $time, id_mem_addr, id_pc, id_r.instruction.rd, global_x_i, global_y_i);
           int_sb_r[i][2] <= 1'b1;
         end
         else if (int_sb_clear & (int_sb_clear_id == i)) begin
-          $display("%0t reset int_sb_r[%h][2] @ %d,%d", $time, int_sb_clear_id, global_x_i, global_y_i);
           int_sb_r[i][2] <= 1'b0;
         end
         // remote ld group
         if (~stall_id & ~stall_all & ~flush & remote_ld_group_in_id & (id_rd == i)) begin
-          $display("%0t remote ld group in id for addr %h @ %h set int_sb_r[%h][1] @ %d,%d", $time, id_mem_addr, id_pc, id_r.instruction.rd, global_x_i, global_y_i);
+          // $display("%0t remote ld group in id for addr %h @ %h set int_sb_r[%h][1] @ %d,%d", $time, id_mem_addr, id_pc, id_r.instruction.rd, global_x_i, global_y_i);
           int_sb_r[i][1] <= 1'b1;
         end
         else if (int_sb_clear & (int_sb_clear_id == i)) begin
-          $display("%0t reset int_sb_r[%h][1] @ %d,%d", $time, int_sb_clear_id, global_x_i, global_y_i);
           int_sb_r[i][1] <= 1'b0;
         end
         // remote amo group
         if (~stall_id & ~stall_all & ~flush & remote_amo_group_in_id & (id_rd == i)) begin
-          $display("%0t remote amo group in id for addr %h @ %h set int_sb_r[%h][0] @ %d,%d", $time, id_mem_addr, id_pc, id_r.instruction.rd, global_x_i, global_y_i);
+          // $display("%0t remote amo group in id for addr %h @ %h set int_sb_r[%h][0] @ %d,%d", $time, id_mem_addr, id_pc, id_r.instruction.rd, global_x_i, global_y_i);
           int_sb_r[i][0] <= 1'b1;
         end
         else if (int_sb_clear & (int_sb_clear_id == i)) begin
-          $display("%0t reset int_sb_r[%h][0] @ %d,%d", $time, int_sb_clear_id, global_x_i, global_y_i);
+          // $display("%0t reset int_sb_r[%h][0] @ %d,%d", $time, int_sb_clear_id, global_x_i, global_y_i);
           int_sb_r[i][0] <= 1'b0;
         end
       end

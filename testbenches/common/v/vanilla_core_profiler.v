@@ -259,6 +259,7 @@ module vanilla_core_profiler
   wire barsend_inc = (exe_r.instruction ==? `RV32_FENCE_OP) & (exe_r.instruction[31:28] == `RV32_BARSEND_FM);
   wire barrecv_inc = (exe_r.instruction ==? `RV32_FENCE_OP) & (exe_r.instruction[31:28] == `RV32_BARRECV_FM);
 
+
   // Track bubbles in the EXE stage
   // and their associated PC
   logic [data_width_p-1:0] exe_bubble_pc_r;

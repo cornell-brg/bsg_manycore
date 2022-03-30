@@ -49,6 +49,24 @@ inline int* brg_malloc() {
   return val;
 }
 
+// number of bytes
+inline void* brg_malloc(uint32_t size) {
+  uint32_t size_4 = size >> 2;
+  if (size & 0x3 != 0) {
+    size_4++;
+  }
+  void* val = (void*)(&(local::dram_buffer[local::dram_buffer_idx]));
+  local::dram_buffer_idx += size_4;
+#ifdef APPL_DEBUG
+  bsg_print_hexadecimal((intptr_t)val);
+  bsg_print_int(local::dram_buffer_idx);
+#endif
+  if (local::dram_buffer_idx > HB_L2_CACHE_LINE_WORDS * BUF_FACTOR) {
+    bsg_print_int(7600);
+  }
+  return val;
+}
+
 template<typename T>
 inline T remote_ptr(T ptr, uint32_t x, uint32_t y) {
   unsigned int local_ptr = ((1 << GROUP_EPA_WIDTH) - 1) & ((unsigned int) ptr);

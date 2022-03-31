@@ -1,7 +1,7 @@
 #include <stdint.h>
 #include "bsg_manycore.h"
 #include "appl.hpp"
-//#include "ligra.h"
+#include "ligra.h"
 
 #include "bsg_tile_group_barrier.hpp"
 
@@ -36,6 +36,15 @@ int kernel_appl_bfs(int* results, int n, int grain_size, int* dram_buffer) {
   if (__bsg_id == 0) {
     bsg_print_int(n);
     bsg_print_int(grain_size);
+    uintE neighbors[5];
+    neighbors[0] = 0;
+    neighbors[1] = 1;
+    neighbors[2] = 2;
+    neighbors[3] = 3;
+    neighbors[4] = 4;
+    symmetricVertex v = symmetricVertex(neighbors, 5);
+    bsg_print_int(v.getOutDegree());
+    bsg_print_int(v.getInNeighbor(2));
   }
 
   // output

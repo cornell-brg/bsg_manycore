@@ -131,19 +131,38 @@ template <typename IndexT, typename BodyT>
 void parallel_for( IndexT first, IndexT last, IndexT step,
                    const BodyT& body )
 {
-  // use the app-specific grain size
-  size_t grain = local::g_pfor_grain_size;
+  if ( first < last ) {
+    // use the app-specific grain size
+    size_t grain = local::g_pfor_grain_size;
 
-  IndexT end = ( last - first - IndexT( 1 ) ) / step + IndexT( 1 );
-  Range1D<IndexT>               range( IndexT( 0 ), end, grain );
-  IndexRangeBody<IndexT, BodyT> range_body( body, first, step );
-  parallel_for( range, range_body );
+    IndexT end = ( last - first - IndexT( 1 ) ) / step + IndexT( 1 );
+    Range1D<IndexT>               range( IndexT( 0 ), end, grain );
+    IndexRangeBody<IndexT, BodyT> range_body( body, first, step );
+    parallel_for( range, range_body );
+  }
+}
+
+template <typename IndexT, typename BodyT>
+void parallel_for_1( IndexT first, IndexT last, IndexT step,
+                     const BodyT& body )
+{
+  if ( first < last ) {
+    IndexT end = ( last - first - IndexT( 1 ) ) / step + IndexT( 1 );
+    Range1D<IndexT>               range( IndexT( 0 ), end, 1 );
+    IndexRangeBody<IndexT, BodyT> range_body( body, first, step );
+    parallel_for( range, range_body );
+  }
 }
 
 template <typename IndexT, typename BodyT>
 void parallel_for( IndexT first, IndexT last, const BodyT& body )
 {
   parallel_for( first, last, IndexT( 1 ), body );
+}
+
+template <typename IndexT, typename BodyT>
+void parallel_for_1( IndexT first, IndexT last, const BodyT& body ) {
+  parallel_for_1( first, last, IndexT( 1 ), body );
 }
 
 } // namespace appl

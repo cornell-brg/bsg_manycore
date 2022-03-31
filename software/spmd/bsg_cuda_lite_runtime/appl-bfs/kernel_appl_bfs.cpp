@@ -34,15 +34,14 @@ int kernel_appl_bfs(int* results, symmetricVertex* V, int n, int m, int* dram_bu
 
   // debug print
   if (__bsg_id == 0) {
-    bsg_print_int(n);
-    bsg_print_int(m);
     graph<symmetricVertex> G = graph<symmetricVertex>(V, n, m, nullptr);
-    bsg_print_int(G.V[1].getOutDegree());
-    for (int i = 0; i < G.V[1].getOutDegree(); i++) {
-      bsg_print_int(G.V[1].getInNeighbor(i));
+    uint32_t idx = 0;
+    for (uint32_t v = 0; v < G.n; v++) {
+      for (uint32_t e = 0; e <  G.V[v].getOutDegree(); e++) {
+        results[idx] = G.V[v].getOutNeighbor(e);
+        idx++;
+      }
     }
-    bsg_print_int(sizeof(symmetricVertex));
-    bsg_print_int(11111);
   }
 
   barrier.sync();

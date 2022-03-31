@@ -3,5 +3,6 @@
 
 #include "parallel.h"
 #include "vertex.h"
+#include "graph.h"
 
 #endif

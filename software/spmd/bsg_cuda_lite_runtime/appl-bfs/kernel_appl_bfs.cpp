@@ -43,8 +43,9 @@ int kernel_appl_bfs(int* results, int n, int grain_size, int* dram_buffer) {
     neighbors[3] = 3;
     neighbors[4] = 4;
     symmetricVertex v = symmetricVertex(neighbors, 5);
-    bsg_print_int(v.getOutDegree());
-    bsg_print_int(v.getInNeighbor(2));
+    graph<symmetricVertex> G = graph<symmetricVertex>(&v, 1, 5, nullptr);
+    bsg_print_int(G.V[0].getOutDegree());
+    bsg_print_int(G.V[0].getInNeighbor(2));
   }
 
   // output

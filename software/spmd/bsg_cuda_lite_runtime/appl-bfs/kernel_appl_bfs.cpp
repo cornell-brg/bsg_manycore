@@ -1,7 +1,7 @@
 #include <stdint.h>
 #include "bsg_manycore.h"
 #include "appl.hpp"
-#include "ligra.h"
+//#include "ligra.h"
 
 #include "bsg_tile_group_barrier.hpp"
 

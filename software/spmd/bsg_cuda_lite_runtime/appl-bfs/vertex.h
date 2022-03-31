@@ -5,7 +5,9 @@
 
 struct symmetricVertex {
   uintE* neighbors;
+  uint32_t pad1;
   uintT degree;
+  uint32_t pad2;
   symmetricVertex( uintE* n, uintT d ) : neighbors( n ), degree( d ) {}
 
   uintE*       getInNeighbors() { return neighbors; }

@@ -14,13 +14,15 @@
 	bsg_tiles_X ?= 2
 	bsg_tiles_Y ?= 2
 
+# If not configured, Will use applrts
+	APPL_IMPL ?= APPL_IMPL_APPLRTS
 
 all: main.run
 
 
 KERNEL_NAME ?=kernel_appl_overflow_dmem
 
-OBJECT_FILES=main.o kernel_appl_overflow_dmem.o appl-config.o appl-runtime.o appl-scheduler.o
+OBJECT_FILES=main.o kernel_appl_overflow_dmem.o
 
 include ../../Makefile.include
 

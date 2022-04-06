@@ -89,9 +89,7 @@ int kernel_appl_knapsack(int *results, struct item* items, int n, int capacity, 
     results[0] = sol;
     bsg_print_int(sol);
   } else {
-    appl::work_stealing_loop([&]() -> bool {
-        return bsg_amoadd(&appl::global::g_stop_flag, 0);
-        } );
+    appl::worker_thread_init();
   }
   appl::runtime_end();
   // --------------------- end of kernel -----------------

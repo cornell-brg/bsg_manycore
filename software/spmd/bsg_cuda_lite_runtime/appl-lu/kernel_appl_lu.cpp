@@ -314,9 +314,7 @@ int kernel_appl_lu(Matrix M, int n, int* dram_buffer) {
   if (__bsg_id == 0) {
     lu(M, nBlocks);
   } else {
-    appl::work_stealing_loop([&]() -> bool {
-        return bsg_amoadd(&appl::global::g_stop_flag, 0);
-        } );
+    appl::worker_thread_init();
   }
   appl::runtime_end();
   // --------------------- end of kernel -----------------

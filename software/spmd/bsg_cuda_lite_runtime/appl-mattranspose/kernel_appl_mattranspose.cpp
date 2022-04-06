@@ -61,9 +61,7 @@ int kernel_appl_mattranspose(REAL *A, REAL *B, int size, int gbase, int* dram_bu
   if (__bsg_id == 0) {
     mat_transpose(A, B, size, size, size, 0, 0);
   } else {
-    appl::work_stealing_loop([&]() -> bool {
-        return bsg_amoadd(&appl::global::g_stop_flag, 0);
-        } );
+    appl::worker_thread_init();
   }
   appl::runtime_end();
   // --------------------- end of kernel -----------------

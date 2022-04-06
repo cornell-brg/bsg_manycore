@@ -2,11 +2,11 @@
 // parallel_for.inl
 //========================================================================
 
-#include "appl-Range1D.hpp"
-#include "appl-scheduler.hpp"
-#include "appl-Task.hpp"
+#include "applrts-Range1D.hpp"
+#include "applrts-scheduler.hpp"
+#include "applrts-Task.hpp"
 
-namespace appl {
+namespace applrts {
 
 //----------------------------------------------------------------------
 // Task definition
@@ -165,4 +165,4 @@ void parallel_for_1( IndexT first, IndexT last, const BodyT& body ) {
   parallel_for_1( first, last, IndexT( 1 ), body );
 }
 
-} // namespace appl
+} // namespace applrts

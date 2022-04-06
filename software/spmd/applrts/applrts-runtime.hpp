@@ -2,19 +2,19 @@
 // runtime.h
 //========================================================================
 
-#ifndef APPL_GLOBAL_H
-#define APPL_GLOBAL_H
+#ifndef APPLRTS_GLOBAL_H
+#define APPLRTS_GLOBAL_H
 
 #include <cstddef>
 #include <stdint.h>
 #include "bsg_manycore.h"
 #include "bsg_manycore_atomic.h"
 #include "bsg_set_tile_x_y.h"
-#include "appl-config.hpp"
-#include "appl-Task.hpp"
-#include "appl-SimpleDeque.hpp"
+#include "applrts-config.hpp"
+#include "applrts-Task.hpp"
+#include "applrts-SimpleDeque.hpp"
 
-namespace appl {
+namespace applrts {
 
 namespace local {
 extern SimpleDeque<Task*> g_taskq;
@@ -38,6 +38,6 @@ size_t get_thread_id();
 
 }
 
-#include "appl-runtime.inl"
+#include "applrts-runtime.inl"
 
 #endif

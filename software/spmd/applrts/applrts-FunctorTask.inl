@@ -2,7 +2,7 @@
 // FunctorTask.cpp
 //========================================================================
 
-namespace appl {
+namespace applrts {
 
 template <typename Func>
 FunctorTask<Func>::FunctorTask( Func&& func )
@@ -30,5 +30,5 @@ Task* FunctorTask<Func>::execute()
   return nullptr;
 }
 
-} // namespace appl
+} // namespace applrts
 

@@ -2,7 +2,7 @@
 // Range1D.inl
 //========================================================================
 
-namespace appl {
+namespace applrts {
 
 //----------------------------------------------------------------------
 // Range1D class
@@ -78,4 +78,4 @@ Range1D<IterType> mk_range1d( const IterType& begin, const IterType& end,
   return Range1D<IterType>( begin, end, grain );
 }
 
-} // namespace appl
+} // namespace applrts

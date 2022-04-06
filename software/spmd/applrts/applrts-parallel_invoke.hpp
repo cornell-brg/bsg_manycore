@@ -2,10 +2,10 @@
 // parallel_invoke.h
 //========================================================================
 
-#ifndef APPL_PARALLEL_INVOKE_H
-#define APPL_PARALLEL_INVOKE_H
+#ifndef APPLRTS_PARALLEL_INVOKE_H
+#define APPLRTS_PARALLEL_INVOKE_H
 
-namespace appl {
+namespace applrts {
 
 // Spawn 2, 3, 4, ... functors in parallel
 
@@ -31,8 +31,8 @@ void parallel_invoke( const Func0& func0, const Func1& func1,
                       const Func6& func6);
 */
 
-} // namespace appl
+} // namespace applrts
 
-#include "appl-parallel_invoke.inl"
+#include "applrts-parallel_invoke.inl"
 
 #endif

@@ -8,13 +8,13 @@
 // provided.
 //
 
-#ifndef APPL_FUNCTOR_TASK_H
-#define APPL_FUNCTOR_TASK_H
+#ifndef APPLRTS_FUNCTOR_TASK_H
+#define APPLRTS_FUNCTOR_TASK_H
 
 #include <utility>
-#include "appl-Task.hpp"
+#include "applrts-Task.hpp"
 
-namespace appl {
+namespace applrts {
 
 //----------------------------------------------------------------------
 // FunctorTask definition
@@ -62,8 +62,8 @@ FunctorTask<Func> mk_task( Func&& func, Task* successor_p )
   return FunctorTask<Func>( std::forward<Func>( func ), successor_p );
 }
 
-} // namespace appl
+} // namespace applrts
 
-#include "appl-FunctorTask.inl"
+#include "applrts-FunctorTask.inl"
 
 #endif

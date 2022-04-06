@@ -2,7 +2,7 @@
 // runtime.inl
 //========================================================================
 
-namespace appl {
+namespace applrts {
 
 inline void runtime_init( int* dram_buffer, size_t pfor_grain_size ) {
   // set parallel for grain size
@@ -35,4 +35,4 @@ inline size_t get_thread_id() {
   return __bsg_id;
 }
 
-} // namespace appl
+} // namespace applrts

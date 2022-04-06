@@ -2,7 +2,7 @@
 // Task.inl
 //========================================================================
 
-namespace appl {
+namespace applrts {
 
 inline Task::Task()
     : m_successor_ptr( nullptr )
@@ -81,4 +81,4 @@ inline int Task::increment_ready_count()
   return bsg_amoadd_aqrl(m_ready_count_ptr, 1);
 }
 
-} // namespace appl
+} // namespace applrts

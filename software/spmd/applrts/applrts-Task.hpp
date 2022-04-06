@@ -5,16 +5,16 @@
 // function and an atomic ready_count. User can override execute()
 // function with custom code.
 
-#ifndef APPL_TASK_H
-#define APPL_TASK_H
+#ifndef APPLRTS_TASK_H
+#define APPLRTS_TASK_H
 
 #include <stdint.h>
 #include "bsg_manycore.h"
 #include "bsg_manycore_atomic.h"
 #include "bsg_set_tile_x_y.h"
-#include "appl-config.hpp"
+#include "applrts-config.hpp"
 
-namespace appl {
+namespace applrts {
 class Task {
 public:
   Task();
@@ -69,8 +69,8 @@ private:
   Task* m_successor_ptr;
 };
 
-} // namespace appl
+} // namespace applrts
 
-#include "appl-Task.inl"
+#include "applrts-Task.inl"
 
 #endif

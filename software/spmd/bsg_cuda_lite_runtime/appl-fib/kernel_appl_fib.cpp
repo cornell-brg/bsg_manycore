@@ -51,9 +51,7 @@ int kernel_appl_fib(int* results, int n, int grain_size, int* dram_buffer) {
     result = fib(n, grain_size);
     results[0] = result;
   } else {
-    appl::work_stealing_loop([&]() -> bool {
-        return bsg_amoadd(&appl::global::g_stop_flag, 0);
-        } );
+    appl::worker_thread_init();
   }
   appl::runtime_end();
   // --------------------- end of kernel -----------------

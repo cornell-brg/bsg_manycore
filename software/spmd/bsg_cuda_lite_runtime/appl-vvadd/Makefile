@@ -20,7 +20,7 @@ all: main.run
 
 KERNEL_NAME ?=kernel_appl_vvadd
 
-OBJECT_FILES=main.o kernel_appl_vvadd.o appl-config.o appl-runtime.o appl-scheduler.o
+OBJECT_FILES=main.o kernel_appl_vvadd.o applrts-config.o applrts-runtime.o applrts-scheduler.o appl-runtime.o
 
 include ../../Makefile.include
 

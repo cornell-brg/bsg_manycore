@@ -37,6 +37,8 @@ void parallel_invoke( const Func0& func0, const Func1& func1,
 
 #ifdef APPL_IMPL_APPLRTS
 #include "appl-parallel_invoke-applrts.inl"
+#elif defined(APPL_IMPL_CELLO)
+// Hi Max!
 #else
 #include "appl-parallel_invoke-serial.inl"
 #endif

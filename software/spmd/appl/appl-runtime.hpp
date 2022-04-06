@@ -35,6 +35,8 @@ size_t get_thread_id();
 
 #ifdef APPL_IMPL_APPLRTS
 #include "appl-runtime-applrts.inl"
+#elif defined(APPL_IMPL_CELLO)
+// Hi Max!
 #else
 #include "appl-runtime-serial.inl"
 #endif

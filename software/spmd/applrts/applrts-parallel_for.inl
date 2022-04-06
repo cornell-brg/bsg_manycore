@@ -154,15 +154,4 @@ void parallel_for_1( IndexT first, IndexT last, IndexT step,
   }
 }
 
-template <typename IndexT, typename BodyT>
-void parallel_for( IndexT first, IndexT last, const BodyT& body )
-{
-  parallel_for( first, last, IndexT( 1 ), body );
-}
-
-template <typename IndexT, typename BodyT>
-void parallel_for_1( IndexT first, IndexT last, const BodyT& body ) {
-  parallel_for_1( first, last, IndexT( 1 ), body );
-}
-
 } // namespace applrts

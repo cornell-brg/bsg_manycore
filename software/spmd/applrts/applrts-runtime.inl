@@ -20,12 +20,6 @@ inline void runtime_init( int* dram_buffer, size_t pfor_grain_size ) {
   return;
 }
 
-inline void runtime_end() {
-  // this does not order any computation
-  bsg_amoswap(&global::g_stop_flag, 1);
-  return;
-}
-
 inline size_t get_nthreads() {
   // nthreads is simply the tile group size
   return (bsg_tiles_X * bsg_tiles_Y);

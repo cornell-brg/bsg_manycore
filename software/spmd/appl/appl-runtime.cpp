@@ -2,14 +2,14 @@
 // runtime.inl
 //========================================================================
 
-#include "applrts-runtime.hpp"
+#include "appl-runtime.hpp"
 
-namespace applrts {
+namespace appl {
 
-namespace local {
+namespace global {
 
-SimpleDeque<Task*> g_taskq = SimpleDeque<Task*>();
+int g_stop_flag __attribute__ ((section (".dram"))) = 0;
 
-} // namespace local
+} // namespace global
 
-} // namespace applrts
+} // namespace appl

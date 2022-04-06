@@ -115,6 +115,12 @@ ifeq ($(BSG_NEWLIB), 1)
   RISCV_GCC_OPTS +=-D__bsg_argv=\"$(subst $(space),\"$(comma)\",$(strip $(ARGV)))\"
 endif
 
+# APPL implemenation
+ifeq ($(APPL_IMPL), APPL_IMPL_APPLRTS)
+	RISCV_GCC_OPTS +=-DAPPL_IMPL_APPLRTS
+	OBJECT_FILES += appl-runtime.o applrts-config.o applrts-runtime.o applrts-scheduler.o
+endif
+
 SPMD_COMMON_OBJECTS ?=
 
 ifeq ($(BSG_NEWLIB), 1)

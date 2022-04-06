@@ -1,18 +1,18 @@
 //========================================================================
-// appl.h
+// applrts.h
 //========================================================================
 
-#ifndef APPL_H
-#define APPL_H
+#ifndef APPLRTS_H
+#define APPLRTS_H
 
 // Task queue
-#include "appl-SimpleDeque.hpp"
+#include "applrts-SimpleDeque.hpp"
 
 // Parallel Patterns
-#include "appl-parallel_for.hpp"
-#include "appl-parallel_invoke.hpp"
+#include "applrts-parallel_for.hpp"
+#include "applrts-parallel_invoke.hpp"
 
 // Utils
-#include "appl-runtime.hpp"
+#include "applrts-runtime.hpp"
 
 #endif

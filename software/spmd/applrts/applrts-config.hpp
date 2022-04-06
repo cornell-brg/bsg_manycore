@@ -1,5 +1,5 @@
-#ifndef APPL_CONFIG_GLOBAL_H
-#define APPL_CONFIG_GLOBAL_H
+#ifndef APPLRTS_CONFIG_GLOBAL_H
+#define APPLRTS_CONFIG_GLOBAL_H
 
 #include <cstddef>
 #include <stdint.h>
@@ -18,10 +18,10 @@
 #define GROUP_Y_CORD_SHIFT (GROUP_X_CORD_SHIFT+GROUP_X_CORD_WIDTH)
 #define GROUP_PREFIX_SHIFT (GROUP_Y_CORD_SHIFT+GROUP_Y_CORD_WIDTH)
 
-#define APPL_DEBUG 1
+#define APPLRTS_DEBUG 1
 
 // utils
-namespace appl {
+namespace applrts {
 namespace local {
 
 // per-tile thread local variable to hold fast rand seed
@@ -39,7 +39,7 @@ extern int* dram_buffer;
 // linear allocator in DRAM
 inline int* brg_malloc() {
   int* val = &(local::dram_buffer[local::dram_buffer_idx++]);
-#ifdef APPL_DEBUG
+#ifdef APPLRTS_DEBUG
   bsg_print_hexadecimal((intptr_t)val);
   bsg_print_int(local::dram_buffer_idx);
 #endif
@@ -57,7 +57,7 @@ inline void* brg_malloc(uint32_t size) {
   }
   void* val = (void*)(&(local::dram_buffer[local::dram_buffer_idx]));
   local::dram_buffer_idx += size_4;
-#ifdef APPL_DEBUG
+#ifdef APPLRTS_DEBUG
   bsg_print_hexadecimal((intptr_t)val);
   bsg_print_int(local::dram_buffer_idx);
 #endif
@@ -84,6 +84,6 @@ inline T remote_ptr(T ptr, size_t remote_id) {
   return remote_ptr<T>(ptr, remote_x, remote_y);
 }
 
-} // namespace appl
+} // namespace applrts
 
 #endif

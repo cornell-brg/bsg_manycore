@@ -3,12 +3,12 @@
 //========================================================================
 // A standard work-stealing scheduler.
 
-#include "appl-scheduler.hpp"
+#include "applrts-scheduler.hpp"
 
-namespace appl {
+namespace applrts {
 
 void spawn( Task* task_p ) {
-#ifdef APPL_DEBUG
+#ifdef APPLRTS_DEBUG
   bsg_print_int(12395);
 #endif
   local::g_taskq.push_back(task_p);
@@ -21,12 +21,12 @@ void wait( Task* wait_task_p ) {
 
 void execute_task( Task* task_p, bool stolen ) {
   while ( task_p ) {
-#ifdef APPL_DEBUG
+#ifdef APPLRTS_DEBUG
     bsg_print_int(12306);
 #endif
     Task* prev_task_p = task_p;
     task_p = task_p->execute();
-#ifdef APPL_DEBUG
+#ifdef APPLRTS_DEBUG
     bsg_print_int(60321);
 #endif
 
@@ -41,5 +41,5 @@ void execute_task( Task* task_p, bool stolen ) {
   }
 }
 
-} // namespace appl
+} // namespace applrts
 

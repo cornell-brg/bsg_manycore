@@ -2,11 +2,11 @@
 // parallel_invoke.inl
 //========================================================================
 
-#include "appl-FunctorTask.hpp"
-#include "appl-scheduler.hpp"
-#include "appl-Task.hpp"
+#include "applrts-FunctorTask.hpp"
+#include "applrts-scheduler.hpp"
+#include "applrts-Task.hpp"
 
-namespace appl {
+namespace applrts {
 
 // Spawn 2, 3, 4, ... functors in parallel
 
@@ -53,4 +53,4 @@ void parallel_invoke( const Func0& func0, const Func1& func1,
   return;
 }
 
-} // namespace appl
+} // namespace applrts

@@ -1,6 +1,6 @@
-#include "appl-config.hpp"
+#include "applrts-config.hpp"
 
-namespace appl {
+namespace applrts {
 
 namespace local {
 
@@ -11,4 +11,4 @@ int* dram_buffer;
 
 } // namespace local
 
-} // namespace appl
+} // namespace applrts

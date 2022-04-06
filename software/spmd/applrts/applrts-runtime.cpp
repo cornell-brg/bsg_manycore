@@ -2,9 +2,9 @@
 // runtime.inl
 //========================================================================
 
-#include "appl-runtime.hpp"
+#include "applrts-runtime.hpp"
 
-namespace appl {
+namespace applrts {
 
 namespace local {
 
@@ -18,4 +18,4 @@ int g_stop_flag __attribute__ ((section (".dram"))) = 0;
 
 } // namespace global
 
-} // namespace appl
+} // namespace applrts

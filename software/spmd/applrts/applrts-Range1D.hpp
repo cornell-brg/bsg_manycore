@@ -5,10 +5,10 @@
 // blocked_range.
 //
 
-#ifndef APPL_RANGE_1D_H
-#define APPL_RANGE_1D_H
+#ifndef APPLRTS_RANGE_1D_H
+#define APPLRTS_RANGE_1D_H
 
-namespace appl {
+namespace applrts {
 
 //----------------------------------------------------------------------
 // Range1D class
@@ -60,8 +60,8 @@ template <typename IterType>
 Range1D<IterType> mk_range1d( const IterType& begin, const IterType& end,
                               size_t grain = 2 );
 
-} // namespace appl
+} // namespace applrts
 
-#include "appl-Range1D.inl"
+#include "applrts-Range1D.inl"
 
 #endif

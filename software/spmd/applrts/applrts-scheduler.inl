@@ -2,7 +2,7 @@
 // Scheduler.cpp
 //========================================================================
 
-namespace appl {
+namespace applrts {
 // Linear congruential generator
 // https://en.wikipedia.org/wiki/Linear_congruential_generator
 //
@@ -44,4 +44,4 @@ inline void work_stealing_loop( Func&& cond ) {
   } // // while ( !cond() )
 }
 
-} // namespace appl
+} // namespace applrts

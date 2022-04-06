@@ -3,17 +3,17 @@
 //========================================================================
 // Simple deque protected by simple lock.
 
-#ifndef APPL_SIMPLEDEQUE_H
-#define APPL_SIMPLEDEQUE_H
+#ifndef APPLRTS_SIMPLEDEQUE_H
+#define APPLRTS_SIMPLEDEQUE_H
 
 #include <cstddef>
 #include "bsg_manycore_atomic.h"
 #include "bsg_set_tile_x_y.h"
-#include "appl-config.hpp"
+#include "applrts-config.hpp"
 
 #define QUEUE_SIZE 160
 
-namespace appl {
+namespace applrts {
 
 inline void lock(int* lock_ptr) {
   int lock_val = 1;
@@ -48,8 +48,8 @@ private:
 
 };
 
-} // namespace appl
+} // namespace applrts
 
-#include "appl-SimpleDeque.inl"
+#include "applrts-SimpleDeque.inl"
 
 #endif

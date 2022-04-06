@@ -2,7 +2,7 @@
 // SimpleDeque.inl
 //========================================================================
 
-namespace appl {
+namespace applrts {
 
 template <typename T>
 SimpleDeque<T>::SimpleDeque() {
@@ -83,4 +83,4 @@ T SimpleDeque<T>::pop_front()
   return ret_val;
 }
 
-} // namespace appl
+} // namespace applrts

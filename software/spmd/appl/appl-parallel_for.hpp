@@ -41,7 +41,7 @@ void parallel_for_1( IndexT first, IndexT last, const BodyT& body );
 #ifdef APPL_IMPL_APPLRTS
 #include "appl-parallel_for-applrts.inl"
 #elif defined(APPL_IMPL_CELLO)
-// Hi Max!
+#include "appl-parallel_for-cello.inl"
 #else
 #include "appl-parallel_for-serial.inl"
 #endif

@@ -38,14 +38,6 @@ int kernel_appl_bfs(int* results, symmetricVertex* V, int n, int m, int* dram_bu
   // debug print
   if (__bsg_id == 0) {
     graph<symmetricVertex> G = graph<symmetricVertex>(V, n, m, nullptr);
-    uint32_t idx = 0;
-    for (uint32_t v = 0; v < G.n; v++) {
-      for (uint32_t e = 0; e <  G.V[v].getOutDegree(); e++) {
-        results[idx] = G.V[v].getOutNeighbor(e);
-        idx++;
-      }
-    }
-
     size_t n     = G.n;
     size_t start = 0;
     uintE* Parents = newA( uintE, n );
@@ -61,6 +53,7 @@ int kernel_appl_bfs(int* results, symmetricVertex* V, int n, int m, int* dram_bu
 
     // print
     for (size_t i = 0; i < G.n; i++) {
+      results[i] = Parents[i];
       bsg_print_int(Parents[i]);
     }
   }

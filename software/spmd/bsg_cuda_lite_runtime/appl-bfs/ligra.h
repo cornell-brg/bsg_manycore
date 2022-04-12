@@ -19,6 +19,18 @@ inline bool      should_output( const flags& fl )
   return !( fl & no_output );
 }
 
+auto get_emdense_gen( bool* next ) {
+  return [next](uintE id, bool m = false) {
+    if (m) {
+      next[id] = true;
+    }
+  };
+}
+
+auto get_emdense_nooutput_gen() {
+    return [](uintE id, bool m = false) {};
+}
+
 template <class vertex, class VS, class F>
 vertexSubset edgeMapDense( graph<vertex> GA, VS& vs,
                            F& f, const flags fl ) {
@@ -27,11 +39,7 @@ vertexSubset edgeMapDense( graph<vertex> GA, VS& vs,
 
   if ( should_output( fl ) ) {
     bool* next = newA( bool, n );
-    auto g = [next](uintE id, bool m = false) {
-      if (m) {
-        next[id] = true;
-      }
-    };
+    auto g = get_emdense_gen(next);
     appl::parallel_for( size_t( 0 ), n, [&]( size_t v ) {
         next[v] = 0;
         if ( f.cond( v ) ) {
@@ -41,8 +49,7 @@ vertexSubset edgeMapDense( graph<vertex> GA, VS& vs,
     } );
     return vertexSubset( n, next );
   } else {
-    auto g = [](uintE id, bool m = false) {
-    };
+    auto g = get_emdense_nooutput_gen();
     appl::parallel_for( size_t( 0 ), n, [&]( size_t v ) {
         if ( f.cond( v ) ) {
           G[v].decodeInNghBreakEarly( v, vs, f, g,

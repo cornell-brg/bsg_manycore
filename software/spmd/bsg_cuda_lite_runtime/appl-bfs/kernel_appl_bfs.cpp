@@ -7,30 +7,33 @@
 
 bsg_barrier<bsg_tiles_X, bsg_tiles_Y> barrier;
 
-int32_t fib_base(int32_t n) {
-  if (n < 2)
-    return n;
-  else
-    return fib_base(n-1) + fib_base(n-2);
-}
+struct BFS_F {
+  uintE* Parents;
+  BFS_F( uintE* _Parents ) : Parents( _Parents ) {}
 
-int32_t fib(int32_t n, int32_t gsize = 2) {
-  if (n <= gsize) {
-    return fib_base(n);
+  inline bool update( uintE s, uintE d )
+  {
+    if ( Parents[d] == UINT_E_MAX ) {
+      Parents[d] = s;
+      return 1;
+    }
+    else
+      return 0;
   }
 
-  int32_t x, y;
+  inline bool updateAtomic( uintE s, uintE d )
+  {
+    return update( s, d );
+  }
 
-  appl::parallel_invoke(
-      [&] { x = fib(n-1, gsize); },
-      [&] { y = fib(n-2, gsize); }
-      );
-
-  return x + y;
-}
+  // cond function checks if vertex has been visited yet
+  inline bool cond( uintE d ) { return ( Parents[d] == UINT_E_MAX ); }
+};
 
 extern "C" __attribute__ ((noinline))
 int kernel_appl_bfs(int* results, symmetricVertex* V, int n, int m, int* dram_buffer) {
+
+  appl::runtime_init(dram_buffer, 16);
 
   // debug print
   if (__bsg_id == 0) {
@@ -43,21 +46,27 @@ int kernel_appl_bfs(int* results, symmetricVertex* V, int n, int m, int* dram_bu
       }
     }
 
-    // test vertex subset
-    bool d[G.n] = {0};
-    d[0] = true;
-    d[63] = true;
-    vertexSubset vs = vertexSubset(G.n, d);
+    size_t n     = G.n;
+    size_t start = 0;
+    uintE* Parents = newA( uintE, n );
+    appl::parallel_for( size_t( 0 ), n,
+                        [&]( size_t i ) { Parents[i] = UINT_E_MAX; } );
+    Parents[start] = start;
+    vertexSubset Frontier( n, start ); // creates initial frontier
+
     bsg_print_int(14850);
-    bsg_print_int(vs.size());
-    bsg_print_int(vs.numVertices());
-    if (vs.dense()) {
+    if (Frontier.dense()) {
       bsg_print_int(123);
     } else {
       bsg_print_int(321);
     }
+
+    vertexSubset output = edgeMap( G, Frontier, BFS_F( Parents ) );
+    bsg_print_int(14853);
+    bsg_print_int(output.size());
   }
 
+  appl::runtime_end();
 
   barrier.sync();
   return 0;

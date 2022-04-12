@@ -2,6 +2,38 @@
 #define VERTEX_H
 
 #include "parallel.h"
+#include "vertexSubset.h"
+
+namespace decode_uncompressed {
+
+// Used by edgeMapDense. Callers ensure cond(v_id). For each vertex,
+// decode its in-edges, and check to see whether this neighbor is in the
+// current frontier, calling update if it is. If processing the edges
+// sequentially, break once !cond(v_id).
+template <class vertex, class F, class VS>
+inline void decodeInNghBreakEarly( vertex* v, size_t v_id, VS& vertexSubset,
+                                   F& f, bool parallel = 0 ) {
+  uintE d = v->getInDegree();
+  if ( !parallel || d < 1000 ) {
+    for ( size_t j = 0; j < d; j++ ) {
+      uintE ngh = v->getInNeighbor( j );
+      if ( vertexSubset.isIn( ngh ) ) {
+        f.update( ngh, v_id );
+      }
+      if ( !f.cond( v_id ) )
+        break;
+    }
+  } else {
+    appl::parallel_for( uintE( 0 ), d, [&]( uintE j ) {
+        uintE ngh = v->getInNeighbor( j );
+        if ( vertexSubset.isIn( ngh ) ) {
+          f.updateAtomic( ngh, v_id );
+        }
+    } );
+  }
+}
+
+} // namespace decode_uncompressed
 
 struct symmetricVertex {
   uintE* neighbors;
@@ -27,6 +59,13 @@ struct symmetricVertex {
   void  setInDegree( uintT _d ) { degree = _d; }
   void  setOutDegree( uintT _d ) { degree = _d; }
   void  flipEdges() {}
+
+  template <class VS, class F>
+  inline void decodeInNghBreakEarly( size_t v_id, VS& vertexSubset, F& f,
+                                     bool parallel = 0 ) {
+    decode_uncompressed::decodeInNghBreakEarly<symmetricVertex, F, VS>(
+        this, v_id, vertexSubset, f, parallel );
+  }
 };
 
 

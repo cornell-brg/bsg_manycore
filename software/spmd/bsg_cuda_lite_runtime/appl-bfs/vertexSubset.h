@@ -2,6 +2,7 @@
 #define VERTEXSUBSET_H
 
 #include "parallel.h"
+#include "utils.h"
 
 struct vertexSubset {
   using S = uintE;
@@ -12,12 +13,18 @@ struct vertexSubset {
   {
   }
 
-  /*
+  // A vertexSubset with a single vertex.
+  vertexSubset( size_t _n, uintE v )
+      : n( _n ), m( 1 ), d( NULL ), isDense( 0 )
+  {
+    s = newA( uintE, 1 );
+    s[0] = v;
+  }
+
   vertexSubset( size_t _n, size_t _m, S* indices )
       : n( _n ), m( _m ), s( indices ), d( NULL ), isDense( 0 )
   {
   }
-  */
 
   vertexSubset( size_t _n, size_t _m, bool* _d )
       : n( _n ), m( _m ), s( NULL ), d( _d ), isDense( 1 )
@@ -50,11 +57,9 @@ struct vertexSubset {
   bool isEmpty() { return m == 0; }
   bool dense() { return isDense; }
 
-  /*
   void toDense()
   {
     if ( d == NULL ) {
-      // XXX: impl newA
       d = newA( bool, n );
       appl::parallel_for( size_t( 0 ), n, [&]( size_t i ) { d[i] = 0; } );
       appl::parallel_for( size_t( 0 ), m,
@@ -62,7 +67,6 @@ struct vertexSubset {
     }
     isDense = true;
   }
-  */
 
   S*     s;
   bool*  d;

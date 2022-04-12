@@ -60,6 +60,7 @@ int kernel_appl_bfs(int* results, symmetricVertex* V, int n, int m, int* dram_bu
     } else {
       bsg_print_int(321);
     }
+    bsg_print_int(Frontier.size());
 
     vertexSubset output = edgeMap( G, Frontier, BFS_F( Parents ) );
     bsg_print_int(14853);

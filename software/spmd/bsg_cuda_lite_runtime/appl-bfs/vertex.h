@@ -10,15 +10,16 @@ namespace decode_uncompressed {
 // decode its in-edges, and check to see whether this neighbor is in the
 // current frontier, calling update if it is. If processing the edges
 // sequentially, break once !cond(v_id).
-template <class vertex, class F, class VS>
+template <class vertex, class F, class G, class VS>
 inline void decodeInNghBreakEarly( vertex* v, size_t v_id, VS& vertexSubset,
-                                   F& f, bool parallel = 0 ) {
+                                   F& f, G& g, bool parallel = 0 ) {
   uintE d = v->getInDegree();
   if ( !parallel || d < 1000 ) {
     for ( size_t j = 0; j < d; j++ ) {
       uintE ngh = v->getInNeighbor( j );
       if ( vertexSubset.isIn( ngh ) ) {
-        f.update( ngh, v_id );
+        auto m = f.update( ngh, v_id );
+        g( v_id, m );
       }
       if ( !f.cond( v_id ) )
         break;
@@ -27,7 +28,8 @@ inline void decodeInNghBreakEarly( vertex* v, size_t v_id, VS& vertexSubset,
     appl::parallel_for( uintE( 0 ), d, [&]( uintE j ) {
         uintE ngh = v->getInNeighbor( j );
         if ( vertexSubset.isIn( ngh ) ) {
-          f.updateAtomic( ngh, v_id );
+          auto m = f.updateAtomic( ngh, v_id );
+          g( v_id, m );
         }
     } );
   }
@@ -60,11 +62,11 @@ struct symmetricVertex {
   void  setOutDegree( uintT _d ) { degree = _d; }
   void  flipEdges() {}
 
-  template <class VS, class F>
+  template <class VS, class F, class G>
   inline void decodeInNghBreakEarly( size_t v_id, VS& vertexSubset, F& f,
-                                     bool parallel = 0 ) {
-    decode_uncompressed::decodeInNghBreakEarly<symmetricVertex, F, VS>(
-        this, v_id, vertexSubset, f, parallel );
+                                     G& g, bool parallel = 0 ) {
+    decode_uncompressed::decodeInNghBreakEarly<symmetricVertex, F, G, VS>(
+        this, v_id, vertexSubset, f, g, parallel );
   }
 };
 

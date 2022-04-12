@@ -27,18 +27,25 @@ vertexSubset edgeMapDense( graph<vertex> GA, VS& vs,
 
   if ( should_output( fl ) ) {
     bool* next = newA( bool, n );
+    auto g = [next](uintE id, bool m = false) {
+      if (m) {
+        next[id] = true;
+      }
+    };
     appl::parallel_for( size_t( 0 ), n, [&]( size_t v ) {
         next[v] = 0;
         if ( f.cond( v ) ) {
-          G[v].decodeInNghBreakEarly( v, vs, f,
+          G[v].decodeInNghBreakEarly( v, vs, f, g,
                                       fl & dense_parallel );
         }
     } );
     return vertexSubset( n, next );
   } else {
+    auto g = [](uintE id, bool m = false) {
+    };
     appl::parallel_for( size_t( 0 ), n, [&]( size_t v ) {
         if ( f.cond( v ) ) {
-          G[v].decodeInNghBreakEarly( v, vs, f,
+          G[v].decodeInNghBreakEarly( v, vs, f, g,
                                       fl & dense_parallel );
         }
     } );

@@ -54,17 +54,15 @@ int kernel_appl_bfs(int* results, symmetricVertex* V, int n, int m, int* dram_bu
     Parents[start] = start;
     vertexSubset Frontier( n, start ); // creates initial frontier
 
-    bsg_print_int(14850);
-    if (Frontier.dense()) {
-      bsg_print_int(123);
-    } else {
-      bsg_print_int(321);
+    while ( !Frontier.isEmpty() ) {    // loop until frontier is empty
+      vertexSubset output = edgeMap( G, Frontier, BFS_F( Parents ) );
+      Frontier = output; // set new frontier
     }
-    bsg_print_int(Frontier.size());
 
-    vertexSubset output = edgeMap( G, Frontier, BFS_F( Parents ) );
-    bsg_print_int(14853);
-    bsg_print_int(output.size());
+    // print
+    for (size_t i = 0; i < G.n; i++) {
+      bsg_print_int(Parents[i]);
+    }
   }
 
   appl::runtime_end();

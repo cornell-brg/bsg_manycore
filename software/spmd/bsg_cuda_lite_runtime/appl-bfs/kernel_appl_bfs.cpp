@@ -42,7 +42,22 @@ int kernel_appl_bfs(int* results, symmetricVertex* V, int n, int m, int* dram_bu
         idx++;
       }
     }
+
+    // test vertex subset
+    bool d[G.n] = {0};
+    d[0] = true;
+    d[63] = true;
+    vertexSubset vs = vertexSubset(G.n, d);
+    bsg_print_int(14850);
+    bsg_print_int(vs.size());
+    bsg_print_int(vs.numVertices());
+    if (vs.dense()) {
+      bsg_print_int(123);
+    } else {
+      bsg_print_int(321);
+    }
   }
+
 
   barrier.sync();
   return 0;

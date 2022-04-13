@@ -9,12 +9,16 @@ bsg_barrier<bsg_tiles_X, bsg_tiles_Y> barrier;
 
 struct BFS_F {
   uintE* Parents;
-  BFS_F( uintE* _Parents ) : Parents( _Parents ) {}
+  uintE* bfsLvls;
+  uintE  lvl;
+  BFS_F( uintE* _Parents, uintE* _bfsLvls, uintE  _lvl )
+    : Parents( _Parents ), bfsLvls( _bfsLvls ), lvl( _lvl ) {}
 
   inline bool update( uintE s, uintE d )
   {
     if ( Parents[d] == UINT_E_MAX ) {
       Parents[d] = s;
+      bfsLvls[d] = lvl;
       return 1;
     }
     else
@@ -41,21 +45,28 @@ int kernel_appl_bfs(int* results, symmetricVertex* V, int n, int m, int* dram_bu
     size_t n     = G.n;
     size_t start = 0;
     uintE* Parents = newA( uintE, n );
-    appl::parallel_for( size_t( 0 ), n,
-                        [&]( size_t i ) { Parents[i] = UINT_E_MAX; } );
+    uintE* bfsLvls = newA( uintE, n );
+    appl::parallel_for( size_t( 0 ), n, [&]( size_t i ) {
+        Parents[i] = UINT_E_MAX;
+        bfsLvls[i] = UINT_E_MAX;
+        } );
     Parents[start] = start;
     vertexSubset Frontier( n, start ); // creates initial frontier
 
+    uintE lvl = 0;
     while ( !Frontier.isEmpty() ) {    // loop until frontier is empty
-      vertexSubset output = edgeMap( G, Frontier, BFS_F( Parents ) );
+      vertexSubset output = edgeMap( G, Frontier, BFS_F( Parents, bfsLvls, lvl ) );
       Frontier = output; // set new frontier
+      lvl++;
     }
 
     // print
     for (size_t i = 0; i < G.n; i++) {
-      results[i] = Parents[i];
-      bsg_print_int(Parents[i]);
+      results[i] = bfsLvls[i];
+      bsg_print_int(bfsLvls[i]);
     }
+  } else {
+    appl::worker_thread_init();
   }
 
   appl::runtime_end();

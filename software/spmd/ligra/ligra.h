@@ -107,4 +107,17 @@ void vertexMap( VS& vs, F f ) {
   }
 }
 
+template <class VS, class F>
+vertexSubset vertexFilter( VS& vs, F f ) {
+  size_t n = vs.numRows();
+  vs.toDense();
+  bool* next = newA( bool, n );
+  appl::parallel_for( size_t( 0 ), n, [&]( size_t i ) {
+      if (vs.isIn(i)) {
+        next[i] = f(i);
+      }
+  } );
+  return vertexSubset( n, next );
+}
+
 #endif

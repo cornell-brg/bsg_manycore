@@ -89,4 +89,22 @@ vertexSubset edgeMap( graph<vertex> GA, VS& vs, F f, intT threshold = -1,
   return edgeMapDense<vertex, VS, F>( GA, vs, f, fl );
 }
 
+//*****VERTEX FUNCTIONS*****
+
+template <class VS, class F>
+void vertexMap( VS& vs, F f ) {
+  if (vs.isDense()) {
+    size_t n = vs.numRows();
+    appl::parallel_for( size_t( 0 ), n, [&]( size_t i ) {
+        if (vs.isIn(i)) {
+          f(i);
+        }
+    } );
+  } else {
+    size_t m = vs.numNonzeros();
+    appl::parallel_for( size_t( 0 ), m,
+        [&]( size_t i ) { f( vs.vtx( i ) ); } );
+  }
+}
+
 #endif

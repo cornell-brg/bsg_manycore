@@ -34,6 +34,34 @@ struct BFS_F {
   inline bool cond( uintE d ) { return ( Parents[d] == UINT_E_MAX ); }
 };
 
+void Compute( graph<vertex>& GA, int* results ) {
+  size_t n     = GA.n;
+  size_t start = 0;
+  uintE* Parents = newA( uintE, n );
+  uintE* bfsLvls = newA( uintE, n );
+  appl::parallel_for( size_t( 0 ), n, [&]( size_t i ) {
+      Parents[i] = UINT_E_MAX;
+      bfsLvls[i] = UINT_E_MAX;
+      } );
+  Parents[start] = start;
+  vertexSubset Frontier( n, start ); // creates initial frontier
+
+  uintE lvl = 0;
+  while ( !Frontier.isEmpty() ) {    // loop until frontier is empty
+    vertexSubset output = edgeMap( GA, Frontier, BFS_F( Parents, bfsLvls, lvl ) );
+    Frontier.del();
+    Frontier = output; // set new frontier
+    lvl++;
+  }
+
+  // print
+  for (size_t i = 0; i < G.n; i++) {
+    results[i] = bfsLvls[i];
+    bsg_print_int(bfsLvls[i]);
+  }
+  Frontier.del();
+}
+
 extern "C" __attribute__ ((noinline))
 int kernel_appl_bfs(int* results, symmetricVertex* V, int n, int m, int* dram_buffer) {
 
@@ -42,29 +70,7 @@ int kernel_appl_bfs(int* results, symmetricVertex* V, int n, int m, int* dram_bu
   // debug print
   if (__bsg_id == 0) {
     graph<symmetricVertex> G = graph<symmetricVertex>(V, n, m, nullptr);
-    size_t n     = G.n;
-    size_t start = 0;
-    uintE* Parents = newA( uintE, n );
-    uintE* bfsLvls = newA( uintE, n );
-    appl::parallel_for( size_t( 0 ), n, [&]( size_t i ) {
-        Parents[i] = UINT_E_MAX;
-        bfsLvls[i] = UINT_E_MAX;
-        } );
-    Parents[start] = start;
-    vertexSubset Frontier( n, start ); // creates initial frontier
-
-    uintE lvl = 0;
-    while ( !Frontier.isEmpty() ) {    // loop until frontier is empty
-      vertexSubset output = edgeMap( G, Frontier, BFS_F( Parents, bfsLvls, lvl ) );
-      Frontier = output; // set new frontier
-      lvl++;
-    }
-
-    // print
-    for (size_t i = 0; i < G.n; i++) {
-      results[i] = bfsLvls[i];
-      bsg_print_int(bfsLvls[i]);
-    }
+    Compute(G, results);
   } else {
     appl::worker_thread_init();
   }

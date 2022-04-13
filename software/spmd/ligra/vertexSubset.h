@@ -45,7 +45,8 @@ struct vertexSubset {
     m = sum;
   }
 
-  // Dense
+  void del() { }
+
   inline bool   isIn( const uintE& v ) const { return d[v]; }
   inline uintE& vtx( const uintE& i ) const { return s[i]; }
 

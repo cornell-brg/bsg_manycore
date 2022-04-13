@@ -9,30 +9,30 @@ struct vertexSubset {
 
   // An empty vertex set.
   vertexSubset( size_t _n )
-      : n( _n ), m( 0 ), d( NULL ), s( NULL ), isDense( 0 )
+      : n( _n ), m( 0 ), d( NULL ), s( NULL ), dense( 0 )
   {
   }
 
   // A vertexSubset with a single vertex.
   vertexSubset( size_t _n, uintE v )
-      : n( _n ), m( 1 ), d( NULL ), isDense( 0 )
+      : n( _n ), m( 1 ), d( NULL ), dense( 0 )
   {
     s = newA( uintE, 1 );
     s[0] = v;
   }
 
   vertexSubset( size_t _n, size_t _m, S* indices )
-      : n( _n ), m( _m ), s( indices ), d( NULL ), isDense( 0 )
+      : n( _n ), m( _m ), s( indices ), d( NULL ), dense( 0 )
   {
   }
 
   vertexSubset( size_t _n, size_t _m, bool* _d )
-      : n( _n ), m( _m ), s( NULL ), d( _d ), isDense( 1 )
+      : n( _n ), m( _m ), s( NULL ), d( _d ), dense( 1 )
   {
   }
 
   vertexSubset( size_t _n, bool* _d )
-      : n( _n ), s( NULL ), d( _d ), isDense( 1 )
+      : n( _n ), s( NULL ), d( _d ), dense( 1 )
   {
     // m is the number of TRUE
     // XXX: do a parallel reduce
@@ -46,7 +46,8 @@ struct vertexSubset {
   }
 
   // Dense
-  inline bool isIn( const uintE& v ) const { return d[v]; }
+  inline bool   isIn( const uintE& v ) const { return d[v]; }
+  inline uintE& vtx( const uintE& i ) const { return s[i]; }
 
   size_t size() { return m; }
   size_t numVertices() { return n; }
@@ -55,7 +56,7 @@ struct vertexSubset {
   size_t numNonzeros() { return m; }
 
   bool isEmpty() { return m == 0; }
-  bool dense() { return isDense; }
+  bool isDense() { return dense; }
 
   void toDense()
   {
@@ -65,13 +66,13 @@ struct vertexSubset {
       appl::parallel_for( size_t( 0 ), m,
                           [&]( size_t i ) { d[s[i]] = 1; } );
     }
-    isDense = true;
+    dense = true;
   }
 
   S*     s;
   bool*  d;
   size_t n, m;
-  bool   isDense;
+  bool   dense;
 };
 
 #endif

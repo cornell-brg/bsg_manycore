@@ -34,6 +34,7 @@ struct BFS_F {
   inline bool cond( uintE d ) { return ( Parents[d] == UINT_E_MAX ); }
 };
 
+template <class vertex>
 void Compute( graph<vertex>& GA, int* results ) {
   size_t n     = GA.n;
   size_t start = 0;
@@ -55,7 +56,7 @@ void Compute( graph<vertex>& GA, int* results ) {
   }
 
   // print
-  for (size_t i = 0; i < G.n; i++) {
+  for (size_t i = 0; i < GA.n; i++) {
     results[i] = bfsLvls[i];
     bsg_print_int(bfsLvls[i]);
   }

@@ -132,6 +132,12 @@ module spmd_testbench
 `ifdef BSG_ENABLE_COVERAGE
     ,.enable_vcore_pc_coverage_p(1)
 `endif
+`ifdef BSG_ENABLE_VANILLA_CORE_TRACE
+    ,.enable_vanilla_core_trace_p(1)
+`endif
+`ifdef BSG_ENABLE_PC_HISTOGRAM
+    ,.enable_vanilla_core_pc_histogram_p(1)
+`endif
   ) tb (
     .clk_i(core_clk)
     ,.reset_i(global_reset)

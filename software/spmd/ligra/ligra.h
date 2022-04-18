@@ -120,4 +120,10 @@ vertexSubset vertexFilter( VS& vs, F f ) {
   return vertexSubset( n, next );
 }
 
+// cond function that always returns true
+inline bool cond_true( intT d )
+{
+  return 1;
+}
+
 #endif

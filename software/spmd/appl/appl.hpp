@@ -10,6 +10,7 @@
 // Parallel Patterns
 #include "appl-parallel_for.hpp"
 #include "appl-parallel_invoke.hpp"
+#include "appl-parallel_reduce.hpp"
 
 // Utils
 #include "appl-runtime.hpp"

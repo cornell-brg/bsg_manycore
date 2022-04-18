@@ -34,15 +34,19 @@ struct vertexSubset {
   vertexSubset( size_t _n, bool* _d )
       : n( _n ), s( NULL ), d( _d ), dense( 1 )
   {
+    m = appl::parallel_reduce(size_t(0), n, size_t(0),
+        [&](size_t start, size_t end, size_t initV) {
+          size_t psum = initV;
+          for (size_t i = start; i < end; i++) {
+            if (d[i]) {
+              psum++;
+            }
+          }
+          return psum;
+        },
+        [](size_t x, size_t y) { return x + y; }
+      );
     // m is the number of TRUE
-    // XXX: do a parallel reduce
-    size_t sum = 0;
-    for (size_t i = 0; i < n; i++) {
-      if (d[i]) {
-        sum++;
-      }
-    }
-    m = sum;
   }
 
   void del() { }

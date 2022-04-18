@@ -169,6 +169,10 @@ module network_tx
         e_vanilla_amoswap:  out_packet.op_v2 = e_remote_amoswap;
         e_vanilla_amoor:    out_packet.op_v2 = e_remote_amoor;
         e_vanilla_amoadd:   out_packet.op_v2 = e_remote_amoadd;
+        e_vanilla_amomin:   out_packet.op_v2 = e_remote_amomin;
+        e_vanilla_amomax:   out_packet.op_v2 = e_remote_amomax;
+        e_vanilla_amominu:  out_packet.op_v2 = e_remote_amominu;
+        e_vanilla_amomaxu:  out_packet.op_v2 = e_remote_amomaxu;
         default:            out_packet.op_v2 = e_remote_amoswap;  // should never happen.
       endcase
     end

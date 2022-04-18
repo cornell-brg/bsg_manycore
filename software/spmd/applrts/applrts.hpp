@@ -11,6 +11,7 @@
 // Parallel Patterns
 #include "applrts-parallel_for.hpp"
 #include "applrts-parallel_invoke.hpp"
+#include "applrts-parallel_reduce.hpp"
 
 // Utils
 #include "applrts-runtime.hpp"

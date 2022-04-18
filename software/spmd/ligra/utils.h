@@ -31,4 +31,13 @@ inline bool writeMinu(ET* p, ET val) {
   return result > val;
 }
 
+template <class ET>
+inline ET min(ET a, ET b) {
+  if (a > b) {
+    return b;
+  } else {
+    return a;
+  }
+}
+
 #endif

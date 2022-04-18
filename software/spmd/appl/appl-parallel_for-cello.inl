@@ -8,20 +8,14 @@ template <typename IndexT, typename BodyT>
 void parallel_for( IndexT first, IndexT last, IndexT step,
                    const BodyT& body )
 {
-    // unimplemented for now...
-    for (IndexT i = first; i < last; i += step) {
-        body( i );
-    }
+    cello::for_each(first, last, step, body);
 }
 
 template <typename IndexT, typename BodyT>
 void parallel_for_1( IndexT first, IndexT last, IndexT step,
                      const BodyT& body )
 {
-    // unimplemented for now...
-    for (IndexT i = first; i < last; i += step) {
-        body( i );
-    }
+    cello::for_each(first, last, step, body);
 }
 
 template <typename IndexT, typename BodyT>

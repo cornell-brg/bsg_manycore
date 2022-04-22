@@ -49,9 +49,8 @@ bsg_mcs_mutex_acquire_loop:
         // and (2) the contention on this lock.
         // We expect the wait time to be on the order of 20-100 cycles in the
         // case where there is low contention on the lock.
-        lr.w    t0, (a1)                       // unlocked = lcl->unlocked
+        lw      t0, 0(a1)                      // unlocked = lcl->unlocked
         bnez    t0, bsg_mcs_mutex_acquire_ret  // return if unlocked
-        lr.w.aq t0, (a1)                       // unlocked = lcl->unlocked
         // MBT: backwards predict not taken branch variant would be helpful here
         //
         // MBT: if we supported context switching the reservation register, then we would

@@ -133,7 +133,6 @@ ifeq ($(APPL_IMPL), APPL_IMPL_CELLO)
 	RISCV_GCC_OPTS += -fno-threadsafe-statics
 	OBJECT_FILES += appl-runtime.o
 	OBJECT_FILES += bsg_mcs_mutex.o
-	# Hi Max!
 endif
 
 SPMD_COMMON_OBJECTS ?=

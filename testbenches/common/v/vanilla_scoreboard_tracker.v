@@ -57,15 +57,17 @@ module vanilla_scoreboard_tracker
 
   wire is_overflow_dmem_addr = (tile_group_addr.remote == 3'b001) & is_my_addr & (tile_group_addr.addr inside {[16'h0100:16'hFCFF]});
 
-  wire remote_ld_dram_in_id = (id_r.decode.is_load_op & id_r.decode.write_rd) & (id_mem_addr[data_width_p-1] | is_overflow_dmem_addr);
+  wire remote_ld_dram_in_id = (id_r.decode.is_load_op & id_r.decode.write_rd) & id_mem_addr[data_width_p-1];
   wire remote_amo_dram_in_id = id_r.decode.is_amo_op & id_mem_addr[data_width_p-1];
   wire remote_ld_global_in_id = ((id_r.decode.is_load_op & id_r.decode.write_rd) | id_r.decode.is_amo_op) & (id_mem_addr[data_width_p-1-:2] == 2'b01);
   wire remote_ld_group_in_id = (id_r.decode.is_load_op & id_r.decode.write_rd) & is_true_remote_group_addr;
   wire remote_amo_group_in_id = id_r.decode.is_amo_op & (id_mem_addr[data_width_p-1-:3] == 3'b001);
+  wire dmem_overflow_ld_in_id = (id_r.decode.is_load_op & id_r.decode.write_rd) & is_overflow_dmem_addr;
 
-  wire remote_flw_dram_in_id = (id_r.decode.is_load_op & id_r.decode.write_frd) & (id_mem_addr[data_width_p-1] | is_overflow_dmem_addr);
+  wire remote_flw_dram_in_id = (id_r.decode.is_load_op & id_r.decode.write_frd) & id_mem_addr[data_width_p-1];
   wire remote_flw_global_in_id = (id_r.decode.is_load_op & id_r.decode.write_frd) & (id_mem_addr[data_width_p-1-:2] == 2'b01);
   wire remote_flw_group_in_id = (id_r.decode.is_load_op & id_r.decode.write_frd) & ((id_mem_addr[data_width_p-1-:3] == 3'b001) & ~is_my_addr);
+  wire dmem_overflow_fld_in_id = (id_r.decode.is_load_op & id_r.decode.write_frd) & is_overflow_dmem_addr;
 
   wire [reg_addr_width_lp-1:0] id_rd = id_r.instruction.rd;
 
@@ -99,6 +101,13 @@ module vanilla_scoreboard_tracker
         end
         else if (int_sb_clear & (int_sb_clear_id == i)) begin
           int_sb_r[i].remote_dram_amo <= 1'b0;
+        end
+        // dmem overflow to dram
+        if (~stall_id & ~stall_all & ~flush & dmem_overflow_ld_in_id & (id_rd == i)) begin
+          int_sb_r[i].remote_dmem_overflow_load <= 1'b1;
+        end
+        else if (int_sb_clear & (int_sb_clear_id == i)) begin
+          int_sb_r[i].remote_dmem_overflow_load <= 1'b0;
         end
         // remote ld global
         if (~stall_id & ~stall_all & ~flush & remote_ld_global_in_id & (id_rd == i)) begin
@@ -152,6 +161,13 @@ module vanilla_scoreboard_tracker
         end
         else if (float_sb_clear & (float_sb_clear_id == i)) begin
           float_sb_r[i].remote_group_load <= 1'b0;
+        end
+        //flw dmem overflow to dream
+        if (~stall_id & ~stall_all & ~flush & dmem_overflow_fld_in_id & (id_rd == i)) begin
+          float_sb_r[i].remote_dmem_overflow_load <= 1'b1;
+        end
+        else if (float_sb_clear & (float_sb_clear_id == i)) begin
+          float_sb_r[i].remote_dmem_overflow_load <= 1'b0;
         end
       end // for (integer i = 0; i < RV32_reg_els_gp; i++)
     end // else: !if(reset_i)

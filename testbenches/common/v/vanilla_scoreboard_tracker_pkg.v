@@ -7,6 +7,7 @@ package vanilla_scoreboard_tracker_pkg;
     logic remote_global_load;
     logic remote_dram_load;
     logic remote_dram_amo;
+    logic remote_dmem_overflow_load;
     logic idiv;
   } vanilla_isb_info_s;
 
@@ -15,6 +16,7 @@ package vanilla_scoreboard_tracker_pkg;
     logic remote_group_load;
     logic remote_global_load;
     logic remote_dram_load;
+    logic remote_dmem_overflow_load;
     logic fdiv_fsqrt;
   } vanilla_fsb_info_s;
 

@@ -172,13 +172,13 @@ module vanilla_core_profiler
   wire remote_ld_inc = exe_r.decode.is_load_op & lsu_remote_req_v_lo & exe_r.decode.write_rd;
   wire remote_ld_dram_inc = remote_ld_inc & remote_req_o.addr[data_width_p-1];
   wire remote_ld_global_inc = remote_ld_inc & (remote_req_o.addr[data_width_p-1-:2] == 2'b01);
-  wire remote_ld_group_inc = remote_ld_inc & (remote_req_o.addr[data_width_p-1-:3] == 3'b001);
+  wire remote_ld_group_inc = remote_ld_inc & (remote_req_o.addr[data_width_p-1-:3] == 3'b001) & ~dmem_overflow_v_lo;
   wire remote_ld_overflow_inc = remote_ld_inc & (remote_req_o.addr[data_width_p-1-:3] == 3'b001) & dmem_overflow_v_lo;
 
   wire remote_st_inc = exe_r.decode.is_store_op & lsu_remote_req_v_lo & exe_r.decode.read_rs2;
   wire remote_st_dram_inc = remote_st_inc & remote_req_o.addr[data_width_p-1];
   wire remote_st_global_inc = remote_st_inc & (remote_req_o.addr[data_width_p-1-:2] == 2'b01);
-  wire remote_st_group_inc = remote_st_inc & (remote_req_o.addr[data_width_p-1-:3] == 3'b001);
+  wire remote_st_group_inc = remote_st_inc & (remote_req_o.addr[data_width_p-1-:3] == 3'b001) & ~dmem_overflow_v_lo;
   wire remote_st_overflow_inc = remote_st_inc & (remote_req_o.addr[data_width_p-1-:3] == 3'b001) & dmem_overflow_v_lo;
 
   wire local_flw_inc = exe_r.decode.is_load_op & lsu_dmem_v_lo & exe_r.decode.write_frd;
@@ -187,13 +187,13 @@ module vanilla_core_profiler
   wire remote_flw_inc = exe_r.decode.is_load_op & lsu_remote_req_v_lo & exe_r.decode.write_frd;
   wire remote_flw_dram_inc = remote_flw_inc & remote_req_o.addr[data_width_p-1];
   wire remote_flw_global_inc = remote_flw_inc & (remote_req_o.addr[data_width_p-1-:2] == 2'b01);
-  wire remote_flw_group_inc = remote_flw_inc & (remote_req_o.addr[data_width_p-1-:3] == 3'b001);
+  wire remote_flw_group_inc = remote_flw_inc & (remote_req_o.addr[data_width_p-1-:3] == 3'b001) & ~dmem_overflow_v_lo;
   wire remote_flw_overflow_inc = remote_flw_inc & (remote_req_o.addr[data_width_p-1-:3] == 3'b001) & dmem_overflow_v_lo;
 
   wire remote_fsw_inc = exe_r.decode.is_store_op & lsu_remote_req_v_lo & exe_r.decode.read_frs2;
   wire remote_fsw_dram_inc = remote_fsw_inc & remote_req_o.addr[data_width_p-1];
   wire remote_fsw_global_inc = remote_fsw_inc & (remote_req_o.addr[data_width_p-1-:2] == 2'b01);
-  wire remote_fsw_group_inc = remote_fsw_inc & (remote_req_o.addr[data_width_p-1-:3] == 3'b001);
+  wire remote_fsw_group_inc = remote_fsw_inc & (remote_req_o.addr[data_width_p-1-:3] == 3'b001) & ~dmem_overflow_v_lo;
   wire remote_fsw_overflow_inc = remote_fsw_inc & (remote_req_o.addr[data_width_p-1-:3] == 3'b001) & dmem_overflow_v_lo;
 
   wire icache_miss_inc = exe_r.icache_miss;

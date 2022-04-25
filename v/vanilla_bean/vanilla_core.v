@@ -696,6 +696,7 @@ module vanilla_core
   logic [data_mask_width_lp-1:0] lsu_dmem_mask_lo;
   logic lsu_reserve_lo;
   logic [data_width_p-1:0] lsu_mem_addr_sent_lo;
+  logic dmem_overflow_v_lo;
 
   lsu #(
     .data_width_p(data_width_p)
@@ -729,6 +730,8 @@ module vanilla_core
     ,.reserve_o(lsu_reserve_lo)
 
     ,.mem_addr_sent_o(lsu_mem_addr_sent_lo)
+
+    ,.dmem_overflow_v_o(dmem_overflow_v_lo)
   );
 
 

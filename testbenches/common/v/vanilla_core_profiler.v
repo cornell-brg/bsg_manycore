@@ -1063,18 +1063,22 @@ module vanilla_core_profiler
       $fwrite(fd, "instr_remote_ld_dram,");
       $fwrite(fd, "instr_remote_ld_global,");
       $fwrite(fd, "instr_remote_ld_group,");
+      $fwrite(fd, "instr_remote_ld_overflow,");
       $fwrite(fd, "instr_remote_st_dram,");
       $fwrite(fd, "instr_remote_st_global,");
       $fwrite(fd, "instr_remote_st_group,");
+      $fwrite(fd, "instr_remote_st_overflow,");
     
       $fwrite(fd, "instr_local_flw,");
       $fwrite(fd, "instr_local_fsw,");
       $fwrite(fd, "instr_remote_flw_dram,");
       $fwrite(fd, "instr_remote_flw_global,");
       $fwrite(fd, "instr_remote_flw_group,");
+      $fwrite(fd, "instr_remote_flw_overflow,");
       $fwrite(fd, "instr_remote_fsw_dram,");
       $fwrite(fd, "instr_remote_fsw_global,");
       $fwrite(fd, "instr_remote_fsw_group,");
+      $fwrite(fd, "instr_remote_fsw_overflow,");
 
       $fwrite(fd, "miss_icache,");
       $fwrite(fd, "instr_lr,");

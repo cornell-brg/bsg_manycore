@@ -58,6 +58,9 @@ module lsu
     , output logic reserve_o
     , output logic [1:0] byte_sel_o 
 
+    // for profiling
+    , output logic dmem_overflow_v_o
+
   );
 
 
@@ -185,7 +188,9 @@ module lsu
   // only valid on local DMEM
   assign reserve_o = exe_decode_i.is_lr_op & is_local_dmem_addr;
 
-
+  // if this is a local dmem addr in group format, and it does not fit in DMEM
+  // it overflows to DRAM
+  assign dmem_overflow_v_o = is_remote_local_dmem_addr & ~is_local_dmem_addr;
 
 
   // synopsys translate_off

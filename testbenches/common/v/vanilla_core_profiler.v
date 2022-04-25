@@ -77,6 +77,7 @@ module vanilla_core_profiler
     , input lsu_dmem_v_lo
     , input lsu_remote_req_v_lo
     , input remote_req_s remote_req_o
+    , input dmem_overflow_v_lo
 
     , input [data_width_p-1:0] rs1_val_to_exe
     , input [RV32_Iimm_width_gp-1:0] mem_addr_op2
@@ -169,14 +170,16 @@ module vanilla_core_profiler
   wire local_st_inc = exe_r.decode.is_store_op & lsu_dmem_v_lo & exe_r.decode.read_rs2;
 
   wire remote_ld_inc = exe_r.decode.is_load_op & lsu_remote_req_v_lo & exe_r.decode.write_rd;
-  wire remote_ld_dram_inc = remote_ld_inc & remote_req_o.addr[data_width_p-1]; 
+  wire remote_ld_dram_inc = remote_ld_inc & remote_req_o.addr[data_width_p-1];
   wire remote_ld_global_inc = remote_ld_inc & (remote_req_o.addr[data_width_p-1-:2] == 2'b01);
   wire remote_ld_group_inc = remote_ld_inc & (remote_req_o.addr[data_width_p-1-:3] == 3'b001);
+  wire remote_ld_overflow_inc = remote_ld_inc & (remote_req_o.addr[data_width_p-1-:3] == 3'b001) & dmem_overflow_v_lo;
 
   wire remote_st_inc = exe_r.decode.is_store_op & lsu_remote_req_v_lo & exe_r.decode.read_rs2;
   wire remote_st_dram_inc = remote_st_inc & remote_req_o.addr[data_width_p-1];
   wire remote_st_global_inc = remote_st_inc & (remote_req_o.addr[data_width_p-1-:2] == 2'b01);
   wire remote_st_group_inc = remote_st_inc & (remote_req_o.addr[data_width_p-1-:3] == 3'b001);
+  wire remote_st_overflow_inc = remote_st_inc & (remote_req_o.addr[data_width_p-1-:3] == 3'b001) & dmem_overflow_v_lo;
 
   wire local_flw_inc = exe_r.decode.is_load_op & lsu_dmem_v_lo & exe_r.decode.write_frd;
   wire local_fsw_inc = exe_r.decode.is_store_op & lsu_dmem_v_lo & exe_r.decode.read_frs2;
@@ -185,11 +188,13 @@ module vanilla_core_profiler
   wire remote_flw_dram_inc = remote_flw_inc & remote_req_o.addr[data_width_p-1];
   wire remote_flw_global_inc = remote_flw_inc & (remote_req_o.addr[data_width_p-1-:2] == 2'b01);
   wire remote_flw_group_inc = remote_flw_inc & (remote_req_o.addr[data_width_p-1-:3] == 3'b001);
+  wire remote_flw_overflow_inc = remote_flw_inc & (remote_req_o.addr[data_width_p-1-:3] == 3'b001) & dmem_overflow_v_lo;
 
   wire remote_fsw_inc = exe_r.decode.is_store_op & lsu_remote_req_v_lo & exe_r.decode.read_frs2;
   wire remote_fsw_dram_inc = remote_fsw_inc & remote_req_o.addr[data_width_p-1];
   wire remote_fsw_global_inc = remote_fsw_inc & (remote_req_o.addr[data_width_p-1-:2] == 2'b01);
   wire remote_fsw_group_inc = remote_fsw_inc & (remote_req_o.addr[data_width_p-1-:3] == 3'b001);
+  wire remote_fsw_overflow_inc = remote_fsw_inc & (remote_req_o.addr[data_width_p-1-:3] == 3'b001) & dmem_overflow_v_lo;
 
   wire icache_miss_inc = exe_r.icache_miss;
 
@@ -377,18 +382,22 @@ module vanilla_core_profiler
     integer remote_ld_dram;
     integer remote_ld_global;
     integer remote_ld_group;
+    integer remote_ld_overflow;
     integer remote_st_dram;
     integer remote_st_global;
     integer remote_st_group;
+    integer remote_st_overflow;
 
     integer local_flw;
     integer local_fsw;
     integer remote_flw_dram;
     integer remote_flw_global;
     integer remote_flw_group;
+    integer remote_flw_overflow;
     integer remote_fsw_dram;
     integer remote_fsw_global;
     integer remote_fsw_group;
+    integer remote_fsw_overflow;
 
     integer icache_miss;
     integer lr;
@@ -534,18 +543,22 @@ module vanilla_core_profiler
         else if (remote_ld_dram_inc) stat_r.remote_ld_dram++;
         else if (remote_ld_global_inc) stat_r.remote_ld_global++;
         else if (remote_ld_group_inc) stat_r.remote_ld_group++;
+        else if (remote_ld_overflow_inc) stat_r.remote_ld_overflow++;
         else if (remote_st_dram_inc) stat_r.remote_st_dram++;
         else if (remote_st_global_inc) stat_r.remote_st_global++;
         else if (remote_st_group_inc) stat_r.remote_st_group++;
+        else if (remote_st_overflow_inc) stat_r.remote_st_overflow++;
 
         else if (local_flw_inc) stat_r.local_flw++;
         else if (local_fsw_inc) stat_r.local_fsw++;
         else if (remote_flw_dram_inc) stat_r.remote_flw_dram++;
         else if (remote_flw_global_inc) stat_r.remote_flw_global++;
         else if (remote_flw_group_inc) stat_r.remote_flw_group++;
+        else if (remote_flw_overflow_inc) stat_r.remote_flw_overflow++;
         else if (remote_fsw_dram_inc) stat_r.remote_fsw_dram++;
         else if (remote_fsw_global_inc) stat_r.remote_fsw_global++;
         else if (remote_fsw_group_inc) stat_r.remote_fsw_group++;
+        else if (remote_fsw_overflow_inc) stat_r.remote_fsw_overflow++;
 
         else if (icache_miss_inc) stat_r.icache_miss++;
         else if (lr_inc) stat_r.lr++;
@@ -878,18 +891,22 @@ module vanilla_core_profiler
           $fwrite(fd, "%0d,", stat_r.remote_ld_dram);
           $fwrite(fd, "%0d,", stat_r.remote_ld_global);
           $fwrite(fd, "%0d,", stat_r.remote_ld_group);
+          $fwrite(fd, "%0d,", stat_r.remote_ld_overflow);
           $fwrite(fd, "%0d,", stat_r.remote_st_dram);
           $fwrite(fd, "%0d,", stat_r.remote_st_global);
           $fwrite(fd, "%0d,", stat_r.remote_st_group);
+          $fwrite(fd, "%0d,", stat_r.remote_st_overflow);
 
           $fwrite(fd, "%0d,", stat_r.local_flw);
           $fwrite(fd, "%0d,", stat_r.local_fsw);
           $fwrite(fd, "%0d,", stat_r.remote_flw_dram);
           $fwrite(fd, "%0d,", stat_r.remote_flw_global);
           $fwrite(fd, "%0d,", stat_r.remote_flw_group);
+          $fwrite(fd, "%0d,", stat_r.remote_flw_overflow);
           $fwrite(fd, "%0d,", stat_r.remote_fsw_dram);
           $fwrite(fd, "%0d,", stat_r.remote_fsw_global);
           $fwrite(fd, "%0d,", stat_r.remote_fsw_group);
+          $fwrite(fd, "%0d,", stat_r.remote_fsw_overflow);
 
           $fwrite(fd, "%0d,", stat_r.icache_miss);
           $fwrite(fd, "%0d,", stat_r.lr);
@@ -1025,18 +1042,22 @@ module vanilla_core_profiler
           else if (remote_ld_dram_inc) print_operation_trace("remote_ld_dram", exe_pc);
           else if (remote_ld_global_inc) print_operation_trace("remote_ld_global", exe_pc);
           else if (remote_ld_group_inc) print_operation_trace("remote_ld_group", exe_pc);
+          else if (remote_ld_overflow_inc) print_operation_trace("remote_ld_overflow", exe_pc);
           else if (remote_st_dram_inc) print_operation_trace("remote_st_dram", exe_pc);
           else if (remote_st_global_inc) print_operation_trace("remote_st_global", exe_pc);
           else if (remote_st_group_inc) print_operation_trace("remote_st_group", exe_pc);
+          else if (remote_st_overflow_inc) print_operation_trace(fd2, "remote_st_overflow", exe_pc);
 
           else if (local_flw_inc) print_operation_trace("local_flw", exe_pc);
           else if (local_fsw_inc) print_operation_trace("local_fsw", exe_pc);
           else if (remote_flw_dram_inc) print_operation_trace("remote_flw_dram", exe_pc);
           else if (remote_flw_global_inc) print_operation_trace("remote_flw_global", exe_pc);
           else if (remote_flw_group_inc) print_operation_trace("remote_flw_group", exe_pc);
+          else if (remote_flw_overflow_inc) print_operation_trace("remote_flw_overflow", exe_pc);
           else if (remote_fsw_dram_inc) print_operation_trace("remote_fsw_dram", exe_pc);
           else if (remote_fsw_global_inc) print_operation_trace("remote_fsw_global", exe_pc);
           else if (remote_fsw_group_inc) print_operation_trace("remote_fsw_group", exe_pc);
+          else if (remote_flw_overflow_inc) print_operation_trace("remote_flw_overflow", exe_pc);
 
           else if (icache_miss_inc) print_operation_trace("icache_miss", exe_pc);
           else if (lr_inc) print_operation_trace("lr", exe_pc);

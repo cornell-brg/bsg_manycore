@@ -281,13 +281,15 @@ module vanilla_core_profiler
   wire is_my_addr   = is_my_x_addr & is_my_y_addr;
   wire is_true_remote_group_addr = (tile_group_addr.remote == 3'b001) & (~is_my_addr | id_r.decode.is_amo_op);
 
-  wire remote_ld_dram_in_id = (id_r.decode.is_load_op & id_r.decode.write_rd) & id_mem_addr[data_width_p-1];
+  wire is_overflow_dmem_addr = (tile_group_addr.remote == 3'b001) & is_my_addr & (tile_group_addr.addr inside {[16'h0100:16'hFCFF]});
+
+  wire remote_ld_dram_in_id = (id_r.decode.is_load_op & id_r.decode.write_rd) & (id_mem_addr[data_width_p-1] | is_overflow_dmem_addr);
   wire remote_amo_dram_in_id = id_r.decode.is_amo_op & id_mem_addr[data_width_p-1];
   wire remote_ld_global_in_id = ((id_r.decode.is_load_op & id_r.decode.write_rd) | id_r.decode.is_amo_op) & (id_mem_addr[data_width_p-1-:2] == 2'b01);
   wire remote_ld_group_in_id = (id_r.decode.is_load_op & id_r.decode.write_rd) & is_true_remote_group_addr;
   wire remote_amo_group_in_id = id_r.decode.is_amo_op & (id_mem_addr[data_width_p-1-:3] == 3'b001);
 
-  wire remote_flw_dram_in_id = (id_r.decode.is_load_op & id_r.decode.write_frd) & id_mem_addr[data_width_p-1];
+  wire remote_flw_dram_in_id = (id_r.decode.is_load_op & id_r.decode.write_frd) & (id_mem_addr[data_width_p-1] | is_overflow_dmem_addr);
   wire remote_flw_global_in_id = (id_r.decode.is_load_op & id_r.decode.write_frd) & (id_mem_addr[data_width_p-1-:2] == 2'b01);
   wire remote_flw_group_in_id = (id_r.decode.is_load_op & id_r.decode.write_frd) & ((id_mem_addr[data_width_p-1-:3] == 3'b001) & ~is_my_addr);
 

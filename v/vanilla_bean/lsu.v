@@ -124,6 +124,8 @@ module lsu
   wire is_low_dmem_addr  = tile_group_addr.addr inside {[16'h0000:16'h00FF]} ? 1 : 0;
   wire is_high_dmem_addr = tile_group_addr.addr inside {[16'hFD00:16'hFFFF]} ? 1 : 0;
   // combine
+  // LC: XXX -> I think we SHOULD only access low 1KB with plain local addr
+  // otherwise EVA to NPA will get a plain addr for overflowed part of the stack and it panics.
   wire is_local_dmem_addr = (is_plain_low_dmem_addr | is_plain_high_dmem_addr |
                             (is_remote_local_dmem_addr & (is_low_dmem_addr | is_high_dmem_addr)));
 

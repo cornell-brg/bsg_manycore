@@ -214,6 +214,10 @@ module vanilla_exe_bubble_classifier
           exe_bubble_r <= e_exe_bubble_stall_depend_group_amo;
           exe_bubble_pc_r <= id_pc;
         end
+        else if (stall_depend_group_overflow) begin
+          exe_bubble_r <= e_exe_bubble_stall_depend_group_overflow;
+          exe_bubble_pc_r <= id_pc;
+        end
         else if (stall_depend_global_load) begin
           exe_bubble_r <= e_exe_bubble_stall_depend_global;
           exe_bubble_pc_r <= id_pc;

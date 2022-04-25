@@ -10,6 +10,7 @@ package vanilla_exe_bubble_classifier_pkg;
     e_exe_bubble_stall_depend_global,
     e_exe_bubble_stall_depend_group,
     e_exe_bubble_stall_depend_group_amo,
+    e_exe_bubble_stall_depend_group_overflow,
     e_exe_bubble_stall_depend_fdiv,
     e_exe_bubble_stall_depend_idiv,
 

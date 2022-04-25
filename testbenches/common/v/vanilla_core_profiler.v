@@ -326,6 +326,7 @@ module vanilla_core_profiler
   wire stall_depend_dram_amo_inc = (exe_bubble_r == e_exe_bubble_stall_depend_dram_amo);
   wire stall_depend_group_load_inc = (exe_bubble_r == e_exe_bubble_stall_depend_group);
   wire stall_depend_group_amo_inc = (exe_bubble_r == e_exe_bubble_stall_depend_group_amo);
+  wire stall_depend_group_overflow_inc = (exe_bubble_r == e_exe_bubble_stall_depend_group_overflow);
   wire stall_depend_global_load_inc = (exe_bubble_r == e_exe_bubble_stall_depend_global);
   wire stall_depend_idiv_inc = (exe_bubble_r == e_exe_bubble_stall_depend_idiv);
   wire stall_depend_fdiv_inc = (exe_bubble_r == e_exe_bubble_stall_depend_fdiv);
@@ -472,6 +473,7 @@ module vanilla_core_profiler
     integer stall_depend_dram_amo;
     integer stall_depend_group_load;
     integer stall_depend_group_amo;
+    integer stall_depend_group_overflow;
     integer stall_depend_global_load;
     integer stall_depend_idiv;
     integer stall_depend_fdiv;
@@ -647,6 +649,7 @@ module vanilla_core_profiler
         else if (stall_depend_dram_amo_inc) stat_r.stall_depend_dram_amo++;
         else if (stall_depend_group_load_inc) stat_r.stall_depend_group_load++;
         else if (stall_depend_group_amo_inc) stat_r.stall_depend_group_amo++;
+        else if (stall_depend_group_overflow_inc) stat_r.stall_depend_group_overflow++;
         else if (stall_depend_global_load_inc) stat_r.stall_depend_global_load++;
         else if (stall_depend_idiv_inc) stat_r.stall_depend_idiv++;
         else if (stall_depend_fdiv_inc) stat_r.stall_depend_fdiv++;
@@ -820,6 +823,7 @@ module vanilla_core_profiler
       $fwrite(fd, "stall_depend_dram_amo,");
       $fwrite(fd, "stall_depend_group_load,");
       $fwrite(fd, "stall_depend_group_amo,");
+      $fwrite(fd, "stall_depend_group_overflow,");
       $fwrite(fd, "stall_depend_global_load,");
       $fwrite(fd, "stall_depend_idiv,");
       $fwrite(fd, "stall_depend_fdiv,");
@@ -985,6 +989,7 @@ module vanilla_core_profiler
           $fwrite(fd, "%0d,", stat_r.stall_depend_dram_amo);
           $fwrite(fd, "%0d,", stat_r.stall_depend_group_load);
           $fwrite(fd, "%0d,", stat_r.stall_depend_group_amo);
+          $fwrite(fd, "%0d,", stat_r.stall_depend_group_overflow);
           $fwrite(fd, "%0d,", stat_r.stall_depend_global_load);
           $fwrite(fd, "%0d,", stat_r.stall_depend_idiv);
           $fwrite(fd, "%0d,", stat_r.stall_depend_fdiv);
@@ -1050,7 +1055,7 @@ module vanilla_core_profiler
           else if (remote_st_dram_inc) print_operation_trace("remote_st_dram", exe_pc);
           else if (remote_st_global_inc) print_operation_trace("remote_st_global", exe_pc);
           else if (remote_st_group_inc) print_operation_trace("remote_st_group", exe_pc);
-          else if (remote_st_overflow_inc) print_operation_trace(fd2, "remote_st_overflow", exe_pc);
+          else if (remote_st_overflow_inc) print_operation_trace("remote_st_overflow", exe_pc);
 
           else if (local_flw_inc) print_operation_trace("local_flw", exe_pc);
           else if (local_fsw_inc) print_operation_trace("local_fsw", exe_pc);
@@ -1141,7 +1146,8 @@ module vanilla_core_profiler
           else if (stall_depend_dram_load_inc) print_operation_trace("stall_depend_dram_load", exe_bubble_pc_r);
           else if (stall_depend_dram_amo_inc) print_operation_trace("stall_depend_dram_amo", exe_bubble_pc_r);          
           else if (stall_depend_group_load_inc) print_operation_trace("stall_depend_group_load", exe_bubble_pc_r);
-          else if (stall_depend_group_amo_inc) print_operation_trace("stall_depend_group_amo", exe_bubble_pc_r);          
+          else if (stall_depend_group_amo_inc) print_operation_trace("stall_depend_group_amo", exe_bubble_pc_r);
+          else if (stall_depend_group_overflow_inc) print_operation_trace("stall_depend_group_overflow", exe_bubble_pc_r);
           else if (stall_depend_global_load_inc) print_operation_trace("stall_depend_global_load", exe_bubble_pc_r);
           else if (stall_depend_idiv_inc) print_operation_trace("stall_depend_idiv", exe_bubble_pc_r);
           else if (stall_depend_fdiv_inc) print_operation_trace("stall_depend_fdiv", exe_bubble_pc_r);

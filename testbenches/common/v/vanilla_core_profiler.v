@@ -439,6 +439,14 @@ module vanilla_core_profiler
        (id_r.decode.read_frs2 & float_sb_r[id_r.instruction.rs2][3]) |
        (id_r.decode.write_frd & float_sb_r[id_r.instruction.rd][3]));
 
+  wire stall_depend_group_overflow = stall_depend_long_op
+    & ((id_r.decode.read_rs1 & int_sb_r[id_r.instruction.rs1][3]) |
+       (id_r.decode.read_rs2 & int_sb_r[id_r.instruction.rs2][3]) |
+       (id_r.decode.write_rd & int_sb_r[id_r.instruction.rd][3]) |
+       (id_r.decode.read_frs1 & float_sb_r[id_r.instruction.rs1][0]) |
+       (id_r.decode.read_frs2 & float_sb_r[id_r.instruction.rs2][0]) |
+       (id_r.decode.write_frd & float_sb_r[id_r.instruction.rd][0]));
+
   wire stall_depend_idiv = stall_depend_long_op
     & ((id_r.decode.read_rs1 & int_sb_r[id_r.instruction.rs1][6]) |
        (id_r.decode.read_rs2 & int_sb_r[id_r.instruction.rs2][6]) |

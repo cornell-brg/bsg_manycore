@@ -161,6 +161,14 @@ module vanilla_exe_bubble_classifier
           (id_r.decode.read_frs2 & float_sb[id_r.instruction.rs2].remote_dram_load) |
           (id_r.decode.write_frd & float_sb[id_r.instruction.rd].remote_dram_load));
 
+  wire stall_depend_group_overflow = stall_depend_long_op
+       & ((id_r.decode.read_rs1 & int_sb_r[id_r.instruction.rs1].remote_dmem_overflow_load) |
+          (id_r.decode.read_rs2 & int_sb_r[id_r.instruction.rs2].remote_dmem_overflow_load) |
+          (id_r.decode.write_rd & int_sb_r[id_r.instruction.rd].remote_dmem_overflow_load) |
+          (id_r.decode.read_frs1 & float_sb_r[id_r.instruction.rs1].remote_dmem_overflow_load) |
+          (id_r.decode.read_frs2 & float_sb_r[id_r.instruction.rs2].remote_dmem_overflow_load) |
+          (id_r.decode.write_frd & float_sb_r[id_r.instruction.rd].remote_dmem_overflow_load));
+
   wire stall_depend_idiv = stall_depend_long_op
        & ((id_r.decode.read_rs1 & int_sb[id_r.instruction.rs1].idiv) |
           (id_r.decode.read_rs2 & int_sb[id_r.instruction.rs2].idiv) |

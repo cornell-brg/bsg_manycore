@@ -15,7 +15,7 @@
 	bsg_tiles_Y ?= 2
 
 # If not configured, Will use applrts
-	APPL_IMPL ?= APPL_IMPL_CELLO
+	APPL_IMPL ?= APPL_IMPL_APPLRTS
 
 all: main.run
 

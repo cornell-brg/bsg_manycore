@@ -55,7 +55,7 @@ module vanilla_scoreboard_tracker
   wire is_my_addr   = is_my_x_addr & is_my_y_addr;
   wire is_true_remote_group_addr = (tile_group_addr.remote == 3'b001) & (~is_my_addr | id_r.decode.is_amo_op);
 
-  wire is_overflow_dmem_addr = (tile_group_addr.remote == 3'b001) & is_my_addr & (tile_group_addr.addr inside {[16'h0100:16'hFCFF]});
+  wire is_overflow_dmem_addr = (tile_group_addr.remote == 3'b001) & is_my_addr & (tile_group_addr.addr inside {[16'h0080:16'hFC7F]});
 
   wire remote_ld_dram_in_id = (id_r.decode.is_load_op & id_r.decode.write_rd) & id_mem_addr[data_width_p-1];
   wire remote_amo_dram_in_id = id_r.decode.is_amo_op & id_mem_addr[data_width_p-1];

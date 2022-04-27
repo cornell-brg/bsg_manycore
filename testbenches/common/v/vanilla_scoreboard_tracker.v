@@ -15,7 +15,7 @@ module vanilla_scoreboard_tracker
    ,input stall_id
 
    ,input [data_width_p-1:0] rs1_val_to_exe
-   ,input [RV32_Iimm_width_gp-1:0] mem_addr_op2
+   ,input [data_width_p-1:0] mem_addr_op2
 
    ,input int_sb_clear
    ,input float_sb_clear

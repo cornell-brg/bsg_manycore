@@ -1,5 +1,6 @@
 # This file contains a list of non-synthesizable files used in manycore
 # simulation. These augment the sythesizable files in core.include.
+VINCLUDES += $(BSG_MANYCORE_DIR)/testbenches/common/v/
 
 VHEADERS += $(BSG_MANYCORE_DIR)/testbenches/common/v/bsg_manycore_mem_cfg_pkg.v
 VHEADERS += $(BSG_MANYCORE_DIR)/testbenches/common/v/bsg_manycore_network_cfg_pkg.v
@@ -60,7 +61,6 @@ VSOURCES += $(BSG_MANYCORE_DIR)/testbenches/common/v/instr_trace.v
 VSOURCES += $(BSG_MANYCORE_DIR)/testbenches/common/v/vanilla_core_profiler.v
 VSOURCES += $(BSG_MANYCORE_DIR)/testbenches/common/v/vanilla_exe_bubble_classifier.v
 VSOURCES += $(BSG_MANYCORE_DIR)/testbenches/common/v/vanilla_scoreboard_tracker.v
-CSOURCES += $(BSG_MANYCORE_DIR)/testbenches/common/v/vanilla_core_profiler.cpp
 CSOURCES += $(BSG_MANYCORE_DIR)/testbenches/common/v/vanilla_core_pc_histogram.cpp
 VSOURCES += $(BSG_MANYCORE_DIR)/testbenches/common/v/vcache_profiler.v
 VSOURCES += $(BSG_MANYCORE_DIR)/testbenches/common/v/vcache_non_blocking_profiler.v

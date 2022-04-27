@@ -160,12 +160,12 @@ class bsg_manycore_link_gen:
       ['.sdata'            , ['.sdata','.sdata.*','.sdata*','.sdata*.*'
                               '.gnu.linkonce.s.*']],
       ['.sbss'             , ['.sbss','.sbss.*','.gnu.linkonce.sb.*','.scommon']],
-      ['.bss'              , ['.bss','.bss*']],
       ['.tdata'            , ['.tdata','.tdata*']],
       ['.tbss'             , ['.tbss','.tbss*']],
       ['.striped.data.dmem', ['.striped.data']],
       ['.rodata'           , ['.rodata','.rodata*','.srodata.cst16','.srodata.cst8',
                               '.srodata.cst4', '.srodata.cst2','.srodata*']],
+      ['.bss'              , ['.bss','.bss*']],
       ['.eh_frame.dram'    , ['.eh_frame','.eh_frame*']],
       ['.dram'             , ['.dram','.dram.*']],
       ]

@@ -112,7 +112,20 @@ module bsg_manycore_eva_to_npa
   logic [y_cord_width_p-1:0] overflowed_dram_y_cord_lo;
   logic [addr_width_p-1:0]   overflowed_dram_epa_lo;
   assign eva_overflowed_l[data_width_p-1] = 1'b1;
-  assign eva_overflowed_l[data_width_p-2:0] = eva_i[data_width_p-2:0];
+  // assign eva_overflowed_l[data_width_p-2:0] = eva_i[data_width_p-2:0];
+  // hardcode vcache_block_size_in_words_p+2-1:0
+  // direct assignment
+  assign eva_overflowed_l[5:0]   = eva_i[5:0];
+  assign eva_overflowed_l[17:11] = eva_i[17:11];
+  assign eva_overflowed_l[25:22] = eva_i[25:22];
+  assign eva_overflowed_l[30:27] = eva_i[30:27];
+
+  // swap for vcache-x
+  assign eva_overflowed_l[9:6]  = eva_i[21:18];
+  assign eva_overflowed_l[21:18] = eva_i[9:6];
+  // swap for vcache-y
+  assign eva_overflowed_l[10]    = eva_i[26];
+  assign eva_overflowed_l[26]    = eva_i[10];
 
   bsg_manycore_dram_hash_function #(
     .data_width_p(data_width_p)
@@ -159,7 +172,7 @@ module bsg_manycore_eva_to_npa
         y_cord_o = overflowed_dram_y_cord_lo;
         x_cord_o = overflowed_dram_x_cord_lo;
         epa_o = overflowed_dram_epa_lo;
-        // $display("[INFO][LC] possible overflowed DMEM access t=%0t; x=%d, y=%d; addr=%h; overflowed addr=%h", $time, tile_group_addr.x_cord, tile_group_addr.y_cord, tile_group_addr.addr, eva_overflowed_l);
+        // $display("[INFO][LC] possible overflowed DMEM access t=%0t; x=%d, y=%d; addr=%h; overflowed addr=%h; vcache y=%d x=%d", $time, tile_group_addr.x_cord, tile_group_addr.y_cord, eva_i, eva_overflowed_l, y_cord_o, x_cord_o);
       end
       else begin
         // tile-group addr

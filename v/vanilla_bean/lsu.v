@@ -114,15 +114,15 @@ module lsu
   // wire is_local_dmem_addr = (is_remote_local_dmem_addr | is_plain_local_dmem_addr);
 
   // check if the "local addr" is really in SPM
-  // 0x3FFFF - 0x3F400    0x3F3FF - 0x00400    0x003FF - 0x00000
+  // 0x3FFFF - 0x3F200    0x3F1FF - 0x00200    0x001FF - 0x00000
   //        SPM                  DRAM                 SPM
-  //         3k                  252k                  1k
+  //        3.5k                 252k                 0.5k
   // handle plain local addr
-  wire is_plain_low_dmem_addr  = mem_addr inside {[32'h00000:32'h003FF]} ? 1 : 0;
-  wire is_plain_high_dmem_addr = mem_addr inside {[32'h3F400:32'h3FFFF]} ? 1 : 0;
+  wire is_plain_low_dmem_addr  = mem_addr inside {[32'h00000:32'h001FF]} ? 1 : 0;
+  wire is_plain_high_dmem_addr = mem_addr inside {[32'h3F200:32'h3FFFF]} ? 1 : 0;
   // handle remote format local addr
-  wire is_low_dmem_addr  = tile_group_addr.addr inside {[16'h0000:16'h00FF]} ? 1 : 0;
-  wire is_high_dmem_addr = tile_group_addr.addr inside {[16'hFD00:16'hFFFF]} ? 1 : 0;
+  wire is_low_dmem_addr  = tile_group_addr.addr inside {[16'h0000:16'h007F]} ? 1 : 0;
+  wire is_high_dmem_addr = tile_group_addr.addr inside {[16'hFC80:16'hFFFF]} ? 1 : 0;
   // combine
   // LC: XXX -> I think we SHOULD only access low 1KB with plain local addr
   // otherwise EVA to NPA will get a plain addr for overflowed part of the stack and it panics.

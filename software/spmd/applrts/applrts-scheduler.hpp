@@ -23,6 +23,8 @@ int fast_rand( void );
 template <typename Func>
 void work_stealing_loop( Func&& cond );
 
+void work_stealing_inner_loop();
+
 // Execute the task
 void execute_task( Task* task_p, bool stolen );
 

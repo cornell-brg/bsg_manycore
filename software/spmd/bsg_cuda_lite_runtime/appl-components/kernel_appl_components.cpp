@@ -75,8 +75,8 @@ extern "C" __attribute__ ((noinline))
 int kernel_appl_components(int* results, symmetricVertex* V, int n, int m, int* dram_buffer) {
 
   appl::runtime_init(dram_buffer, 16);
+  barrier.sync();
 
-  // debug print
   if (__bsg_id == 0) {
     graph<symmetricVertex> G = graph<symmetricVertex>(V, n, m, nullptr);
     Compute(G, results);

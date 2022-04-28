@@ -38,13 +38,14 @@ public:
   T pop_front();
 
 private:
-  T  m_array[QUEUE_SIZE];
   T* m_array_rp; // this is a pointer to m_array in remote format
   T* m_head_ptr;
   T* m_tail_ptr;
   T* m_array_end;
 
   int* m_mutex_ptr;
+
+  T  m_array[QUEUE_SIZE];
 
 };
 

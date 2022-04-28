@@ -8,7 +8,7 @@
 
 #define MAX_WORKERS (bsg_tiles_X * bsg_tiles_Y)
 #define HB_L2_CACHE_LINE_WORDS 16
-#define BUF_FACTOR 129
+#define BUF_FACTOR 2049
 
 // remote pointer calculation
 #define GROUP_EPA_WIDTH 18
@@ -18,7 +18,7 @@
 #define GROUP_Y_CORD_SHIFT (GROUP_X_CORD_SHIFT+GROUP_X_CORD_WIDTH)
 #define GROUP_PREFIX_SHIFT (GROUP_Y_CORD_SHIFT+GROUP_Y_CORD_WIDTH)
 
-#define APPLRTS_DEBUG 1
+#undef APPLRTS_DEBUG
 
 // utils
 namespace applrts {

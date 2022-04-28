@@ -126,9 +126,13 @@ ifeq ($(APPL_IMPL), APPL_IMPL_SERIAL)
 endif
 
 ifeq ($(APPL_IMPL), APPL_IMPL_CELLO)
+	CELLO_DIR := $(BSG_MANYCORE_DIR)/../cello
 	RISCV_GCC_OPTS +=-DAPPL_IMPL_CELLO
+	RISCV_GCC_OPTS +=-I$(CELLO_DIR)/include
+	RISCV_GCC_OPTS +=-I$(CELLO_DIR)/arch/hammerblade/include
+	RISCV_GCC_OPTS += -fno-threadsafe-statics
 	OBJECT_FILES += appl-runtime.o
-	# Hi Max!
+	OBJECT_FILES += bsg_mcs_mutex.o
 endif
 
 SPMD_COMMON_OBJECTS ?=

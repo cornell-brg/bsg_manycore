@@ -132,7 +132,16 @@ module spmd_testbench
 `ifdef BSG_ENABLE_COVERAGE
     ,.enable_vcore_pc_coverage_p(1)
 `endif
-  ) tb (
+`ifdef BSG_ENABLE_VANILLA_CORE_TRACE
+    ,.enable_vanilla_core_trace_p(1)
+`endif
+`ifdef BSG_ENABLE_PC_HISTOGRAM
+    ,.enable_vanilla_core_pc_histogram_p(1)
+`endif
+  // DR: If the instance name is changed, the bind statements in the
+  // file where this module is defined, and header strings in the
+  // profilers need to be changed as well.
+  ) testbench (
     .clk_i(core_clk)
     ,.reset_i(global_reset)
 

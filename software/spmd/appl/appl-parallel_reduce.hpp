@@ -27,7 +27,7 @@ ValueT parallel_reduce( IndexT first, IndexT last, const ValueT initV,
 #ifdef APPL_IMPL_APPLRTS
 #include "appl-parallel_reduce-applrts.inl"
 #elif defined(APPL_IMPL_CELLO)
-// Hi Max!
+#include "appl-parallel_reduce-cello.inl"
 #else
 #include "appl-parallel_reduce-serial.inl"
 #endif

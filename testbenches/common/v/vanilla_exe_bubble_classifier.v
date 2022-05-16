@@ -7,6 +7,10 @@ module vanilla_exe_bubble_classifier
   import vanilla_scoreboard_tracker_pkg::*;
   #(parameter `BSG_INV_PARAM(pc_width_p)
     ,parameter `BSG_INV_PARAM(data_width_p)
+    ,parameter `BSG_INV_PARAM(x_cord_width_p)
+    ,parameter `BSG_INV_PARAM(y_cord_width_p)
+    ,parameter `BSG_INV_PARAM(origin_x_cord_p)
+    ,parameter `BSG_INV_PARAM(origin_y_cord_p)
     )
   (
    input clk_i
@@ -55,6 +59,9 @@ module vanilla_exe_bubble_classifier
    ,input id_signals_s id_r
    ,input exe_signals_s exe_r
    ,input fp_exe_ctrl_signals_s fp_exe_ctrl_r
+
+   ,input [x_cord_width_p-1:0] global_x_i
+   ,input [y_cord_width_p-1:0] global_y_i
 
    ,output [pc_width_p-1:0] exe_bubble_pc_o
    ,output [31:0] exe_bubble_type_o
@@ -120,7 +127,12 @@ module vanilla_exe_bubble_classifier
   vanilla_fsb_info_s [RV32_reg_els_gp-1:0]  float_sb;
 
   vanilla_scoreboard_tracker
-    #(.data_width_p(data_width_p))
+    #(.data_width_p(data_width_p)
+      ,.x_cord_width_p(x_cord_width_p)
+      ,.y_cord_width_p(y_cord_width_p)
+      ,.origin_x_cord_p(origin_x_cord_p)
+      ,.origin_y_cord_p(origin_y_cord_p)
+      )
   sb_tracker
     (.*
      ,.int_sb_o(int_sb)
@@ -128,9 +140,9 @@ module vanilla_exe_bubble_classifier
      );
 
   wire stall_depend_group_amo = stall_depend_long_op
-       & ((id_r.decode.read_rs1 & int_sb_r[id_r.instruction.rs1].remote_group_amo) |
-          (id_r.decode.read_rs2 & int_sb_r[id_r.instruction.rs2].remote_group_amo) |
-          (id_r.decode.write_rd & int_sb_r[id_r.instruction.rd].remote_group_amo));
+       & ((id_r.decode.read_rs1 & int_sb[id_r.instruction.rs1].remote_group_amo) |
+          (id_r.decode.read_rs2 & int_sb[id_r.instruction.rs2].remote_group_amo) |
+          (id_r.decode.write_rd & int_sb[id_r.instruction.rd].remote_group_amo));
 
   wire stall_depend_group_load = stall_depend_long_op
        & ((id_r.decode.read_rs1 & int_sb[id_r.instruction.rs1].remote_group_load) |
@@ -149,9 +161,9 @@ module vanilla_exe_bubble_classifier
           (id_r.decode.write_frd & float_sb[id_r.instruction.rd].remote_global_load));
 
   wire stall_depend_dram_amo = stall_depend_long_op
-       & ((id_r.decode.read_rs1 & int_sb_r[id_r.instruction.rs1].remote_dram_amo) |
-          (id_r.decode.read_rs2 & int_sb_r[id_r.instruction.rs2].remote_dram_amo) |
-          (id_r.decode.write_rd & int_sb_r[id_r.instruction.rd].remote_dram_amo));
+       & ((id_r.decode.read_rs1 & int_sb[id_r.instruction.rs1].remote_dram_amo) |
+          (id_r.decode.read_rs2 & int_sb[id_r.instruction.rs2].remote_dram_amo) |
+          (id_r.decode.write_rd & int_sb[id_r.instruction.rd].remote_dram_amo));
 
   wire stall_depend_dram_load = stall_depend_long_op
        & ((id_r.decode.read_rs1 & int_sb[id_r.instruction.rs1].remote_dram_load) |
@@ -162,12 +174,12 @@ module vanilla_exe_bubble_classifier
           (id_r.decode.write_frd & float_sb[id_r.instruction.rd].remote_dram_load));
 
   wire stall_depend_group_overflow = stall_depend_long_op
-       & ((id_r.decode.read_rs1 & int_sb_r[id_r.instruction.rs1].remote_dmem_overflow_load) |
-          (id_r.decode.read_rs2 & int_sb_r[id_r.instruction.rs2].remote_dmem_overflow_load) |
-          (id_r.decode.write_rd & int_sb_r[id_r.instruction.rd].remote_dmem_overflow_load) |
-          (id_r.decode.read_frs1 & float_sb_r[id_r.instruction.rs1].remote_dmem_overflow_load) |
-          (id_r.decode.read_frs2 & float_sb_r[id_r.instruction.rs2].remote_dmem_overflow_load) |
-          (id_r.decode.write_frd & float_sb_r[id_r.instruction.rd].remote_dmem_overflow_load));
+       & ((id_r.decode.read_rs1 & int_sb[id_r.instruction.rs1].remote_dmem_overflow_load) |
+          (id_r.decode.read_rs2 & int_sb[id_r.instruction.rs2].remote_dmem_overflow_load) |
+          (id_r.decode.write_rd & int_sb[id_r.instruction.rd].remote_dmem_overflow_load) |
+          (id_r.decode.read_frs1 & float_sb[id_r.instruction.rs1].remote_dmem_overflow_load) |
+          (id_r.decode.read_frs2 & float_sb[id_r.instruction.rs2].remote_dmem_overflow_load) |
+          (id_r.decode.write_frd & float_sb[id_r.instruction.rd].remote_dmem_overflow_load));
 
   wire stall_depend_idiv = stall_depend_long_op
        & ((id_r.decode.read_rs1 & int_sb[id_r.instruction.rs1].idiv) |

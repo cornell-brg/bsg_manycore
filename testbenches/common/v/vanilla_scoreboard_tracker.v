@@ -5,6 +5,10 @@ module vanilla_scoreboard_tracker
   import bsg_vanilla_pkg::*;
   import vanilla_scoreboard_tracker_pkg::*;
   #(parameter `BSG_INV_PARAM(data_width_p)
+    ,parameter `BSG_INV_PARAM(x_cord_width_p)
+    ,parameter `BSG_INV_PARAM(y_cord_width_p)
+    ,parameter `BSG_INV_PARAM(origin_x_cord_p)
+    ,parameter `BSG_INV_PARAM(origin_y_cord_p)
     ,parameter reg_addr_width_lp=RV32_reg_addr_width_gp
     )
   (input clk_i
@@ -25,6 +29,9 @@ module vanilla_scoreboard_tracker
    ,input id_signals_s id_r
    ,input exe_signals_s exe_r
    ,input fp_exe_ctrl_signals_s fp_exe_ctrl_r
+
+   ,input [x_cord_width_p-1:0] global_x_i
+   ,input [y_cord_width_p-1:0] global_y_i
 
    ,output vanilla_isb_info_s [RV32_reg_els_gp-1:0] int_sb_o
    ,output vanilla_fsb_info_s [RV32_reg_els_gp-1:0] float_sb_o
@@ -96,10 +103,10 @@ module vanilla_scoreboard_tracker
         end
         // remote amo dram
         if (~stall_id & ~stall_all & ~flush & remote_amo_dram_in_id & (id_rd == i)) begin
-          int_sb_r[i].remote_amo_dram <= 1'b1;
+          int_sb_r[i].remote_dram_amo <= 1'b1;
         end
         else if (int_sb_clear & (int_sb_clear_id == i)) begin
-          int_sb_r[i].remote_amo_dram <= 1'b0;
+          int_sb_r[i].remote_dram_amo <= 1'b0;
         end
         // dmem overflow to dram
         if (~stall_id & ~stall_all & ~flush & dmem_overflow_ld_in_id & (id_rd == i)) begin
@@ -124,10 +131,10 @@ module vanilla_scoreboard_tracker
         end
         // remote amo group
         if (~stall_id & ~stall_all & ~flush & remote_amo_group_in_id & (id_rd == i)) begin
-          int_sb_r[i].remote_amo_group <= 1'b1;
+          int_sb_r[i].remote_group_amo <= 1'b1;
         end
         else if (int_sb_clear & (int_sb_clear_id == i)) begin
-          int_sb_r[i].remote_amo_group <= 1'b0;
+          int_sb_r[i].remote_group_amo <= 1'b0;
         end
       end // for (integer i = 0; i < RV32_reg_els_gp; i++)
 
@@ -164,7 +171,8 @@ module vanilla_scoreboard_tracker
         // overflow to dram
         if (~stall_id & ~stall_all & ~flush & dmem_overflow_fld_in_id & (id_rd == i)) begin
           float_sb_r[i].remote_dmem_overflow_load <= 1'b1;
-        else if (float_sb_clear & (float_sb_clear_id == i))b begin
+        end
+        else if (float_sb_clear & (float_sb_clear_id == i)) begin
           float_sb_r[i].remote_dmem_overflow_load <= 1'b0;
         end
       end // for (integer i = 0; i < RV32_reg_els_gp; i++)

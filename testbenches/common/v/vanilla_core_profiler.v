@@ -281,6 +281,10 @@ module vanilla_core_profiler
   vanilla_exe_bubble_classifier
     #(.pc_width_p(pc_width_lp)
       ,.data_width_p(data_width_p)
+      ,.x_cord_width_p(x_cord_width_p)
+      ,.y_cord_width_p(y_cord_width_p)
+      ,.origin_x_cord_p(origin_x_cord_p)
+      ,.origin_y_cord_p(origin_y_cord_p)
       )
   classifier
     (.*

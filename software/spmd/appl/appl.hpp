@@ -14,5 +14,6 @@
 
 // Utils
 #include "appl-runtime.hpp"
+#include "appl-malloc.hpp"
 
 #endif

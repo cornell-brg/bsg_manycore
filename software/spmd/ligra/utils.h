@@ -6,7 +6,7 @@
 #if defined(APPL_IMPL_CELLO)
 #define newA( __E, __n ) (__E*)cello::arch::malloc( ( __n ) * sizeof( __E ) )
 #else
-#define newA( __E, __n ) (__E*)applrts::brg_malloc( ( __n ) * sizeof( __E ) )
+#define newA( __E, __n ) (__E*)appl::appl_malloc( ( __n ) * sizeof( __E ) )
 #endif
 
 template <class ET>

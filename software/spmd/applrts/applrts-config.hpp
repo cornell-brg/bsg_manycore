@@ -5,10 +5,9 @@
 #include <stdint.h>
 #include "bsg_manycore.h"
 #include "bsg_set_tile_x_y.h"
+#include "appl-malloc.hpp"
 
 #define MAX_WORKERS (bsg_tiles_X * bsg_tiles_Y)
-#define HB_L2_CACHE_LINE_WORDS 16
-#define BUF_FACTOR 2049
 
 // remote pointer calculation
 #define GROUP_EPA_WIDTH 18
@@ -29,42 +28,16 @@ extern int seed;
 // parallel for grain size
 extern size_t g_pfor_grain_size;
 
-// ref_count stack. This needs to be in the DRAM for AMO
-extern uint32_t dram_buffer_idx;
-
-extern int* dram_buffer;
-
 } // namespace local
 
 // linear allocator in DRAM
 inline int* brg_malloc() {
-  int* val = &(local::dram_buffer[local::dram_buffer_idx++]);
-#ifdef APPLRTS_DEBUG
-  bsg_print_hexadecimal((intptr_t)val);
-  bsg_print_int(local::dram_buffer_idx);
-#endif
-  if (local::dram_buffer_idx > HB_L2_CACHE_LINE_WORDS * BUF_FACTOR) {
-    bsg_print_int(7600);
-  }
-  return val;
+  return appl::appl_malloc();
 }
 
 // number of bytes
 inline void* brg_malloc(uint32_t size) {
-  uint32_t size_4 = size >> 2;
-  if (size & 0x3 != 0) {
-    size_4++;
-  }
-  void* val = (void*)(&(local::dram_buffer[local::dram_buffer_idx]));
-  local::dram_buffer_idx += size_4;
-#ifdef APPLRTS_DEBUG
-  bsg_print_hexadecimal((intptr_t)val);
-  bsg_print_int(local::dram_buffer_idx);
-#endif
-  if (local::dram_buffer_idx > HB_L2_CACHE_LINE_WORDS * BUF_FACTOR) {
-    bsg_print_int(7600);
-  }
-  return val;
+  return appl::appl_malloc(size);
 }
 
 template<typename T>

@@ -2,5 +2,7 @@
 // appl-config.h
 //========================================================================
 
-// For debug, we can define APPL_IMPL_APPLRTS here
-// #define APPL_IMPL_APPLRTS
+#ifndef APPL_CONFIG_GLOBAL_H
+#define APPL_CONFIG_GLOBAL_H
+
+#endif

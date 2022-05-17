@@ -2,12 +2,14 @@
 // runtime.inl
 //========================================================================
 
+#include "appl-malloc.hpp"
 #include "applrts.hpp"
 
 namespace appl {
 
 inline void runtime_init( int* dram_buffer, size_t pfor_grain_size ) {
-  applrts::runtime_init( dram_buffer, pfor_grain_size );
+  appl::malloc_init( dram_buffer );
+  applrts::runtime_init( pfor_grain_size );
 }
 
 inline void runtime_end() {

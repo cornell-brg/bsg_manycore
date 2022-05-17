@@ -119,11 +119,14 @@ endif
 # APPL implemenation
 ifeq ($(APPL_IMPL), APPL_IMPL_APPLRTS)
 	RISCV_GCC_OPTS +=-DAPPL_IMPL_APPLRTS
-	OBJECT_FILES += appl-runtime.o applrts-config.o applrts-runtime.o applrts-scheduler.o
+	OBJECT_FILES += appl-malloc.o
+	OBJECT_FILES += appl-runtime.o
+	OBJECT_FILES += applrts-config.o applrts-runtime.o applrts-scheduler.o
 endif
 
 ifeq ($(APPL_IMPL), APPL_IMPL_SERIAL)
 	RISCV_GCC_OPTS +=-DAPPL_IMPL_SERIAL
+	OBJECT_FILES += appl-malloc.o
 endif
 
 ifeq ($(APPL_IMPL), APPL_IMPL_CELLO)

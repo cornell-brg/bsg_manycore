@@ -6,6 +6,10 @@ module vanilla_scoreboard_tracker
   import vanilla_scoreboard_tracker_pkg::*;
   #(parameter `BSG_INV_PARAM(data_width_p)
     ,parameter reg_addr_width_lp=RV32_reg_addr_width_gp
+    ,parameter `BSG_INV_PARAM(x_cord_width_p)
+    ,parameter `BSG_INV_PARAM(y_cord_width_p)
+    ,parameter `BSG_INV_PARAM(origin_x_cord_p)
+    ,parameter `BSG_INV_PARAM(origin_y_cord_p)
     )
   (input clk_i
    ,input reset_i
@@ -15,7 +19,7 @@ module vanilla_scoreboard_tracker
    ,input stall_id
 
    ,input [data_width_p-1:0] rs1_val_to_exe
-   ,input [RV32_Iimm_width_gp-1:0] mem_addr_op2
+   ,input [data_width_p-1:0] mem_addr_op2
 
    ,input int_sb_clear
    ,input float_sb_clear
@@ -25,6 +29,9 @@ module vanilla_scoreboard_tracker
    ,input id_signals_s id_r
    ,input exe_signals_s exe_r
    ,input fp_exe_ctrl_signals_s fp_exe_ctrl_r
+
+   ,input [x_cord_width_p-1:0] global_x_i
+   ,input [y_cord_width_p-1:0] global_y_i
 
    ,output vanilla_isb_info_s [RV32_reg_els_gp-1:0] int_sb_o
    ,output vanilla_fsb_info_s [RV32_reg_els_gp-1:0] float_sb_o

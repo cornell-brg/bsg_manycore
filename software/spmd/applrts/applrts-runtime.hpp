@@ -21,7 +21,7 @@ extern SimpleDeque<Task*> g_taskq;
 }
 
 // Initialize the runtime with a default scheduler and a thread pool
-void runtime_init( int* dram_buffer, size_t pfor_grain_size = 1 );
+void runtime_init( size_t pfor_grain_size = 1 );
 
 // Get number of threads
 size_t get_nthreads();

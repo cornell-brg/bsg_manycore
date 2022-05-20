@@ -73,6 +73,7 @@ LINK_GEN        = $(BSG_MANYCORE_DIR)/software/py/bsg_manycore_link_gen.py
 COMMON_SRC_DIRS = $(BSG_MANYCORE_DIR)/software/spmd/common \
 									$(BSG_MANYCORE_DIR)/software/spmd/appl \
 									$(BSG_MANYCORE_DIR)/software/spmd/applrts \
+									$(BSG_MANYCORE_DIR)/software/spmd/applstatic \
 									$(BSG_MANYCORE_DIR)/software/spmd/ligra \
                   $(BSG_MANYCORE_DIR)/software/bsg_manycore_lib
 
@@ -88,7 +89,7 @@ OPT_LEVEL ?= -O2
 RISCV_GCC_EXTRA_OPTS ?=
 RISCV_GCC_OPTS  =-march=$(ARCH_OP) -static -std=gnu99 -ffast-math -fno-common -mtune=bsg_vanilla_2020
 
-RISCV_GCC_OPTS +=$(RISCV_GCC_EXTRA_OPTS) -I$(BSG_MANYCORE_DIR)/software/spmd/common/ -I$(BSG_MANYCORE_DIR)/software/spmd/applrts/ -I$(BSG_MANYCORE_DIR)/software/spmd/appl/ -I$(BSG_MANYCORE_DIR)/software/bsg_manycore_lib -I$(BSG_MANYCORE_DIR)/software/spmd/ligra/
+RISCV_GCC_OPTS +=$(RISCV_GCC_EXTRA_OPTS) -I$(BSG_MANYCORE_DIR)/software/spmd/common/ -I$(BSG_MANYCORE_DIR)/software/spmd/applrts/ -I$(BSG_MANYCORE_DIR)/software/spmd/applstatic/ -I$(BSG_MANYCORE_DIR)/software/spmd/appl/ -I$(BSG_MANYCORE_DIR)/software/bsg_manycore_lib -I$(BSG_MANYCORE_DIR)/software/spmd/ligra/
 RISCV_GCC_OPTS +=-Dbsg_tiles_X=$(bsg_tiles_X) -Dbsg_tiles_Y=$(bsg_tiles_Y)
 RISCV_GCC_OPTS +=-Dbsg_global_X=$(bsg_global_X) -Dbsg_global_Y=$(bsg_global_Y)
 RISCV_GCC_OPTS +=-Dbsg_group_size=$(bsg_group_size)
@@ -121,12 +122,22 @@ ifeq ($(APPL_IMPL), APPL_IMPL_APPLRTS)
 	RISCV_GCC_OPTS +=-DAPPL_IMPL_APPLRTS
 	OBJECT_FILES += appl-malloc.o
 	OBJECT_FILES += appl-runtime.o
-	OBJECT_FILES += applrts-config.o applrts-runtime.o applrts-scheduler.o
+	OBJECT_FILES += applrts-config.o
+	OBJECT_FILES += applrts-runtime.o
+	OBJECT_FILES += applrts-scheduler.o
 endif
 
 ifeq ($(APPL_IMPL), APPL_IMPL_SERIAL)
 	RISCV_GCC_OPTS +=-DAPPL_IMPL_SERIAL
 	OBJECT_FILES += appl-malloc.o
+endif
+
+ifeq ($(APPL_IMPL), APPL_IMPL_STATIC)
+	RISCV_GCC_OPTS +=-DAPPL_IMPL_STATIC
+	OBJECT_FILES += appl-malloc.o
+	OBJECT_FILES += appl-runtime.o
+	OBJECT_FILES += applstatic-config.o
+	OBJECT_FILES += applstatic-runtime.o
 endif
 
 ifeq ($(APPL_IMPL), APPL_IMPL_CELLO)

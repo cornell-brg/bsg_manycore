@@ -1,9 +1,7 @@
-#ifndef APPL_PARALLEL_reduce_H
-#define APPL_PARALLEL_reduce_H
+#ifndef APPLSTATIC_PARALLEL_REDUCE_H
+#define APPLSTATIC_PARALLEL_REDUCE_H
 
-#include "appl-config.hpp"
-
-namespace appl {
+namespace applrts {
 
 //----------------------------------------------------------------------
 // Functional form of parallel_reduce
@@ -21,17 +19,8 @@ template <typename IndexT, typename ValueT, typename FuncT,
           typename ReduceT>
 ValueT parallel_reduce( IndexT first, IndexT last, const ValueT initV,
                         const FuncT& func, const ReduceT& reduce );
+} // namespace applrts
 
-} // namespace appl
-
-#ifdef APPL_IMPL_APPLRTS
-#include "appl-parallel_reduce-applrts.inl"
-#elif defined(APPL_IMPL_CELLO)
-#include "appl-parallel_reduce-cello.inl"
-#elif defined(APPL_IMPL_STATIC)
-#include "appl-parallel_reduce-applstatic.inl"
-#else
-#include "appl-parallel_reduce-serial.inl"
-#endif
+#include "applstatic-parallel_reduce.inl"
 
 #endif

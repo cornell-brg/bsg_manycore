@@ -42,6 +42,8 @@ void parallel_for_1( IndexT first, IndexT last, const BodyT& body );
 #include "appl-parallel_for-applrts.inl"
 #elif defined(APPL_IMPL_CELLO)
 #include "appl-parallel_for-cello.inl"
+#elif defined(APPL_IMPL_STATIC)
+#include "appl-parallel_for-applstatic.inl"
 #else
 #include "appl-parallel_for-serial.inl"
 #endif

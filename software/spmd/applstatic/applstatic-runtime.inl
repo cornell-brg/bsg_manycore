@@ -15,6 +15,8 @@ inline void runtime_init( size_t pfor_grain_size ) {
   // set parallel for grain size
   local::g_pfor_grain_size = pfor_grain_size;
 
+  local::task = nullptr;
+
   return;
 }
 

@@ -44,6 +44,7 @@ public:
 
     // run
     for ( IndexT i = b; i < e; ++i, k += s ) {
+      bsg_print_int(k);
       m_body( k );
     }
     return nullptr;
@@ -88,7 +89,10 @@ void parallel_for( IndexT first, IndexT last, IndexT step,
 
       local::is_top_level = false;
       appl::sync();
-      local::task->execute();
+      if (local::task != nullptr) {
+        local::task->execute();
+        local::task = nullptr;
+      }
       appl::sync();
       local::is_top_level = true;
     } else {

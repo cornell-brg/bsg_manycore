@@ -25,7 +25,10 @@ inline void runtime_end() {
 inline void worker_thread_init() {
   while (bsg_amoadd(&global::g_stop_flag, 0) == 0) {
     appl::sync();
-    applstatic::local::task->execute();
+    if (applstatic::local::task != nullptr) {
+      applstatic::local::task->execute();
+      applstatic::local::task = nullptr;
+    }
     appl::sync();
   }
 }

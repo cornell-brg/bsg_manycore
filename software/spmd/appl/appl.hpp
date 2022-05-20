@@ -15,5 +15,6 @@
 // Utils
 #include "appl-runtime.hpp"
 #include "appl-malloc.hpp"
+#include "appl-hw-barrier.hpp"
 
 #endif

@@ -7,6 +7,7 @@
 extern "C" {
 #endif
 extern int *__cuda_barrier_cfg;
+extern int sense;
 
 /**
  * Initialize the tile-group barrier.
@@ -14,7 +15,7 @@ extern int *__cuda_barrier_cfg;
  */
 static inline void bsg_barrier_hw_tile_group_init()
 {
-    int sense = 1;
+    sense = 1;
     // initalize csr
     int cfg = __cuda_barrier_cfg[1+__bsg_id];
     asm volatile ("csrrw x0, 0xfc1, %0" : : "r" (cfg));

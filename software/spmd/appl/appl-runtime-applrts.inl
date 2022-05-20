@@ -8,6 +8,7 @@
 namespace appl {
 
 inline void runtime_init( int* dram_buffer, size_t pfor_grain_size ) {
+  appl::config_hw_barrier();
   appl::malloc_init( dram_buffer );
   applrts::runtime_init( pfor_grain_size );
 }

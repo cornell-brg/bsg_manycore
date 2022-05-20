@@ -157,6 +157,8 @@ endif
 BSG_MANYCORE_LIB_OBJS+= bsg_tile_config_vars.o
 BSG_MANYCORE_LIB_OBJS+= bsg_set_tile_x_y.o
 BSG_MANYCORE_LIB_OBJS+= bsg_printf.o
+BSG_MANYCORE_LIB_OBJS+= bsg_cuda_lite_barrier.o
+BSG_MANYCORE_LIB_OBJS+= bsg_barrier_amoadd.o
 
 BSG_MANYCORE_LIB = bsg_manycore_lib.a
 

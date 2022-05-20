@@ -9,6 +9,7 @@
 #include <stdint.h>
 #include "bsg_manycore_atomic.h"
 #include "appl-config.hpp"
+#include "appl-hw-barrier.hpp"
 
 namespace appl {
 

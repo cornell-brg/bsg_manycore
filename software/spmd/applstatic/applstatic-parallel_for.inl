@@ -44,7 +44,6 @@ public:
 
     // run
     for ( IndexT i = b; i < e; ++i, k += s ) {
-      bsg_print_int(k);
       m_body( k );
     }
     return nullptr;

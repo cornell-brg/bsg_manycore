@@ -7,13 +7,14 @@
 
 #include <cstddef>
 #include <stdint.h>
-#include "bsg_manycore_atomic.h"
+#include "bsg_manycore.h"
 #include "appl-config.hpp"
 #include "appl-hw-barrier.hpp"
 
 namespace appl {
 
 namespace global {
+// global runtime start/stop flag
 extern int g_stop_flag __attribute__ ((section (".dram")));
 }
 
@@ -38,6 +39,8 @@ size_t get_thread_id();
 #include "appl-runtime-applrts.inl"
 #elif defined(APPL_IMPL_CELLO)
 #include "appl-runtime-cello.inl"
+#elif defined(APPL_IMPL_STATIC)
+#include "appl-runtime-applstatic.inl"
 #else
 #include "appl-runtime-serial.inl"
 #endif

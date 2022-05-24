@@ -125,6 +125,7 @@ ifeq ($(APPL_IMPL), APPL_IMPL_APPLRTS)
 	OBJECT_FILES += applrts-config.o
 	OBJECT_FILES += applrts-runtime.o
 	OBJECT_FILES += applrts-scheduler.o
+	OBJECT_FILES += applrts-stats.o
 endif
 
 ifeq ($(APPL_IMPL), APPL_IMPL_SERIAL)

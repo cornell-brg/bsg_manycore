@@ -4,6 +4,7 @@
 // A standard work-stealing scheduler.
 
 #include "applrts-scheduler.hpp"
+#include "applrts-stats.hpp"
 
 namespace applrts {
 
@@ -11,6 +12,7 @@ void spawn( Task* task_p ) {
 #ifdef APPLRTS_DEBUG
   bsg_print_int(12395);
 #endif
+  stats::log_task_enqueue();
   local::g_taskq.push_back(task_p);
 }
 
@@ -47,6 +49,7 @@ void __attribute__ ((noinline)) work_stealing_inner_loop() {
   Task* task_p = local::g_taskq.pop_back();
   // execute this task
   if ( task_p ) {
+    stats::log_task_dequeue();
     execute_task( task_p, false );
   } else {
     // no work on local queue, attempt to steal
@@ -61,7 +64,10 @@ void __attribute__ ((noinline)) work_stealing_inner_loop() {
     SimpleDeque<Task*>* victim_queue = remote_ptr(&local::g_taskq, victim_id);
     Task* task_p = victim_queue->pop_front();
 
+    stats::log_stealing_attempt();
+
     if ( task_p ) {
+      stats::log_task_stolen();
       // execute the stolen task
       execute_task( task_p, true );
     }

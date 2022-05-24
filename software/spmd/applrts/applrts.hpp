@@ -15,5 +15,6 @@
 
 // Utils
 #include "applrts-runtime.hpp"
+#include "applrts-stats.hpp"
 
 #endif

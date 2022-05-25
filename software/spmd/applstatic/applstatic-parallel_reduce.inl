@@ -21,6 +21,7 @@ public:
       : m_first( first ), m_last( last ), m_initV( initV ),
         m_grain( grain ), m_func( func ), m_pvalues( pvalues )
   {
+    m_size = sizeof(ParallelReduceTask<IndexT, ValueT, FuncT>);
   }
 
   Task* execute()
@@ -91,7 +92,7 @@ ValueT parallel_reduce( IndexT first, IndexT last, const ValueT initV,
 
       local::is_top_level = false;
       appl::sync();
-      local::task->execute();
+      local_task.execute();
       appl::sync();
       local::is_top_level = true;
 

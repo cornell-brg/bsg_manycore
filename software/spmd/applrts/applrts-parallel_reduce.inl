@@ -5,6 +5,7 @@
 #include "applrts-Range1D.hpp"
 #include "applrts-scheduler.hpp"
 #include "applrts-Task.hpp"
+#include "applrts-config.hpp"
 
 namespace applrts {
 
@@ -139,7 +140,13 @@ ValueT parallel_reduce( IndexT first, IndexT last, const ValueT initV,
 {
   if ( first < last ) {
     // use the app-specific grain size
-    size_t grain = local::g_pfor_grain_size;
+    size_t grain = (last - first) / (8 * MAX_WORKERS); // local::g_pfor_grain_size;
+    if (grain > 32) {
+      grain = 32;
+    }
+    if (grain == 0) {
+      grain = 1;
+    }
     IndexT end = ( last - first );
     Range1D<IndexT> range( IndexT( 0 ), end, grain );
     return parallel_reduce(range, initV, func, reduce);

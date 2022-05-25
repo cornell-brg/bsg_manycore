@@ -3,6 +3,7 @@
 //========================================================================
 
 #include "applrts-Task.hpp"
+#include "applstatic-config.hpp"
 
 namespace applstatic {
 
@@ -56,7 +57,13 @@ ValueT parallel_reduce( IndexT first, IndexT last, const ValueT initV,
 {
   if ( first < last ) {
     // use the app-specific grain size
-    size_t grain = local::g_pfor_grain_size;
+    size_t grain = (last - first) / (8 * MAX_WORKERS); // local::g_pfor_grain_size;
+    if (grain > 32) {
+      grain = 32;
+    }
+    if (grain == 0) {
+      grain = 1;
+    }
 
     if (local::is_top_level) {
       // partial value buffer

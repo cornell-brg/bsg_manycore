@@ -11,9 +11,9 @@
 #include "bsg_set_tile_x_y.h"
 
 #define HB_L2_CACHE_LINE_WORDS 16
-#define BUF_FACTOR 2049
+#define BUF_FACTOR 16385
 
-#define MALLOC_DEBUG 1
+#undef MALLOC_DEBUG
 
 // utils
 namespace appl {

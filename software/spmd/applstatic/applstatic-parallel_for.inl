@@ -107,8 +107,13 @@ template <typename IndexT, typename BodyT>
 void parallel_for( IndexT first, IndexT last, IndexT step,
                    const BodyT& body )
 {
-  // use the app-specific grain size
-  size_t grain = local::g_pfor_grain_size;
+  size_t grain = (last - first) / (8 * MAX_WORKERS); // local::g_pfor_grain_size;
+  if (grain > 32) {
+    grain = 32;
+  }
+  if (grain == 0) {
+    grain = 1;
+  }
   parallel_for( first, last, step, body, grain );
 }
 

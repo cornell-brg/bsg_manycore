@@ -126,8 +126,11 @@ module vanilla_core_pc_histogram
     ,e_jalr_miss
     ,e_icache_miss_bubble
     ,e_stall_depend_dram
+    ,e_stall_depend_dram_amo
     ,e_stall_depend_global
     ,e_stall_depend_group
+    ,e_stall_depend_group_amo
+    ,e_stall_depend_group_overflow
     ,e_stall_depend_fdiv
     ,e_stall_depend_idiv
     ,e_stall_depend_local_load
@@ -163,8 +166,11 @@ module vanilla_core_pc_histogram
       vanilla_core_pc_hist_register_operation(pc_hist_vptr, e_jalr_miss, "jalr_miss");
       vanilla_core_pc_hist_register_operation(pc_hist_vptr, e_icache_miss_bubble, "icache_miss_bubble");
       vanilla_core_pc_hist_register_operation(pc_hist_vptr, e_stall_depend_dram, "stall_depend_dram");
+      vanilla_core_pc_hist_register_operation(pc_hist_vptr, e_stall_depend_dram_amo, "stall_depend_dram_amo");      
       vanilla_core_pc_hist_register_operation(pc_hist_vptr, e_stall_depend_global, "stall_depend_global");
       vanilla_core_pc_hist_register_operation(pc_hist_vptr, e_stall_depend_group, "stall_depend_group");
+      vanilla_core_pc_hist_register_operation(pc_hist_vptr, e_stall_depend_group_amo, "stall_depend_group_amo");
+      vanilla_core_pc_hist_register_operation(pc_hist_vptr, e_stall_depend_group_overflow, "stall_depend_group_overflow");            
       vanilla_core_pc_hist_register_operation(pc_hist_vptr, e_stall_depend_fdiv, "stall_depend_fdiv");
       vanilla_core_pc_hist_register_operation(pc_hist_vptr, e_stall_depend_idiv, "stall_depend_idiv");
       vanilla_core_pc_hist_register_operation(pc_hist_vptr, e_stall_depend_local_load, "stall_depend_local_load");
@@ -273,11 +279,20 @@ module vanilla_core_pc_histogram
       else if ( exe_bubble_type == e_exe_bubble_stall_depend_dram) begin
         vanilla_core_pc_hist_increment(pc_hist_vptr,  exe_bubble_pc,  e_stall_depend_dram);
       end
+      else if ( exe_bubble_type == e_exe_bubble_stall_depend_dram_amo) begin
+        vanilla_core_pc_hist_increment(pc_hist_vptr, exe_bubble_pc,   e_stall_depend_dram_amo);
+      end
       else if ( exe_bubble_type == e_exe_bubble_stall_depend_global) begin
         vanilla_core_pc_hist_increment(pc_hist_vptr,  exe_bubble_pc,  e_stall_depend_global);
       end
       else if ( exe_bubble_type == e_exe_bubble_stall_depend_group) begin
         vanilla_core_pc_hist_increment(pc_hist_vptr,  exe_bubble_pc,  e_stall_depend_group);
+      end
+      else if ( exe_bubble_type == e_exe_bubble_stall_depend_group_amo) begin
+        vanilla_core_pc_hist_increment(pc_hist_vptr,  exe_bubble_pc,  e_stall_depend_group_amo);
+      end
+      else if ( exe_bubble_type == e_exe_bubble_stall_depend_group_overflow) begin
+        vanilla_core_pc_hist_increment(pc_hist_vptr,  exe_bubble_pc,  e_stall_depend_group_overflow);
       end
       else if ( exe_bubble_type == e_exe_bubble_stall_depend_fdiv) begin
         vanilla_core_pc_hist_increment(pc_hist_vptr,  exe_bubble_pc,  e_stall_depend_fdiv);

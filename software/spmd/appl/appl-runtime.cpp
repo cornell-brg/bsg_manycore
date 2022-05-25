@@ -8,7 +8,7 @@ namespace appl {
 
 namespace global {
 
-int g_stop_flag __attribute__ ((section (".dram"))) = 0;
+int g_stop_flag = 0;
 
 } // namespace global
 

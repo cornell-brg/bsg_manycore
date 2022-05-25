@@ -15,7 +15,7 @@ namespace appl {
 
 namespace global {
 // global runtime start/stop flag
-extern int g_stop_flag __attribute__ ((section (".dram")));
+extern int g_stop_flag;
 }
 
 // Initialize the runtime with a default scheduler and a thread pool

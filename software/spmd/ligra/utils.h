@@ -44,4 +44,17 @@ inline ET min(ET a, ET b) {
   }
 }
 
+#define granular_for( _i, _start, _end, _cond, _body )                   \
+  {                                                                      \
+    if ( _cond ) {                                                       \
+      appl::parallel_for( (size_t)_start, (size_t)_end,                  \
+                          [&]( size_t _i ) { _body } );                  \
+    }                                                                    \
+    else {                                                               \
+      for ( size_t _i = _start; _i < _end; _i++ ) {                      \
+        _body                                                            \
+      }                                                                  \
+    }                                                                    \
+  }
+
 #endif

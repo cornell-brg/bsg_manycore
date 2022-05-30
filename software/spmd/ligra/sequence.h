@@ -6,8 +6,8 @@
 
 namespace pbbs {
 
-#define _log_block_size = 10;
-#define _block_size     = ( 1 << _log_block_size );
+#define _log_block_size 10
+#define _block_size     ( 1 << _log_block_size )
 
 inline size_t num_blocks( size_t n, size_t block_size )
 {
@@ -38,12 +38,11 @@ size_t scan_add(size_t* In, size_t* Out, size_t l) {
 }
 
 template <class Idx_Type>
-size_t pack(bool* d, Idx_Type* Out) {
-  size_t n = ;
+size_t pack(size_t n, bool* d, Idx_Type* Out) {
   size_t l = num_blocks( n, _block_size );
   size_t* Sums = newA( size_t, l );
   sliced_for( n, _block_size, [&]( size_t i, size_t s, size_t e ) {
-      size_t sum = 0
+      size_t sum = 0;
       for ( size_t idx = s; idx < e; idx++ ) {
         if ( d[idx] ) {
           sum++;
@@ -51,7 +50,15 @@ size_t pack(bool* d, Idx_Type* Out) {
       }
       Sums[i] = sum;
   });
-  size_t m = scan_add( Sums, Sums );
+  bsg_print_int(10010);
+  for (size_t i = 0; i < l; i++) {
+    bsg_print_int(Sums[i]);
+  }
+  size_t m = scan_add( Sums, Sums, l );
+  bsg_print_int(10011);
+  for (size_t i = 0; i < l; i++) {
+    bsg_print_int(Sums[i]);
+  }
   sliced_for( n, _block_size, [&]( size_t i, size_t s, size_t e ) {
       Idx_Type* ptr = Out + Sums[i];
       for ( size_t idx = s; idx < e; idx++ ) {

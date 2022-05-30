@@ -78,14 +78,14 @@ struct vertexSubset {
   void toSparse()
   {
     if ( s == NULL && m > 0 ) {
-      s = new(S, m);
-      size_t sparse_m = pack(d, s);
+      s = newA(S, m);
+      size_t sparse_m = pbbs::pack(n, d, s);
       if ( sparse_m != m ) {
         // ERROR bad stored value of m
         bsg_print_int(7700);
       }
     }
-    isDense = false;
+    dense = false;
   }
 
   S*     s;

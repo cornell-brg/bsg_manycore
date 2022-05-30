@@ -125,6 +125,8 @@ vertexSubset edgeMap( graph<vertex> GA, VS& vs, F f, intT threshold = -1,
   size_t numEdges = GA.m;
   size_t m = vs.numNonzeros();
 
+  bsg_print_int(11185);
+  bsg_print_int(fl);
   if ( threshold == -1 ) {
     threshold = numEdges / 20; // default threshold
   }

@@ -72,5 +72,40 @@ size_t pack(size_t n, bool* d, Idx_Type* Out) {
   return m;
 }
 
+template <class T, class PRED>
+size_t filterf( T* In, T* Out, size_t n, PRED p ) {
+  size_t l = num_blocks( n, _block_size );
+  size_t* Sums = newA( size_t, l );
+  sliced_for( n, _block_size, [&]( size_t i, size_t s, size_t e ) {
+      size_t sum = 0;
+      for ( size_t idx = s; idx < e; idx++ ) {
+        if ( p( In[idx] ) ) {
+          sum++;
+        }
+      }
+      Sums[i] = sum;
+  });
+  bsg_print_int(10012);
+  for (size_t i = 0; i < l; i++) {
+    bsg_print_int(Sums[i]);
+  }
+  size_t m = scan_add( Sums, Sums, l );
+  bsg_print_int(10013);
+  for (size_t i = 0; i < l; i++) {
+    bsg_print_int(Sums[i]);
+  }
+  sliced_for( n, _block_size, [&]( size_t i, size_t s, size_t e ) {
+      T* ptr = Out + Sums[i];
+      for ( size_t idx = s; idx < e; idx++ ) {
+        if( p( In[idx] ) ) {
+          *ptr = idx;
+          ptr++;
+        }
+      }
+  });
+
+  return m;
+}
+
 } // namespace pbbs
 #endif

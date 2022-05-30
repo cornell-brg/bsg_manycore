@@ -86,6 +86,13 @@ struct symmetricVertex {
     decode_uncompressed::decodeInNghBreakEarly<symmetricVertex, F, G, VS>(
         this, v_id, vertexSubset, f, g, parallel );
   }
+
+  template <class F, class G>
+  inline void decodeOutNghSparse( int i, uintT o, F& f, G& g )
+  {
+    decode_uncompressed::decodeOutNghSparse<symmetricVertex, F>(
+        this, i, o, f, g );
+  }
 };
 
 

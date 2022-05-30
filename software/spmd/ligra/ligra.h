@@ -151,12 +151,17 @@ vertexSubset edgeMap( graph<vertex> GA, VS& vs, F f, intT threshold = -1,
       frontierVertices[i] = v;
   });
 
+  bsg_print_int(90189);
+  for (size_t i = 0; i < m; i++) {
+    bsg_print_int(degrees[i]);
+  }
+
   //uintT outDegrees = sequence::plusReduce( degrees, m );
   uintT outDegrees = appl::parallel_reduce(size_t(0), m, size_t(0),
       [&](size_t start, size_t end, size_t initV) {
         size_t psum = initV;
         for (size_t i = start; i < end; i++) {
-          psum += degrees[m];
+          psum += degrees[i];
         }
         return psum;
       },

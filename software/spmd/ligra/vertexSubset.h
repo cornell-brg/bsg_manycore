@@ -3,6 +3,7 @@
 
 #include "parallel.h"
 #include "utils.h"
+#include "sequence.h"
 
 struct vertexSubset {
   using S = uintE;
@@ -72,6 +73,19 @@ struct vertexSubset {
                           [&]( size_t i ) { d[s[i]] = 1; } );
     }
     dense = true;
+  }
+
+  void toSparse()
+  {
+    if ( s == NULL && m > 0 ) {
+      s = new(S, m);
+      size_t sparse_m = pack(d, s);
+      if ( sparse_m != m ) {
+        // ERROR bad stored value of m
+        bsg_print_int(7700);
+      }
+    }
+    isDense = false;
   }
 
   S*     s;

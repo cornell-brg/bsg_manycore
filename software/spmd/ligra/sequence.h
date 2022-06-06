@@ -44,15 +44,7 @@ size_t pack(size_t n, bool* d, Idx_Type* Out) {
       }
       Sums[i] = sum;
   });
-  bsg_print_int(10010);
-  for (size_t i = 0; i < l; i++) {
-    bsg_print_int(Sums[i]);
-  }
   size_t m = scan_add( Sums, Sums, l );
-  bsg_print_int(10011);
-  for (size_t i = 0; i < l; i++) {
-    bsg_print_int(Sums[i]);
-  }
   sliced_for( n, _block_size, [&]( size_t i, size_t s, size_t e ) {
       Idx_Type* ptr = Out + Sums[i];
       for ( size_t idx = s; idx < e; idx++ ) {
@@ -79,15 +71,7 @@ size_t filterf( T* In, T* Out, size_t n, PRED p ) {
       }
       Sums[i] = sum;
   });
-  bsg_print_int(10012);
-  for (size_t i = 0; i < l; i++) {
-    bsg_print_int(Sums[i]);
-  }
   size_t m = scan_add( Sums, Sums, l );
-  bsg_print_int(10013);
-  for (size_t i = 0; i < l; i++) {
-    bsg_print_int(Sums[i]);
-  }
   sliced_for( n, _block_size, [&]( size_t i, size_t s, size_t e ) {
       T* ptr = Out + Sums[i];
       for ( size_t idx = s; idx < e; idx++ ) {

@@ -125,8 +125,6 @@ vertexSubset edgeMap( graph<vertex> GA, VS& vs, F f, intT threshold = -1,
   size_t numEdges = GA.m;
   size_t m = vs.numNonzeros();
 
-  bsg_print_int(11185);
-  bsg_print_int(fl);
   if ( threshold == -1 ) {
     threshold = numEdges / 20; // default threshold
   }
@@ -153,11 +151,6 @@ vertexSubset edgeMap( graph<vertex> GA, VS& vs, F f, intT threshold = -1,
       frontierVertices[i] = v;
   });
 
-  bsg_print_int(90189);
-  for (size_t i = 0; i < m; i++) {
-    bsg_print_int(degrees[i]);
-  }
-
   //uintT outDegrees = sequence::plusReduce( degrees, m );
   uintT outDegrees = appl::parallel_reduce(size_t(0), m, size_t(0),
       [&](size_t start, size_t end, size_t initV) {
@@ -174,15 +167,10 @@ vertexSubset edgeMap( graph<vertex> GA, VS& vs, F f, intT threshold = -1,
     return vertexSubset( numVertices );
   }
 
-  bsg_print_int(10086);
-  bsg_print_int(outDegrees);
-
   if ( m + outDegrees > threshold ) {
-    bsg_print_int(10087);
     vs.toDense();
     return edgeMapDense<vertex, VS, F>( GA, vs, f, fl );
   } else {
-    bsg_print_int(10088);
     auto vs_out = edgeMapSparse<vertex, VS, F>(
                     GA, frontierVertices, vs, degrees,
                     vs.numNonzeros(), f, fl );

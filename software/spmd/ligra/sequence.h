@@ -6,7 +6,7 @@
 
 namespace pbbs {
 
-#define _log_block_size 4
+#define _log_block_size _SCAN_LOG_BSIZE
 #define _block_size     ( 1 << _log_block_size )
 
 inline size_t num_blocks( size_t n, size_t block_size )

@@ -28,13 +28,7 @@ void sliced_for( size_t n, size_t block_size, const F& f )
 // this will be handled serially as we dont expect too
 // many blocks
 size_t scan_add(size_t* In, size_t* Out, size_t l) {
-  size_t total = 0;
-  for ( size_t i = 0; i < l; i++ ) {
-    size_t old = total;
-    total += In[i];
-    Out[i] = old;
-  }
-  return total;
+  return sequence::plusScan( In, Out, l);
 }
 
 template <class Idx_Type>

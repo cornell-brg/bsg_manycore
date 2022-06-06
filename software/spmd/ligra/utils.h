@@ -9,6 +9,9 @@
 #define newA( __E, __n ) (__E*)appl::appl_malloc( ( __n ) * sizeof( __E ) )
 #endif
 
+#define _SCAN_LOG_BSIZE 8
+#define _SCAN_BSIZE ( 1 << _SCAN_LOG_BSIZE )
+
 template <class E>
 struct addF {
     E operator()( const E& a, const E& b ) const { return a + b; }
@@ -61,9 +64,6 @@ inline ET min(ET a, ET b) {
       }                                                                  \
     }                                                                    \
   }
-
-#define _SCAN_LOG_BSIZE 4
-#define _SCAN_BSIZE ( 1 << _SCAN_LOG_BSIZE )
 
 namespace sequence {
 

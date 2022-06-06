@@ -35,6 +35,24 @@ inline void decodeInNghBreakEarly( vertex* v, size_t v_id, VS& vertexSubset,
   }
 }
 
+// Used by edgeMapSparse. For each out-neighbor satisfying cond, call
+// updateAtomic.
+template <class V, class F, class G>
+inline void decodeOutNghSparse( V* v, int i, uintT o, F& f, G& g )
+{
+  uintE d = v->getOutDegree();
+  granular_for( j, 0, d, ( d > 1000 ), {
+    uintE ngh = v->getOutNeighbor( j );
+    if ( f.cond( ngh ) ) {
+      auto m = f.updateAtomic( i, ngh );
+      g( ngh, o + j, m );
+    }
+    else {
+      g( ngh, o + j );
+    }
+  } );
+}
+
 } // namespace decode_uncompressed
 
 struct symmetricVertex {
@@ -67,6 +85,13 @@ struct symmetricVertex {
                                      G& g, bool parallel = 0 ) {
     decode_uncompressed::decodeInNghBreakEarly<symmetricVertex, F, G, VS>(
         this, v_id, vertexSubset, f, g, parallel );
+  }
+
+  template <class F, class G>
+  inline void decodeOutNghSparse( int i, uintT o, F& f, G& g )
+  {
+    decode_uncompressed::decodeOutNghSparse<symmetricVertex, F>(
+        this, i, o, f, g );
   }
 };
 

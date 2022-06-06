@@ -1,7 +1,9 @@
 //========================================================================
 // runtime.inl
 //========================================================================
-#include "limoncello.hpp"
+#include "cello.hpp"
+#include "cello_scheduler.h"
+#include "cello_malloc.h"
 
 namespace appl {
 
@@ -9,19 +11,19 @@ namespace appl {
  * Is set to 1 when worker threads should return
  */
 __attribute__((weak, section(".dram")))
-int __cello_stop = 0;
+i32 __cello_stop_flag = 1;
 
 /**
  * Called by all threads.
  */
 inline void runtime_init( int* dram_buffer, size_t pfor_grain_size ) {
     appl::config_hw_barrier();
-    using namespace cello;
-    using namespace arch;
+    appl::sync();
+    cello_scheduler_init();
     if (get_thread_id()==0) {
-        __cello_arch_dram_heap_ptr = reinterpret_cast<intptr_t>(dram_buffer);
-        cello::arch::work_queue::Instance()->clear();
+        __cello_malloc_heap_ptr = reinterpret_cast<intptr_t>(dram_buffer);
     }
+    appl::sync();
 }
 
 /**
@@ -29,7 +31,7 @@ inline void runtime_init( int* dram_buffer, size_t pfor_grain_size ) {
  */
 inline void runtime_end() {
     if (get_thread_id() == 0) {
-        __cello_stop = 1;
+        __cello_stop_flag = 0;
     }
 }
 
@@ -37,9 +39,7 @@ inline void runtime_end() {
  * This function is called by all-but-one thread.
  */
 inline void worker_thread_init() {
-    using namespace cello;
-    using namespace arch;
-    while (__cello_stop != 1) { cello::arch::worker::LocalWorker()->work(); }
+    cello_scheduler(&__cello_stop_flag);
 }    
 
 inline size_t get_nthreads() {
@@ -47,9 +47,7 @@ inline size_t get_nthreads() {
 }
 
 inline size_t get_thread_id() {
-    using namespace cello;
-    using namespace arch;
-    return worker::LocalWorker()->id();
+    return __bsg_id;
 }
 
 } // namespace appl

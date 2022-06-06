@@ -145,10 +145,14 @@ ifeq ($(APPL_IMPL), APPL_IMPL_CELLO)
 	CELLO_DIR := $(BSG_MANYCORE_DIR)/../cello
 	RISCV_GCC_OPTS +=-DAPPL_IMPL_CELLO
 	RISCV_GCC_OPTS +=-I$(CELLO_DIR)/include
-	RISCV_GCC_OPTS +=-I$(CELLO_DIR)/arch/hammerblade/include
 	RISCV_GCC_OPTS += -fno-threadsafe-statics
 	OBJECT_FILES += appl-runtime.o
 	OBJECT_FILES += bsg_mcs_mutex.o
+	vpath %.c   $(CELLO_DIR)/src
+	vpath %.cpp $(CELLO_DIR)/src
+	OBJECT_FILES += cello_schedule.o
+	OBJECT_FILES += cello_malloc.o
+	OBJECT_FILES += cello_invoke.o
 endif
 
 SPMD_COMMON_OBJECTS ?=

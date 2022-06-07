@@ -11,9 +11,10 @@
 #include "bsg_set_tile_x_y.h"
 
 #define HB_L2_CACHE_LINE_WORDS 16
-#define BUF_FACTOR 2049
+#define BUF_FACTOR 16385
+#define RT_FACTOR 2049
 
-#define MALLOC_DEBUG 1
+#undef MALLOC_DEBUG
 
 // utils
 namespace appl {
@@ -21,6 +22,7 @@ namespace local {
 
 // ref_count stack. This needs to be in the DRAM for AMO
 extern uint32_t dram_buffer_idx;
+extern uint32_t dram_buffer_end;
 
 extern int* dram_buffer;
 
@@ -35,7 +37,7 @@ inline int* appl_malloc() {
   bsg_print_hexadecimal((intptr_t)val);
   bsg_print_int(local::dram_buffer_idx);
 #endif
-  if (local::dram_buffer_idx > HB_L2_CACHE_LINE_WORDS * BUF_FACTOR) {
+  if (local::dram_buffer_idx > local::dram_buffer_end) {
     bsg_print_int(7600);
   }
   return val;
@@ -53,7 +55,7 @@ inline void* appl_malloc(uint32_t size) {
   bsg_print_hexadecimal((intptr_t)val);
   bsg_print_int(local::dram_buffer_idx);
 #endif
-  if (local::dram_buffer_idx > HB_L2_CACHE_LINE_WORDS * BUF_FACTOR) {
+  if (local::dram_buffer_idx > local::dram_buffer_end) {
     bsg_print_int(7600);
   }
   return val;

@@ -107,7 +107,7 @@ void parallel_for( IndexT first, IndexT last, IndexT step,
                    const BodyT& body )
 {
   // use the app-specific grain size
-  size_t grain = get_grain_size();
+  size_t grain = get_grain_size(first, last);
 
   parallel_for( first, last, step, body, grain );
 }

@@ -58,7 +58,7 @@ ValueT parallel_reduce( IndexT first, IndexT last, const ValueT initV,
 {
   if ( first < last ) {
     // use the app-specific grain size
-    size_t grain = get_grain_size();
+    size_t grain = get_grain_size(first, last);
 
     if (local::is_top_level) {
       // partial value buffer

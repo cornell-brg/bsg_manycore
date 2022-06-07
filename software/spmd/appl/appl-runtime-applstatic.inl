@@ -16,17 +16,28 @@ inline void runtime_init( int* dram_buffer, size_t pfor_grain_size ) {
 inline void runtime_end() {
   if (__bsg_id == 0) {
     appl::sync();
-    // this does not order any computation
-    bsg_amoswap(&global::g_stop_flag, 1);
+    if (__bsg_id == 0) {
+      for (uint32_t i = 1; i < MAX_WORKERS; i++) {
+        int* stop = applrts::remote_ptr(&global::g_stop_flag, i);
+        *stop = 1;
+      }
+    }
     appl::sync();
   }
 }
 
 inline void worker_thread_init() {
-  while (bsg_amoadd(&global::g_stop_flag, 0) == 0) {
+  while (local::g_stop_flag == 0) {
     appl::sync();
     if (applstatic::local::task != nullptr) {
-      applstatic::local::task->execute();
+      size_t size = applstatic::local::task->m_size;
+      char local_task[size];
+      char* src = (char*)(intptr_t)applstatic::local::task;
+      for (uint32_t i = 0; i < size; i++) {
+        local_task[i] = src[i];
+      }
+      applrts::Task* local_task_p = (applrts::Task*)(intptr_t)local_task;
+      local_task_p->execute();
       applstatic::local::task = nullptr;
     }
     appl::sync();

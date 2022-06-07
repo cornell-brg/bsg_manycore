@@ -6,6 +6,7 @@
 #include "applstatic-runtime.hpp"
 #include "applrts-Task.hpp"
 #include "appl-hw-barrier.hpp"
+#include "applstatic-config.hpp"
 
 namespace applstatic {
 
@@ -23,6 +24,7 @@ public:
       : m_first( first ), m_last( last ), m_step( step ),
         m_grain( grain ), m_body( body )
   {
+    m_size = sizeof(ParallelForTask<IndexT, BodyT>);
   }
 
   Task* execute()
@@ -81,17 +83,14 @@ void parallel_for( IndexT first, IndexT last, IndexT step,
       }
 
       // task assignment
-      for (uint32_t i = 0; i < MAX_WORKERS; i++) {
+      for (uint32_t i = 1; i < MAX_WORKERS; i++) {
         applrts::Task** core_task = applrts::remote_ptr(&local::task, i);
         *core_task = task;
       }
 
       local::is_top_level = false;
       appl::sync();
-      if (local::task != nullptr) {
-        local::task->execute();
-        local::task = nullptr;
-      }
+      local_task.execute();
       appl::sync();
       local::is_top_level = true;
     } else {
@@ -108,7 +107,8 @@ void parallel_for( IndexT first, IndexT last, IndexT step,
                    const BodyT& body )
 {
   // use the app-specific grain size
-  size_t grain = local::g_pfor_grain_size;
+  size_t grain = get_grain_size();
+
   parallel_for( first, last, step, body, grain );
 }
 

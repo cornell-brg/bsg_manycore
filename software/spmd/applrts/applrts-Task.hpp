@@ -62,6 +62,8 @@ public:
 
   int increment_ready_count();
 
+  size_t m_size;
+
 private:
   // this needs to be a pointer so we can
   // allocate space in DRAM

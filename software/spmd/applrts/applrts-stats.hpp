@@ -6,7 +6,7 @@
 #define APPLRTS_STATS_H
 
 // stats enable
-#define APPL_STATS
+#undef APPL_STATS
 
 #ifdef APPL_STATS
 

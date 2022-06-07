@@ -3,10 +3,12 @@
 namespace applrts {
 namespace stats {
 
+#ifdef APPL_STATS
 uint32_t s_task_enqueue;
 uint32_t s_task_dequeue;
 uint32_t s_task_stolen;
 uint32_t s_stealing_attempt;
+#endif
 
 __attribute__ ((noinline)) void dump_stats() {
 #ifdef APPL_STATS

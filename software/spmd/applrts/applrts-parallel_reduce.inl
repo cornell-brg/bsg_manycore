@@ -140,7 +140,7 @@ ValueT parallel_reduce( IndexT first, IndexT last, const ValueT initV,
 {
   if ( first < last ) {
     // use the app-specific grain size
-    size_t grain = get_grain_size();
+    size_t grain = get_grain_size(first, last);
 
     IndexT end = ( last - first );
     Range1D<IndexT> range( IndexT( 0 ), end, grain );

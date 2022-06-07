@@ -18,7 +18,7 @@ inline void runtime_end() {
     appl::sync();
     if (__bsg_id == 0) {
       for (uint32_t i = 1; i < MAX_WORKERS; i++) {
-        int* stop = applrts::remote_ptr(&global::g_stop_flag, i);
+        int* stop = applrts::remote_ptr(&local::g_stop_flag, i);
         *stop = 1;
       }
     }

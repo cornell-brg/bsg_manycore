@@ -134,7 +134,7 @@ void parallel_for( IndexT first, IndexT last, IndexT step,
 {
   if ( first < last ) {
     // use the app-specific grain size
-    size_t grain = get_grain_size();
+    size_t grain = get_grain_size(first, last);
 
     IndexT end = ( last - first - IndexT( 1 ) ) / step + IndexT( 1 );
     Range1D<IndexT>               range( IndexT( 0 ), end, grain );

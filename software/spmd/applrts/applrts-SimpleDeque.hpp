@@ -26,6 +26,10 @@ public:
   void push_back( const T& item );
   T pop_back();
   T pop_front();
+  // race is allowed here
+  bool unsafe_empty() const {
+    return (m_tail_ptr - m_head_ptr) == 0;
+  }
 
 private:
   T* m_array_rp; // this is a pointer to m_array in remote format

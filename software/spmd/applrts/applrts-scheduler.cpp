@@ -62,8 +62,13 @@ void __attribute__ ((noinline)) work_stealing_inner_loop() {
     // now found a victim, steal...
 
     SimpleDeque<Task*>* victim_queue = remote_ptr(&local::g_taskq, victim_id);
-    Task* task_p = victim_queue->pop_front();
 
+    // do an unsafe check to see if the victim is out of work
+    if (victim_queue->unsafe_empty()) {
+      return;
+    }
+
+    Task* task_p = victim_queue->pop_front();
     stats::log_stealing_attempt();
 
     if ( task_p ) {

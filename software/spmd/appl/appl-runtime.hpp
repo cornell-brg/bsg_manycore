@@ -13,13 +13,13 @@
 
 namespace appl {
 
-namespace global {
+namespace local {
 // global runtime start/stop flag
-extern int g_stop_flag __attribute__ ((section (".dram")));
+extern int g_stop_flag;
 }
 
 // Initialize the runtime with a default scheduler and a thread pool
-void runtime_init( int* dram_buffer, size_t pfor_grain_size = 1 );
+void runtime_init( int* dram_buffer, size_t pfor_grain_size = 0 );
 
 // Terminate runtime by destructing the scheduler and thread pool.
 void runtime_end();

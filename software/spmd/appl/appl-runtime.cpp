@@ -6,10 +6,10 @@
 
 namespace appl {
 
-namespace global {
+namespace local {
 
-int g_stop_flag __attribute__ ((section (".dram"))) = 0;
+int g_stop_flag  = 0;
 
-} // namespace global
+} // namespace local
 
 } // namespace appl

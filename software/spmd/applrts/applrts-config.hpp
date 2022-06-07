@@ -57,6 +57,20 @@ inline T remote_ptr(T ptr, size_t remote_id) {
   return remote_ptr<T>(ptr, remote_x, remote_y);
 }
 
+inline size_t get_grain_size() {
+  size_t grain = local::g_pfor_grain_size;
+  if (grain == 0) {
+    grain = (last - first) / (8 * MAX_WORKERS);
+    if (grain > 32) {
+      grain = 32;
+    }
+    if (grain == 0) {
+      grain = 1;
+    }
+  }
+  return grain;
+}
+
 } // namespace applrts
 
 #endif

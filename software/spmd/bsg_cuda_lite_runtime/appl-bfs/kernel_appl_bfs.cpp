@@ -31,9 +31,8 @@ struct BFS_F {
 };
 
 template <class vertex>
-void Compute( graph<vertex>& GA, int* results ) {
+void Compute( graph<vertex>& GA, size_t start, int* results ) {
   size_t n     = GA.n;
-  size_t start = 1;
   uintE* Parents = newA( uintE, n );
   uintE* bfsLvls = newA( uintE, n );
   appl::parallel_for( size_t( 0 ), n, [&]( size_t i ) {
@@ -63,7 +62,7 @@ void Compute( graph<vertex>& GA, int* results ) {
 }
 
 extern "C" __attribute__ ((noinline))
-int kernel_appl_bfs(int* results, symmetricVertex* V, int n, int m, int* dram_buffer) {
+int kernel_appl_bfs(int* results, symmetricVertex* V, int n, int m, int start, int* dram_buffer) {
 
   appl::runtime_init(dram_buffer, 16);
   appl::sync();
@@ -71,7 +70,7 @@ int kernel_appl_bfs(int* results, symmetricVertex* V, int n, int m, int* dram_bu
 
   if (__bsg_id == 0) {
     graph<symmetricVertex> G = graph<symmetricVertex>(V, n, m, nullptr);
-    Compute(G, results);
+    Compute(G, start, results);
   } else {
     appl::worker_thread_init();
   }

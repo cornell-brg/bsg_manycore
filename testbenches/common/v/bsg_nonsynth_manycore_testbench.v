@@ -55,6 +55,8 @@ module bsg_nonsynth_manycore_testbench
     , parameter enable_cache_profiling_p=0
 
     , parameter enable_vcore_pc_coverage_p=0
+    , parameter enable_vanilla_core_trace_p=0
+    , parameter enable_vanilla_core_pc_histogram_p=0
 
     , parameter cache_bank_addr_width_lp = `BSG_SAFE_CLOG2(bsg_dram_size_p/(2*num_tiles_x_p*num_vcache_rows_p)*4) // byte addr
     , parameter link_sif_width_lp =
@@ -810,6 +812,45 @@ if (enable_vcore_pc_coverage_p) begin
 end
 `endif
 `endif
+
+  ///             ///
+  ///   TRACER    ///
+  ///             ///
+  
+`ifndef VERILATOR_WORKAROUND_DISABLE_VCORE_TRACE
+if (enable_vanilla_core_trace_p) begin
+  bind vanilla_core vanilla_core_trace #(
+    .x_cord_width_p(x_cord_width_p)
+    ,.y_cord_width_p(y_cord_width_p)
+    ,.icache_tag_width_p(icache_tag_width_p)
+    ,.icache_entries_p(icache_entries_p)
+    ,.data_width_p(data_width_p)
+    ,.dmem_size_p(dmem_size_p)
+  ) trace0 (
+    .*
+    ,.clk_i(clk_i)
+  );
+end
+`endif
+
+  //////////////////
+  // PC Histogram //
+  //////////////////
+`ifndef VERILATOR_WORKAROUND_DISABLE_PC_HISTOGRAM
+if (enable_vanilla_core_pc_histogram_p) begin
+  bind vanilla_core vanilla_core_pc_histogram
+    #(.x_cord_width_p(x_cord_width_p)
+      ,.y_cord_width_p(y_cord_width_p)
+      ,.data_width_p(data_width_p)
+      ,.icache_tag_width_p(icache_tag_width_p)
+      ,.icache_entries_p(icache_entries_p)
+      ,.origin_x_cord_p(`BSG_MACHINE_ORIGIN_X_CORD)
+      ,.origin_y_cord_p(`BSG_MACHINE_ORIGIN_Y_CORD)
+      )
+  vcore_pc_hist
+    (.*);
+`endif
+end // if (enable_vanilla_core_pc_histogram_p)
 
 endmodule
 

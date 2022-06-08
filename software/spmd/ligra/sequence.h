@@ -76,7 +76,7 @@ size_t filterf( T* In, T* Out, size_t n, PRED p ) {
       T* ptr = Out + Sums[i];
       for ( size_t idx = s; idx < e; idx++ ) {
         if( p( In[idx] ) ) {
-          *ptr = idx;
+          *ptr = In[idx];
           ptr++;
         }
       }

@@ -53,11 +53,11 @@ inline size_t get_grain_size(size_t first, size_t last) {
   size_t grain = local::g_pfor_grain_size;
   if (grain == 0) {
     grain = (last - first) / (8 * MAX_WORKERS);
-    if (grain > 32) {
-      grain = 32;
+    if (grain > 128) {
+      grain = 128;
     }
     if (grain == 0) {
-      grain = 1;
+      grain = 16;
     }
   }
   return grain;

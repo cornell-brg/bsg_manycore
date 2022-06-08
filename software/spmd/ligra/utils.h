@@ -82,7 +82,7 @@ struct getA {
     intT _ee = _e;                                                       \
     intT _n  = _ee - _ss;                                                \
     intT _l  = nblocks( _n, _bsize );                                    \
-    appl::parallel_for( (intT)0, _l, [&]( intT i ) {                     \
+    appl::parallel_for_1( (intT)0, _l, [&]( intT i ) {                     \
       intT _s = _ss + _i * ( _bsize );                                   \
       intT _e = min( _s + ( _bsize ), _ee );                             \
       _body                                                              \

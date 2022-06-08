@@ -64,7 +64,7 @@ void Compute( graph<vertex>& GA, size_t start, int* results ) {
 extern "C" __attribute__ ((noinline))
 int kernel_appl_bfs(int* results, symmetricVertex* V, int n, int m, int start, int* dram_buffer) {
 
-  appl::runtime_init(dram_buffer, 16);
+  appl::runtime_init(dram_buffer);
   appl::sync();
   bsg_cuda_print_stat_kernel_start();
 

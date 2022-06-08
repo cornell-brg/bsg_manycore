@@ -140,6 +140,13 @@ vertexSubset edgeMap( graph<vertex> GA, VS& vs, F f, intT threshold = -1,
     return vertexSubset( numVertices );
   }
 
+  // shortcut -- if m is already larger than threshold
+  // then we dont need to convert back and forth
+  if ( m > threshold ) {
+    vs.toDense();
+    return edgeMapDense<vertex, VS, F>( GA, vs, f, fl );
+  }
+
   vs.toSparse();
   uintT*  degrees          = newA( uintT, m );
   vertex* frontierVertices = newA( vertex, m );

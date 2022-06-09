@@ -31,20 +31,19 @@ struct BFS_F {
 };
 
 template <class vertex>
-void Compute( graph<vertex>& GA, size_t start, int* results ) {
+void Compute( graph<vertex>& GA, size_t start, uintE* results ) {
   size_t n     = GA.n;
   uintE* Parents = newA( uintE, n );
-  uintE* bfsLvls = newA( uintE, n );
   appl::parallel_for( size_t( 0 ), n, [&]( size_t i ) {
       Parents[i] = UINT_E_MAX;
-      bfsLvls[i] = UINT_E_MAX;
+      results[i] = UINT_E_MAX;
       } );
   Parents[start] = start;
   vertexSubset Frontier( n, start ); // creates initial frontier
 
   uintE lvl = 0;
   while ( !Frontier.isEmpty() ) {    // loop until frontier is empty
-    vertexSubset output = edgeMap( GA, Frontier, BFS_F( Parents, bfsLvls, lvl ) );
+    vertexSubset output = edgeMap( GA, Frontier, BFS_F( Parents, results, lvl ) );
     Frontier.del();
     Frontier = output; // set new frontier
     lvl++;
@@ -53,11 +52,6 @@ void Compute( graph<vertex>& GA, size_t start, int* results ) {
     bsg_print_int(Frontier.numNonzeros());
   }
 
-  // print
-  for (size_t i = 0; i < GA.n; i++) {
-    results[i] = bfsLvls[i];
-    // bsg_print_int(bfsLvls[i]);
-  }
   Frontier.del();
 }
 
@@ -70,7 +64,7 @@ int kernel_appl_bfs(int* results, symmetricVertex* V, int n, int m, int start, i
 
   if (__bsg_id == 0) {
     graph<symmetricVertex> G = graph<symmetricVertex>(V, n, m, nullptr);
-    Compute(G, start, results);
+    Compute(G, start, (uintE*)(intptr_t)results);
   } else {
     appl::worker_thread_init();
   }

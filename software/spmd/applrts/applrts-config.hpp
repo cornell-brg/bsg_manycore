@@ -68,7 +68,7 @@ inline size_t get_grain_size(size_t first, size_t last) {
       grain = 128;
     }
     if (grain == 0) {
-      grain = 16;
+      grain = 1;
     }
   }
   return grain;

@@ -12,7 +12,7 @@ float fabs( float x ) {
 }
 
 template <typename T>
-void swap(T x, T y) {
+void swap(T& x, T& y) {
   T tmp = x;
   x = y;
   y = tmp;
@@ -114,6 +114,9 @@ void Compute( graph<vertex>& GA, uint32_t maxIters, float* results )
         [](float x, float y) { return x + y; }
     );
 
+    bsg_print_int(10086);
+    bsg_print_int(iter);
+    bsg_print_float(L1_norm);
     if ( L1_norm < epsilon )
       break;
 

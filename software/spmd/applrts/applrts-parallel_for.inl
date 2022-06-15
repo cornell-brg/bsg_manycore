@@ -97,9 +97,9 @@ public:
   }
 
 private:
-  const BodyT&  m_body;
-  const IndexT& m_begin;
-  const IndexT& m_step;
+  const BodyT  m_body;
+  const IndexT m_begin;
+  const IndexT m_step;
 };
 
 //----------------------------------------------------------------------

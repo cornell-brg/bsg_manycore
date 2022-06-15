@@ -2,6 +2,10 @@
 #include "bsg_manycore.h"
 #include "appl.hpp"
 
+#include "bsg_tile_group_barrier.hpp"
+
+bsg_barrier<bsg_tiles_X, bsg_tiles_Y> barrier;
+
 int32_t fib_base(int32_t n) {
   if (n < 2)
     return n;
@@ -40,7 +44,7 @@ int kernel_appl_fib(int* results, int n, int grain_size, int* dram_buffer) {
   appl::runtime_init(dram_buffer, 2);
 
   // sync
-  appl::sync();
+  barrier.sync();
   bsg_cuda_print_stat_kernel_start();
 
   if (__bsg_id == 0) {
@@ -55,6 +59,6 @@ int kernel_appl_fib(int* results, int n, int grain_size, int* dram_buffer) {
   bsg_cuda_print_stat_kernel_end();
   bsg_print_int(result);
 
-  appl::sync();
+  barrier.sync();
   return 0;
 }

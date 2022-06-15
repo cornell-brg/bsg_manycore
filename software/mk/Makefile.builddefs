@@ -126,7 +126,6 @@ ifeq ($(APPL_IMPL), APPL_IMPL_APPLRTS)
 	OBJECT_FILES += applrts-runtime.o
 	OBJECT_FILES += applrts-scheduler.o
 	OBJECT_FILES += applrts-stats.o
-	OBJECT_FILES += bsg_mcs_mutex.o
 endif
 
 ifeq ($(APPL_IMPL), APPL_IMPL_SERIAL)

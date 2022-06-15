@@ -10,12 +10,22 @@
 #include "bsg_manycore_atomic.h"
 #include "bsg_set_tile_x_y.h"
 #include "applrts-config.hpp"
-#include "appl-malloc.hpp"
-#include "bsg_mcs_mutex.h"
 
 #define QUEUE_SIZE 160
 
 namespace applrts {
+
+inline void lock(int* lock_ptr) {
+  int lock_val = 1;
+  do {
+    lock_val = bsg_amoswap_aq(lock_ptr, 1);
+  } while (lock_val != 0);
+  return;
+}
+
+inline void unlock(int* lock_ptr) {
+  bsg_amoswap_rl(lock_ptr, 0);
+}
 
 template <typename T>
 class SimpleDeque {
@@ -37,18 +47,10 @@ private:
   T* m_tail_ptr;
   T* m_array_end;
 
-  bsg_mcs_mutex_t* m_mutex_ptr;
-  bsg_mcs_mutex_node_t* m_lcl_rp;
-  bsg_mcs_mutex_node_t m_lcl;
+  int* m_mutex_ptr;
 
   T  m_array[QUEUE_SIZE];
 
-  inline void lock() {
-    bsg_mcs_mutex_acquire(m_mutex_ptr, &m_lcl, m_lcl_rp);
-  }
-  inline void unlock() {
-    bsg_mcs_mutex_release(m_mutex_ptr, &m_lcl, m_lcl_rp);
-  }
 };
 
 } // namespace applrts

@@ -54,7 +54,7 @@ vertexSubset edgeMapDense( graph<vertex> GA, VS& vs,
   if ( should_output( fl ) ) {
     bool* next = newA( bool, n );
     auto g = get_emdense_gen(next);
-    appl::parallel_for( size_t( 0 ), n, [&]( size_t v ) {
+    appl::parallel_for( size_t( 0 ), n, [&, G, g, vs]( size_t v ) {
         next[v] = 0;
         if ( f.cond( v ) ) {
           G[v].decodeInNghBreakEarly( v, vs, f, g,
@@ -64,7 +64,7 @@ vertexSubset edgeMapDense( graph<vertex> GA, VS& vs,
     return vertexSubset( n, next );
   } else {
     auto g = get_emdense_nooutput_gen();
-    appl::parallel_for( size_t( 0 ), n, [&]( size_t v ) {
+    appl::parallel_for( size_t( 0 ), n, [&, G, g, vs]( size_t v ) {
         if ( f.cond( v ) ) {
           G[v].decodeInNghBreakEarly( v, vs, f, g,
                                       fl & dense_parallel );
@@ -191,7 +191,7 @@ template <class VS, class F>
 void vertexMap( VS& vs, F f ) {
   if (vs.isDense()) {
     size_t n = vs.numRows();
-    appl::parallel_for( size_t( 0 ), n, [&]( size_t i ) {
+    appl::parallel_for( size_t( 0 ), n, [&, vs]( size_t i ) {
         if (vs.isIn(i)) {
           f(i);
         }
@@ -199,7 +199,7 @@ void vertexMap( VS& vs, F f ) {
   } else {
     size_t m = vs.numNonzeros();
     appl::parallel_for( size_t( 0 ), m,
-        [&]( size_t i ) { f( vs.vtx( i ) ); } );
+        [&, vs]( size_t i ) { f( vs.vtx( i ) ); } );
   }
 }
 

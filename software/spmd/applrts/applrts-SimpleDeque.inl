@@ -16,9 +16,10 @@ void SimpleDeque<T>::reset() {
   m_array_end = m_array_rp + QUEUE_SIZE;
 
   m_mutex_ptr = (bsg_mcs_mutex_t*)appl::appl_malloc(sizeof(bsg_mcs_mutex_t));
-  local::lcl_rp = remote_ptr(&m_lcl, bsg_x, bsg_y);
   bsg_print_hexadecimal((intptr_t)m_mutex_ptr);
-  bsg_print_hexadecimal((intptr_t)local::lcl_rp);
+  m_lcl_rp = remote_ptr(&m_lcl, bsg_x, bsg_y);
+  bsg_print_int(12580);
+  bsg_print_hexadecimal((intptr_t)m_lcl_rp);
 
   bsg_print_int((intptr_t)m_head_ptr);
   bsg_print_int((intptr_t)m_tail_ptr);

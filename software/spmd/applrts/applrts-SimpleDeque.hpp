@@ -38,16 +38,16 @@ private:
   T* m_array_end;
 
   bsg_mcs_mutex_t* m_mutex_ptr;
+  bsg_mcs_mutex_node_t* m_lcl_rp;
   bsg_mcs_mutex_node_t m_lcl;
 
   T  m_array[QUEUE_SIZE];
 
-  // lcl_rp has to be the thread local one.
   inline void lock() {
-    bsg_mcs_mutex_acquire(m_mutex_ptr, local::lcl_rp, local::lcl_rp);
+    bsg_mcs_mutex_acquire(m_mutex_ptr, &m_lcl, m_lcl_rp);
   }
   inline void unlock() {
-    bsg_mcs_mutex_release(m_mutex_ptr, local::lcl_rp, local::lcl_rp);
+    bsg_mcs_mutex_release(m_mutex_ptr, &m_lcl, m_lcl_rp);
   }
 };
 

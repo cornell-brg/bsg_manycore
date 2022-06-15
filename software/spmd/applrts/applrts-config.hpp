@@ -6,7 +6,6 @@
 #include "bsg_manycore.h"
 #include "bsg_set_tile_x_y.h"
 #include "appl-malloc.hpp"
-#include "bsg_mcs_mutex.h"
 
 #define MAX_WORKERS (bsg_tiles_X * bsg_tiles_Y)
 
@@ -28,8 +27,6 @@ namespace local {
 extern int seed;
 // parallel for grain size
 extern size_t g_pfor_grain_size;
-// mcs lock
-extern bsg_mcs_mutex_node_t* lcl_rp;
 
 } // namespace local
 

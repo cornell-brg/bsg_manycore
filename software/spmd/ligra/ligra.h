@@ -54,7 +54,7 @@ vertexSubset edgeMapDense( graph<vertex> GA, VS& vs,
   if ( should_output( fl ) ) {
     bool* next = newA( bool, n );
     auto g = get_emdense_gen(next);
-    appl::parallel_for( size_t( 0 ), n, [&, G, g, vs]( size_t v ) {
+    appl::parallel_for( size_t( 0 ), n, [&, G, g, vs, fl]( size_t v ) {
         next[v] = 0;
         if ( f.cond( v ) ) {
           G[v].decodeInNghBreakEarly( v, vs, f, g,
@@ -64,7 +64,7 @@ vertexSubset edgeMapDense( graph<vertex> GA, VS& vs,
     return vertexSubset( n, next );
   } else {
     auto g = get_emdense_nooutput_gen();
-    appl::parallel_for( size_t( 0 ), n, [&, G, g, vs]( size_t v ) {
+    appl::parallel_for( size_t( 0 ), n, [&, G, g, vs, fl]( size_t v ) {
         if ( f.cond( v ) ) {
           G[v].decodeInNghBreakEarly( v, vs, f, g,
                                       fl & dense_parallel );

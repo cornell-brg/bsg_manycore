@@ -18,6 +18,8 @@ parser = argparse.ArgumentParser(description="Argument parser for pc_histogram.p
 parser.add_argument("--start", default="0x00000000", type=str, help="Start PC for PC/BB Histogram, in hex. e.g: 0x00000000")
 parser.add_argument("--end", default="0xffffffff", type=str, help="End PC for PC/BB Histogram, in hex. e.g: 0x00000000")
 parser.add_argument("--pathpat", default="./", type=str, help="Search Path for CSV Files")
+parser.add_argument("--no-pc-hist", action="store_true", help="Do not produce histogram by PC")
+parser.add_argument("--no-bb-hist", action="store_true", help="Do not produce histogram by BB (Basic Block)")
 args = parser.parse_args()
 
 # Colors assigns colors to each stall/instruction type, but it ALSO assigns the order.
@@ -135,8 +137,12 @@ for f in files:
     p = f.parent
     print("Parsing: "  + str(f))
     df = read_histogram_csv(f)
-    write_bb_hist(df, p)
-    write_pc_hist(df, p)
+    if not args.no_bb_hist:
+        print("Writing BB histogram")
+        write_bb_hist(df, p)
+    if not args.no_pc_hist:
+        print("Writing PC histogram")
+        write_pc_hist(df, p)
     if(agg is not None):
         agg += df
     else:

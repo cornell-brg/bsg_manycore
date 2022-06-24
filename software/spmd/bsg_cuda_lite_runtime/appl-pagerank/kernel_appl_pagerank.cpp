@@ -26,18 +26,18 @@ struct PR_F {
       : p_curr( _p_curr ), p_next( _p_next ), V( _V )
   {
   }
-  inline bool update( uintE s, uintE d )
+  inline bool update( uintE s, uintE d ) const
   { // update function applies PageRank equation
     p_next[d] += p_curr[s] / V[s].getOutDegree();
     return 1;
   }
-  inline bool updateAtomic( uintE s, uintE d )
+  inline bool updateAtomic( uintE s, uintE d ) const
   { // atomic Update
     // writeAdd( &p_next[d], p_curr[s] / V[s].getOutDegree() );
     bsg_print_int(7800);
     return 1;
   }
-  inline bool cond( intT d ) { return 1; }
+  inline bool cond( intT d ) const { return 1; }
 };
 
 // vertex map function to update its p value according to PageRank
@@ -52,7 +52,7 @@ struct PR_Vertex_F {
         addedConstant( ( 1 - _damping ) * ( 1 / (float)n ) )
   {
   }
-  inline bool operator()( uintE i )
+  inline bool operator()( uintE i ) const
   {
     p_next[i] = damping * p_next[i] + addedConstant;
     return 1;
@@ -63,7 +63,7 @@ struct PR_Vertex_F {
 struct PR_Vertex_Reset {
   float* p_curr;
   PR_Vertex_Reset( float* _p_curr ) : p_curr( _p_curr ) {}
-  inline bool operator()( uintE i )
+  inline bool operator()( uintE i ) const
   {
     p_curr[i] = 0.0;
     return 1;

@@ -12,7 +12,7 @@ struct CC_F {
   CC_F( uintE* _IDs, uintE* _prevIDs ) : IDs( _IDs ), prevIDs( _prevIDs )
   {
   }
-  inline bool update( uintE s, uintE d )
+  inline bool update( uintE s, uintE d ) const
   { // Update function writes min ID
     uintE origID = IDs[d];
     if ( IDs[s] < origID ) {
@@ -22,12 +22,12 @@ struct CC_F {
     }
     return 0;
   }
-  inline bool updateAtomic( uintE s, uintE d )
+  inline bool updateAtomic( uintE s, uintE d ) const
   { // atomic Update
     uintE origID = IDs[d];
     return ( writeMinu( &IDs[d], IDs[s] ) && origID == prevIDs[d] );
   }
-  inline bool cond( uintE d ) { return cond_true( d ); } // does nothing
+  inline bool cond( uintE d ) const { return cond_true( d ); } // does nothing
 };
 
 // function used by vertex map to sync prevIDs with IDs
@@ -37,7 +37,7 @@ struct CC_Vertex_F {
       : IDs( _IDs ), prevIDs( _prevIDs )
   {
   }
-  inline bool operator()( uintE i )
+  inline bool operator()( uintE i ) const
   {
     prevIDs[i] = IDs[i];
     return 1;

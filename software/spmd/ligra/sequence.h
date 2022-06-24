@@ -18,7 +18,7 @@ template <class F>
 void sliced_for( size_t n, size_t block_size, const F& f )
 {
   size_t l = num_blocks( n, block_size );
-  appl::parallel_for_1( (size_t)0, l, [&]( size_t i ) {
+  appl::parallel_for_1( (size_t)0, l, [block_size, f, n]( size_t i ) {
     size_t s = i * block_size;
     size_t e = (s + block_size) > n ? n : (s + block_size);
     f( i, s, e );
@@ -35,7 +35,7 @@ template <class Idx_Type>
 size_t pack(size_t n, bool* d, Idx_Type* Out) {
   size_t l = num_blocks( n, _block_size );
   size_t* Sums = newA( size_t, l );
-  sliced_for( n, _block_size, [&]( size_t i, size_t s, size_t e ) {
+  sliced_for( n, _block_size, [d, Sums]( size_t i, size_t s, size_t e ) {
       size_t sum = 0;
       for ( size_t idx = s; idx < e; idx++ ) {
         if ( d[idx] ) {
@@ -45,7 +45,7 @@ size_t pack(size_t n, bool* d, Idx_Type* Out) {
       Sums[i] = sum;
   });
   size_t m = scan_add( Sums, Sums, l );
-  sliced_for( n, _block_size, [&]( size_t i, size_t s, size_t e ) {
+  sliced_for( n, _block_size, [d, Out, Sums]( size_t i, size_t s, size_t e ) {
       Idx_Type* ptr = Out + Sums[i];
       for ( size_t idx = s; idx < e; idx++ ) {
         if( d[idx] ) {
@@ -62,7 +62,7 @@ template <class T, class PRED>
 size_t filterf( T* In, T* Out, size_t n, PRED p ) {
   size_t l = num_blocks( n, _block_size );
   size_t* Sums = newA( size_t, l );
-  sliced_for( n, _block_size, [&]( size_t i, size_t s, size_t e ) {
+  sliced_for( n, _block_size, [p, In, Sums]( size_t i, size_t s, size_t e ) {
       size_t sum = 0;
       for ( size_t idx = s; idx < e; idx++ ) {
         if ( p( In[idx] ) ) {
@@ -72,7 +72,7 @@ size_t filterf( T* In, T* Out, size_t n, PRED p ) {
       Sums[i] = sum;
   });
   size_t m = scan_add( Sums, Sums, l );
-  sliced_for( n, _block_size, [&]( size_t i, size_t s, size_t e ) {
+  sliced_for( n, _block_size, [p, In, Out, Sums]( size_t i, size_t s, size_t e ) {
       T* ptr = Out + Sums[i];
       for ( size_t idx = s; idx < e; idx++ ) {
         if( p( In[idx] ) ) {

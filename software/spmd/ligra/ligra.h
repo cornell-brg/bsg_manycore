@@ -42,7 +42,7 @@ auto get_emsparse_gen( uintE* outEdges ) {
 }
 
 auto get_emsparse_nooutput_gen() {
-    return [&]( uintE ngh, uintT offset, bool m = false ) {};
+    return []( uintE ngh, uintT offset, bool m = false ) {};
 }
 
 template <class vertex, class VS, class F>
@@ -54,7 +54,7 @@ vertexSubset edgeMapDense( graph<vertex> GA, VS& vs,
   if ( should_output( fl ) ) {
     bool* next = newA( bool, n );
     auto g = get_emdense_gen(next);
-    appl::parallel_for( size_t( 0 ), n, [&, G, g, vs, fl, f]( size_t v ) {
+    appl::parallel_for( size_t( 0 ), n, [G, g, vs, fl, f, next]( size_t v ) {
         next[v] = 0;
         if ( f.cond( v ) ) {
           G[v].decodeInNghBreakEarly( v, vs, f, g,
@@ -64,7 +64,7 @@ vertexSubset edgeMapDense( graph<vertex> GA, VS& vs,
     return vertexSubset( n, next );
   } else {
     auto g = get_emdense_nooutput_gen();
-    appl::parallel_for( size_t( 0 ), n, [&, G, g, vs, fl, f]( size_t v ) {
+    appl::parallel_for( size_t( 0 ), n, [G, g, vs, fl, f]( size_t v ) {
         if ( f.cond( v ) ) {
           G[v].decodeInNghBreakEarly( v, vs, f, g,
                                       fl & dense_parallel );
@@ -88,7 +88,7 @@ vertexSubset edgeMapSparse( graph<vertex> GA, vertex* frontierVertices, VS& indi
     outEdgeCount   = sequence::plusScan( offsets, offsets, m );
     outEdges       = newA( S, outEdgeCount );
     auto g         = get_emsparse_gen( outEdges );
-    appl::parallel_for( uintT( 0 ), m, [&]( uintT i ) {
+    appl::parallel_for( uintT( 0 ), m, [indices, offsets, frontierVertices, f, g]( uintT i ) {
       uintT  v = indices.vtx( i ), o = offsets[i];
       vertex vert = frontierVertices[i];
       vert.decodeOutNghSparse( v, o, f, g );
@@ -96,7 +96,7 @@ vertexSubset edgeMapSparse( graph<vertex> GA, vertex* frontierVertices, VS& indi
   }
   else {
     auto g = get_emsparse_nooutput_gen();
-    appl::parallel_for( uintT( 0 ), m, [&]( uintT i ) {
+    appl::parallel_for( uintT( 0 ), m, [indices, frontierVertices, f, g]( uintT i ) {
       uintT  v    = indices.vtx( i );
       vertex vert = frontierVertices[i];
       vert.decodeOutNghSparse( v, 0, f, g );
@@ -151,7 +151,7 @@ vertexSubset edgeMap( graph<vertex> GA, VS& vs, F f, intT threshold = -1,
   uintT*  degrees          = newA( uintT, m );
   vertex* frontierVertices = newA( vertex, m );
 
-  appl::parallel_for( size_t( 0 ), m, [&]( int i ) {
+  appl::parallel_for( size_t( 0 ), m, [vs, G, degrees, frontierVertices]( int i ) {
       uintE  v_id         = vs.vtx( i );
       vertex v            = G[v_id];
       degrees[i]          = v.getOutDegree();
@@ -160,7 +160,7 @@ vertexSubset edgeMap( graph<vertex> GA, VS& vs, F f, intT threshold = -1,
 
   //uintT outDegrees = sequence::plusReduce( degrees, m );
   uintT outDegrees = appl::parallel_reduce(size_t(0), m, size_t(0),
-      [&](size_t start, size_t end, size_t initV) {
+      [degrees](size_t start, size_t end, size_t initV) {
         size_t psum = initV;
         for (size_t i = start; i < end; i++) {
           psum += degrees[i];
@@ -191,7 +191,7 @@ template <class VS, class F>
 void vertexMap( VS& vs, F f ) {
   if (vs.isDense()) {
     size_t n = vs.numRows();
-    appl::parallel_for( size_t( 0 ), n, [&, vs, f]( size_t i ) {
+    appl::parallel_for( size_t( 0 ), n, [vs, f]( size_t i ) {
         if (vs.isIn(i)) {
           f(i);
         }
@@ -199,7 +199,7 @@ void vertexMap( VS& vs, F f ) {
   } else {
     size_t m = vs.numNonzeros();
     appl::parallel_for( size_t( 0 ), m,
-        [&, vs, f]( size_t i ) { f( vs.vtx( i ) ); } );
+        [vs, f]( size_t i ) { f( vs.vtx( i ) ); } );
   }
 }
 
@@ -208,7 +208,7 @@ vertexSubset vertexFilter( VS& vs, F f ) {
   size_t n = vs.numRows();
   vs.toDense();
   bool* next = newA( bool, n );
-  appl::parallel_for( size_t( 0 ), n, [&]( size_t i ) {
+  appl::parallel_for( size_t( 0 ), n, [vs, next, f]( size_t i ) {
       if (vs.isIn(i)) {
         next[i] = f(i);
       }

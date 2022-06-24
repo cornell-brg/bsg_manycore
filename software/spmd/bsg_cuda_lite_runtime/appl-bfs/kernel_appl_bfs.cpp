@@ -34,7 +34,7 @@ template <class vertex>
 void Compute( graph<vertex>& GA, size_t start, uintE* results ) {
   size_t n     = GA.n;
   uintE* Parents = newA( uintE, n );
-  appl::parallel_for( size_t( 0 ), n, [&]( size_t i ) {
+  appl::parallel_for( size_t( 0 ), n, [Parents, results]( size_t i ) {
       Parents[i] = UINT_E_MAX;
       results[i] = UINT_E_MAX;
       } );

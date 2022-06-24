@@ -25,7 +25,7 @@ inline void decodeInNghBreakEarly( vertex* v, size_t v_id, VS& vertexSubset,
         break;
     }
   } else {
-    appl::parallel_for( uintE( 0 ), d, [&]( uintE j ) {
+    appl::parallel_for( uintE( 0 ), d, [v, vertexSubset, f, g, v_id]( uintE j ) {
         uintE ngh = v->getInNeighbor( j );
         if ( vertexSubset.isIn( ngh ) ) {
           auto m = f.updateAtomic( ngh, v_id );
@@ -41,16 +41,40 @@ template <class V, class F, class G>
 inline void decodeOutNghSparse( V* v, int i, uintT o, F& f, G& g )
 {
   uintE d = v->getOutDegree();
-  granular_for( j, 0, d, ( d > 1000 ), {
-    uintE ngh = v->getOutNeighbor( j );
-    if ( f.cond( ngh ) ) {
-      auto m = f.updateAtomic( i, ngh );
-      g( ngh, o + j, m );
+  // granular_for( j, 0, d, ( d > 1000 ), {
+  //   uintE ngh = v->getOutNeighbor( j );
+  //   if ( f.cond( ngh ) ) {
+  //     auto m = f.updateAtomic( i, ngh );
+  //     g( ngh, o + j, m );
+  //   }
+  //   else {
+  //     g( ngh, o + j );
+  //   }
+  // } );
+  if ( d > 1000 ) {
+    appl::parallel_for( uintE(0), d,
+        [v, i, o, f, g]( uintE j ) {
+          uintE ngh = v->getOutNeighbor( j );
+          if ( f.cond( ngh ) ) {
+            auto m = f.updateAtomic( i, ngh );
+            g( ngh, o + j, m );
+          }
+          else {
+            g( ngh, o + j );
+          }
+        } );
+  } else {
+    for ( size_t j = 0; j < d; j++ ) {
+      uintE ngh = v->getOutNeighbor( j );
+      if ( f.cond( ngh ) ) {
+        auto m = f.updateAtomic( i, ngh );
+        g( ngh, o + j, m );
+      }
+      else {
+        g( ngh, o + j );
+      }
     }
-    else {
-      g( ngh, o + j );
-    }
-  } );
+  }
 }
 
 } // namespace decode_uncompressed

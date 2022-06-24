@@ -35,11 +35,12 @@ struct vertexSubset {
   vertexSubset( size_t _n, bool* _d )
       : n( _n ), s( NULL ), d( _d ), dense( 1 )
   {
+    bool* tmp_d = d;
     m = appl::parallel_reduce(size_t(0), n, size_t(0),
-        [&](size_t start, size_t end, size_t initV) {
+        [tmp_d](size_t start, size_t end, size_t initV) {
           size_t psum = initV;
           for (size_t i = start; i < end; i++) {
-            if (d[i]) {
+            if (tmp_d[i]) {
               psum++;
             }
           }
@@ -68,9 +69,11 @@ struct vertexSubset {
   {
     if ( d == NULL ) {
       d = newA( bool, n );
-      appl::parallel_for( size_t( 0 ), n, [&]( size_t i ) { d[i] = 0; } );
+      bool* tmp_d = d;
+      S*    tmp_s = s;
+      appl::parallel_for( size_t( 0 ), n, [tmp_d]( size_t i ) { tmp_d[i] = 0; } );
       appl::parallel_for( size_t( 0 ), m,
-                          [&]( size_t i ) { d[s[i]] = 1; } );
+                          [tmp_d, tmp_s]( size_t i ) { tmp_d[tmp_s[i]] = 1; } );
     }
     dense = true;
   }

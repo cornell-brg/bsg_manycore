@@ -10,7 +10,7 @@ struct BFS_F {
   BFS_F( uintE* _Parents, uintE* _bfsLvls, uintE  _lvl )
     : Parents( _Parents ), bfsLvls( _bfsLvls ), lvl( _lvl ) {}
 
-  inline bool update( uintE s, uintE d )
+  inline bool update( uintE s, uintE d ) const
   {
     if ( Parents[d] == UINT_E_MAX ) {
       Parents[d] = s;
@@ -21,13 +21,13 @@ struct BFS_F {
       return 0;
   }
 
-  inline bool updateAtomic( uintE s, uintE d )
+  inline bool updateAtomic( uintE s, uintE d ) const
   {
     return update( s, d );
   }
 
   // cond function checks if vertex has been visited yet
-  inline bool cond( uintE d ) { return ( Parents[d] == UINT_E_MAX ); }
+  inline bool cond( uintE d ) const { return ( Parents[d] == UINT_E_MAX ); }
 };
 
 template <class vertex>

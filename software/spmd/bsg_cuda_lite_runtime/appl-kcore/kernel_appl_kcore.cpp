@@ -10,17 +10,17 @@ bsg_barrier<bsg_tiles_X, bsg_tiles_Y> barrier;
 struct Update_Deg {
   intE* Degrees;
   Update_Deg( intE* _Degrees ) : Degrees( _Degrees ) {}
-  inline bool update( uintE s, uintE d )
+  inline bool update( uintE s, uintE d ) const
   {
     Degrees[d]--;
     return 1;
   }
-  inline bool updateAtomic( uintE s, uintE d )
+  inline bool updateAtomic( uintE s, uintE d ) const
   {
     writeAdd( &Degrees[d], intE(-1) );
     return 1;
   }
-  inline bool cond( uintE d ) { return Degrees[d] > 0; }
+  inline bool cond( uintE d ) const { return Degrees[d] > 0; }
 };
 
 template <class vertex>
@@ -34,7 +34,7 @@ struct Deg_LessThan_K {
       : V( _V ), k( _k ), Degrees( _Degrees ), coreNumbers( _coreNumbers )
   {
   }
-  inline bool operator()( uintE i )
+  inline bool operator()( uintE i ) const
   {
     if ( Degrees[i] < k ) {
       coreNumbers[i] = k - 1;
@@ -55,7 +55,7 @@ struct Deg_AtLeast_K {
       : V( _V ), k( _k ), Degrees( _Degrees )
   {
   }
-  inline bool operator()( uintE i ) { return Degrees[i] >= k; }
+  inline bool operator()( uintE i ) const { return Degrees[i] >= k; }
 };
 
 // assumes symmetric graph

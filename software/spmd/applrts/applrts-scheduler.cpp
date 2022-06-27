@@ -70,8 +70,9 @@ void __attribute__ ((noinline)) work_stealing_inner_loop() {
       // copy task to local
       size_t size = task_p->m_size;
       if (size != -1) {
-        char local_task[size];
-        char* src = (char*)(intptr_t)task_p;
+        size = (size >> 2) + 1;
+        uint32_t local_task[size];
+        uint32_t* src = (uint32_t*)(intptr_t)task_p;
         for (uint32_t i = 0; i < size; i++) {
           local_task[i] = src[i];
         }

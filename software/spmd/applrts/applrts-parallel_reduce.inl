@@ -20,6 +20,8 @@ public:
   ParallelReduceTask( const RangeT& range, const BodyT& body )
       : m_range( range ), m_body( body )
   {
+    // m_size = sizeof(ParallelReduceTask<RangeT, BodyT>);
+    m_size = -1;
   }
 
   ParallelReduceTask<RangeT, BodyT> split()

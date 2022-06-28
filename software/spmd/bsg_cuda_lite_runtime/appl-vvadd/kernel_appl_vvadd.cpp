@@ -2,15 +2,11 @@
 #include "bsg_manycore.h"
 #include "appl.hpp"
 
-#include "bsg_tile_group_barrier.hpp"
-
-bsg_barrier<bsg_tiles_X, bsg_tiles_Y> barrier;
-
 __attribute__ ((noinline))
 void vvadd_appl_pfor( int dest[], int src0[],
                       int src1[], int size ) {
   appl::parallel_for( 0, size,
-      [&]( int i ) {
+      [dest, src0, src1]( int i ) {
         dest[i] = src0[i] + src1[i];
       }
   );
@@ -29,7 +25,8 @@ int kernel_appl_vvadd(int *A, int *B, int *C, int size, int grain_size, int* dra
   appl::runtime_init(dram_buffer, grain_size);
 
   // sync
-  barrier.sync();
+  appl::sync();
+  bsg_cuda_print_stat_kernel_start();
 
   if (__bsg_id == 0) {
     vvadd_appl_pfor(C, A, B, size);
@@ -39,6 +36,7 @@ int kernel_appl_vvadd(int *A, int *B, int *C, int size, int grain_size, int* dra
   appl::runtime_end();
   // --------------------- end of kernel -----------------
 
-  barrier.sync();
+  bsg_cuda_print_stat_kernel_end();
+  appl::sync();
   return 0;
 }

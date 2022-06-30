@@ -67,29 +67,8 @@ void __attribute__ ((noinline)) work_stealing_inner_loop() {
 
     if ( task_p ) {
       stats::log_task_stolen();
-      // copy task to local
-      size_t size = task_p->m_size;
-      if (size != -1) {
-        size = (size >> 2) + 1;
-        uint32_t local_task[size];
-        uint32_t* src = (uint32_t*)(intptr_t)task_p;
-        for (uint32_t i = 0; i < size; i++) {
-          local_task[i] = src[i];
-        }
-        applrts::Task* local_task_p = (applrts::Task*)(intptr_t)local_task;
-        // execute the stolen task copied to local
-        // this does not work on reduce
-#ifdef APPLRTS_DEBUG
-        bsg_print_int(9001);
-#endif
-        execute_task( local_task_p, true );
-      } else {
-        // execute the stolen task
-#ifdef APPLRTS_DEBUG
-        bsg_print_int(9002);
-#endif
-        execute_task( task_p, true );
-      }
+      // execute the stolen task
+      execute_task( task_p, true );
     }
   }
 }

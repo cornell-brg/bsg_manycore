@@ -20,7 +20,6 @@ public:
   ParallelForTask( const RangeT& range, const BodyT& body )
       : m_range( range ), m_body( body )
   {
-    m_size = sizeof(ParallelForTask<RangeT, BodyT>);
   }
 
   Task* execute()

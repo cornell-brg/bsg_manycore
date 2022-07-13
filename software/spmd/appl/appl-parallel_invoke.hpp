@@ -39,6 +39,8 @@ void parallel_invoke( const Func0& func0, const Func1& func1,
 #include "appl-parallel_invoke-applrts.inl"
 #elif defined(APPL_IMPL_CELLO)
 #include "appl-parallel_invoke-cello.inl"
+#elif defined(APPL_IMPL_STATIC)
+#include "appl-parallel_invoke-applstatic.inl"
 #else
 #include "appl-parallel_invoke-serial.inl"
 #endif

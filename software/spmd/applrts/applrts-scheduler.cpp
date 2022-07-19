@@ -12,8 +12,14 @@ void spawn( Task* task_p ) {
 #ifdef APPLRTS_DEBUG
   bsg_print_int(12395);
 #endif
-  stats::log_task_enqueue();
-  local::g_taskq.push_back(task_p);
+  if (local::seed_target != nullptr && local::seed_task != nullptr) {
+    *local::seed_target = task_p;
+    // seeding complete
+    local::seed_task = nullptr;
+  } else {
+    stats::log_task_enqueue();
+    local::g_taskq.push_back(task_p);
+  }
 }
 
 void wait( Task* wait_task_p ) {

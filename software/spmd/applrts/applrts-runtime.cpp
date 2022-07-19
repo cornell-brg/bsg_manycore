@@ -9,6 +9,8 @@ namespace applrts {
 namespace local {
 
 SimpleDeque<Task*> g_taskq = SimpleDeque<Task*>();
+Task* seed_task;
+Task** seed_target;
 
 } // namespace local
 

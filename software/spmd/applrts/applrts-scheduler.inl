@@ -18,8 +18,14 @@ inline void work_stealing_loop( Func&& cond ) {
 
   // wait until cond() == true
   while ( !cond() ) {
-    work_stealing_inner_loop();
+    if (local::seed_task != nullptr) {
+      execute_task( local::seed_task, true);
+      // reset seed
+      // note that it may have already been reset
+      local::seed_task = nullptr;
+    } else {
+      work_stealing_inner_loop();
+    }
   } // // while ( !cond() )
 }
-
 } // namespace applrts

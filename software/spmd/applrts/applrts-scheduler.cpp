@@ -12,14 +12,13 @@ void spawn( Task* task_p ) {
 #ifdef APPLRTS_DEBUG
   bsg_print_int(12395);
 #endif
-  if (local::seed_target != nullptr && local::seed_task != nullptr) {
+  if (local::seed_target != nullptr && local::seed_enable) {
     *local::seed_target = task_p;
-    // seeding complete
-    local::seed_task = nullptr;
   } else {
     stats::log_task_enqueue();
     local::g_taskq.push_back(task_p);
   }
+  local::seed_enable = false;
 }
 
 void wait( Task* wait_task_p ) {

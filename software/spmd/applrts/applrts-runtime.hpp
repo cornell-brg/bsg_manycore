@@ -18,6 +18,7 @@ namespace applrts {
 
 namespace local {
 extern SimpleDeque<Task*> g_taskq;
+extern bool seed_enable;
 extern Task* seed_task;
 extern Task** seed_target;
 }

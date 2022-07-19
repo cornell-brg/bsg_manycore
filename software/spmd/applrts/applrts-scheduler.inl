@@ -19,10 +19,12 @@ inline void work_stealing_loop( Func&& cond ) {
   // wait until cond() == true
   while ( !cond() ) {
     if (local::seed_task != nullptr) {
-      execute_task( local::seed_task, true);
-      // reset seed
-      // note that it may have already been reset
+      // seed the next core
+      local::seed_enable = true;
+      Task* task_p = local::seed_task;
+      // prevent double execution
       local::seed_task = nullptr;
+      execute_task( task_p, true);
     } else {
       work_stealing_inner_loop();
     }

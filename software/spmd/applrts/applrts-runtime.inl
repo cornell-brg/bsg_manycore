@@ -14,6 +14,8 @@ inline void runtime_init( size_t pfor_grain_size ) {
   // init task queue
   local::g_taskq.reset();
 
+  local::seed_enable = false;
+
   local::seed_task = nullptr;
 
   // get seeding target

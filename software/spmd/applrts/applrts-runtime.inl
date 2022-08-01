@@ -12,7 +12,8 @@ inline void runtime_init( size_t pfor_grain_size ) {
   local::seed = __bsg_id;
 
   // init task queue
-  local::g_taskq.reset();
+  local::g_taskq = (SimpleDeque<Task*>*)appl::appl_malloc(sizeof(SimpleDeque<Task*>));
+  local::g_taskq->reset();
 
   return;
 }

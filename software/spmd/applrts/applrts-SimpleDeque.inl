@@ -10,7 +10,7 @@ SimpleDeque<T>::SimpleDeque() {
 
 template <typename T>
 void SimpleDeque<T>::reset() {
-  m_array_rp  = remote_ptr(m_array, bsg_x, bsg_y);
+  m_array_rp  = m_array;
   m_head_ptr  = m_array_rp;
   m_tail_ptr  = m_array_rp;
   m_array_end = m_array_rp + QUEUE_SIZE;

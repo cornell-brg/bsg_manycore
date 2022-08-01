@@ -17,7 +17,7 @@
 namespace applrts {
 
 namespace local {
-extern SimpleDeque<Task*> g_taskq;
+extern SimpleDeque<Task*>* g_taskq;
 }
 
 // Initialize the runtime with a default scheduler and a thread pool

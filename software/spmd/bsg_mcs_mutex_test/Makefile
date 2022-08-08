@@ -1,10 +1,10 @@
 export BSG_MANYCORE_DIR := $(shell git rev-parse --show-toplevel)
 
 # Running tests on full manycore array. Uncomment and modify for a smaller array
-# bsg_tiles_X = 2
-# bsg_tiles_Y = 2
+bsg_tiles_X = 2
+bsg_tiles_Y = 2
 
-RISCV_GXX_EXTRA_OPTS += -DITERS=16
+RISCV_GXX_EXTRA_OPTS += -DITERS=2
 
 all: main.run
 

@@ -14,7 +14,7 @@
 INIT_TILE_GROUP_BARRIER(r_barrier, c_barrier, 0, bsg_tiles_X-1, 0, bsg_tiles_Y-1);
 
 volatile int data __attribute__((section(".dram"))) = 0;
-
+bsg_mcs_mutex_node_t lcl;
 bsg_mcs_mutex_t mtx __attribute__((section(".dram")));
 
 int main()
@@ -22,10 +22,11 @@ int main()
 
   bsg_set_tile_x_y();
 
-  bsg_mcs_mutex_node_t lcl, *lcl_as_glbl = (bsg_mcs_mutex_node_t*)bsg_tile_group_remote_ptr(int, bsg_x, bsg_y, &lcl);
+  bsg_mcs_mutex_node_t *lcl_as_glbl = (bsg_mcs_mutex_node_t*)bsg_tile_group_remote_ptr(int, bsg_x, bsg_y, &lcl);
 
   for (int i = 0; i < ITERS; i++) {
       bsg_mcs_mutex_acquire(&mtx, &lcl, lcl_as_glbl);
+      bsg_print_int(data);
       data += 1;
       bsg_mcs_mutex_release(&mtx, &lcl, lcl_as_glbl);
   }

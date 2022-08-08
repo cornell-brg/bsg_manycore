@@ -74,7 +74,8 @@ VSOURCES += $(BSG_MANYCORE_DIR)/testbenches/common/v/bsg_manycore_vcache_wh_to_c
 VSOURCES += $(BSG_MANYCORE_DIR)/testbenches/common/v/bsg_nonsynth_manycore_testbench.v
 VSOURCES += $(BSG_MANYCORE_DIR)/testbenches/common/v/vcache_dma_to_dram_channel_map.v
 VSOURCES += $(BSG_MANYCORE_DIR)/testbenches/common/v/spmd_testbench.v
-
+VSOURCES += $(BSG_MANYCORE_DIR)/testbenches/common/v/vanilla_core_dmem_tracker.v
+CSOURCES += $(BSG_MANYCORE_DIR)/testbenches/common/v/vanilla_core_dmem_tracker.cpp
 
 VSOURCES += $(BASEJUMP_STL_DIR)/bsg_misc/bsg_crossbar_control_basic_o_by_i.v
 VSOURCES += $(BASEJUMP_STL_DIR)/bsg_noc/bsg_router_crossbar_o_by_i.v

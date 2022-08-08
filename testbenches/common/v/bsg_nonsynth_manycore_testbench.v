@@ -852,6 +852,24 @@ if (enable_vanilla_core_pc_histogram_p) begin
 `endif
 end // if (enable_vanilla_core_pc_histogram_p)
 
+  /////////////////
+  // DMEM Tracer //
+  /////////////////
+  `define DMEM_TRACER
+  `ifdef  DMEM_TRACER
+  bind vanilla_core vanilla_core_dmem_tracker
+    #(.data_width_p(data_width_p)
+      ,.dmem_size_p(dmem_size_p)
+      ,.icache_entries_p(icache_entries_p)
+      ,.icache_tag_width_p(icache_tag_width_p)
+      ,.x_cord_width_p(x_cord_width_p)
+      ,.y_cord_width_p(y_cord_width_p)
+      ,.pod_x_cord_width_p(pod_x_cord_width_p)
+      ,.pod_y_cord_width_p(pod_y_cord_width_p)
+      )
+  vcore_dmem_trace
+    (.*);
+  `endif
 endmodule
 
 `BSG_ABSTRACT_MODULE(bsg_nonsynth_manycore_testbench)

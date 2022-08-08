@@ -9,7 +9,7 @@
 #include "bsg_hw_barrier_config_init.h"
 
 #define N 4
-#define NUM_WORDS 16
+#define NUM_WORDS 1
 // my private data in DMEM
 int mydata[NUM_WORDS] = {0};
 

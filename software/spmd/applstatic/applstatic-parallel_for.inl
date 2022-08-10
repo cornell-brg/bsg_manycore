@@ -1,7 +1,7 @@
 //========================================================================
 // parallel_for.inl
 //========================================================================
-
+#include <string.h>
 #include "applstatic-config.hpp"
 #include "applstatic-runtime.hpp"
 #include "applrts-Task.hpp"
@@ -78,9 +78,7 @@ void parallel_for( IndexT first, IndexT last, IndexT step,
       // globalization
       char* src = (char*)(intptr_t)&local_task;
       char* dst = (char*)(intptr_t)task;
-      for (uint32_t i = 0; i < sizeof(ParallelForTask<IndexT, BodyT>); i++) {
-        dst[i] = src[i];
-      }
+      memcpy(dst, src, sizeof(local_task));
 
       // task assignment
       for (uint32_t i = 1; i < MAX_WORKERS; i++) {

@@ -1,7 +1,7 @@
 //========================================================================
 // runtime.inl
 //========================================================================
-
+#include <string.h>
 #include "appl-malloc.hpp"
 #include "applstatic.hpp"
 
@@ -33,9 +33,7 @@ inline void worker_thread_init() {
       size_t size = applstatic::local::task->m_size;
       char local_task[size];
       char* src = (char*)(intptr_t)applstatic::local::task;
-      for (uint32_t i = 0; i < size; i++) {
-        local_task[i] = src[i];
-      }
+      memcpy(local_task, src, size);
       applrts::Task* local_task_p = (applrts::Task*)(intptr_t)local_task;
       local_task_p->execute();
       applstatic::local::task = nullptr;

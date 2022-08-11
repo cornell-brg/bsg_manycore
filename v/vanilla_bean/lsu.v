@@ -126,8 +126,8 @@ module lsu
   // combine
   // LC: XXX -> I think we SHOULD only access low 1KB with plain local addr
   // otherwise EVA to NPA will get a plain addr for overflowed part of the stack and it panics.
-  wire is_local_dmem_addr = (is_plain_low_dmem_addr | is_plain_high_dmem_addr |
-                            (is_remote_local_dmem_addr & (is_low_dmem_addr | is_high_dmem_addr)));
+  wire is_local_dmem_addr = (is_plain_low_dmem_addr |
+                            (is_remote_local_dmem_addr & (is_low_dmem_addr)));
 
   assign dmem_v_o = is_local_dmem_addr &
     (exe_decode_i.is_load_op | exe_decode_i.is_store_op |

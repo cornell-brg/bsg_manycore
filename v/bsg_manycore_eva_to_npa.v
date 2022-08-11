@@ -170,7 +170,7 @@ module bsg_manycore_eva_to_npa
       // DRAM overflowed DMEM Hack:
       // we check if the dmem is in overflowed range or not
       // this is a dmem access made to an addr actually in DRAM
-      if (tile_group_addr.addr inside {[16'h0080:16'hFC7F]}) begin
+      if (tile_group_addr.addr inside {[16'h0080:16'hFFFF]}) begin
         y_cord_o = overflowed_dram_y_cord_lo;
         x_cord_o = overflowed_dram_x_cord_lo;
         epa_o = overflowed_dram_epa_lo;

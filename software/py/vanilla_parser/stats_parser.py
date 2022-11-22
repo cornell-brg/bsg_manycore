@@ -40,7 +40,12 @@ except:
 
 from enum import Enum
 from collections import Counter
-from . import common
+# from . import common
+import pathlib
+current_path = str(pathlib.Path(__file__).parent.absolute())
+print(current_path)
+sys.path.append(current_path)
+import common
 
 
 # CudaStatTag class 
